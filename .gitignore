@@ -1,0 +1,17 @@
+node_modules
+
+*.pyc
+*.db
+*.log
+*.pot
+*.pdf
+*.docx
+*.jpg
+*.png
+
+*/*/*/__pycache__/
+
+*/*/__pycache__/
+
+*/__pycache__/
+
