@@ -1,5 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
+import Navbar from './components/Navbar'
+import PagesRoutes from './components/PagesRoutes';
 
 function App() {
   const requestOptions = {
@@ -14,9 +16,12 @@ function App() {
   })
 
   return (
-    <div className="App">
-      <h1>Hello world</h1>
+    <div>
+      <Navbar/>
+      <div id = 'gap'></div>
+      <PagesRoutes/>
     </div>
+    
   );
 }
 
