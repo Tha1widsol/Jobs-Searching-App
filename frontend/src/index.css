@@ -1,13 +1,58 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+
+/* ################
+Global styles
+##################*/
+
+#firstcast{
+  font-size: 30px; 
+  top:3px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#gap{
+  width:100%; 
+  height:60px;
 }
+
+
+h1,h2,h3,h4,p,::-webkit-input-placeholder, /* Chrome/Opera/Safari */input,button,select,body, li,textarea{
+  font-family:'Montserrat', sans-serif;
+}
+
+a{text-decoration: none;}
+
+.nav {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index: 1;
+  }
+  
+  a{color:black;}
+
+.nav,.dropdown-content,.dropbtn{
+  background-color: #333;
+}
+
+.nav a {
+position: relative;
+float: left;
+display: block;
+color: white;
+text-align: center;
+padding: 14px 16px;
+text-decoration: none;
+font-size: 17px;
+top:10px;
+margin:auto;
+border-bottom: 3px solid transparent;
+}
+
+.nav a.active, .nav a:hover {
+  border-bottom: 3px solid white;
+  padding: 14px 16px;
+  }
+
+.nav a:hover { color:lightgray; }
+
+    
