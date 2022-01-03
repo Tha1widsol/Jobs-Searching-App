@@ -1,4 +1,3 @@
-
 /* ################
 Global styles
 ##################*/
@@ -55,4 +54,68 @@ border-bottom: 3px solid transparent;
 
 .nav a:hover { color:lightgray; }
 
-    
+/* ################
+Home styles
+##################*/
+
+#home{
+  display:flex; 
+  justify-content: space-evenly;
+}
+
+#you_are{
+ text-align: center;
+  font-size:60px;
+}
+
+.home-container{
+  width:400px;
+  text-align: center;
+} 
+
+.home-heading{
+  font-size: 40px;
+  margin-bottom: -5px; 
+}
+
+.vertical { 
+  border-left: 0.5px solid black; 
+  height:300px;
+  margin-right: 15px;
+  } 
+
+  /* ################
+Button styles
+##################*/
+
+button {
+  background-color: #4CAF50;
+  border-style: solid;
+  border-color: black;
+  border-width:1px;
+  height:auto;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  }
+
+  button,.dropbtn{
+    cursor:pointer;
+    position:relative;
+  }
+  
+  button:hover{
+  color: lightgray;
+  opacity: 0.8;
+  }
+  
+
+  button:disabled{
+    pointer-events: none; 
+    opacity:0.6;
+  }
+  
