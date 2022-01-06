@@ -9,7 +9,7 @@ export default function HomePage() {
                 <div className = 'home-container'>
                     <h2 className = "home-heading"><u>Looking for a job:</u> </h2>
                     <p>Find your dream job right now with one of the most trusted job searching engines on the web.</p>
-                    <a href = '/registration/job_seeker' ><button id = 'job_seeker' >Add your profile</button></a> 
+                    <a href = '/register/job_seeker' ><button id = 'job_seeker' >Add your profile</button></a> 
                 </div>
                 
                 <div className = 'vertical'></div>
@@ -17,7 +17,7 @@ export default function HomePage() {
                 <div className = 'home-container'>
                     <h2 className = 'home-heading'><u>An employer:</u> </h2>
                     <p>Setup your company and start adding jobs using our system.</p>
-                    <a href = '/registration/employer' ><button id = 'company' >Add your company</button></a> 
+                    <a href = '/register/employer' ><button id = 'company' >Add your company</button></a> 
                 </div>
             </div>
           
