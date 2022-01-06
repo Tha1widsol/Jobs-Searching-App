@@ -1,6 +1,7 @@
 import React from 'react'
 import {BrowserRouter as Router,Routes,Route} from "react-router-dom"
 import HomePage from './Pages/HomePage'
+import RegisterPage from './Pages/RegisterPage'
 
 export default function PagesRoutes() {
     return (
@@ -9,6 +10,7 @@ export default function PagesRoutes() {
                 <Routes>
                     <Route path = '/' element={<HomePage/>}></Route>
                     <Route path = '/home' element={<HomePage/>}></Route>
+                    <Route path = '/register/:option' element={<RegisterPage/>}></Route>
                 </Routes>
             </Router>
         </div>
