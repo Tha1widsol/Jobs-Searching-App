@@ -5,10 +5,10 @@ import Errors from '../messages/Errors';
 interface FormErrors{
     emailError: boolean,
     passwordError: {
-        invalidLength: boolean,
-        noUppercase: boolean,
-        noDigit: boolean,
-        noSymbol: boolean
+        invalidLength: boolean | null,
+        noUppercase: boolean | null,
+        noDigit: boolean | null,
+        noSymbol: boolean | null
     },
 
     confirmPasswordError: boolean
@@ -23,10 +23,10 @@ export default function RegisterPage() {
     const [errors,setErrors] = useState<Array<string>>([])
     const [FieldErrors,setFieldErrors] = useState<FormErrors>({
         emailError: false,
-        passwordError: {invalidLength: false,
-            noUppercase: false,
-            noDigit: false,
-            noSymbol: false
+        passwordError: {invalidLength: null,
+            noUppercase: null,
+            noDigit: null,
+            noSymbol: null
         },
         confirmPasswordError: false})
 
@@ -154,10 +154,10 @@ export default function RegisterPage() {
             <form id = 'regForm' onSubmit = {handleSubmitForm} noValidate>
                 <div style = {{textAlign:'center'}}>
                     <b><p style={{fontSize:'20px'}}>Password:</p></b> 
-                    <li className = {FieldErrors.passwordError.invalidLength ? 'error' : ''}>Must be atleast 9 characters long</li>
-                    <li className = {FieldErrors.passwordError.noUppercase ? 'error' : ''}>Contains atleast one uppercase character</li>
-                    <li className = {FieldErrors.passwordError.noDigit? 'error' : ''}>Contains atleast one digit</li>
-                    <li className = {FieldErrors.passwordError.noSymbol ? 'error' : ''}>Contains atleast one of these symbols: !,£,$,%,^,&,*,(,)</li>
+                    <li className = {FieldErrors.passwordError.invalidLength ? 'error' : !FieldErrors.passwordError.invalidLength && FieldErrors.passwordError.invalidLength != null ? 'success': ''}>Must be atleast 9 characters long</li>
+                    <li className = {FieldErrors.passwordError.noUppercase ? 'error' : !FieldErrors.passwordError.noUppercase && FieldErrors.passwordError.noUppercase != null ? 'success' : ''}>Contains atleast one uppercase character</li>
+                    <li className = {FieldErrors.passwordError.noDigit? 'error' : !FieldErrors.passwordError.noDigit && FieldErrors.passwordError.noDigit != null ? 'success' : ''}>Contains atleast one digit</li>
+                    <li className = {FieldErrors.passwordError.noSymbol ? 'error' : !FieldErrors.passwordError.noSymbol && FieldErrors.passwordError.noSymbol != null ? 'success' : ''}>Contains atleast one of these symbols: !,£,$,%,^,&,*,(,)</li>
                     <hr className="mt-0-mb-4" />
                 </div>
             
