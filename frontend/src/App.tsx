@@ -1,5 +1,5 @@
-import Navbar from './components/Navbar'
-import PagesRoutes from './components/PagesRoutes';
+import Navbar from './components/Global/Navbar'
+import PagesRoutes from './components/Global/PagesRoutes';
 
 function App() {
   const requestOptions = {

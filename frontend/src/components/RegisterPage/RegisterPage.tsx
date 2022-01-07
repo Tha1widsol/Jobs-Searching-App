@@ -1,18 +1,8 @@
 import React,{useState,createRef} from 'react'
 import { useNavigate,useParams } from "react-router-dom";
 import Errors from '../messages/Errors';
-
-interface FormErrors{
-    emailError: boolean,
-    passwordError: {
-        invalidLength: boolean | null,
-        noUppercase: boolean | null,
-        noDigit: boolean | null,
-        noSymbol: boolean | null
-    },
-
-    confirmPasswordError: boolean
-}
+import './css/RegisterPage.css'
+import {FormErrors} from './types/RegisterInterface'
 
 export default function RegisterPage() {
     const {option} = useParams()
