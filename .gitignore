@@ -8,6 +8,7 @@ node_modules
 *.docx
 *.jpg
 *.png
+*.sqlite3
 
 */*/*/__pycache__/
 
