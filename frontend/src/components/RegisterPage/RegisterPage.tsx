@@ -1,11 +1,14 @@
-import React,{useState,createRef} from 'react'
-import { useNavigate,useParams } from "react-router-dom";
+import React,{useState,useEffect,createRef} from 'react'
+import {useNavigate} from "react-router-dom";
 import Errors from '../messages/Errors';
 import './css/RegisterPage.css'
 import {FormErrors} from './types/RegisterInterface'
+import axios from 'axios'
 
 export default function RegisterPage() {
-    const {option} = useParams()
+    let navigate = useNavigate()
+    const pathName = window.location.pathname
+
     const emailRef = createRef<HTMLInputElement>()
     const passwordRef = createRef<HTMLInputElement>()
     const confirmPasswordRef = createRef<HTMLInputElement>()
@@ -19,13 +22,10 @@ export default function RegisterPage() {
             noSymbol: null
         },
         confirmPasswordError: false})
-
-    const validateForm = () => {
+ 
+    const validateForm = (email: string | undefined, password: string | undefined,confirmPassword: string | undefined) => {
         let isValid = true
         let errors : Array<string> = []
-        const email = emailRef.current?.value
-        const password = passwordRef.current?.value
-        const confirmPassword = confirmPasswordRef.current?.value
 
         const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
     
@@ -128,10 +128,30 @@ export default function RegisterPage() {
 
 
     function handleSubmitForm(e:any){
-        if (!validateForm()){
+        const email = emailRef.current?.value
+        const password = passwordRef.current?.value
+        const confirmPassword = confirmPasswordRef.current?.value
+        
+        if (!validateForm(email,password,confirmPassword)){
             e.preventDefault()
             return 
         }
+
+        const requestOptions = { 
+            headers:{'Content-Type':'application/json'}
+        }
+
+        axios.post(`/api/auth/${pathName}`,JSON.stringify({email: email,password: password}),requestOptions)
+        .then(response => {
+            const data = response.data
+            localStorage.setItem('token',data.token)
+            navigate('/')
+            window.location.reload()
+        })
+
+        .catch(error => {
+            console.log(error)
+        })
      
     }
 
