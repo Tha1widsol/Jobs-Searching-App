@@ -8,10 +8,15 @@ from knox.models import AuthToken
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerializer
 
-    def post(self,request,*args,**kwargs):
+    def post(self,request,option,*args,**kwargs):
         serializer = self.get_serializer(data = request.data)
         serializer.is_valid(raise_exception = True)
         user = serializer.save()
+
+        if option == 'employer':
+            user.is_an_employer = True
+            user.save()
+
         return Response({
             "user":UserSerializer(user,
         context = self.get_serializer_context()).data,
