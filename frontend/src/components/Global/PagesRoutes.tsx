@@ -10,7 +10,8 @@ export default function PagesRoutes() {
                 <Routes>
                     <Route path = '/' element={<HomePage/>}></Route>
                     <Route path = '/home' element={<HomePage/>}></Route>
-                    <Route path = '/register/:option' element={<RegisterPage/>}></Route>
+                    <Route path = '/register/job_seeker' element={<RegisterPage/>}></Route>
+                    <Route path = '/register/employer' element={<RegisterPage/>}></Route>
                 </Routes>
             </Router>
         </div>
