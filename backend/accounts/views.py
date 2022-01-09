@@ -1,6 +1,7 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from .serializers import *
+from main.serializers import UserSerializer
 from knox.models import AuthToken
 
 # Create your views here.
