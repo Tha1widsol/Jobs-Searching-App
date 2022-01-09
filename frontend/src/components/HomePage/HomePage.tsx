@@ -1,23 +1,7 @@
 import React,{useEffect} from 'react'
 import './css/HomePage.css'
-import { useAppSelector,useAppDispatch } from '../Global/features/hooks'
-import {login} from '../Global/features/user'
 
 export default function HomePage() {
-    const user = useAppSelector((state) => state.user)
-    const dispatch = useAppDispatch()
-    
-    useEffect(() => {
-        dispatch(
-            login({
-                id: 1,
-                email: 'laikelvin9@gmail.com',
-                hired:true,
-                is_an_employer:false
-            })
-          )
-    },[])
-  
     return (
         <div>
             <h1 id = 'you_are'>You are...</h1>
