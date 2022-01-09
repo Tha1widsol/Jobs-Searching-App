@@ -1,7 +1,12 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import *
+from .serializers import *
 
 # Create your views here.
 
-def index(request):
-    return JsonResponse ({'message':'Hello world'})
+class getCurrentUser(APIView):
+    def get(self,request,*args,**kwargs):
+        serializer_class = UserSerializer(request.user)
+        return Response(serializer_class.data)
