@@ -1,16 +1,18 @@
 import {createSlice} from '@reduxjs/toolkit'
 
+const initialStateValues = {id: null, email: null, hired: null, is_an_employer: null,logged_in: false}
+
 export const userSlice = createSlice({
     name : 'user',
-    initialState:  {id: null, email: null, hired: null, is_an_employer: null,logged_in: localStorage.getItem('token') ? true : false},
+    initialState: {values: initialStateValues},
     reducers: {
         login: (state,action) => {
-            state = action.payload
+            state.values = action.payload
         },
 
         logout: (state) => {
+            state.values = initialStateValues
             localStorage.removeItem('token');
-            state = {id: null, email: null, hired: null, is_an_employer: null,logged_in: false}
         }
     }
 })
