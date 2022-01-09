@@ -46,7 +46,7 @@ input,select,textarea{
   background-color: #333;
 }
 
-.nav a {
+.nav a,#loggedinMessage {
 position: relative;
 float: left;
 display: block;
@@ -60,7 +60,7 @@ margin:auto;
 border-bottom: 3px solid transparent;
 }
 
-.nav a.active, .nav a:hover {
+.nav a.active, .nav a:hover,#loggedinMessage:hover {
   border-bottom: 3px solid white;
   padding: 14px 16px;
   }
@@ -72,6 +72,13 @@ border-bottom: 3px solid transparent;
 .error{color: red}
 
 .success{color: green}
+
+.inputError{background-color:#ffdddd}
+
+form{
+  margin: 0px auto;
+  width: 60%;
+}
 
   /* ################
 Button styles
