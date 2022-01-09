@@ -1,8 +1,7 @@
-import React,{useState,useEffect,createRef} from 'react'
+import React,{useState,createRef} from 'react'
 import {useNavigate} from "react-router-dom";
 import Errors from '../messages/Errors';
-import './css/RegisterPage.css'
-import {FormErrors} from './types/RegisterInterface'
+import {FormProps} from './types/RegisterInterface'
 import axios from 'axios'
 
 export default function RegisterPage() {
@@ -14,7 +13,7 @@ export default function RegisterPage() {
     const confirmPasswordRef = createRef<HTMLInputElement>()
 
     const [errors,setErrors] = useState<Array<string>>([])
-    const [FieldErrors,setFieldErrors] = useState<FormErrors>({
+    const [FieldErrors,setFieldErrors] = useState<FormProps>({
         emailError: false,
         passwordError: {invalidLength: null,
             noUppercase: null,
@@ -25,9 +24,9 @@ export default function RegisterPage() {
  
     const validateForm = (email: string | undefined, password: string | undefined,confirmPassword: string | undefined) => {
         let isValid = true
-        let errors : Array<string> = []
+        let errors = []
 
-        const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+        const emailRegex = /^(([^<>()[\],;:\s@]+([^<>()[\],;:\s@]+)*)|(.+))@(([^<>()[\],;:\s@]+)+[^<>()[\],;:\s@]{2,})$/i
     
         const numbers = /[0-9]/g
         const symbols = /[!£$%^&*()]/g
@@ -45,7 +44,7 @@ export default function RegisterPage() {
             isValid = false
         }
 
-        if (password && password.length < 9 || password === ''){
+        if (password && (password.length < 9 || password === '')){
                 setFieldErrors(prev => ({
                     ...prev,
                     passwordError: {...prev.passwordError, invalidLength: true}
@@ -128,6 +127,7 @@ export default function RegisterPage() {
 
 
     function handleSubmitForm(e:any){
+        e.preventDefault()
         const email = emailRef.current?.value
         const password = passwordRef.current?.value
         const confirmPassword = confirmPasswordRef.current?.value
@@ -150,7 +150,8 @@ export default function RegisterPage() {
         })
 
         .catch(error => {
-            console.log(error)
+            setErrors(['Email already exists'])
+            window.scrollTo(0, 0)
         })
      
     }
@@ -158,10 +159,9 @@ export default function RegisterPage() {
     return (
         <div>
             <h1 className = 'title'>Register</h1>
-
             <Errors errors = {errors}/>
 
-            <form id = 'regForm' onSubmit = {handleSubmitForm} noValidate>
+            <form onSubmit = {handleSubmitForm} noValidate>
                 <div style = {{textAlign:'center'}}>
                     <b><p style={{fontSize:'20px'}}>Password:</p></b> 
                     <li className = {FieldErrors.passwordError.invalidLength ? 'error' : !FieldErrors.passwordError.invalidLength && FieldErrors.passwordError.invalidLength != null ? 'success': ''}>Must be atleast 9 characters long</li>
@@ -172,13 +172,13 @@ export default function RegisterPage() {
                 </div>
             
                 <label htmlFor = 'email'><h3>Email address:</h3></label>
-                <input type = 'email' style = {FieldErrors.emailError ? {backgroundColor:'#ffdddd'} : {backgroundColor:'none'}} ref = {emailRef} id = 'email' placeholder = 'E.g 123@example.com' required/>
+                <input type = 'email' className = {FieldErrors.emailError ? 'inputError' : ''} ref = {emailRef} id = 'email' placeholder = 'E.g 123@example.com' autoComplete = 'on' required/>
 
                 <label htmlFor = 'password'><h3>Password:</h3></label>
-                <input type = 'password' style = {FieldErrors.passwordError.invalidLength || FieldErrors.passwordError.noDigit || FieldErrors.passwordError.noSymbol || FieldErrors.passwordError.noUppercase? {backgroundColor:'#ffdddd'} : {backgroundColor:'none'}} ref = {passwordRef} placeholder = 'Password...' id = 'password' required/>
+                <input type = 'password' className = {FieldErrors.passwordError.invalidLength || FieldErrors.passwordError.noDigit || FieldErrors.passwordError.noSymbol || FieldErrors.passwordError.noUppercase ? 'inputError' : ''} ref = {passwordRef} placeholder = 'Password...' id = 'password' autoComplete = 'on' required/>
 
                 <label htmlFor = 'confirm_password'><h3>Confirm password:</h3></label>
-                <input type = 'password' style = {FieldErrors.confirmPasswordError ? {backgroundColor:'#ffdddd'} : {backgroundColor:'none'}} ref = {confirmPasswordRef} id = 'confirm_password' placeholder = 'Confirm password...' required/>
+                <input type = 'password' className = {FieldErrors.confirmPasswordError ? 'inputError' : ''} ref = {confirmPasswordRef} id = 'confirm_password' placeholder = 'Confirm password...' autoComplete = 'on' required/>
 
                 <button id = 'submit'>Submit</button>
 
