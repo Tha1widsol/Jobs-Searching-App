@@ -1,4 +1,4 @@
-export interface FormErrors{
+export interface FormProps{
     emailError: boolean,
     passwordError: {
         invalidLength: boolean | null,
