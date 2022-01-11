@@ -1,15 +1,16 @@
-import React,{useState} from 'react'
-import { useAppSelector,useAppDispatch} from '../features/hooks'
+import React from 'react'
+import {useAppSelector,useAppDispatch} from '../features/hooks'
 import {logout} from '../features/user'
+import {toggleNavDropdown} from '../features/dropdown'
 import axios from 'axios'
 import './css/Navbar.css'
 
 export default function Navbar() {
     const pathName = window.location.pathname
     const user = useAppSelector(state => state.user.values)
-    const dispatch = useAppDispatch()
+    const dropdown = useAppSelector(state => state.dropdown)
 
-    const [toggleDropdown,setToggleDropdown] = useState(false)
+    const dispatch = useAppDispatch()
 
     function handleLogout(){
         const requestOptions = { 
@@ -37,8 +38,8 @@ export default function Navbar() {
              {user.logged_in ?
              <div>
                   <div className = 'dropdown'> 
-                  <button id = 'navDropBtn' onClick={() => setToggleDropdown(!toggleDropdown)}>My account</button>
-                  {toggleDropdown ?  
+                <button id = 'navDropBtn' onClick={() => dispatch(toggleNavDropdown())}>My account</button>
+                  {dropdown.navDropdownOn ?  
                     <div className = 'dropdown-content'>
                             {user.is_an_employer ? 
                              <>
