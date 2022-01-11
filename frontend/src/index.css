@@ -3,8 +3,7 @@ Global styles
 ##################*/
 
 #firstcast{
-  font-size: 30px; 
-  top:3px;
+  font-size: 25px; 
 }
 
 .title{
@@ -31,41 +30,6 @@ input,select,textarea{
   border: 1.5px solid #aaaaaa;
   box-sizing: border-box;
 }
-
-.nav {
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  z-index: 1;
-  }
-  
-  a{color:black;}
-
-.nav,.dropdown-content,.dropbtn{
-  background-color: #333;
-}
-
-.nav a,#loggedinMessage {
-position: relative;
-float: left;
-display: block;
-color: white;
-text-align: center;
-padding: 14px 16px;
-text-decoration: none;
-font-size: 17px;
-top:10px;
-margin:auto;
-border-bottom: 3px solid transparent;
-}
-
-.nav a.active, .nav a:hover,#loggedinMessage:hover {
-  border-bottom: 3px solid white;
-  padding: 14px 16px;
-  }
-
-.nav a:hover { color:lightgray; }
 
 .error,.success{text-align: center}
 
