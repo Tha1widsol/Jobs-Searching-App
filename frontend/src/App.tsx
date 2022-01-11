@@ -3,12 +3,12 @@ import Navbar from './components/Global/Navbar/Navbar'
 import PagesRoutes from './components/Global/PagesRoutes';
 import {useAppDispatch} from './components/Global/features/hooks'
 import {login,logout} from './components/Global/features/user'
+import {navDropdownOff} from './components/Global/features/dropdown';
 import axios from 'axios'
 
 function App() {
   const dispatch = useAppDispatch()
   const token = localStorage.getItem('token')
-  
   
   useEffect(() => {
     if(!token) return
@@ -21,6 +21,7 @@ function App() {
     
     .then(response => {
         const data = response.data
+        
         if (data.email){
             dispatch(
                 login({
@@ -40,13 +41,19 @@ function App() {
         console.log(error)
     })
 
-},[dispatch,token])
+},[token,dispatch])
+
+function handleSetDropdownsOff(){
+  dispatch(navDropdownOff())
+}
 
   return (
     <div>
       <Navbar/>
-      <div id = 'gap'></div>
-      <PagesRoutes/>
+        <div onClick = {handleSetDropdownsOff}>
+          <div id = 'gap'></div>
+          <PagesRoutes/>
+        </div>
     </div>
     
   );
