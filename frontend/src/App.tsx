@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react'
-import Navbar from './components/Global/Navbar'
+import Navbar from './components/Global/Navbar/Navbar'
 import PagesRoutes from './components/Global/PagesRoutes';
 import {useAppDispatch} from './components/Global/features/hooks'
 import {login,logout} from './components/Global/features/user'
