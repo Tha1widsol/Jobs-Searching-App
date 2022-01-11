@@ -44,7 +44,7 @@ export default function RegisterPage() {
             isValid = false
         }
 
-        if (password && (password.length < 9 || password === '')){
+        if ((password && password.length < 9) || !password){
                 setFieldErrors(prev => ({
                     ...prev,
                     passwordError: {...prev.passwordError, invalidLength: true}
