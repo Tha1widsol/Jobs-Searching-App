@@ -1,0 +1,60 @@
+.nav {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    display:flex;
+    align-items: center;
+    }
+    
+  a{color:black; text-decoration: none;}
+  
+  .nav,.dropdown-content{background-color: #333;}
+  
+  .nav a{
+    font-size: 16px;
+    color: white;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+
+  #firstcast{border: unset;}
+
+  .nav a:hover{color: lightgray}
+  
+  .nav a.active, .nav a:hover,.dropdown-content a:hover,#navDropBtn:hover{
+    border-bottom: 0.5px solid white;
+    }
+
+  #loggedinMessage{
+    color:white; 
+    padding-left:14px
+  }
+
+  .dropdown #navDropBtn {
+    font-size: 16px;  
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+  }
+
+  #navDropBtn{border: unset;}
+  
+  .dropdown-content {
+    position: absolute;
+    background-color: #333;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: white;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown, .dropdown-content {display: block;}
+  
