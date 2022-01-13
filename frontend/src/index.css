@@ -39,11 +39,6 @@ input,select,textarea{
 
 .inputError{background-color:#ffdddd}
 
-form{
-  margin: 0px auto;
-  width: 60%;
-}
-
   /* ################
 Button styles
 ##################*/
@@ -63,10 +58,9 @@ button {
   margin: 4px 2px;
   }
 
-  #submit{
-    float: right;
-    margin-top: 10px;
-  }
+  #submit,.toggleTabBtn{margin-top: 10px;}
+
+  #submit{float: right;}
 
   button,.dropbtn{
     cursor:pointer;
@@ -84,3 +78,43 @@ button {
     opacity:0.6;
   }
   
+  /* ################
+Form styles
+##################*/
+
+form{
+  margin: 0px auto;
+  width: 60%;
+}
+
+.steps{
+  text-align: center;
+  margin-top: 10px
+}
+
+.step {
+  height: 15px;
+  width: 15px;
+  margin: 0 50px;
+  background-color: #bbbbbb;
+  border: none;  
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+  z-index: -1;
+}
+
+.step-label{
+  display:flex;
+  justify-content: center;
+}
+
+.step.active {opacity: 1;}
+ 
+.step.finish {background-color: #4CAF50;}
+
+.show{display: block;}
+
+.hide{display: none;}
+  
+
