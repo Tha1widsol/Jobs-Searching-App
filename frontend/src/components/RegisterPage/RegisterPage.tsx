@@ -14,13 +14,13 @@ export default function RegisterPage() {
 
     const [errors,setErrors] = useState<Array<string>>([])
     const [FieldErrors,setFieldErrors] = useState<FormProps>({
-        emailError: false,
-        passwordError: {invalidLength: null,
-            noUppercase: null,
-            noDigit: null,
-            noSymbol: null
+        emailIsValid: true,
+        password: {hasValidLength: null,
+            hasUppercase: null,
+            hasDigit: null,
+            hasSymbol: null
         },
-        confirmPasswordError: false})
+        confirmPasswordIsValid: true})
  
     const validateForm = (email: string | undefined, password: string | undefined,confirmPassword: string | undefined) => {
         let isValid = true
@@ -32,22 +32,16 @@ export default function RegisterPage() {
         const symbols = /[!£$%^&*()]/g
         const upper = /[A-Z]/g
 
-        if (email === '') {
-            setFieldErrors(prev => {return {...prev,emailError : true}})
-            errors.push('Email is required')
-            isValid = false
-        }
-
-        if (!email?.match(emailRegex) && email !== ''){
+        if (!email?.match(emailRegex)){
             errors.push('Invalid email')
-            setFieldErrors(prev => {return {...prev,emailError : true}})
+            setFieldErrors(prev => {return {...prev,emailIsValid: false}})
             isValid = false
         }
 
-        if ((password && password.length < 9) || !password){
+        if (password != null && password.length < 9){
                 setFieldErrors(prev => ({
                     ...prev,
-                    passwordError: {...prev.passwordError, invalidLength: true}
+                    password: {...prev.password, hasValidLength: false}
                 }))
 
                 isValid = false
@@ -56,7 +50,7 @@ export default function RegisterPage() {
         else{
             setFieldErrors(prev => ({
                 ...prev,
-                passwordError: {...prev.passwordError, invalidLength: false}
+                password: {...prev.password, hasValidLength: true}
             }))
 
         }
@@ -64,7 +58,7 @@ export default function RegisterPage() {
         if (!password?.match(numbers)){
                setFieldErrors(prev => ({
                     ...prev,
-                    passwordError: {...prev.passwordError, noDigit: true}
+                    password: {...prev.password, hasDigit: false}
                 }))
 
                 isValid = false
@@ -73,14 +67,14 @@ export default function RegisterPage() {
         else{
             setFieldErrors(prev => ({
                 ...prev,
-                passwordError: {...prev.passwordError, noDigit: false}
+                password: {...prev.password, hasDigit: true}
             }))
         }
 
         if (!password?.match(upper)){
             setFieldErrors(prev => ({
                 ...prev,
-                passwordError: {...prev.passwordError, noUppercase: true}
+                password: {...prev.password, hasUppercase: false}
             }))
 
             isValid = false
@@ -89,14 +83,14 @@ export default function RegisterPage() {
         else{
             setFieldErrors(prev => ({
                 ...prev,
-                passwordError: {...prev.passwordError, noUppercase: false}
+                password: {...prev.password, hasUppercase: true}
             }))
         }
 
         if (!password?.match(symbols)){
             setFieldErrors(prev => ({
                 ...prev,
-                passwordError: {...prev.passwordError, noSymbol: true}
+                password: {...prev.password, hasSymbol: false}
             }))
 
             isValid = false
@@ -105,12 +99,12 @@ export default function RegisterPage() {
         else{
             setFieldErrors(prev => ({
                 ...prev,
-                passwordError: {...prev.passwordError, noSymbol: false}
+                password: {...prev.password, hasSymbol: true}
             }))
         }
 
         if (password !== confirmPassword){
-            setFieldErrors(prev => {return {...prev,confirmPasswordError : true}})
+            setFieldErrors(prev => {return {...prev,confirmPasswordIsValid : true}})
             errors.push('Passwords must match')
             isValid = false
         }
@@ -164,21 +158,21 @@ export default function RegisterPage() {
             <form onSubmit = {handleSubmitForm} noValidate>
                 <div style = {{textAlign:'center'}}>
                     <b><p style={{fontSize:'20px'}}>Password:</p></b> 
-                    <li className = {FieldErrors.passwordError.invalidLength ? 'error' : !FieldErrors.passwordError.invalidLength && FieldErrors.passwordError.invalidLength != null ? 'success': ''}>Must be atleast 9 characters long</li>
-                    <li className = {FieldErrors.passwordError.noUppercase ? 'error' : !FieldErrors.passwordError.noUppercase && FieldErrors.passwordError.noUppercase != null ? 'success' : ''}>Contains atleast one uppercase character</li>
-                    <li className = {FieldErrors.passwordError.noDigit? 'error' : !FieldErrors.passwordError.noDigit && FieldErrors.passwordError.noDigit != null ? 'success' : ''}>Contains atleast one digit</li>
-                    <li className = {FieldErrors.passwordError.noSymbol ? 'error' : !FieldErrors.passwordError.noSymbol && FieldErrors.passwordError.noSymbol != null ? 'success' : ''}>Contains atleast one of these symbols: !,£,$,%,^,&,*,(,)</li>
+                    <li className = {FieldErrors.password.hasValidLength === false ? 'error' : FieldErrors.password.hasValidLength ? 'success': ''}>Must be atleast 9 characters long</li>
+                    <li className = {FieldErrors.password.hasUppercase === false ? 'error' : FieldErrors.password.hasUppercase ? 'success' : ''}>Contains atleast one uppercase character</li>
+                    <li className = {FieldErrors.password.hasDigit === false ? 'error' : FieldErrors.password.hasDigit ? 'success' : ''}>Contains atleast one digit</li>
+                    <li className = {FieldErrors.password.hasSymbol === false ? 'error' : FieldErrors.password.hasSymbol ? 'success' : ''}>Contains atleast one of these symbols: !,£,$,%,^,&,*,(,)</li>
                     <hr className="mt-0-mb-4" />
                 </div>
             
                 <label htmlFor = 'email'><h3>Email address:</h3></label>
-                <input type = 'email' className = {FieldErrors.emailError ? 'inputError' : ''} ref = {emailRef} id = 'email' placeholder = 'E.g 123@example.com' autoComplete = 'on' required/>
+                <input type = 'email' className = {!FieldErrors.emailIsValid ? 'inputError' : ''} ref = {emailRef} id = 'email' placeholder = 'E.g 123@example.com' autoComplete = 'on' required/>
 
                 <label htmlFor = 'password'><h3>Password:</h3></label>
-                <input type = 'password' className = {FieldErrors.passwordError.invalidLength || FieldErrors.passwordError.noDigit || FieldErrors.passwordError.noSymbol || FieldErrors.passwordError.noUppercase ? 'inputError' : ''} ref = {passwordRef} placeholder = 'Password...' id = 'password' autoComplete = 'on' required/>
+                <input type = 'password' className = {FieldErrors.password.hasValidLength === false || !FieldErrors.password.hasDigit === false || FieldErrors.password.hasSymbol === false || FieldErrors.password.hasUppercase === false ? 'inputError' : ''} ref = {passwordRef} placeholder = 'Password...' id = 'password' autoComplete = 'on' required/>
 
-                <label htmlFor = 'confirm_password'><h3>Confirm password:</h3></label>
-                <input type = 'password' className = {FieldErrors.confirmPasswordError ? 'inputError' : ''} ref = {confirmPasswordRef} id = 'confirm_password' placeholder = 'Confirm password...' autoComplete = 'on' required/>
+                <label htmlFor = 'ConfirmPassword'><h3>Confirm password:</h3></label>
+                <input type = 'password' className = {!FieldErrors.confirmPasswordIsValid ? 'inputError' : ''} ref = {confirmPasswordRef} id = 'confirmPassword' placeholder = 'Confirm password...' autoComplete = 'on' required/>
 
                 <button id = 'submit'>Submit</button>
 
