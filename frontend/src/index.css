@@ -89,7 +89,7 @@ form{
 
 .steps{
   text-align: center;
-  margin-top: 10px
+  margin: 10px 0px 45px 0px
 }
 
 .step {
@@ -107,14 +107,19 @@ form{
 .step-label{
   display:flex;
   justify-content: center;
+  pointer-events: none;
 }
 
 .step.active {opacity: 1;}
+
+.step.finish {
+  cursor: pointer;
+  background-color: #4CAF50;
+}
  
-.step.finish {background-color: #4CAF50;}
+.tab.show,.show{display: block;}
 
-.show{display: block;}
-
-.hide{display: none;}
+.tab.hide,.hide{display: none;}
   
+
 
