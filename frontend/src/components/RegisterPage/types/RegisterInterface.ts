@@ -1,11 +1,11 @@
 export interface FormProps{
-    emailError: boolean,
-    passwordError: {
-        invalidLength: boolean | null,
-        noUppercase: boolean | null,
-        noDigit: boolean | null,
-        noSymbol: boolean | null
+    emailIsValid: boolean,
+    password: {
+        hasValidLength: boolean | null,
+        hasUppercase: boolean | null,
+        hasDigit: boolean | null,
+        hasSymbol: boolean | null
     },
 
-    confirmPasswordError: boolean
+    confirmPasswordIsValid: boolean
 }
