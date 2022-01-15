@@ -3,7 +3,6 @@ import Navbar from './components/Global/Navbar/Navbar'
 import PagesRoutes from './components/Global/PagesRoutes';
 import {useAppDispatch} from './components/Global/features/hooks'
 import {login,logout} from './components/Global/features/user'
-import {navDropdownOff} from './components/Global/features/dropdown';
 import axios from 'axios'
 
 function App() {
@@ -43,17 +42,10 @@ function App() {
 
 },[token,dispatch])
 
-function handleSetDropdownsOff(){
-  dispatch(navDropdownOff())
-}
-
   return (
     <div>
       <Navbar/>
-        <div onClick = {handleSetDropdownsOff}>
-          <div id = 'gap'></div>
-          <PagesRoutes/>
-        </div>
+      <PagesRoutes/>
     </div>
     
   );
