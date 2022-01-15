@@ -6,10 +6,9 @@ export default function Errors ({errors} : {errors : Array<string>}) {
             {errors.map((error,index) => {
                 return (
                     <div className = 'error' key = {index}> 
-                    <p><li>{error}</li></p>
+                    <li>{error}</li>
                     </div>
                     )
-        
             })}
         </div>
 
