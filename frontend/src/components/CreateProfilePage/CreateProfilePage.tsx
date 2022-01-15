@@ -6,28 +6,34 @@ import {FormProps} from './types/CreateProfileInterface';
 export default function CreateProfilePage() {
     const [currentTab,setCurrentTab] = useState(1)
     const [errors,setErrors] = useState<Array<string>>([])
+    
     const firstNameRef = createRef<HTMLInputElement>()
     const middleNameRef = createRef<HTMLInputElement>()
     const lastNameRef = createRef<HTMLInputElement>()
+    const aboutRef = createRef<HTMLTextAreaElement>()
     const logoRef = createRef<HTMLInputElement>()
 
     const [FieldErrors,setFieldErrors] = useState<FormProps>({
         firstName: {isValid: true, msg: 'First name is invalid'},
         middleName: {isValid: true, msg: 'Middle name is invalid'},
-        lastName:  {isValid: true, msg: 'Last name is invalid'}
+        lastName:  {isValid: true, msg: 'Last name is invalid'},
+        about: {isValid: true, msg: 'About section is invalid'}
     })
 
+    const [aboutLength,setAboutLength] = useState({currentLength: 0, maxLength: 250})
     const maxTabs = document.querySelectorAll('.tab').length
 
     const validateForm = () => {
         let isValid = true
         let errorsArr : Array<string> = []
-        const letters = (/^[A-Za-z]+$/);
+        const letters = /^[A-Za-z]+$/
+        const lettersAndSpaces = /^[a-zA-Z\s]*$/
         const numbers = /[0-9]/g
         const symbols = /[!£$%^&*()]/g
         const firstName = firstNameRef.current?.value
         const middleName = middleNameRef.current?.value
         const lastName = lastNameRef.current?.value
+        const about = aboutRef.current?.value
 
         if (!firstName?.match(letters)){
             setFieldErrors(prev => ({...prev, firstName: {...prev.firstName, isValid: false}}))
@@ -53,6 +59,14 @@ export default function CreateProfilePage() {
 
         else setFieldErrors(prev => ({...prev, lastName: {...prev.lastName, isValid: true}}))
 
+        if (!about?.match(lettersAndSpaces) || about.length < 10){
+            setFieldErrors(prev => ({...prev, about: {...prev.about, isValid: false}}))
+            errorsArr.push(FieldErrors.about.msg)
+            isValid = false
+        }
+
+        else setFieldErrors(prev => ({...prev, about: {...prev.about, isValid: true}}))
+
         if (!isValid){
             setErrors(errorsArr)
             window.scrollTo(0, 0)
@@ -65,7 +79,7 @@ export default function CreateProfilePage() {
 
     function fixName(e:any){
         const spaceRegex = /\s/g  
-        e.target.value = e.target.value.charAt(0).toUpperCase() +  e.target.value.slice(1);  
+        e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);  
         e.target.value = e.target.value.replace(spaceRegex, '');
         e.target.value = e.target.value.charAt(0) + e.target.value.slice(1).toLowerCase()
     }
@@ -93,6 +107,9 @@ export default function CreateProfilePage() {
 
                     <label htmlFor = 'lastName'><h3>Last name:</h3></label>
                     <input id = 'lastName' className = {!FieldErrors.lastName.isValid ? 'inputError' : ''} ref = {lastNameRef} placeholder = 'Last name...' onKeyUp = {fixName} autoComplete = 'on' required/>
+
+                    <label htmlFor = 'about' ><h3>About (Characters remaining: {aboutLength.maxLength - aboutLength.currentLength}):</h3></label>
+                    <textarea id = 'about' className = {!FieldErrors.about.isValid ? 'inputError' : ''} ref = {aboutRef} onChange = {(e:any) => setAboutLength(prev => {return {...prev,currentLength: e.target.value.length}})} placeholder = 'Tell us about yourself...' maxLength = {aboutLength.maxLength} style = {{height:'100px'}} required/>
 
                     <label htmlFor = 'logo'><h3>Profile logo (Optional):</h3></label>
                     <input id = 'logo' ref = {logoRef} type = 'file' accept = 'image/*' autoComplete = 'on' required/>
