@@ -8,9 +8,9 @@ import axios from 'axios'
 function App() {
   const dispatch = useAppDispatch()
   const token = localStorage.getItem('token')
-  
+
   useEffect(() => {
-    if(!token) return
+    if(!token || token === '') return
 
      axios.get('/api/currentUser',{
         headers: {
@@ -26,8 +26,8 @@ function App() {
                 login({
                     id: data.id,
                     email: data.email,
-                    is_an_employer: data.is_an_employer,
-                    logged_in: true
+                    isAnEmployer: data.is_an_employer,
+                    loggedIn: true
                 })
             )
           
