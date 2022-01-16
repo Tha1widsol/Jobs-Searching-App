@@ -128,6 +128,10 @@ form{
 .tab.show,.show{display: block;}
 
 .tab.hide,.hide{display: none;}
-  
+
+.list{
+  height: 150px;
+  margin-bottom: 20px;
+}
 
 

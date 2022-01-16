@@ -1,25 +1,33 @@
 import React,{useState,createRef} from 'react'
 import Errors from '../messages/Errors';
+import Success from '../messages/Success';
 import axios from 'axios'
+import ReactScrollableFeed from 'react-scrollable-feed';
 import {FormProps} from './types/CreateProfileInterface';
 
 export default function CreateProfilePage() {
     const [currentTab,setCurrentTab] = useState(1)
+    const [success,setSuccess] = useState('')
     const [errors,setErrors] = useState<Array<string>>([])
-    
+
     const firstNameRef = createRef<HTMLInputElement>()
     const middleNameRef = createRef<HTMLInputElement>()
     const lastNameRef = createRef<HTMLInputElement>()
     const aboutRef = createRef<HTMLTextAreaElement>()
     const logoRef = createRef<HTMLInputElement>()
+    const skillsRef = createRef<any>()
 
     const [FieldErrors,setFieldErrors] = useState<FormProps>({
         firstName: {isValid: true, msg: 'First name is invalid'},
         middleName: {isValid: true, msg: 'Middle name is invalid'},
         lastName:  {isValid: true, msg: 'Last name is invalid'},
-        about: {isValid: true, msg: 'About section is invalid'}
+        about: {isValid: true, msg: 'About section is invalid'},
+        skill: {isEmpty: false, EmptyMsg: 'Invalid skill', 
+            alreadyExists: false, alreadyExistsMsg: 'Skill already exists'}
     })
 
+    const [skills,setSkills] = useState<Array<string>>([])
+    
     const [aboutLength,setAboutLength] = useState({currentLength: 0, maxLength: 250})
     const maxTabs = document.querySelectorAll('.tab').length
 
@@ -77,11 +85,54 @@ export default function CreateProfilePage() {
         setCurrentTab(currentTab + 1)
     }
 
+    function handleToPrevTab(){
+        setErrors([])
+        setCurrentTab(currentTab - 1)
+    }
+
     function fixName(e:any){
         const spaceRegex = /\s/g  
         e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);  
         e.target.value = e.target.value.replace(spaceRegex, '');
         e.target.value = e.target.value.charAt(0) + e.target.value.slice(1).toLowerCase()
+    }
+
+    function handleAddSkill(){
+       const skill = skillsRef.current?.value.trim()
+       let errors:Array<string> = []
+
+       if (skill.match(/^ *$/)) {
+        setFieldErrors(prev => ({...prev, skill: {...prev.skill, isEmpty: true}}))
+        errors.push(FieldErrors.skill.EmptyMsg)
+       }
+
+       else setFieldErrors(prev => ({...prev, skill: {...prev.skill, isEmpty: false}}))
+
+       if (skills.filter(obj => obj === skill).length > 0){
+        setFieldErrors(prev => ({...prev, skill: {...prev.skill, alreadyExists: true}}))
+        errors.push(FieldErrors.skill.alreadyExistsMsg)
+       }
+
+       else setFieldErrors(prev => ({...prev, skill: {...prev.skill, alreadyExists: false}}))
+
+       if (errors.length){
+           setSuccess('')
+           setErrors(errors)
+           return
+       }
+       
+       setSkills(prev => {return [...prev,skill]})
+       setSuccess('Skill added')
+       setErrors([])
+       skillsRef.current.value = null
+    }
+
+    function handleRemoveSkill(skill: string){
+        const newSkills = [...skills]
+        let index = newSkills.findIndex(obj => obj === skill)
+        newSkills.splice(index,1)
+        setSkills(newSkills)
+        setSuccess('Skill removed')
     }
 
     return (
@@ -118,7 +169,27 @@ export default function CreateProfilePage() {
 
                 <div className = {`tab ${currentTab === 2 ? 'show' : 'hide'}`}>
                     <h1 className = 'title'>Skills</h1> 
+                    <Success success = {success}/>
                     <Errors errors = {errors}/>
+
+                    <label htmlFor = 'skills'><h3>Specific Key skills:</h3></label>
+                    <input id = 'skills' className = {FieldErrors.skill.alreadyExists || FieldErrors.skill.isEmpty ? 'inputError' : ''} ref = {skillsRef} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
+                    <button type = 'button' style = {{marginTop:'10px'}} onClick = {handleAddSkill}>Add skill</button>
+
+                    {skills.length ? <p>Your skills ({skills.length}):</p> : null}
+                    <div className = 'list'>
+                        <ReactScrollableFeed>
+                        {skills.map((skill,index) => {
+                            return (
+                            <div key = {index} style = {{display:'flex',justifyContent:'space-between'}}>
+                               <li>{skill}</li>
+                               <button type = 'button' onClick = {() => handleRemoveSkill(skill)} style = {{padding:'10px'}}>Remove</button>
+                            </div>
+                            )
+                        
+                        })}
+                        </ReactScrollableFeed>
+                    </div>
                 </div>
 
                 <div className = {`tab ${currentTab === 3 ? 'show' : 'hide'}`}>
@@ -136,8 +207,8 @@ export default function CreateProfilePage() {
                     <Errors errors = {errors}/>
                 </div>
                 
-                {currentTab === maxTabs ? <button id = 'submit'>Submit</button> : <button type = 'button' className = 'toggleTabBtn' onClick = {validateForm} style = {{float:'right'}}>Next</button>}
-                <button type = 'button' className = {currentTab > 1 ? 'toggleTabBtn' : 'hide'} onClick = {() => setCurrentTab(currentTab - 1)}>Previous</button>
+                {currentTab === maxTabs ? <button id = 'submit'>Submit</button> : <button type = 'button' className = 'toggleTabBtn' onClick = {() => setCurrentTab(currentTab + 1)} style = {{float:'right'}}>Next</button>}
+                <button type = 'button' className = {currentTab > 1 ? 'toggleTabBtn' : 'hide'} onClick = {handleToPrevTab}>Previous</button>
             </form>
 
         </div>
