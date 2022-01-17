@@ -13,7 +13,7 @@ export default function HomePage() {
                     <a href = '/register/job_seeker' ><button id = 'jobseeker' >Add your profile</button></a> 
                 </div>
                 
-                <div id = 'vertical'></div>
+                <div id = 'vertical'/>
 
                 <div className = 'container'>
                     <h2 className = 'heading'><u>An employer:</u></h2>
