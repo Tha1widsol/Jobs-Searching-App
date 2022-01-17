@@ -79,14 +79,14 @@ export default function CreateProfilePage() {
         setCurrentTab(currentTab - 1)
     }
 
-    function fixName(e:any){
+    function handleFixName(e:any){
         const spaceRegex = /\s/g  
         e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);  
         e.target.value = e.target.value.replace(spaceRegex, '');
         e.target.value = e.target.value.charAt(0) + e.target.value.slice(1).toLowerCase()
     }
 
-    function handleAddSkill(e:any){
+    function handleAddSkill(){
        const currentSkill = skills.currentSkill.trim()
        let errors:Array<string> = []
 
@@ -121,6 +121,7 @@ export default function CreateProfilePage() {
         let index = newSkills.findIndex(obj => obj === skill)
         newSkills.splice(index,1)
         setSkills(prev => {return {...prev,value: newSkills}})
+        setErrors([])
         setSuccess(skills.skillRemovedMsg)
     }
 
@@ -140,16 +141,16 @@ export default function CreateProfilePage() {
                     <Errors errors = {errors}/>
 
                     <label htmlFor = 'firstName'><h3>First name:</h3></label>
-                    <input id = 'firstName' className = {!firstName.isValid ? 'inputError' : ''} onChange = {(e:any) => setFirstName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {fixName} placeholder = 'First name...' autoComplete = 'on' required/>
+                    <input id = 'firstName' className = {!firstName.isValid ? 'inputError' : ''} onChange = {e => setFirstName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {handleFixName} placeholder = 'First name...' autoComplete = 'on' required/>
 
                     <label htmlFor = 'middleName'><h3>Middle name (Optional):</h3></label>
-                    <input id = 'middleName' className = {!middleName.isValid ? 'inputError' : ''} onChange = {(e:any) => setMiddleName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Middle name...' onKeyUp = {fixName} autoComplete = 'on'/>
+                    <input id = 'middleName' className = {!middleName.isValid ? 'inputError' : ''} onChange = {e => setMiddleName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Middle name...' onKeyUp = {handleFixName} autoComplete = 'on'/>
 
                     <label htmlFor = 'lastName'><h3>Last name:</h3></label>
-                    <input id = 'lastName' className = {!lastName.isValid ? 'inputError' : ''}  onChange = {(e:any) => setLastName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Last name...' onKeyUp = {fixName} autoComplete = 'on' required/>
+                    <input id = 'lastName' className = {!lastName.isValid ? 'inputError' : ''}  onChange = {e => setLastName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Last name...' onKeyUp = {handleFixName} autoComplete = 'on' required/>
 
                     <label htmlFor = 'about' ><h3>About (Characters remaining: {about.maxLength - about.currentLength}):</h3></label>
-                    <textarea id = 'about' className = {!about.isValid ? 'inputError' : ''} onChange = {(e:any) => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
+                    <textarea id = 'about' className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
 
                     <label htmlFor = 'logo'><h3>Profile logo (Optional):</h3></label>
                     <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' required/>
@@ -162,7 +163,7 @@ export default function CreateProfilePage() {
                     <Errors errors = {errors}/>
 
                     <label htmlFor = 'skills'><h3>Specific Key skills:</h3></label>
-                    <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentSkill} onChange = {(e:any) => setSkills(prev => {return {...prev, currentSkill: e.target.value}})} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
+                    <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentSkill} onChange = {e => setSkills(prev => {return {...prev, currentSkill: e.target.value}})} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
                     <button type = 'button' style = {{marginTop:'10px'}} onClick = {handleAddSkill}>Add skill</button>
 
                     {skills.value.length ? <p>Your skills ({skills.value.length}):</p> : null}
@@ -185,7 +186,7 @@ export default function CreateProfilePage() {
                     <h1 className = 'title'>Work Experience</h1> 
                     <Errors errors = {errors}/>
                     <label htmlFor = 'experience'><h3>Work Experience (Optional) Characters remaining: {experience.maxLength - experience.currentLength}</h3></label>
-                    <textarea id = 'experience' className = {!experience.isValid ? 'inputError' : ''}   style = {{height: '200px'}} onChange = {(e:any) => setExperience(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Work experience...' autoComplete = 'on' maxLength = {experience.maxLength}/>
+                    <textarea id = 'experience' className = {!experience.isValid ? 'inputError' : ''}   style = {{height: '200px'}} onChange = {e => setExperience(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Work experience...' autoComplete = 'on' maxLength = {experience.maxLength}/>
 
                 </div>
 
