@@ -1,82 +1,71 @@
-import React,{useState,createRef} from 'react'
+import React,{useState} from 'react'
 import Errors from '../messages/Errors';
 import Success from '../messages/Success';
 import axios from 'axios'
 import ReactScrollableFeed from 'react-scrollable-feed';
-import {FormProps} from './types/CreateProfileInterface';
+import {FieldProps,TextFieldProps,SkillsProps} from './types/CreateProfileInterface';
 
 export default function CreateProfilePage() {
     const [currentTab,setCurrentTab] = useState(1)
     const [success,setSuccess] = useState('')
     const [errors,setErrors] = useState<Array<string>>([])
 
-    const firstNameRef = createRef<HTMLInputElement>()
-    const middleNameRef = createRef<HTMLInputElement>()
-    const lastNameRef = createRef<HTMLInputElement>()
-    const aboutRef = createRef<HTMLTextAreaElement>()
-    const logoRef = createRef<HTMLInputElement>()
-    const skillsRef = createRef<any>()
+    const [firstName,setFirstName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'First name is invalid'})
+    const [middleName,setMiddleName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Middle name is invalid'})
+    const [lastName,setLastName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Last name is invalid'})
+    const [about,setAbout] = useState<TextFieldProps>({value: '', isValid: true, currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
+    const [skills,setSkills] = useState<SkillsProps>({value: [], currentSkill: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',skillAddedMsg:'Skill added',skillRemovedMsg: 'Skill removed'})
+    const [experience,setExperience] = useState<TextFieldProps>({value: '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 450})
 
-    const [FieldErrors,setFieldErrors] = useState<FormProps>({
-        firstName: {isValid: true, msg: 'First name is invalid'},
-        middleName: {isValid: true, msg: 'Middle name is invalid'},
-        lastName:  {isValid: true, msg: 'Last name is invalid'},
-        about: {isValid: true, msg: 'About section is invalid'},
-        skill: {isEmpty: false, EmptyMsg: 'Invalid skill', 
-            alreadyExists: false, alreadyExistsMsg: 'Skill already exists'}
-    })
-
-    const [skills,setSkills] = useState<Array<string>>([])
-    
-    const [aboutLength,setAboutLength] = useState({currentLength: 0, maxLength: 250})
     const maxTabs = document.querySelectorAll('.tab').length
 
     const validateForm = () => {
         let isValid = true
-        let errorsArr : Array<string> = []
+        let errors : Array<string> = []
         const letters = /^[A-Za-z]+$/
         const lettersAndSpaces = /^[a-zA-Z\s]*$/
         const numbers = /[0-9]/g
         const symbols = /[!£$%^&*()]/g
-        const firstName = firstNameRef.current?.value
-        const middleName = middleNameRef.current?.value
-        const lastName = lastNameRef.current?.value
-        const about = aboutRef.current?.value
 
-        if (!firstName?.match(letters)){
-            setFieldErrors(prev => ({...prev, firstName: {...prev.firstName, isValid: false}}))
-            errorsArr.push(FieldErrors.firstName.msg)
-            isValid = false
+        switch(currentTab){
+          case 1: 
+            if (!firstName.value.match(letters)){
+                setFirstName(prev => {return {...prev,isValid: false}})
+                errors.push(firstName.errorMsg)
+                isValid = false
+            }
+    
+            else setFirstName(prev => {return {...prev,isValid: true}})
+    
+            if (middleName.value !== '' && !middleName.value.match(letters)){
+                setMiddleName(prev => {return {...prev,isValid: false}})
+                errors.push(middleName.errorMsg)
+                isValid = false
+            }
+    
+            else setMiddleName(prev => {return {...prev,isValid: true}})
+    
+            if (!lastName.value.match(letters)){
+                setLastName(prev => {return {...prev,isValid: false}})
+                errors.push(lastName.errorMsg)
+                isValid = false
+            }
+    
+            else setLastName(prev => {return {...prev,isValid: true}})
+
+            if (about.value.length < 100){
+                setAbout(prev => {return {...prev,isValid: false}})
+                errors.push(about.errorMsg)
+                isValid = false
+            }
+    
+            else setAbout(prev => {return {...prev,isValid: true}})
+    
+            break
         }
-
-        else setFieldErrors(prev => ({...prev, firstName: {...prev.firstName, isValid: true}}))
-
-        if (middleName !== '' && !middleName?.match(letters)){
-            setFieldErrors(prev => ({...prev, middleName: {...prev.middleName, isValid: false}}))
-            errorsArr.push(FieldErrors.middleName.msg)
-            isValid = false
-        }
-
-        else setFieldErrors(prev => ({...prev, middleName: {...prev.middleName, isValid: true}}))
-
-        if (!lastName?.match(letters)){
-            setFieldErrors(prev => ({...prev, lastName: {...prev.lastName, isValid: false}}))
-            errorsArr.push(FieldErrors.lastName.msg)
-            isValid = false
-        }
-
-        else setFieldErrors(prev => ({...prev, lastName: {...prev.lastName, isValid: true}}))
-
-        if (!about?.match(lettersAndSpaces) || about.length < 10){
-            setFieldErrors(prev => ({...prev, about: {...prev.about, isValid: false}}))
-            errorsArr.push(FieldErrors.about.msg)
-            isValid = false
-        }
-
-        else setFieldErrors(prev => ({...prev, about: {...prev.about, isValid: true}}))
-
+    
         if (!isValid){
-            setErrors(errorsArr)
+            setErrors(errors)
             window.scrollTo(0, 0)
             return
         }
@@ -97,23 +86,23 @@ export default function CreateProfilePage() {
         e.target.value = e.target.value.charAt(0) + e.target.value.slice(1).toLowerCase()
     }
 
-    function handleAddSkill(){
-       const skill = skillsRef.current?.value.trim()
+    function handleAddSkill(e:any){
+       const currentSkill = skills.currentSkill.trim()
        let errors:Array<string> = []
 
-       if (skill.match(/^ *$/)) {
-        setFieldErrors(prev => ({...prev, skill: {...prev.skill, isEmpty: true}}))
-        errors.push(FieldErrors.skill.EmptyMsg)
+       if (currentSkill.match(/^ *$/)) {
+        setSkills(prev => {return {...prev,isEmpty: true}})
+        errors.push(skills.emptyErrorMsg)
        }
 
-       else setFieldErrors(prev => ({...prev, skill: {...prev.skill, isEmpty: false}}))
+       else setSkills(prev => {return {...prev,isEmpty: false}})
 
-       if (skills.filter(obj => obj === skill).length > 0){
-        setFieldErrors(prev => ({...prev, skill: {...prev.skill, alreadyExists: true}}))
-        errors.push(FieldErrors.skill.alreadyExistsMsg)
+       if (skills.value.filter(skill => skill === currentSkill).length > 0){
+        setSkills(prev => {return {...prev,alreadyExists: true}})
+        errors.push(skills.alreadyExistsMsg)
        }
 
-       else setFieldErrors(prev => ({...prev, skill: {...prev.skill, alreadyExists: false}}))
+       else setSkills(prev => {return {...prev,alreadyExists: false}})
 
        if (errors.length){
            setSuccess('')
@@ -121,18 +110,18 @@ export default function CreateProfilePage() {
            return
        }
        
-       setSkills(prev => {return [...prev,skill]})
-       setSuccess('Skill added')
+       setSkills(prev => ({...prev, value: [...prev.value,currentSkill]}))
+       setSuccess(skills.skillAddedMsg)
        setErrors([])
-       skillsRef.current.value = null
+       setSkills(prev => {return {...prev,currentSkill: ''}})
     }
 
     function handleRemoveSkill(skill: string){
-        const newSkills = [...skills]
+        const newSkills = [...skills.value]
         let index = newSkills.findIndex(obj => obj === skill)
         newSkills.splice(index,1)
-        setSkills(newSkills)
-        setSuccess('Skill removed')
+        setSkills(prev => {return {...prev,value: newSkills}})
+        setSuccess(skills.skillRemovedMsg)
     }
 
     return (
@@ -151,19 +140,19 @@ export default function CreateProfilePage() {
                     <Errors errors = {errors}/>
 
                     <label htmlFor = 'firstName'><h3>First name:</h3></label>
-                    <input id = 'firstName' className = {!FieldErrors.firstName.isValid ? 'inputError' : ''} onKeyUp = {fixName} ref = {firstNameRef} placeholder = 'First name...' autoComplete = 'on' required/>
+                    <input id = 'firstName' className = {!firstName.isValid ? 'inputError' : ''} onChange = {(e:any) => setFirstName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {fixName} placeholder = 'First name...' autoComplete = 'on' required/>
 
                     <label htmlFor = 'middleName'><h3>Middle name (Optional):</h3></label>
-                    <input id = 'middleName' className = {!FieldErrors.middleName.isValid ? 'inputError' : ''} ref = {middleNameRef} placeholder = 'Middle name...' onKeyUp = {fixName} autoComplete = 'on'/>
+                    <input id = 'middleName' className = {!middleName.isValid ? 'inputError' : ''} onChange = {(e:any) => setMiddleName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Middle name...' onKeyUp = {fixName} autoComplete = 'on'/>
 
                     <label htmlFor = 'lastName'><h3>Last name:</h3></label>
-                    <input id = 'lastName' className = {!FieldErrors.lastName.isValid ? 'inputError' : ''} ref = {lastNameRef} placeholder = 'Last name...' onKeyUp = {fixName} autoComplete = 'on' required/>
+                    <input id = 'lastName' className = {!lastName.isValid ? 'inputError' : ''}  onChange = {(e:any) => setLastName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Last name...' onKeyUp = {fixName} autoComplete = 'on' required/>
 
-                    <label htmlFor = 'about' ><h3>About (Characters remaining: {aboutLength.maxLength - aboutLength.currentLength}):</h3></label>
-                    <textarea id = 'about' className = {!FieldErrors.about.isValid ? 'inputError' : ''} ref = {aboutRef} onChange = {(e:any) => setAboutLength(prev => {return {...prev,currentLength: e.target.value.length}})} placeholder = 'Tell us about yourself...' maxLength = {aboutLength.maxLength} style = {{height:'100px'}} required/>
+                    <label htmlFor = 'about' ><h3>About (Characters remaining: {about.maxLength - about.currentLength}):</h3></label>
+                    <textarea id = 'about' className = {!about.isValid ? 'inputError' : ''} onChange = {(e:any) => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
 
                     <label htmlFor = 'logo'><h3>Profile logo (Optional):</h3></label>
-                    <input id = 'logo' ref = {logoRef} type = 'file' accept = 'image/*' autoComplete = 'on' required/>
+                    <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' required/>
 
                 </div>
 
@@ -173,13 +162,13 @@ export default function CreateProfilePage() {
                     <Errors errors = {errors}/>
 
                     <label htmlFor = 'skills'><h3>Specific Key skills:</h3></label>
-                    <input id = 'skills' className = {FieldErrors.skill.alreadyExists || FieldErrors.skill.isEmpty ? 'inputError' : ''} ref = {skillsRef} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
+                    <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentSkill} onChange = {(e:any) => setSkills(prev => {return {...prev, currentSkill: e.target.value}})} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
                     <button type = 'button' style = {{marginTop:'10px'}} onClick = {handleAddSkill}>Add skill</button>
 
-                    {skills.length ? <p>Your skills ({skills.length}):</p> : null}
+                    {skills.value.length ? <p>Your skills ({skills.value.length}):</p> : null}
                     <div className = 'list'>
                         <ReactScrollableFeed>
-                        {skills.map((skill,index) => {
+                        {skills.value.map((skill,index) => {
                             return (
                             <div key = {index} style = {{display:'flex',justifyContent:'space-between'}}>
                                <li>{skill}</li>
@@ -193,8 +182,11 @@ export default function CreateProfilePage() {
                 </div>
 
                 <div className = {`tab ${currentTab === 3 ? 'show' : 'hide'}`}>
-                    <h1 className = 'title'>Experience</h1> 
+                    <h1 className = 'title'>Work Experience</h1> 
                     <Errors errors = {errors}/>
+                    <label htmlFor = 'experience'><h3>Work Experience (Optional) Characters remaining: {experience.maxLength - experience.currentLength}</h3></label>
+                    <textarea id = 'experience' className = {!experience.isValid ? 'inputError' : ''}   style = {{height: '200px'}} onChange = {(e:any) => setExperience(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Work experience...' autoComplete = 'on' maxLength = {experience.maxLength}/>
+
                 </div>
 
                 <div className = {`tab ${currentTab === 4 ? 'show' : 'hide'}`}>
