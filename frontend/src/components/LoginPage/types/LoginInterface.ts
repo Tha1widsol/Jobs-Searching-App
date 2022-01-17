@@ -1,4 +1,5 @@
-export interface FormProps{
-    emailError: boolean,
-    passwordError: boolean
+export interface FieldProps{
+    value: string
+    isValid: boolean
+    errorMsg: string
 }
