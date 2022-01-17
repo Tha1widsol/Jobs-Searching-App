@@ -1,114 +1,72 @@
-import React,{useState,createRef} from 'react'
+import React,{useState} from 'react'
 import {useNavigate} from "react-router-dom";
 import Errors from '../messages/Errors';
-import {FormProps} from './types/RegisterInterface'
+import {EmailProps,FieldProps,PasswordProps} from './types/RegisterInterface'
 import axios from 'axios'
 
 export default function RegisterPage() {
     let navigate = useNavigate()
     const pathName = window.location.pathname
-
-    const emailRef = createRef<HTMLInputElement>()
-    const passwordRef = createRef<HTMLInputElement>()
-    const confirmPasswordRef = createRef<HTMLInputElement>()
-
     const [errors,setErrors] = useState<Array<string>>([])
-    const [FieldErrors,setFieldErrors] = useState<FormProps>({
-        emailIsValid: true,
-        password: {hasValidLength: null,
-            hasUppercase: null,
-            hasDigit: null,
-            hasSymbol: null
-        },
-        confirmPasswordIsValid: true})
+
+    const [email,setEmail] = useState<EmailProps>({value: '',isValid: true, invalidErrorMsg: 'Invalid email', alreadyExistsErrorMsg: 'Email already exists'})
+    const [password,setPassword] = useState<PasswordProps>({value: '', hasValidLength: null, hasUppercase: null, hasDigit: null, hasSymbol: null})
+    const [confirmPassword,setConfirmPassword] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Passwords must match'})
  
-    const validateForm = (email: string | undefined, password: string | undefined,confirmPassword: string | undefined) => {
+    const validateForm = () => {
         let isValid = true
         let errors = []
-
         const emailRegex = /^(([^<>()[\],;:\s@]+([^<>()[\],;:\s@]+)*)|(.+))@(([^<>()[\],;:\s@]+)+[^<>()[\],;:\s@]{2,})$/i
-    
         const numbers = /[0-9]/g
         const symbols = /[!£$%^&*()]/g
         const upper = /[A-Z]/g
 
-        if (!email?.match(emailRegex)){
-            errors.push('Invalid email')
-            setFieldErrors(prev => {return {...prev,emailIsValid: false}})
+        if (!email.value.match(emailRegex)){
+            errors.push(email.invalidErrorMsg)
+            setEmail(prev => {return {...prev,isValid: false}})
             isValid = false
         }
 
-        if (password != null && password.length < 9){
-                setFieldErrors(prev => ({
-                    ...prev,
-                    password: {...prev.password, hasValidLength: false}
-                }))
+        else setEmail(prev => {return {...prev,isValid: true}})
 
-                isValid = false
-        }
-
-        else{
-            setFieldErrors(prev => ({
-                ...prev,
-                password: {...prev.password, hasValidLength: true}
-            }))
-
-        }
-
-        if (!password?.match(numbers)){
-               setFieldErrors(prev => ({
-                    ...prev,
-                    password: {...prev.password, hasDigit: false}
-                }))
-
-                isValid = false
-        }
-
-        else{
-            setFieldErrors(prev => ({
-                ...prev,
-                password: {...prev.password, hasDigit: true}
-            }))
-        }
-
-        if (!password?.match(upper)){
-            setFieldErrors(prev => ({
-                ...prev,
-                password: {...prev.password, hasUppercase: false}
-            }))
-
+        if (password.value != null && password.value.length < 9){
+            setPassword(prev => {return {...prev,hasValidLength: false}})
             isValid = false
         }
 
-        else{
-            setFieldErrors(prev => ({
-                ...prev,
-                password: {...prev.password, hasUppercase: true}
-            }))
+        else setPassword(prev => {return {...prev,hasValidLength: true}})
+            
+        
+        if (!password.value.match(numbers)){
+            setPassword(prev => {return {...prev,hasDigit: false}})
+            isValid = false
         }
 
-        if (!password?.match(symbols)){
-            setFieldErrors(prev => ({
-                ...prev,
-                password: {...prev.password, hasSymbol: false}
-            }))
+        else setPassword(prev => {return {...prev,hasDigit: true}})
+           
 
+        if (!password.value.match(upper)){
+            setPassword(prev => {return {...prev,hasUppercase: false}})
+            isValid = false
+        }
+
+        else setPassword(prev => {return {...prev,hasUppercase: true}})
+          
+        if (!password.value.match(symbols)){
+            setPassword(prev => {return {...prev,hasSymbol: false}})
             isValid = false
         }
         
-        else{
-            setFieldErrors(prev => ({
-                ...prev,
-                password: {...prev.password, hasSymbol: true}
-            }))
-        }
+        else setPassword(prev => {return {...prev,hasSymbol: true}})
+            
 
-        if (password !== confirmPassword){
-            setFieldErrors(prev => {return {...prev,confirmPasswordIsValid : true}})
-            errors.push('Passwords must match')
+        if (password.value !== confirmPassword.value){
+            setConfirmPassword(prev => {return {...prev,isValid: false}})
+            errors.push(confirmPassword.errorMsg)
             isValid = false
         }
 
+        else setConfirmPassword(prev => {return {...prev,isValid: true}})
            
         if (!isValid){
             setErrors(errors)
@@ -122,12 +80,8 @@ export default function RegisterPage() {
 
     function handleSubmitForm(e:any){
         e.preventDefault()
-        const email = emailRef.current?.value
-        const password = passwordRef.current?.value
-        const confirmPassword = confirmPasswordRef.current?.value
         
-        if (!validateForm(email,password,confirmPassword)){
-            e.preventDefault()
+        if (!validateForm()){
             return 
         }
 
@@ -144,7 +98,7 @@ export default function RegisterPage() {
         })
 
         .catch(error => {
-            setErrors(['Email already exists'])
+            setErrors([email.alreadyExistsErrorMsg])
             window.scrollTo(0, 0)
         })
      
@@ -158,23 +112,23 @@ export default function RegisterPage() {
             <form onSubmit = {handleSubmitForm} noValidate>
                 <div style = {{textAlign:'center'}}>
                     <b><p style={{fontSize:'20px'}}>Password:</p></b> 
-                    <li className = {FieldErrors.password.hasValidLength === false ? 'error' : FieldErrors.password.hasValidLength ? 'success': ''}>Must be atleast 9 characters long</li>
-                    <li className = {FieldErrors.password.hasUppercase === false ? 'error' : FieldErrors.password.hasUppercase ? 'success' : ''}>Contains atleast one uppercase character</li>
-                    <li className = {FieldErrors.password.hasDigit === false ? 'error' : FieldErrors.password.hasDigit ? 'success' : ''}>Contains atleast one digit</li>
-                    <li className = {FieldErrors.password.hasSymbol === false ? 'error' : FieldErrors.password.hasSymbol ? 'success' : ''}>Contains atleast one of these symbols: !,£,$,%,^,&,*,(,)</li>
+                    <li className = {password.hasValidLength === false ? 'error' : password.hasValidLength ? 'success': ''}>Must be atleast 9 characters long</li>
+                    <li className = {password.hasUppercase === false ? 'error' : password.hasUppercase ? 'success' : ''}>Contains atleast one uppercase character</li>
+                    <li className = {password.hasDigit === false ? 'error' : password.hasDigit ? 'success' : ''}>Contains atleast one digit</li>
+                    <li className = {password.hasSymbol === false ? 'error' : password.hasSymbol ? 'success' : ''}>Contains atleast one of these symbols: !,£,$,%,^,&,*,(,)</li>
                     <hr className="mt-0-mb-4" />
                 </div>
             
                 <label htmlFor = 'email'><h3>Email address:</h3></label>
-                <input type = 'email' className = {!FieldErrors.emailIsValid ? 'inputError' : ''} ref = {emailRef} id = 'email' placeholder = 'E.g 123@example.com' autoComplete = 'on' required/>
+                <input type = 'email' className = {!email.isValid ? 'inputError' : ''} onChange = {e => setEmail(prev => {return {...prev, value: e.target.value}})} id = 'email' placeholder = 'E.g 123@example.com' autoComplete = 'on' required/>
 
                 <label htmlFor = 'password'><h3>Password:</h3></label>
-                <input type = 'password' className = {FieldErrors.password.hasValidLength === false || !FieldErrors.password.hasDigit === false || FieldErrors.password.hasSymbol === false || FieldErrors.password.hasUppercase === false ? 'inputError' : ''} ref = {passwordRef} placeholder = 'Password...' id = 'password' autoComplete = 'on' required/>
+                <input type = 'password' className = {password.hasValidLength === false || password.hasDigit === false || password.hasSymbol === false || password.hasUppercase === false ? 'inputError' : ''} onChange = {e => setPassword(prev => {return {...prev, value: e.target.value}})} placeholder = 'Password...' id = 'password' autoComplete = 'on' required/>
 
                 <label htmlFor = 'ConfirmPassword'><h3>Confirm password:</h3></label>
-                <input type = 'password' className = {!FieldErrors.confirmPasswordIsValid ? 'inputError' : ''} ref = {confirmPasswordRef} id = 'confirmPassword' placeholder = 'Confirm password...' autoComplete = 'on' required/>
+                <input type = 'password' className = {!confirmPassword.isValid? 'inputError' : ''} onChange = {e => setConfirmPassword(prev => {return {...prev, value: e.target.value}})} id = 'confirmPassword' placeholder = 'Confirm password...' autoComplete = 'on' required/>
 
-                <button id = 'submit'>Submit</button>
+                <button type = 'submit' id = 'submit'>Submit</button>
 
             </form>
             
