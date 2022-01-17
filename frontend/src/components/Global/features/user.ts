@@ -1,6 +1,14 @@
 import {createSlice} from '@reduxjs/toolkit'
 
-const initialStateValues = {id: null, email: null, hired: null, isAnEmployer: null,loggedIn: false}
+interface UserProps {
+    id: number | null
+    email: string | null
+    hired: boolean | null
+    isAnEmployer: boolean | null
+    loggedIn: boolean | null
+}
+
+const initialStateValues: UserProps = {id: null, email: null, hired: null, isAnEmployer: null,loggedIn: false}
 
 export const userSlice = createSlice({
     name : 'user',
