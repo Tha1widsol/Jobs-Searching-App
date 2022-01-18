@@ -13,6 +13,7 @@ export default function CreateProfilePage() {
     const [firstName,setFirstName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'First name is invalid'})
     const [middleName,setMiddleName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Middle name is invalid'})
     const [lastName,setLastName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Last name is invalid'})
+    const [phone,setPhone] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Phone number is invalid'})
     const [about,setAbout] = useState<TextFieldProps>({value: '', isValid: true, currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
     const [skills,setSkills] = useState<SkillsProps>({value: [], currentSkill: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',skillAddedMsg:'Skill added',skillRemovedMsg: 'Skill removed'})
     const [experience,setExperience] = useState<TextFieldProps>({value: '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 450})
@@ -52,6 +53,12 @@ export default function CreateProfilePage() {
             }
     
             else setLastName(prev => {return {...prev,isValid: true}})
+
+            if (!phone.value.match(numbers)){
+                setPhone(prev => {return {...prev, isValid: false}})
+                errors.push(phone.errorMsg)
+                isValid = false
+            }
 
             if (about.value.length < 100){
                 setAbout(prev => {return {...prev,isValid: false}})
@@ -148,6 +155,9 @@ export default function CreateProfilePage() {
 
                     <label htmlFor = 'lastName'><h3>Last name:</h3></label>
                     <input id = 'lastName' className = {!lastName.isValid ? 'inputError' : ''}  onChange = {e => setLastName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Last name...' onKeyUp = {handleFixName} autoComplete = 'on' required/>
+
+                    <label htmlFor = 'phone'><h3>Phone number: (Only provided to employers)</h3></label>
+                    <input id = 'phone' type = 'tel' className = {!phone.isValid ? 'inputError' : ''} onChange = {e => setPhone(prev => {return {...prev, value: e.target.value}})} placeholder = 'Phone number...' autoComplete = 'on' maxLength = {15} required/>
 
                     <label htmlFor = 'about' ><h3>About (Characters remaining: {about.maxLength - about.currentLength}):</h3></label>
                     <textarea id = 'about' className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
