@@ -17,6 +17,10 @@ export default function CreateProfilePage() {
     const [about,setAbout] = useState<TextFieldProps>({value: '', isValid: true, currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
     const [skills,setSkills] = useState<SkillsProps>({value: [], currentSkill: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',skillAddedMsg:'Skill added',skillRemovedMsg: 'Skill removed'})
     const [experience,setExperience] = useState<TextFieldProps>({value: '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 450})
+    const [education,setEducation] = useState({value: 'No formal education'})
+    const [industry,setIndustry] = useState({value: 'Any'})
+    const [distance,setDistance] = useState({value: 'Any'})
+ 
 
     const maxTabs = document.querySelectorAll('.tab').length
 
@@ -197,17 +201,51 @@ export default function CreateProfilePage() {
                     <Errors errors = {errors}/>
                     <label htmlFor = 'experience'><h3>Work Experience (Optional) Characters remaining: {experience.maxLength - experience.currentLength}</h3></label>
                     <textarea id = 'experience' className = {!experience.isValid ? 'inputError' : ''}   style = {{height: '200px'}} onChange = {e => setExperience(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Work experience...' autoComplete = 'on' maxLength = {experience.maxLength}/>
-
                 </div>
 
                 <div className = {`tab ${currentTab === 4 ? 'show' : 'hide'}`}>
                     <h1 className = 'title'>Education</h1> 
                     <Errors errors = {errors}/>
+
+                    <label htmlFor = 'education'><h3>Highest level of education:</h3></label>
+                    <select id = 'education' onChange = {e => setEducation({value: e.target.value})}>
+                        <option value = 'No formal education'>No formal education</option>
+                        <option value = 'Primary education'>Primary education</option>
+                        <option value = 'Secondary education'>Secondary education or high school</option>
+                        <option value = 'GED'>GED</option>
+                        <option value = 'Vocational qualification'>Vocational qualification</option>
+                        <option value = 'A-levels'>A-levels</option>
+                        <option value = "Bachelor's degree">Bachelor's degree</option>
+                        <option value = "Master's degree">Master's degree</option>
+                        <option value = 'Doctorate or higher'>Doctorate or higher</option>
+                    </select>
                 </div>
 
                 <div className = {`tab ${currentTab === 5 ? 'show' : 'hide'}`}>
                     <h1 className = 'title'>Preferences</h1> 
                     <Errors errors = {errors}/>
+                    <label htmlFor = 'industry'><h3>Industry: (What job industry are you looking to work in ?)</h3></label>
+                    <select id = 'industry' onChange = {e => setIndustry({value: e.target.value})}>
+                        <option value = 'Any'>Any</option>
+                        <option value = 'Beauty'>Beauty</option>
+                        <option value = 'Construction'>Construction</option>
+                        <option value = 'Information Technology'>Information Technology</option>
+                    </select>
+                    
+                    <label htmlFor = 'cv'><h3>Resume / CV (Optional) (Please submit only .pdf, .doc or .docx files):</h3></label>
+                    <input type = 'file' id = 'cv' accept = '.pdf,.doc,.docx'/>
+
+                    <label htmlFor = 'distance'><h3>Job within:</h3></label>
+                    <select id = 'distance' onChange = {e => setDistance({value: e.target.value})}>
+                        <option value = 'Any'>Any</option>
+                        <option value = '10'>10 miles</option>
+                        <option value = '20'>20 miles</option>
+                        <option value = '30'>30 miles</option>
+                        <option value = '40'>40 miles</option>
+                        <option value = '50+'>50 miles</option>
+                    </select>
+
+
                 </div>
                 
                 {currentTab === maxTabs ? <button id = 'submit'>Submit</button> : <button type = 'button' className = 'toggleTabBtn' onClick = {() => setCurrentTab(currentTab + 1)} style = {{float:'right'}}>Next</button>}
