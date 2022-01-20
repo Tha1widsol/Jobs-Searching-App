@@ -83,6 +83,8 @@ export default function CreateProfilePage() {
 
         setErrors([])
         setCurrentTab(currentTab + 1)
+
+        return isValid
     }
 
     function handleToPrevTab(){
@@ -134,6 +136,19 @@ export default function CreateProfilePage() {
         setSkills(prev => {return {...prev,value: newSkills}})
         setErrors([])
         setSuccess(skills.skillRemovedMsg)
+    }
+
+    function handleSubmitForm(e:any){
+        e.preventDefault()
+        const token = localStorage.getItem('token')
+
+        if (!validateForm()){
+            return
+        }
+
+        const requestOptions = {
+            headers: {'Content-Type':'application/json', Authorization:`Token ${token}`}
+        }
     }
 
     return (
@@ -208,7 +223,7 @@ export default function CreateProfilePage() {
                     <Errors errors = {errors}/>
 
                     <label htmlFor = 'education'><h3>Highest level of education:</h3></label>
-                    <select id = 'education' onChange = {e => setEducation({value: e.target.value})}>
+                    <select id = 'education' onChange = {e => setEducation({value: e.target.value})} required>
                         <option value = 'No formal education'>No formal education</option>
                         <option value = 'Primary education'>Primary education</option>
                         <option value = 'Secondary education'>Secondary education or high school</option>
@@ -225,7 +240,7 @@ export default function CreateProfilePage() {
                     <h1 className = 'title'>Preferences</h1> 
                     <Errors errors = {errors}/>
                     <label htmlFor = 'industry'><h3>Industry: (What job industry are you looking to work in ?)</h3></label>
-                    <select id = 'industry' onChange = {e => setIndustry({value: e.target.value})}>
+                    <select id = 'industry' onChange = {e => setIndustry({value: e.target.value})} autoComplete = 'on'>
                         <option value = 'Any'>Any</option>
                         <option value = 'Beauty'>Beauty</option>
                         <option value = 'Construction'>Construction</option>
@@ -233,10 +248,10 @@ export default function CreateProfilePage() {
                     </select>
                     
                     <label htmlFor = 'cv'><h3>Resume / CV (Optional) (Please submit only .pdf, .doc or .docx files):</h3></label>
-                    <input type = 'file' id = 'cv' accept = '.pdf,.doc,.docx'/>
+                    <input type = 'file' id = 'cv' accept = '.pdf,.doc,.docx' autoComplete = 'on'/>
 
                     <label htmlFor = 'distance'><h3>Job within:</h3></label>
-                    <select id = 'distance' onChange = {e => setDistance({value: e.target.value})}>
+                    <select id = 'distance' onChange = {e => setDistance({value: e.target.value})} autoComplete = 'on'>
                         <option value = 'Any'>Any</option>
                         <option value = '10'>10 miles</option>
                         <option value = '20'>20 miles</option>
@@ -248,7 +263,7 @@ export default function CreateProfilePage() {
 
                 </div>
                 
-                {currentTab === maxTabs ? <button id = 'submit'>Submit</button> : <button type = 'button' className = 'toggleTabBtn' onClick = {() => setCurrentTab(currentTab + 1)} style = {{float:'right'}}>Next</button>}
+                {currentTab === maxTabs ? <button type = 'button' id = 'submit' onClick = {handleSubmitForm} >Submit</button> : <button type = 'button' className = 'toggleTabBtn' onClick = {() => setCurrentTab(currentTab + 1)} style = {{float:'right'}}>Next</button>}
                 <button type = 'button' className = {currentTab > 1 ? 'toggleTabBtn' : 'hide'} onClick = {handleToPrevTab}>Previous</button>
             </form>
 
