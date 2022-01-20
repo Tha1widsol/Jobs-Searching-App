@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import User
 
 # Create your models here.
+
 class Profile(models.Model):
    user = models.OneToOneField(User,on_delete = models.CASCADE)
    firstName = models.CharField(max_length = 200)
@@ -10,8 +11,8 @@ class Profile(models.Model):
    logo = models.ImageField(upload_to = 'profileLogosFiles', blank = True)
    cv = models.FileField(upload_to = 'cvFiles',blank = True)
    education = models.CharField(max_length = 50)
-   industry = models.Field(default = 'Any')
-   distance = models.Field(default = 'Any')
+   industry = models.TextField(default = 'Any')
+   distance = models.TextField(default = 'Any')
    experience = models.TextField(blank = True)
    about = models.TextField()
    isActive = models.BooleanField(default = True)

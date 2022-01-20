@@ -12,7 +12,7 @@ export default function RegisterPage() {
     const [email,setEmail] = useState<EmailProps>({value: '',isValid: true, invalidErrorMsg: 'Invalid email', alreadyExistsErrorMsg: 'Email already exists'})
     const [password,setPassword] = useState<PasswordProps>({value: '', hasValidLength: null, hasUppercase: null, hasDigit: null, hasSymbol: null})
     const [confirmPassword,setConfirmPassword] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Passwords must match'})
- 
+
     const validateForm = () => {
         let isValid = true
         let errors = []
@@ -89,7 +89,7 @@ export default function RegisterPage() {
             headers:{'Content-Type':'application/json'}
         }
 
-        axios.post(`/api/auth/${pathName}`,JSON.stringify({email: email,password: password}),requestOptions)
+        axios.post(`/api/auth/${pathName}`,JSON.stringify({email: email.value,password: password.value}),requestOptions)
         .then(response => {
             const data = response.data
             localStorage.setItem('token',data.token)
@@ -98,6 +98,7 @@ export default function RegisterPage() {
         })
 
         .catch(error => {
+            console.log(error)
             setErrors([email.alreadyExistsErrorMsg])
             window.scrollTo(0, 0)
         })
