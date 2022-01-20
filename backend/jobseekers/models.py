@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import User
+from main.models import Skill
 
 # Create your models here.
 
@@ -7,6 +8,7 @@ class Profile(models.Model):
    user = models.OneToOneField(User,on_delete = models.CASCADE)
    firstName = models.CharField(max_length = 200)
    lastName = models.CharField(max_length = 200)
+   skills = models.ManyToManyField(Skill, blank = True)
    phone = models.CharField(max_length = 15)
    logo = models.ImageField(upload_to = 'profileLogosFiles', blank = True)
    cv = models.FileField(upload_to = 'cvFiles',blank = True)
@@ -19,3 +21,4 @@ class Profile(models.Model):
 
    def __str__(self):
       return self.firstName
+
