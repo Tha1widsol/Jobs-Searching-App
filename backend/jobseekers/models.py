@@ -5,7 +5,7 @@ from main.models import Skill
 # Create your models here.
 
 class Profile(models.Model):
-   user = models.OneToOneField(User,on_delete = models.CASCADE)
+   user = models.OneToOneField(User,on_delete = models.CASCADE,null = True)
    firstName = models.CharField(max_length = 200)
    lastName = models.CharField(max_length = 200)
    skills = models.ManyToManyField(Skill, blank = True)
