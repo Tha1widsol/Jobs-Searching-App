@@ -1,4 +1,5 @@
 import React,{useState} from 'react'
+import {useNavigate} from "react-router-dom";
 import Errors from '../messages/Errors';
 import Success from '../messages/Success';
 import axios from 'axios'
@@ -6,6 +7,7 @@ import ReactScrollableFeed from 'react-scrollable-feed';
 import {FieldProps,TextFieldProps,SkillsProps} from './types/CreateProfileInterface';
 
 export default function CreateProfilePage() {
+    let navigate = useNavigate()
     const [currentTab,setCurrentTab] = useState(1)
     const [success,setSuccess] = useState('')
     const [errors,setErrors] = useState<Array<string>>([])
@@ -20,10 +22,11 @@ export default function CreateProfilePage() {
     const [education,setEducation] = useState({value: 'No formal education'})
     const [industry,setIndustry] = useState({value: 'Any'})
     const [distance,setDistance] = useState({value: 'Any'})
+    const [logo,setLogo] = useState<{value :string | Blob, name:string}>({value: '',name:''})
+    const [cv,setCV] = useState<{value: string | Blob, name:string}>({value: '',name:''})
  
-
     const maxTabs = document.querySelectorAll('.tab').length
-
+    
     const validateForm = () => {
         let isValid = true
         let errors : Array<string> = []
@@ -71,10 +74,30 @@ export default function CreateProfilePage() {
             }
     
             else setAbout(prev => {return {...prev,isValid: true}})
-    
+
             break
+        
+          case 2:
+              if (!skills.value.length){
+                  setSkills(prev => {return {...prev, isEmpty: true}})
+                  errors.push(skills.emptyErrorMsg)
+                  isValid = false
+              }
+
+              else setSkills(prev => {return {...prev, isEmpty: false}})
+            
+              break
+
+          case 3:
+              if (experience.value.length && experience.value.length < 100){
+                    setExperience(prev => {return {...prev, isValid: false}})
+                    errors.push(experience.errorMsg)
+                    isValid = false
+              }
+
+              else setExperience(prev => {return {...prev, isValid: true}})
         }
-    
+
         if (!isValid){
             setErrors(errors)
             window.scrollTo(0, 0)
@@ -142,13 +165,45 @@ export default function CreateProfilePage() {
         e.preventDefault()
         const token = localStorage.getItem('token')
 
-        if (!validateForm()){
-            return
-        }
+        if (!validateForm()) return
 
         const requestOptions = {
-            headers: {'Content-Type':'application/json', Authorization:`Token ${token}`}
+            headers: {'Content-Type': 'multipart/form-data', Authorization:`Token ${token}`}
         }
+
+        let form = new FormData();
+
+        form.append('firstName',firstName.value)
+        form.append('middleName',firstName.value)
+        form.append('lastName',lastName.value)
+        form.append('phone',phone.value)
+        form.append('about',about.value)
+
+        if (cv.value !== '')
+           form.append('cv',cv.value,cv.name)
+        
+        else form.append('cv','')
+        
+        if (logo.value !== '')
+           form.append('logo',logo.value,logo.name)
+        
+        else form.append('logo','')
+      
+        form.append('skills',skills.value.toString())
+        form.append('experience',experience.value)
+        form.append('education',education.value)
+        form.append('industry',industry.value)
+        form.append('distance',distance.value)
+
+        axios.post('/api/create-profile',form,requestOptions)
+        .then(response => response.data)
+        .then(data => console.log(data))
+        .then(() => navigate('/'))
+
+        .catch(error => {
+            console.log(error)
+        })
+        
     }
 
     return (
@@ -182,7 +237,7 @@ export default function CreateProfilePage() {
                     <textarea id = 'about' className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
 
                     <label htmlFor = 'logo'><h3>Profile logo (Optional):</h3></label>
-                    <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' required/>
+                    <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {(e:any) => setLogo({value: e.target.files[0], name: e.target.files[0].name})}/>
 
                 </div>
 
@@ -248,7 +303,7 @@ export default function CreateProfilePage() {
                     </select>
                     
                     <label htmlFor = 'cv'><h3>Resume / CV (Optional) (Please submit only .pdf, .doc or .docx files):</h3></label>
-                    <input type = 'file' id = 'cv' accept = '.pdf,.doc,.docx' autoComplete = 'on'/>
+                    <input type = 'file' id = 'cv' accept = '.pdf,.doc,.docx' onChange = {(e:any) => setCV({value: e.target.files[0],name: e.target.files[0].name})} autoComplete = 'on'/>
 
                     <label htmlFor = 'distance'><h3>Job within:</h3></label>
                     <select id = 'distance' onChange = {e => setDistance({value: e.target.value})} autoComplete = 'on'>
