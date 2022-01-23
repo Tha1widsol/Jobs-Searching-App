@@ -1,7 +1,7 @@
 import React from 'react'
 import './css/HomePage.css'
 
-export default function HomePage() {
+export default function PublicHomePage() {
     return (
         <div style = {{textAlign:'center'}}>
             <h1 id = 'you_are'>You are...</h1>

@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import {useNavigate} from "react-router-dom";
-import Errors from '../messages/Errors';
-import Success from '../messages/Success';
+import Errors from '../../Global/messages/Errors'
+import Success from '../../Global/messages/Success';
 import axios from 'axios'
 import ReactScrollableFeed from 'react-scrollable-feed';
 import {FieldProps,TextFieldProps,SkillsProps} from './types/CreateProfileInterface';
@@ -196,7 +196,7 @@ export default function CreateProfilePage() {
         form.append('industry',industry.value)
         form.append('distance',distance.value)
 
-        axios.post('/api/create-profile',form,requestOptions)
+        axios.post('/api/profile',form,requestOptions)
         .then(() => navigate('/'))
 
         .catch(error => {

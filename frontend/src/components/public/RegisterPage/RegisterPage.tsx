@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import {useNavigate} from "react-router-dom";
-import Errors from '../messages/Errors';
+import Errors from '../../Global/messages/Errors';
 import {EmailProps,FieldProps,PasswordProps} from './types/RegisterInterface'
 import axios from 'axios'
 

@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import {useNavigate} from "react-router-dom";
 import axios from 'axios'
-import Errors from '../messages/Errors';
+import Errors from '../../Global/messages/Errors';
 import {FieldProps} from './types/LoginInterface'
 
 export default function LoginPage() {

@@ -31,6 +31,10 @@ class ProfileAPI(APIView):
         return Response(status = status.HTTP_400_BAD_REQUEST)
 
     def get(self,request):
-        profile = Profile.objects.get(firstName = 'Kelvin')
-        serializer_class = ProfileSerializer(profile)
-        return Response(serializer_class.data, status =  status.HTTP_200_OK)
+        profile = Profile.objects.filter(user = request.user)
+        
+        if profile.exists():
+            serializer_class = ProfileSerializer(profile.first())
+            return Response(serializer_class.data, status =  status.HTTP_200_OK)
+
+        return Response({'Profile not found':'Invalid Profile.'},status = status.HTTP_404_NOT_FOUND)
