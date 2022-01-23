@@ -1,21 +1,28 @@
 import React from 'react'
 import {BrowserRouter as Router,Routes,Route} from "react-router-dom"
-import HomePage from '../HomePage/HomePage'
-import RegisterPage from '../RegisterPage/RegisterPage'
-import LoginPage from '../LoginPage/LoginPage'
-import CreateProfilePage from '../CreateProfilePage/CreateProfilePage'
+import PublicHomePage from '../public/PublicHomePage/PublicHomePage'
+import RegisterPage from '../public/RegisterPage/RegisterPage'
+import LoginPage from '../public/LoginPage/LoginPage'
+import CreateProfilePage from '../Jobseekers/CreateProfilePage/CreateProfilePage'
+import {CheckNotLoggedIn,CheckLoggedIn} from './ProtectedRoutes'
 
 export default function PagesRoutes() {
     return (
         <div>
             <Router>
                 <Routes>
-                    <Route path = '/' element = {<HomePage/>}/>
-                    <Route path = '/home' element = {<HomePage/>}/>
-                    <Route path = '/register/job_seeker' element = {<RegisterPage/>}/>
-                    <Route path = '/register/employer' element = {<RegisterPage/>}/>
-                    <Route path = '/login' element = {<LoginPage/>}/>
-                    <Route path = '/create-profile' element = {<CreateProfilePage/>}/>
+                    <Route path = '/' element = {<PublicHomePage/>}/>
+                    <Route path = '/home' element = {<PublicHomePage/>}/>
+                    <Route element = {<CheckNotLoggedIn/>}>
+                        <Route path = '/register/job_seeker' element = {<RegisterPage/>}/>
+                        <Route path = '/register/employer' element = {<RegisterPage/>}/>
+                        <Route path = '/login' element = {<LoginPage/>}/>
+                    </Route>
+
+                    <Route element = {<CheckLoggedIn/>}>
+                       <Route path = '/create-profile' element = {<CreateProfilePage/>}/>
+                    </Route>
+                    
                 </Routes>
             </Router>
         </div>
