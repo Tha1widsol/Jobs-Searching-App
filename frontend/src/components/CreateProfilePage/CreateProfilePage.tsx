@@ -122,6 +122,11 @@ export default function CreateProfilePage() {
         e.target.value = e.target.value.charAt(0) + e.target.value.slice(1).toLowerCase()
     }
 
+    function handleSetSkills(e:any){
+        setSkills(prev => {return {...prev, currentSkill: e.target.value}})
+        e.target.value = e.target.value.replace(',','')
+    }
+
     function handleAddSkill(){
        const currentSkill = skills.currentSkill.trim()
        let errors:Array<string> = []
@@ -182,13 +187,9 @@ export default function CreateProfilePage() {
         if (cv.value !== '')
            form.append('cv',cv.value,cv.name)
         
-        else form.append('cv','')
-        
         if (logo.value !== '')
            form.append('logo',logo.value,logo.name)
         
-        else form.append('logo','')
-      
         form.append('skills',skills.value.toString())
         form.append('experience',experience.value)
         form.append('education',education.value)
@@ -196,8 +197,6 @@ export default function CreateProfilePage() {
         form.append('distance',distance.value)
 
         axios.post('/api/create-profile',form,requestOptions)
-        .then(response => response.data)
-        .then(data => console.log(data))
         .then(() => navigate('/'))
 
         .catch(error => {
@@ -247,7 +246,7 @@ export default function CreateProfilePage() {
                     <Errors errors = {errors}/>
 
                     <label htmlFor = 'skills'><h3>Specific Key skills:</h3></label>
-                    <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentSkill} onChange = {e => setSkills(prev => {return {...prev, currentSkill: e.target.value}})} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
+                    <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentSkill} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
                     <button type = 'button' style = {{marginTop:'10px'}} onClick = {handleAddSkill}>Add skill</button>
 
                     {skills.value.length ? <p>Your skills ({skills.value.length}):</p> : null}
@@ -318,7 +317,7 @@ export default function CreateProfilePage() {
 
                 </div>
                 
-                {currentTab === maxTabs ? <button type = 'button' id = 'submit' onClick = {handleSubmitForm} >Submit</button> : <button type = 'button' className = 'toggleTabBtn' onClick = {() => setCurrentTab(currentTab + 1)} style = {{float:'right'}}>Next</button>}
+                {currentTab === maxTabs ? <button type = 'button' id = 'submit' onClick = {handleSubmitForm} >Submit</button> : <button type = 'button' className = 'toggleTabBtn' onClick = {validateForm} style = {{float:'right'}}>Next</button>}
                 <button type = 'button' className = {currentTab > 1 ? 'toggleTabBtn' : 'hide'} onClick = {handleToPrevTab}>Previous</button>
             </form>
 
