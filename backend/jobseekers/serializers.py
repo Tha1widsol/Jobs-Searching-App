@@ -7,7 +7,7 @@ from accounts.serializers import *
 class CreateProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        exclude = ['user','skills']
+        exclude = ['user','skills','isActive']
 
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
