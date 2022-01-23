@@ -29,8 +29,8 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
-    hired = models.BooleanField('hired',default=False)
-    is_an_employer = models.BooleanField('is_an_employer',default=False)
+    isHired = models.BooleanField('is_hired',default=False)
+    isAnEmployer = models.BooleanField('is_an_employer',default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
