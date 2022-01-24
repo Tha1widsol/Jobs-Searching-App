@@ -3,15 +3,16 @@ import {Navigate, Outlet} from 'react-router'
 import {useAppSelector} from './features/hooks';
 import LoginPage from '../public/LoginPage/LoginPage';
 
-const IsAuth = () => {
-    const user = useAppSelector(state => state.user.values)
-    return user.loggedIn
+const User = () => {
+  const user = useAppSelector(state => state.user.values)
+  return user
 }
 
+
 export const CheckNotLoggedIn = () => {
-  return IsAuth() ? <Navigate to = '/'/> : <Outlet/> 
+  return User().loggedIn ? <Navigate to = '/'/> : <Outlet/> 
 }
 
 export const CheckLoggedIn = () => { 
-    return IsAuth() ? <Outlet/> : <LoginPage/>
+    return User().loggedIn ? <Outlet/> : <LoginPage/>
 }
