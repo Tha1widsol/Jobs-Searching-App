@@ -8,7 +8,6 @@ export default function RegisterPage() {
     let navigate = useNavigate()
     const pathName = window.location.pathname
     const [errors,setErrors] = useState<Array<string>>([])
-
     const [email,setEmail] = useState<EmailProps>({value: '',isValid: true, invalidErrorMsg: 'Invalid email', alreadyExistsErrorMsg: 'Email already exists'})
     const [password,setPassword] = useState<PasswordProps>({value: '', hasValidLength: null, hasUppercase: null, hasDigit: null, hasSymbol: null})
     const [confirmPassword,setConfirmPassword] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Passwords must match'})
@@ -81,9 +80,7 @@ export default function RegisterPage() {
     function handleSubmitForm(e:any){
         e.preventDefault()
         
-        if (!validateForm()){
-            return 
-        }
+        if (!validateForm()) return 
 
         const requestOptions = { 
             headers:{'Content-Type':'application/json'}
@@ -93,8 +90,7 @@ export default function RegisterPage() {
         .then(response => {
             const data = response.data
             localStorage.setItem('token',data.token)
-            navigate('/')
-            window.location.reload()
+            pathName === '/register/jobseeker' ? navigate('/create-profile') : navigate('/create-employer')
         })
 
         .catch(error => {

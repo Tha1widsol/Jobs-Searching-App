@@ -14,7 +14,7 @@ export default function PagesRoutes() {
                     <Route path = '/' element = {<PublicHomePage/>}/>
                     <Route path = '/home' element = {<PublicHomePage/>}/>
                     <Route element = {<CheckNotLoggedIn/>}>
-                        <Route path = '/register/job_seeker' element = {<RegisterPage/>}/>
+                        <Route path = '/register/jobseeker' element = {<RegisterPage/>}/>
                         <Route path = '/register/employer' element = {<RegisterPage/>}/>
                         <Route path = '/login' element = {<LoginPage/>}/>
                     </Route>

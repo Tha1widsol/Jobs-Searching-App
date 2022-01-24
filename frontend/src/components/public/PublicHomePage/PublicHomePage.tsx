@@ -10,7 +10,7 @@ export default function PublicHomePage() {
                 <div className = 'container'>
                     <h2 className = 'heading'><u>Looking for a job:</u></h2>
                     <p>Find your dream job right now with one of the most trusted job searching engines on the web.</p>
-                    <a href = '/register/job_seeker' ><button id = 'jobseeker' >Add your profile</button></a> 
+                    <a href = '/register/jobseeker' ><button id = 'jobseeker' >Add your profile</button></a> 
                 </div>
                 
                 <div id = 'vertical'/>
