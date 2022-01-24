@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import {useNavigate} from "react-router-dom";
 import Errors from '../../Global/messages/Errors'
 import Success from '../../Global/messages/Success';
@@ -27,6 +27,23 @@ export default function CreateProfilePage() {
  
     const maxTabs = document.querySelectorAll('.tab').length
     
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+
+        const requestOptions = { 
+          headers:{'Content-Type':'application/json', Authorization:`Token ${token}`}
+        }
+      
+        axios.get('/api/profile',requestOptions)
+        .then(() => navigate('/'))
+        
+       .catch(error => {
+           if (error.response.status !== 404)
+               navigate('/')
+       })
+      
+    },[navigate])
+
     const validateForm = () => {
         let isValid = true
         let errors : Array<string> = []
