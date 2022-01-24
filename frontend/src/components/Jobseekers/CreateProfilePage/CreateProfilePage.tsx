@@ -26,23 +26,6 @@ export default function CreateProfilePage() {
     const [cv,setCV] = useState<{value: string | Blob, name:string}>({value: '',name:''})
  
     const maxTabs = document.querySelectorAll('.tab').length
-    
-    useEffect(() => {
-        const token = localStorage.getItem('token')
-
-        const requestOptions = { 
-          headers:{'Content-Type':'application/json', Authorization:`Token ${token}`}
-        }
-      
-        axios.get('/api/profile',requestOptions)
-        .then(() => navigate('/'))
-        
-       .catch(error => {
-           if (error.response.status !== 404)
-               navigate('/')
-       })
-      
-    },[navigate])
 
     const validateForm = () => {
         let isValid = true
