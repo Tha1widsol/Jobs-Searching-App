@@ -39,10 +39,7 @@ export default function LoginPage() {
     function handleSubmitForm(e:any){
         e.preventDefault()
 
-        if (!validateForm()){
-            e.preventDefault()
-            return
-        }
+        if (!validateForm()) return
 
         const requestOptions = { 
             headers:{'Content-Type':'application/json'}
@@ -50,18 +47,17 @@ export default function LoginPage() {
 
         axios.post('/api/auth/login',JSON.stringify({email: email.value, password: password.value}),requestOptions)
         .then(response => {
-            const data = response.data
-            localStorage.setItem('token',data.token)
-            navigate('/')
-            window.location.reload()
-
+                const data = response.data
+                localStorage.setItem('token',data.token)
+                window.location.reload()
+                navigate('/')
         })
 
         .catch(error => {
-            if (error.response)
+            if (error.response.status === 400) {
                 setPassword(prev => {return {...prev,isValid: true}})
                 setErrors(['Email or password is invalid'])
-            
+            }
         })
 
     }
