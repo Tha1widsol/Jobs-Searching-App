@@ -91,6 +91,7 @@ export default function RegisterPage() {
             const data = response.data
             localStorage.setItem('token',data.token)
             pathName === '/register/jobseeker' ? navigate('/create-profile') : navigate('/create-employer')
+            window.location.reload()
         })
 
         .catch(error => {
