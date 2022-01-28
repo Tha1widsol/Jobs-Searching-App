@@ -4,18 +4,16 @@ import PublicHomePage from '../public/PublicHomePage/PublicHomePage'
 import RegisterPage from '../public/RegisterPage/RegisterPage'
 import LoginPage from '../public/LoginPage/LoginPage'
 import CreateProfilePage from '../Jobseekers/CreateProfilePage/CreateProfilePage'
-import {CheckNotLoggedIn,CheckHomePage,CheckNoProfileExists} from './ProtectedRoutes'
+import {CheckNotLoggedIn,CheckNoProfileExists} from './ProtectedRoutes'
 
 export default function PagesRoutes() {
     return (
         <div>
             <Router>
                 <Routes>
-                    <Route element = {<CheckHomePage/>}>
-                        <Route path = '/' element = {<PublicHomePage/>}/>
-                        <Route path = '/home' element = {<PublicHomePage/>}/>
-                    </Route>
-                    
+                    <Route path = '/' element = {<PublicHomePage/>}/>
+                    <Route path = '/home' element = {<PublicHomePage/>}/>
+                
                     <Route element = {<CheckNotLoggedIn/>}>
                         <Route path = '/register/jobseeker' element = {<RegisterPage/>}/>
                         <Route path = '/register/employer' element = {<RegisterPage/>}/>
