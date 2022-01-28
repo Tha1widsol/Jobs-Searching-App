@@ -15,7 +15,7 @@ class RegisterAPI(generics.GenericAPIView):
         user = serializer.save()
 
         if option == 'employer':
-            user.is_an_employer = True
+            user.isAnEmployer = True
             user.save()
 
         return Response({
