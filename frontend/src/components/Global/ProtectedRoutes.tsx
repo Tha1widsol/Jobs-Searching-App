@@ -8,7 +8,7 @@ import EmployersHomePage from '../Employers/EmployersHomePage/EmployersHomePage'
 import axios from 'axios'
 
 const User = () => {
-  const user = useAppSelector(state => state.user.values)
+  const user = useAppSelector(state => state.user)
   return user
 }
 
@@ -23,7 +23,7 @@ export const CheckLoggedIn = () => {
 export const CheckNoProfileExists = () => { 
   const navigate = useNavigate()
 
-  if (User().isAnEmployer) return <Navigate to = '/'/>
+  if (User().user.isAnEmployer) return <Navigate to = '/'/>
 
   const token = localStorage.getItem('token')
   const requestOptions = { 
@@ -45,9 +45,4 @@ export const CheckNoProfileExists = () => {
 
  return <Outlet/>
 
-}
-
-export const CheckHomePage = () => {
-  const user = useAppSelector(state => state.user.values)
-  return User().loggedIn && !User().isAnEmployer ? <JobSeekersHomePage/> : User().loggedIn && User().isAnEmployer ? <EmployersHomePage/> : <Outlet/>
 }
