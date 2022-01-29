@@ -6,7 +6,8 @@ import './css/Navbar.css'
 
 export default function Navbar() {
     const pathName = window.location.pathname
-    const user = useAppSelector(state => state.user.values)
+    const user = useAppSelector(state => state.user)
+    const email = sessionStorage.getItem('email')
     const [dropdown,setDropdown] = useState(false)
 
     const dispatch = useAppDispatch()
@@ -40,7 +41,7 @@ export default function Navbar() {
                 <button id = 'navDropBtn' onClick={() => setDropdown(!dropdown)}>My account</button>
                   {dropdown ?  
                     <div className = 'dropdown-content'>
-                            {user.isAnEmployer ? 
+                            {user.user.isAnEmployer ? 
                              <>
                                 <a href="/companies">My companies</a> 
 
@@ -55,10 +56,9 @@ export default function Navbar() {
   
                   </div>
               </div>: 
-              <a href='/login' className = {pathName === '/login' ? 'active' : ''}>Login</a>}
-              {user.loggedIn ? <p id = 'loggedinMessage'>Welcome, {user.email}</p> : null}
-    
 
+              <a href='/login' className = {pathName === '/login' ? 'active' : ''}>Login</a>}
+              {user.loggedIn ? <p id = 'loggedinMessage'>Welcome, {email}</p> : null}
         </div>
     )
 }
