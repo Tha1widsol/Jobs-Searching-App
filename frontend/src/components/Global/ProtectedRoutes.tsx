@@ -3,9 +3,9 @@ import {Outlet,Navigate} from 'react-router'
 import { useNavigate } from 'react-router-dom';
 import {useAppSelector} from './features/hooks';
 import LoginPage from '../public/LoginPage/LoginPage';
-import JobSeekersHomePage from '../Jobseekers/JobSeekersHomePage/JobSeekersHomePage';
-import EmployersHomePage from '../Employers/EmployersHomePage/EmployersHomePage';
 import axios from 'axios'
+
+const isAnEmployer = localStorage.getItem('isAnEmployer')
 
 const User = () => {
   const user = useAppSelector(state => state.user)
@@ -20,11 +20,8 @@ export const CheckLoggedIn = () => {
     return User().loggedIn ? <Outlet/> : <LoginPage/>
 }
 
-export const CheckNoProfileExists = () => { 
-  const navigate = useNavigate()
-
-  if (User().user.isAnEmployer) return <Navigate to = '/'/>
-
+const GetProfile = () => {
+  let navigate = useNavigate()
   const token = localStorage.getItem('token')
   const requestOptions = { 
     headers:{'Content-Type':'application/json', Authorization:`Token ${token}`}
@@ -32,8 +29,9 @@ export const CheckNoProfileExists = () => {
 
   axios.get('/api/profile',requestOptions)
   .then(response => {
-       if (response.status === 200)
-          navigate('/')
+       if (response.status === 200){
+         navigate('/')
+       }
   })
   
  .catch(error => {
@@ -43,6 +41,12 @@ export const CheckNoProfileExists = () => {
 
  })
 
- return <Outlet/>
-
 }
+
+export const CheckNoProfileExists = () => { 
+  GetProfile()
+  if (isAnEmployer === 'true') return <Navigate to = '/'/>
+  
+  return <Outlet/>
+}
+
