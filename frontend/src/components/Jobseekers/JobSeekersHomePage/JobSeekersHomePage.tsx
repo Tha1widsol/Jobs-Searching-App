@@ -12,11 +12,11 @@ export default function JobSeekersHomePage() {
       }
     
       axios.get('/api/profile',requestOptions)
-     .catch(error => {
+     .catch(() => {
           navigate('/create-profile')
      })
       
-  },[token,navigate])
+  },[navigate,token])
 
   return (
     <div>
