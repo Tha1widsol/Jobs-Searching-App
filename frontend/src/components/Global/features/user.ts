@@ -26,6 +26,7 @@ export const fetchUser:any = createAsyncThunk(
                 }
             })
             sessionStorage.setItem('email', response.data.email)
+            localStorage.setItem('isAnEmployer', response.data.isAnEmployer)
             return response.data
         }
 
@@ -44,6 +45,7 @@ export const userSlice = createSlice({
             state = initialState
             localStorage.removeItem('token');
             sessionStorage.removeItem('email')
+            localStorage.removeItem('isAnEmployer')
         }
     },
 
