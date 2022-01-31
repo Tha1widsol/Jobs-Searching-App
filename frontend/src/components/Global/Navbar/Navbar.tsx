@@ -35,7 +35,7 @@ export default function Navbar() {
             <a href='/about' className = {pathName === '/about' ? 'active' : ''}>About</a>
             <a href='/contact' className = {pathName === '/contact' ? 'active' : ''}>Contact</a>
 
-             {user.loggedIn ?
+             {user.isLoggedIn ?
              <div>
                 <div className = 'dropdown'> 
                 <button id = 'navDropBtn' onClick={() => setDropdown(!dropdown)}>My account</button>
@@ -58,7 +58,7 @@ export default function Navbar() {
               </div>: 
 
               <a href='/login' className = {pathName === '/login' ? 'active' : ''}>Login</a>}
-              {user.loggedIn ? <p id = 'loggedinMessage'>Welcome, {email}</p> : null}
+              {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, {email}</p> : null}
         </div>
     )
 }

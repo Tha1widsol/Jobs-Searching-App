@@ -7,13 +7,13 @@ interface UserProps {
         isHired: boolean | null
         isAnEmployer: boolean | null}
 
-    loggedIn: boolean | null
-    loading: boolean
+    isLoggedIn: boolean | null
+    isLoading: boolean
     error: any
 }
 
 const token = localStorage.getItem('token')
-const initialState: UserProps = {user: {id: null, email: null, isHired: null, isAnEmployer: null},loggedIn: token ? true : false, loading: false, error: null}
+const initialState: UserProps = {user: {id: null, email: null, isHired: null, isAnEmployer: null},isLoggedIn: token ? true : false, isLoading: false, error: null}
 
 export const fetchUser:any = createAsyncThunk(
     'user/fetchUser',
@@ -51,13 +51,13 @@ export const userSlice = createSlice({
 
     extraReducers: {
         [fetchUser.pending]: (state) => {
-            state.loading = true
+            state.isLoading = true
             state.error = null
         },
         
         [fetchUser.fulfilled]: (state,action) => {
             state.user = action.payload
-            state.loading = false
+            state.isLoading = false
         },
 
         [fetchUser.rejected]: (state,action) => {

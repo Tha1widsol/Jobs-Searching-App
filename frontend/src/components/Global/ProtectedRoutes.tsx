@@ -8,16 +8,15 @@ import axios from 'axios'
 const isAnEmployer = localStorage.getItem('isAnEmployer')
 
 const User = () => {
-  const user = useAppSelector(state => state.user)
-  return user
+  return useAppSelector(state => state.user)
 }
 
 export const CheckNotLoggedIn = () => {
-  return User().loggedIn ? <Navigate to = '/'/> : <Outlet/> 
+  return User().isLoggedIn ? <Navigate to = '/'/> : <Outlet/> 
 }
 
 export const CheckLoggedIn = () => { 
-    return User().loggedIn ? <Outlet/> : <LoginPage/>
+    return User().isLoggedIn ? <Outlet/> : <LoginPage/>
 }
 
 const GetProfile = () => {
