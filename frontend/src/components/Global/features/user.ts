@@ -4,7 +4,7 @@ import axios from 'axios'
 interface UserProps {
     user: {id: number | null
         email: string | null
-        hired: boolean | null
+        isHired: boolean | null
         isAnEmployer: boolean | null}
 
     loggedIn: boolean | null
@@ -13,7 +13,7 @@ interface UserProps {
 }
 
 const token = localStorage.getItem('token')
-const initialState: UserProps = {user: {id: null, email: null, hired: null, isAnEmployer: null},loggedIn: token ? true : false, loading: false, error: null}
+const initialState: UserProps = {user: {id: null, email: null, isHired: null, isAnEmployer: null},loggedIn: token ? true : false, loading: false, error: null}
 
 export const fetchUser:any = createAsyncThunk(
     'user/fetchUser',
