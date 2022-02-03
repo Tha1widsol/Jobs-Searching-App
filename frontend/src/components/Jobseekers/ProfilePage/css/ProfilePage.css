@@ -1,0 +1,76 @@
+#profileContainer{
+    margin: 0 auto;
+    width: 70%;
+    padding: 20px 50px 50px 50px;
+    border-style: groove;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+}
+
+.public,.private{
+    margin: 0 auto;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    z-index:-1;
+    margin-bottom: 20px;
+  }
+
+  .public{background-color:green;}
+
+  .private{background-color:red;}
+
+  .kebabMenuIcon:after {
+    float: right;
+    cursor:pointer;
+    content: '\2807';
+    font-size: 35px;
+    color:grey;
+    }
+  
+    .profileDropdown{
+    display:none;
+    float:right;
+    font-size: 16px;  
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+  }
+
+  .profileDropdown-Content{    
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  }
+
+  .profileDropdown-Content a{
+    padding: 12px 16px;
+    text-decoration: none;
+
+  }
+
+  .profileDropdown-Content a:hover{
+      cursor: pointer;
+      background-color: lightgray;
+    }
+
+  .profileDropdown,.profileDropdown-Content,.profileDropdown-Content a {display: block;}
+
+  .status,.delete,.edit{
+    background-color: unset;
+    border:unset;
+    padding: 14px 16px;
+    margin: 0;
+    width:100%;
+    color: unset;
+    color:black;
+    text-align: start;
+  }
+
+  .delete,.delete:hover{color: red;}
+
+  .status:hover,.delete:hover,.edit:hover{background-color: lightgray;}
+  
+  .status:hover,.edit:hover{color:black;}
