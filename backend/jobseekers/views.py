@@ -38,3 +38,15 @@ class ProfileAPI(APIView):
             return Response(serializer_class.data, status =  status.HTTP_200_OK)
 
         return Response({'Profile not found':'Invalid Profile.'},status = status.HTTP_404_NOT_FOUND)
+
+    def delete(self,request):
+        profile = Profile.objects.filter(user = request.user)
+        profile.delete()
+        return Response(status = status.HTTP_200_OK)
+
+class ToggleProfileStatus(APIView):
+    def put(self,request):
+        profile = Profile.objects.get(user = request.user)
+        profile.isActive = not(profile.isActive)
+        profile.save()
+        return Response(status = status.HTTP_200_OK)
