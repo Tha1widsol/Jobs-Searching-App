@@ -49,7 +49,7 @@ export default function ProfilePage() {
 
   return (
   <div> 
-    <label><p style = {{textAlign:'center'}}>Status:</p></label>
+    <label><p id = 'status'>Status:</p></label>
     <div className = {profile.isActive ? 'public' : 'private'}></div>
   
     <div id = 'profileContainer'>
@@ -67,7 +67,51 @@ export default function ProfilePage() {
          
         </div>
     </div>
-        <p>{profile.firstName}</p>
+          <section style = {{display:'flex'}}>
+              <p className = 'fullName'>{profile.firstName} {profile.lastName}</p>
+              {profile.logo ? <img className = 'logo' src = {profile.logo} alt = ''/> : null}
+          </section>
+      
+        <p><i className = 'fa fa-phone icon'></i>{profile.phone}</p>
+        <p><i className = 'icon'>&#9993;</i>{profile.user.email}</p>
+
+        <section className = 'profileSection'>
+          <section>
+              <label><h2>Skills</h2></label>
+              <hr className = 'mt-0-mb-4'/>
+              <div className = 'skills'>
+                {profile.skills.map((skill,index) =>{
+                  return (
+                    <li key = {index}>{skill.name}</li>
+                  )
+                })}
+              </div>
+          </section>
+          
+          <section className = 'about'>
+            <label><h2>About</h2></label>
+            <hr className = 'mt-0-mb-4'/>
+            <p className = 'sectionText'>{profile.about}</p>
+          </section>
+
+        </section>
+
+        <section className = 'profileSection'>
+            <section className = 'experience'>
+                <label><h2>Experience</h2></label>
+                <hr className = 'mt-0-mb-4'/>
+                <p className = 'sectionText'>{profile.experience}</p>
+            </section>
+
+            <section className = 'education'>
+                <label><h2>Education</h2></label>
+                <hr className = 'mt-0-mb-4'/>
+                <p className = 'sectionText'>{profile.education}</p>
+            </section>
+
+        </section>
+
+     
     </div>
   </div>
   
