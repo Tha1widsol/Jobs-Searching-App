@@ -8,6 +8,7 @@ import {FieldProps,TextFieldProps,SkillsProps} from './types/CreateProfileInterf
 
 export default function CreateProfilePage() {
     let navigate = useNavigate()
+    const token = localStorage.getItem('token')
     const [currentTab,setCurrentTab] = useState(1)
     const [success,setSuccess] = useState('')
     const [errors,setErrors] = useState<Array<string>>([])
@@ -26,6 +27,16 @@ export default function CreateProfilePage() {
     const [cv,setCV] = useState<{value: string | Blob, name:string}>({value: '',name:''})
  
     const maxTabs = document.querySelectorAll('.tab').length
+
+    useEffect(() => {
+        axios.get('/api/profile',{headers: {Authorization: `Token ${token}`}})
+        .then(response => {
+          if (response.status === 200){
+            navigate('/profile')
+          }
+          
+        })
+      },[token,navigate])
 
     const validateForm = () => {
         let isValid = true
