@@ -6,18 +6,16 @@ import axios from 'axios'
 
 export default function ProfilePage() {
   let navigate = useNavigate()
+  const token = localStorage.getItem('token')
+
   const [profile,setProfile] = useState<ProfileProps>({user: {email: '',isHired: null,isAnEmployer: null},
-firstName: '',lastName: '',skills: [],phone: '',logo: '',cv: '',education: '',industry: '',distance: '',experience: '',
-about: '', isActive: null})
+  firstName: '',lastName: '',skills: [],phone: '',logo: '',cv: '',education: '',industry: '',distance: '',experience: '',
+  about: '', isActive: null})
 
   const [dropdown,setDropdown] = useState(false)
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    const requestOptions = {
-      headers: {'Content-Type': 'application/json', Authorization: `Token ${token}`}
-    }
-    axios.get('/api/profile',requestOptions)
+    axios.get('/api/profile',{headers: {Authorization: `Token ${token}`}})
     .then(response => {
       if (response.status === 200){
         const data = response.data
@@ -27,17 +25,25 @@ about: '', isActive: null})
     })
 
     .catch(error => {
-      if (error.response.status === 404) {
-          navigate('/create-profile')
-      }
-
+      if (error.response.status === 404) navigate('/create-profile')
     })
-  },[navigate])
+  },[token,navigate])
 
   function handleToggleStatus(){
+    axios.put('/api/toggleProfileStatus',null,{headers: {Authorization: `Token ${token}`}})
+    .then(response => {
+      if (response.status === 200){
+          setProfile(prev => {
+            return {...prev, isActive: !prev.isActive}
+          })
+        }
+    })
+  }
 
-    setProfile(prev => {
-      return {...prev, isActive: !prev.isActive}
+  function handleDeleteProfile(){
+    axios.delete('/api/profile',{headers: {Authorization: `Token ${token}`}})
+    .then(response => {
+      if (response.status === 200) navigate('/create-profile')
     })
   }
 
@@ -51,20 +57,17 @@ about: '', isActive: null})
       <div className = 'kebabMenuIcon'></div>
         <div className = 'profileDropdown'>
           {dropdown ? 
-          <div className = 'profileDropdown-Content'>
-           {profile.isActive ? <button className = 'status' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'status' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
-            <button className = 'edit'>Edit</button>
-             <button className = 'delete'>Delete</button>
+          <div className = 'profileDropdownContent'>
+           {profile.isActive ? <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
+            <button className = 'editNavBtn'>Edit</button>
+             <button className = 'deleteNavBtn' onClick = {() => handleDeleteProfile}>Delete</button>
           </div>
 
           : null}
          
         </div>
     </div>
-
-  
-    
-        <p>fds</p>
+        <p>{profile.firstName}</p>
     </div>
   </div>
   
