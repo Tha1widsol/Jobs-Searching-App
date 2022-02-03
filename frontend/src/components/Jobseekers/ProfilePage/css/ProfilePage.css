@@ -29,6 +29,7 @@
     }
   
     .profileDropdown{
+    position: relative;
     display:none;
     float:right;
     font-size: 16px;  
@@ -39,26 +40,17 @@
     margin: 0;
   }
 
-  .profileDropdown-Content{    
+  .profileDropdownContent{    
+    position: absolute;
+    right: 0;
     background-color: #f9f9f9;
-    min-width: 160px;
+    min-width: 200px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   }
 
-  .profileDropdown-Content a{
-    padding: 12px 16px;
-    text-decoration: none;
+  .profileDropdown,.profileDropdownContent,.profileDropdownContent button {display: block;}
 
-  }
-
-  .profileDropdown-Content a:hover{
-      cursor: pointer;
-      background-color: lightgray;
-    }
-
-  .profileDropdown,.profileDropdown-Content,.profileDropdown-Content a {display: block;}
-
-  .status,.delete,.edit{
+  .statusNavBtn,.deleteNavBtn,.editNavBtn{
     background-color: unset;
     border:unset;
     padding: 14px 16px;
@@ -69,8 +61,8 @@
     text-align: start;
   }
 
-  .delete,.delete:hover{color: red;}
+  .deleteNavBtn,.deleteNavBtn:hover{color: red;}
 
-  .status:hover,.delete:hover,.edit:hover{background-color: lightgray;}
+  .statusNavBtn:hover,.deleteNavBtn:hover,.editNavBtn:hover{background-color: lightgray;}
   
-  .status:hover,.edit:hover{color:black;}
+  .statusNavBtn:hover,.editNavBtn:hover{color:black;}
