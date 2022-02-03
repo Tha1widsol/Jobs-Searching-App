@@ -8,6 +8,7 @@ import {CheckNotLoggedIn,CheckNoProfileExists} from './ProtectedRoutes'
 import JobSeekersHomePage from '../Jobseekers/JobSeekersHomePage/JobSeekersHomePage';
 import EmployersHomePage from '../Employers/EmployersHomePage/EmployersHomePage';
 import {useAppSelector} from './features/hooks'
+import ProfilePage from '../Jobseekers/ProfilePage/ProfilePage'
 
 export default function PagesRoutes() {
     const isAnEmployer = localStorage.getItem('isAnEmployer')
@@ -29,6 +30,7 @@ export default function PagesRoutes() {
                     <Route element = {<CheckNoProfileExists/>}>
                        <Route path = '/create-profile' element = {<CreateProfilePage/>}/>
                     </Route>
+                    <Route path = '/profile' element = {<ProfilePage/>}/>
                     
                 </Routes>
             </Router>
