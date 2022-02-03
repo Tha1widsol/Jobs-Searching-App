@@ -4,7 +4,7 @@ import PublicHomePage from '../public/PublicHomePage/PublicHomePage'
 import RegisterPage from '../public/RegisterPage/RegisterPage'
 import LoginPage from '../public/LoginPage/LoginPage'
 import CreateProfilePage from '../Jobseekers/CreateProfilePage/CreateProfilePage'
-import {CheckNotLoggedIn,CheckNoProfileExists} from './ProtectedRoutes'
+import {CheckNotLoggedIn,CheckJobSeeker} from './ProtectedRoutes'
 import JobSeekersHomePage from '../Jobseekers/JobSeekersHomePage/JobSeekersHomePage';
 import EmployersHomePage from '../Employers/EmployersHomePage/EmployersHomePage';
 import {useAppSelector} from './features/hooks'
@@ -27,10 +27,10 @@ export default function PagesRoutes() {
                         <Route path = '/login' element = {<LoginPage/>}/>
                     </Route>
 
-                    <Route element = {<CheckNoProfileExists/>}>
-                       <Route path = '/create-profile' element = {<CreateProfilePage/>}/>
+                    <Route element = {<CheckJobSeeker/>}>
+                        <Route path = '/create-profile' element = {<CreateProfilePage/>}/>
+                        <Route path = '/profile' element = {<ProfilePage/>}/>
                     </Route>
-                    <Route path = '/profile' element = {<ProfilePage/>}/>
                     
                 </Routes>
             </Router>
