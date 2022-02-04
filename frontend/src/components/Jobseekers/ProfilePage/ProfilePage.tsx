@@ -111,6 +111,15 @@ export default function ProfilePage() {
 
         </section>
 
+        {profile.cv ? 
+        <section className = 'profileSection'>
+                <section className = 'cv'>
+                  <label><h2>CV / Resume</h2></label>
+                  <hr className = 'mt-0-mb-4'/>
+                  <a href = {`http://localhost:8000${profile.cv}`} target = '_blank' rel = 'noopener noreferrer'><button>Preview</button></a> 
+                </section>
+        </section>
+          : null}
      
     </div>
   </div>
