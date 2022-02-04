@@ -42,9 +42,7 @@ export default function CreateProfilePage() {
         let isValid = true
         let errors : Array<string> = []
         const letters = /^[A-Za-z]+$/
-        const lettersAndSpaces = /^[a-zA-Z\s]*$/
         const numbers = /[0-9]/g
-        const symbols = /[!£$%^&*()]/g
 
         switch(currentTab){
           case 1: 
@@ -208,7 +206,7 @@ export default function CreateProfilePage() {
         form.append('distance',distance.value)
 
         axios.post('/api/profile',form,requestOptions)
-        .then(() => navigate('/'))
+        .then(() => navigate('/profile'))
 
         .catch(error => {
             console.log(error)
