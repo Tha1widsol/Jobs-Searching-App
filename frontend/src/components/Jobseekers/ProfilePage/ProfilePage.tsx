@@ -9,7 +9,7 @@ export default function ProfilePage() {
   const token = localStorage.getItem('token')
 
   const [profile,setProfile] = useState<ProfileProps>({user: {email: '',isHired: null,isAnEmployer: null},
-  firstName: '',lastName: '',skills: [],phone: '',logo: '',cv: '',education: '',industry: '',distance: '',experience: '',
+  firstName: '',lastName: '',middleName:'',skills: [],phone: '',logo: '',cv: '',education: '',industry: '',distance: '',experience: '',
   about: '', isActive: null})
 
   const [dropdown,setDropdown] = useState(false)
@@ -68,7 +68,7 @@ export default function ProfilePage() {
         </div>
     </div>
           <section style = {{display:'flex'}}>
-              <p className = 'fullName'>{profile.firstName} {profile.lastName}</p>
+              <p className = 'fullName'>{profile.firstName} {profile.middleName} {profile.lastName}</p>
               {profile.logo ? <img className = 'logo' src = {profile.logo} alt = ''/> : null}
           </section>
       
@@ -118,9 +118,21 @@ export default function ProfilePage() {
                   <hr className = 'mt-0-mb-4'/>
                   <a href = {`http://localhost:8000${profile.cv}`} target = '_blank' rel = 'noopener noreferrer'><button>Preview</button></a> 
                 </section>
+
+                <section className = 'preferences'>
+                    <label><h2>Preferences</h2></label>
+                    <hr className = 'mt-0-mb-4'/>
+                    <section style = {{width: '300px'}}>
+                       <li>Prefered industry: Any</li>
+                       <li>Prefered distance from workplace: {profile.distance}</li>
+                      </section>
+                </section>
+     
         </section>
           : null}
+
      
+    
     </div>
   </div>
   
