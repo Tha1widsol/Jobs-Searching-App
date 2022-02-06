@@ -2,6 +2,7 @@ export interface ProfileProps{
     user: {email: string, isHired: boolean | null, isAnEmployer: boolean | null}
     firstName: string
     lastName: string
+    middleName?: string
     skills: {name: string}[]
     phone: string
     logo?: string
