@@ -7,6 +7,7 @@ from main.models import Skill
 class Profile(models.Model):
    user = models.OneToOneField(User,on_delete = models.CASCADE,null = True)
    firstName = models.CharField(max_length = 200)
+   middleName = models.CharField(max_length = 200,blank = True)
    lastName = models.CharField(max_length = 200)
    skills = models.ManyToManyField(Skill, blank = True)
    phone = models.CharField(max_length = 15)
