@@ -1,16 +1,17 @@
 import React,{useState,useEffect} from 'react'
 import {useNavigate} from "react-router-dom";
 import Errors from '../../Global/messages/Errors'
-import Success from '../../Global/messages/Success';
+import {useAppDispatch} from '../../Global/features/hooks';
+import {setMessage} from '../../Global/features/successMsg';
 import axios from 'axios'
 import ReactScrollableFeed from 'react-scrollable-feed';
 import {FieldProps,TextFieldProps,SkillsProps} from './types/CreateProfileInterface';
 
 export default function CreateProfilePage() {
     let navigate = useNavigate()
+    const dispatch = useAppDispatch()
     const token = localStorage.getItem('token')
     const [currentTab,setCurrentTab] = useState(1)
-    const [success,setSuccess] = useState('')
     const [errors,setErrors] = useState<Array<string>>([])
 
     const [firstName,setFirstName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'First name is invalid'})
@@ -23,7 +24,7 @@ export default function CreateProfilePage() {
     const [education,setEducation] = useState({value: 'No formal education'})
     const [industry,setIndustry] = useState({value: 'Any'})
     const [distance,setDistance] = useState({value: 'Any'})
-    const [logo,setLogo] = useState<{value :string | Blob, name:string}>({value: '',name:''})
+    const [logo,setLogo] = useState<{value: string | Blob, name:string}>({value: '',name:''})
     const [cv,setCV] = useState<{value: string | Blob, name:string}>({value: '',name:''})
  
     const maxTabs = document.querySelectorAll('.tab').length
@@ -155,13 +156,11 @@ export default function CreateProfilePage() {
        else setSkills(prev => {return {...prev,alreadyExists: false}})
 
        if (errors.length){
-           setSuccess('')
            setErrors(errors)
            return
        }
        
        setSkills(prev => ({...prev, value: [...prev.value,currentSkill]}))
-       setSuccess(skills.skillAddedMsg)
        setErrors([])
        setSkills(prev => {return {...prev,currentSkill: ''}})
     }
@@ -172,7 +171,6 @@ export default function CreateProfilePage() {
         newSkills.splice(index,1)
         setSkills(prev => {return {...prev,value: newSkills}})
         setErrors([])
-        setSuccess(skills.skillRemovedMsg)
     }
 
     function handleSubmitForm(e:any){
@@ -206,12 +204,14 @@ export default function CreateProfilePage() {
         form.append('distance',distance.value)
 
         axios.post('/api/profile',form,requestOptions)
-        .then(() => navigate('/profile'))
-
+        .then(() => {
+            dispatch(setMessage('Profile is successful'))
+            navigate('/profile')
+        })
         .catch(error => {
             console.log(error)
         })
-        
+      
     }
 
     return (
@@ -251,7 +251,6 @@ export default function CreateProfilePage() {
 
                 <div className = {`tab ${currentTab === 2 ? 'show' : 'hide'}`}>
                     <h1 className = 'title'>Skills</h1> 
-                    <Success success = {success}/>
                     <Errors errors = {errors}/>
 
                     <label htmlFor = 'skills'><h3>Specific Key skills:</h3></label>
