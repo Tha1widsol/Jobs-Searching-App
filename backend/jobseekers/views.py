@@ -49,4 +49,4 @@ class ToggleProfileStatus(APIView):
         profile = Profile.objects.get(user = request.user)
         profile.isActive = not(profile.isActive)
         profile.save()
-        return Response(status = status.HTTP_200_OK)
+        return Response({'success':'Profile status has been changed'},status = status.HTTP_200_OK)
