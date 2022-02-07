@@ -2,12 +2,14 @@ import React,{useState,useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {ProfileProps} from './types';
 import './css/ProfilePage.css'
+import {useAppDispatch} from '../../Global/features/hooks';
+import {setMessage} from '../../Global/features/successMsg';
 import axios from 'axios'
 
 export default function ProfilePage() {
   let navigate = useNavigate()
   const token = localStorage.getItem('token')
-
+  const dispatch = useAppDispatch()
   const [profile,setProfile] = useState<ProfileProps>({user: {email: '',isHired: null,isAnEmployer: null},
   firstName: '',lastName: '',middleName:'',skills: [],phone: '',logo: '',cv: '',education: '',industry: '',distance: '',experience: '',
   about: '', isActive: null})
@@ -33,9 +35,17 @@ export default function ProfilePage() {
     axios.put('/api/toggleProfileStatus',null,{headers: {Authorization: `Token ${token}`}})
     .then(response => {
       if (response.status === 200){
-          setProfile(prev => {
+           const message = response.data
+           dispatch(setMessage(message.success))
+           window.scrollTo(0, 0)
+           setTimeout(() => {
+            dispatch(setMessage(''))
+           },2000)
+
+            setProfile(prev => {
             return {...prev, isActive: !prev.isActive}
           })
+          setDropdown(false)
         }
     })
   }
@@ -72,7 +82,7 @@ export default function ProfilePage() {
               {profile.logo ? <img className = 'logo' src = {profile.logo} alt = ''/> : null}
           </section>
       
-        <p><i className = 'fa fa-phone icon'></i>{profile.phone}</p>
+        <p><i className = 'fa fa-phone icon'></i>000011111</p>
         <p><i className = 'icon'>&#9993;</i>{profile.user.email}</p>
 
         <section className = 'profileSection'>
