@@ -1,9 +1,11 @@
 import {configureStore} from '@reduxjs/toolkit'
 import userReducer from './user'
+import successMsgReducer from './successMsg'
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    successMsg: successMsgReducer
   }
 })
 
