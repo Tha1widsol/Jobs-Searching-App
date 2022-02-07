@@ -2,10 +2,13 @@ import React,{useState} from 'react'
 import {useNavigate} from "react-router-dom";
 import axios from 'axios'
 import Errors from '../../Global/messages/Errors';
+import {useAppDispatch} from '../../Global/features/hooks';
+import {setMessage} from '../../Global/features/successMsg';
 import {FieldProps} from './types/LoginInterface'
 
 export default function LoginPage() {
     let navigate = useNavigate()
+    const dispatch = useAppDispatch()
     const [email,setEmail] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Email is required'})
     const [password,setPassword] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Password is required'})
 
@@ -49,8 +52,9 @@ export default function LoginPage() {
         .then(response => {
                 const data = response.data
                 localStorage.setItem('token',data.token)
-                window.location.reload()
                 navigate('/')
+                dispatch(setMessage(data.message))
+                window.location.reload()
         })
 
         .catch(error => {

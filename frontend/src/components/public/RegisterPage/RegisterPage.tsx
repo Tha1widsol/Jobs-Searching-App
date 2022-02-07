@@ -1,11 +1,14 @@
 import React,{useState} from 'react'
 import {useNavigate} from "react-router-dom";
+import {useAppDispatch} from '../../Global/features/hooks';
+import {setMessage} from '../../Global/features/successMsg';
 import Errors from '../../Global/messages/Errors';
 import {EmailProps,FieldProps,PasswordProps} from './types/RegisterInterface'
 import axios from 'axios'
 
 export default function RegisterPage() {
     let navigate = useNavigate()
+    const dispatch = useAppDispatch()
     const pathName = window.location.pathname
     const [errors,setErrors] = useState<Array<string>>([])
     const [email,setEmail] = useState<EmailProps>({value: '',isValid: true, invalidErrorMsg: 'Invalid email', alreadyExistsErrorMsg: 'Email already exists'})
@@ -91,6 +94,7 @@ export default function RegisterPage() {
             const data = response.data
             localStorage.setItem('token',data.token)
             pathName === '/register/jobseeker' ? navigate('/create-profile') : navigate('/create-employer')
+            dispatch(setMessage(data.message))
             window.location.reload()
         })
 
