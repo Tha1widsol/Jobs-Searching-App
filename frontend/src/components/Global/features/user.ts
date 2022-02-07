@@ -32,6 +32,7 @@ export const fetchUser:any = createAsyncThunk(
 
       catch(error){
           localStorage.removeItem('token');
+          window.location.reload()
       }
     }
 
