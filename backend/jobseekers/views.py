@@ -37,7 +37,7 @@ class ProfileAPI(APIView):
             serializer_class = ProfileSerializer(profile.first())
             return Response(serializer_class.data, status =  status.HTTP_200_OK)
 
-        return Response({'Profile not found':'Invalid Profile.'},status = status.HTTP_404_NOT_FOUND)
+        return Response(status = status.HTTP_404_NOT_FOUND)
 
     def delete(self,request):
         profile = Profile.objects.filter(user = request.user)
