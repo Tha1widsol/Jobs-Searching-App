@@ -1,14 +1,11 @@
 import React,{useState} from 'react'
 import {useNavigate} from "react-router-dom";
-import {useAppDispatch} from '../../Global/features/hooks';
-import {setMessage} from '../../Global/features/successMsg';
 import Errors from '../../Global/messages/Errors';
 import {EmailProps,FieldProps,PasswordProps} from './types/RegisterInterface'
 import axios from 'axios'
 
 export default function RegisterPage() {
     let navigate = useNavigate()
-    const dispatch = useAppDispatch()
     const pathName = window.location.pathname
     const [errors,setErrors] = useState<Array<string>>([])
     const [email,setEmail] = useState<EmailProps>({value: '',isValid: true, invalidErrorMsg: 'Invalid email', alreadyExistsErrorMsg: 'Email already exists'})
@@ -94,7 +91,6 @@ export default function RegisterPage() {
             const data = response.data
             localStorage.setItem('token',data.token)
             pathName === '/register/jobseeker' ? navigate('/create-profile') : navigate('/create-employer')
-            dispatch(setMessage(data.message))
             window.location.reload()
         })
 
@@ -114,10 +110,10 @@ export default function RegisterPage() {
             <form onSubmit = {handleSubmitForm} noValidate>
                 <div style = {{textAlign:'center'}}>
                     <b><p style={{fontSize:'20px'}}>Password:</p></b> 
-                    <li className = {password.hasValidLength === false ? 'error' : password.hasValidLength ? 'success': ''}>Must be atleast 9 characters long</li>
-                    <li className = {password.hasUppercase === false ? 'error' : password.hasUppercase ? 'success' : ''}>Contains atleast one uppercase character</li>
-                    <li className = {password.hasDigit === false ? 'error' : password.hasDigit ? 'success' : ''}>Contains atleast one digit</li>
-                    <li className = {password.hasSymbol === false ? 'error' : password.hasSymbol ? 'success' : ''}>Contains atleast one of these symbols: !,£,$,%,^,&,*,(,)</li>
+                    <li className = {password.hasValidLength === false ? 'error' : password.hasValidLength ? 'valid': ''}>Must be atleast 9 characters long</li>
+                    <li className = {password.hasUppercase === false ? 'error' : password.hasUppercase ? 'valid' : ''}>Contains atleast one uppercase character</li>
+                    <li className = {password.hasDigit === false ? 'error' : password.hasDigit ? 'valid' : ''}>Contains atleast one digit</li>
+                    <li className = {password.hasSymbol === false ? 'error' : password.hasSymbol ? 'valid' : ''}>Contains atleast one of these symbols: !,£,$,%,^,&,*,(,)</li>
                     <hr className="mt-0-mb-4" />
                 </div>
             
