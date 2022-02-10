@@ -48,18 +48,18 @@ export default function Profile({userIsOnProfilePage = false} : {userIsOnProfile
     <div id = 'profileContainer'>
         {userIsOnProfilePage ? 
         <div onMouseEnter = {() => setDropdown(true)} onMouseLeave = {() => setDropdown(false)}>
-            <div className = 'kebabMenuIcon'></div>
+            <div className = 'kebabMenuIcon'/>
                 <div className = 'profileDropdown'>
-                {dropdown ? 
-                <div className = 'profileDropdownContent'>
-                 {profile.isActive ? <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
-                    <button className = 'editNavBtn'>Edit</button>
-                    <button className = 'deleteNavBtn' onClick = {() => handleDeleteProfile()}>Delete</button>
-                </div>
+                    {dropdown ? 
+                    <div className = 'profileDropdownContent'>
+                        {profile.isActive ? <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
+                            <button className = 'editNavBtn'>Edit</button>
+                            <button className = 'deleteNavBtn' onClick = {() => handleDeleteProfile()}>Delete</button>
+                    </div>
 
-                : null}
+                    : null}
                 
-            </div>
+                </div>
         </div>
         
         : null}
