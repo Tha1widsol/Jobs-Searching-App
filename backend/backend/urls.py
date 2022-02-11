@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/',include('main.urls')),
     path('api/',include('accounts.urls')),
     path('api/',include('jobseekers.urls')),
+    path('api/',include('employers.urls')),
     path('auth/',obtain_auth_token)
 
 ]
