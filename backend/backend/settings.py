@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'main',
     'accounts',
     'jobseekers',
+    'employers',
     'rest_framework',
     'knox'
 ]
