@@ -18,7 +18,7 @@ export default function Profile({userIsOnProfilePage = false} : {userIsOnProfile
     useEffect(() => {
         if (profileDoesExist === 'false') navigate('/create-profile') 
         dispatch(fetchProfile())
-    },[dispatch,navigate,profile.doesExist,profileDoesExist])
+    },[dispatch,navigate,profileDoesExist])
 
     function handleToggleStatus(){
         axios.put('/api/toggleProfileStatus',null,{headers: {Authorization: `Token ${token}`}})
@@ -73,21 +73,21 @@ export default function Profile({userIsOnProfilePage = false} : {userIsOnProfile
             <p><i className = 'icon'>&#9993;</i>{profile.user.email}</p>
 
             <section className = 'profileSection'>
-            <section>
-                <label><h2>Skills</h2></label>
-                <hr className = 'mt-0-mb-4'/>
-                <div className = 'skills'>
-                    {profile.skills.map((skill,index) => {
-                        return (<li key = {index}>{skill.name}</li>)
-                    })}
-                </div>
-            </section>
-            
-            <section className = 'about'>
-                <label><h2>About</h2></label>
-                <hr className = 'mt-0-mb-4'/>
-                <p className = 'sectionText'>{profile.about}</p>
-            </section>
+                <section>
+                    <label><h2>Skills</h2></label>
+                    <hr className = 'mt-0-mb-4'/>
+                    <div className = 'skills'>
+                        {profile.skills.map((skill,index) => {
+                            return (<li key = {index}>{skill.name}</li>)
+                        })}
+                    </div>
+                </section>
+                
+                <section className = 'about'>
+                    <label><h2>About</h2></label>
+                    <hr className = 'mt-0-mb-4'/>
+                    <p className = 'sectionText'>{profile.about}</p>
+                </section>
 
             </section>
 
@@ -118,8 +118,8 @@ export default function Profile({userIsOnProfilePage = false} : {userIsOnProfile
                         <label><h2>Preferences</h2></label>
                         <hr className = 'mt-0-mb-4'/>
                         <section style = {{width: '300px'}}>
-                        <li>Prefered industry: Any</li>
-                        <li>Prefered distance from workplace: {profile.distance}</li>
+                            <li>Prefered industry: Any</li>
+                            <li>Prefered distance from workplace: {profile.distance}</li>
                         </section>
                     </section>
         
