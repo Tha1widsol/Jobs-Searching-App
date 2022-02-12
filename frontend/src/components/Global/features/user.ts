@@ -2,7 +2,7 @@ import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import axios from 'axios'
 
 interface UserProps {
-    user: {id: number | null
+    values: {id: number | null
         email: string | null
         isHired: boolean | null
         isAnEmployer: boolean | null}
@@ -13,7 +13,10 @@ interface UserProps {
 }
 
 const token = localStorage.getItem('token')
-const initialState: UserProps = {user: {id: null, email: null, isHired: null, isAnEmployer: null},isLoggedIn: token ? true : false, isLoading: false, error: null}
+const email = sessionStorage.getItem('email')
+const isAnEmployer = localStorage.getItem('isAnEmployer')
+
+const initialState: UserProps = {values: {id: null, email: email, isHired: null, isAnEmployer: isAnEmployer === 'true' ? true : isAnEmployer === 'false' ? false : null},isLoggedIn: token ? true : false, isLoading: false, error: null}
 
 export const fetchUser:any = createAsyncThunk(
     'user/fetchUser',
@@ -57,7 +60,7 @@ export const userSlice = createSlice({
         },
         
         [fetchUser.fulfilled]: (state,action) => {
-            state.user = action.payload
+            state.values = action.payload
             state.isLoading = false
         },
 
