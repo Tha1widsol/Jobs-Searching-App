@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import axios from 'axios'
 import Errors from '../../Global/messages/Errors';
-import {FieldProps} from './types/LoginInterface'
+import {FieldProps} from '../../Global/types/forms';
 
 export default function LoginPage() {
     const [email,setEmail] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Email is required'})
