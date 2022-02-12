@@ -22,7 +22,6 @@ const initialState: ProfileProps = {values: {
     experience: '',
     about: '',
     isActive: null,
-    doesExist: null,
     isLoading: false
     }
 
@@ -61,16 +60,13 @@ export const ProfileSlice = createSlice({
         
         [fetchProfile.fulfilled]: (state,action) => {
             state.values = action.payload
-            state.values.doesExist = true
-            sessionStorage.removeItem('profileDoesExist')
             state.values.isLoading = false
         },
 
         [fetchProfile.rejected]: (state) => {
-            state.values.doesExist = false
-            sessionStorage.setItem('profileDoesExist','false')
-        }
+            state.values.isLoading = false
     }
+  }
 
 })
 
