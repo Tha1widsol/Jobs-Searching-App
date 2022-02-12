@@ -3,8 +3,6 @@ import {Outlet,Navigate} from 'react-router'
 import {useAppSelector} from './features/hooks';
 import LoginPage from '../public/LoginPage/LoginPage';
 
-const isAnEmployer = localStorage.getItem('isAnEmployer')
-
 const User = () => {
   return useAppSelector(state => state.user)
 }
