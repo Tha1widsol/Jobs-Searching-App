@@ -1,9 +1,3 @@
-export interface FieldProps{
-    value: string
-    isValid: boolean
-    errorMsg: string
-}
-
 export interface EmailProps{
     value: string
     isValid: boolean
