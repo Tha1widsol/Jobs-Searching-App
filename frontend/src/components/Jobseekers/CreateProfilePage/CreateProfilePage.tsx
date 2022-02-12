@@ -8,6 +8,7 @@ import ReactScrollableFeed from 'react-scrollable-feed';
 import {FieldProps} from '../../Global/types/forms';
 import {handleFixName} from '../../Global/formFunctions';
 import {TextFieldProps,SkillsProps} from './types/CreateProfileInterface';
+import {fetchProfile} from '../../Global/features/Jobseekers/Profile/profile';
 
 export default function CreateProfilePage() {
     let navigate = useNavigate()
@@ -29,6 +30,13 @@ export default function CreateProfilePage() {
     const [cv,setCV] = useState<{value: string | Blob, name:string}>({value: '',name:''})
  
     const maxTabs = document.querySelectorAll('.tab').length
+
+    useEffect(() => {
+       dispatch(fetchProfile()).then((response: any) => {
+        if (!response.error) navigate('/profile')
+       })
+
+     },[dispatch,navigate])
 
     const validateForm = () => {
         let isValid = true
