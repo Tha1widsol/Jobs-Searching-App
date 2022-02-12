@@ -12,13 +12,19 @@ export default function Profile({userIsOnProfilePage = false} : {userIsOnProfile
     const token = localStorage.getItem('token')
     const profile = useAppSelector(state => state.profile.values)
     const [dropdown,setDropdown] = useState(false)
-    const profileDoesExist = sessionStorage.getItem('profileDoesExist')
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        if (profileDoesExist === 'false') navigate('/create-profile') 
-        dispatch(fetchProfile())
-    },[dispatch,navigate,profileDoesExist])
+        axios.get('/api/profile',{headers: {Authorization: `Token ${token}`}})
+        .then(response => {
+            if (response.status === 200) dispatch(fetchProfile())
+        })
+
+        .catch(error => {
+            if (error.response.status === 404) navigate('/create-profile')
+        })
+        
+    },[dispatch,navigate])
 
     function handleToggleStatus(){
         axios.put('/api/toggleProfileStatus',null,{headers: {Authorization: `Token ${token}`}})
