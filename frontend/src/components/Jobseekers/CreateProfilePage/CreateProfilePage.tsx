@@ -5,12 +5,13 @@ import {useAppDispatch} from '../../Global/features/hooks';
 import {setMessage} from '../../Global/features/successMsg';
 import axios from 'axios'
 import ReactScrollableFeed from 'react-scrollable-feed';
-import {FieldProps,TextFieldProps,SkillsProps} from './types/CreateProfileInterface';
+import {FieldProps} from '../../Global/types/forms';
+import {handleFixName} from '../../Global/formFunctions';
+import {TextFieldProps,SkillsProps} from './types/CreateProfileInterface';
 
 export default function CreateProfilePage() {
     let navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const token = localStorage.getItem('token')
     const [currentTab,setCurrentTab] = useState(1)
     const [errors,setErrors] = useState<Array<string>>([])
 
@@ -28,16 +29,6 @@ export default function CreateProfilePage() {
     const [cv,setCV] = useState<{value: string | Blob, name:string}>({value: '',name:''})
  
     const maxTabs = document.querySelectorAll('.tab').length
-
-    useEffect(() => {
-        axios.get('/api/profile',{headers: {Authorization: `Token ${token}`}})
-        .then(response => {
-          if (response.status === 200){
-            navigate('/profile')
-          }
-          
-        })
-      },[token,navigate])
 
     const validateForm = () => {
         let isValid = true
@@ -125,13 +116,6 @@ export default function CreateProfilePage() {
         setCurrentTab(currentTab - 1)
     }
 
-    function handleFixName(e:any){
-        const spaceRegex = /\s/g  
-        e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);  
-        e.target.value = e.target.value.replace(spaceRegex, '');
-        e.target.value = e.target.value.charAt(0) + e.target.value.slice(1).toLowerCase()
-    }
-
     function handleSetSkills(e:any){
         setSkills(prev => {return {...prev, currentSkill: e.target.value}})
         e.target.value = e.target.value.replace(',','')
@@ -186,7 +170,7 @@ export default function CreateProfilePage() {
         let form = new FormData();
 
         form.append('firstName',firstName.value)
-        form.append('middleName',firstName.value)
+        form.append('middleName',middleName.value)
         form.append('lastName',lastName.value)
         form.append('phone',phone.value)
         form.append('about',about.value)
@@ -204,12 +188,16 @@ export default function CreateProfilePage() {
         form.append('distance',distance.value)
 
         axios.post('/api/profile',form,requestOptions)
-        .then(() => {
-            dispatch(setMessage('Profile is successful'))
-            navigate('/profile')
+        .then(response => {
+            if (response.status === 201){
+                dispatch(setMessage('Profile is successful'))
+                navigate('/profile')
+            }
+           
         })
+
         .catch(error => {
-            console.log(error)
+            if (error.response.status === 400) setErrors(['Something went wrong'])
         })
       
     }
