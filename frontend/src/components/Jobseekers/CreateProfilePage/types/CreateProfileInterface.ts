@@ -1,8 +1,4 @@
-export interface FieldProps{
-    value : string
-    isValid: boolean
-    errorMsg: string
-}
+import {FieldProps} from "../../../Global/types/forms";
 
 export interface TextFieldProps extends FieldProps{
     currentLength: number 
