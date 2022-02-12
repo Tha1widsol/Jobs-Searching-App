@@ -1,7 +1,8 @@
 import React,{useState} from 'react'
 import {useNavigate} from "react-router-dom";
 import Errors from '../../Global/messages/Errors';
-import {EmailProps,FieldProps,PasswordProps} from './types/RegisterInterface'
+import {FieldProps} from '../../Global/types/forms';
+import {EmailProps,PasswordProps} from './types/RegisterInterface'
 import axios from 'axios'
 
 export default function RegisterPage() {
