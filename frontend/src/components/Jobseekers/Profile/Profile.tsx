@@ -15,15 +15,9 @@ export default function Profile({userIsOnProfilePage = false} : {userIsOnProfile
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        axios.get('/api/profile',{headers: {Authorization: `Token ${token}`}})
-        .then(response => {
-            if (response.status === 200) dispatch(fetchProfile())
+       dispatch(fetchProfile()).then((response: any) => {
+            if (response.error) navigate('/create-profile')
         })
-
-        .catch(error => {
-            if (error.response.status === 404) navigate('/create-profile')
-        })
-        
     },[dispatch,navigate])
 
     function handleToggleStatus(){
