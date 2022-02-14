@@ -22,7 +22,7 @@ const initialState: ProfileProps = {values: {
     experience: '',
     about: '',
     isActive: null,
-    isLoading: false
+    status: null
     }
 
 }
@@ -55,16 +55,16 @@ export const ProfileSlice = createSlice({
 
     extraReducers: {
         [fetchProfile.pending]: (state) => {
-            state.values.isLoading = true
+            state.values.status = 'loading'
         },
         
         [fetchProfile.fulfilled]: (state,action) => {
             state.values = action.payload
-            state.values.isLoading = false
+            state.values.status = 'success'
         },
 
         [fetchProfile.rejected]: (state) => {
-            state.values.isLoading = false
+            state.values.status = 'rejected'
     }
   }
 
