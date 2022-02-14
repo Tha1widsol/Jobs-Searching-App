@@ -8,6 +8,7 @@ import {CheckNotLoggedIn,CheckJobSeeker,CheckEmployer} from './ProtectedRoutes'
 import JobSeekersHomePage from '../Jobseekers/JobSeekersHomePage/JobSeekersHomePage';
 import EmployersHomePage from '../Employers/EmployersHomePage/EmployersHomePage';
 import CreateEmployerPage from '../Employers/CreateEmployerPage/CreateEmployerPage'
+import EmployerPage from '../Employers/EmployerPage/EmployerPage'
 import {useAppSelector} from './features/hooks'
 import ProfilePage from '../Jobseekers/ProfilePage/ProfilePage'
 
@@ -35,6 +36,7 @@ export default function PagesRoutes() {
                     
                     <Route element = {<CheckEmployer/>}>
                        <Route path = '/create-employer' element = {<CreateEmployerPage/>}/>
+                       <Route path = '/employer' element = {<EmployerPage/>}/>
                     </Route>
                     
                 </Routes>
