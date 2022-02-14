@@ -11,7 +11,7 @@ class EmployerAPI(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self,request):
-        serializer_class = CreateEmployerSerializer
+        serializer_class = EmployerSerializer
         serializer = serializer_class(data = request.data)
 
         if serializer.is_valid():
@@ -21,3 +21,14 @@ class EmployerAPI(APIView):
             return Response(status = status.HTTP_201_CREATED)
 
         return Response(status = status.HTTP_400_BAD_REQUEST)
+
+    def get(self,request):
+        employer = Employer.objects.filter(user = request.user)
+
+        if employer.exists():
+            serializer_class = EmployerSerializer(employer.first())
+            return Response(serializer_class.data, status =  status.HTTP_200_OK)
+        
+        return Response(status = status.HTTP_404_NOT_FOUND)
+
+
