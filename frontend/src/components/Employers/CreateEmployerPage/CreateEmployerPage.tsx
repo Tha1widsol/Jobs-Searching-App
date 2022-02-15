@@ -2,7 +2,8 @@ import React,{useState} from 'react'
 import {useNavigate} from "react-router-dom";
 import {FieldProps} from '../../Global/types/forms'
 import {handleFixName} from '../../Global/formFunctions';
-import {TextFieldProps} from '../../Jobseekers/CreateProfilePage/types/CreateProfileInterface';
+import {TextFieldProps} from '../../Global/types/forms';
+import {FileProps} from '../../Global/types/forms';
 import Errors from '../../Global/messages/Errors'
 import axios from 'axios'
 
@@ -13,7 +14,7 @@ export default function CreateEmployerPage() {
     const [lastName,setLastName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Last name is invalid'})
     const [errors,setErrors] = useState<Array<string>>([])
     const [about,setAbout] = useState<TextFieldProps>({value: '', isValid: true, currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
-    const [logo,setLogo] = useState<{value: string | Blob, name:string}>({value: '',name:''})
+    const [logo,setLogo] = useState<FileProps>({value: '',name:''})
 
     const validateForm = () => {
         let isValid = true
@@ -63,7 +64,7 @@ export default function CreateEmployerPage() {
         return isValid
     }
 
-    function handleSubmitForm(e:any){
+    function handleSubmitForm(e: React.SyntheticEvent){
         e.preventDefault()
         const token = localStorage.getItem('token')
 
