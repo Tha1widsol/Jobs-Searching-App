@@ -1,10 +1,3 @@
-import {FieldProps} from "../../../Global/types/forms";
-
-export interface TextFieldProps extends FieldProps{
-    currentLength: number 
-    maxLength: number
-}
-
 export interface SkillsProps{
     value: Array<string>
     currentSkill: string
