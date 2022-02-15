@@ -7,7 +7,9 @@ import axios from 'axios'
 import ReactScrollableFeed from 'react-scrollable-feed';
 import {FieldProps} from '../../Global/types/forms';
 import {handleFixName} from '../../Global/formFunctions';
-import {TextFieldProps,SkillsProps} from './types/CreateProfileInterface';
+import {TextFieldProps} from '../../Global/types/forms';
+import {SkillsProps} from './types/CreateProfileInterface';
+import {FileProps} from '../../Global/types/forms';
 import {fetchProfile} from '../../Global/features/Jobseekers/Profile/profile';
 
 export default function CreateProfilePage() {
@@ -26,8 +28,8 @@ export default function CreateProfilePage() {
     const [education,setEducation] = useState({value: 'No formal education'})
     const [industry,setIndustry] = useState({value: 'Any'})
     const [distance,setDistance] = useState({value: 'Any'})
-    const [logo,setLogo] = useState<{value: string | Blob, name:string}>({value: '',name:''})
-    const [cv,setCV] = useState<{value: string | Blob, name:string}>({value: '',name:''})
+    const [logo,setLogo] = useState<FileProps>({value: '',name:''})
+    const [cv,setCV] = useState<FileProps>({value: '',name:''})
  
     const maxTabs = document.querySelectorAll('.tab').length
 
@@ -75,6 +77,8 @@ export default function CreateProfilePage() {
                 errors.push(phone.errorMsg)
                 isValid = false
             }
+
+            else setPhone(prev => {return {...prev, isValid: true}})
 
             if (about.value.length < 100){
                 setAbout(prev => {return {...prev,isValid: false}})
@@ -165,7 +169,7 @@ export default function CreateProfilePage() {
         setErrors([])
     }
 
-    function handleSubmitForm(e:any){
+    function handleSubmitForm(e: React.SyntheticEvent){
         e.preventDefault()
         const token = localStorage.getItem('token')
 
@@ -241,7 +245,7 @@ export default function CreateProfilePage() {
                     <textarea id = 'about' className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
 
                     <label htmlFor = 'logo'><h3>Profile logo (Optional):</h3></label>
-                    <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {(e:any) => setLogo({value: e.target.files[0], name: e.target.files[0].name})}/>
+                    <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {(e: any) => setLogo({value: e.target.files[0], name: e.target.files[0].name})}/>
 
                 </div>
 
