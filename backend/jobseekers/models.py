@@ -17,7 +17,7 @@ class Profile(models.Model):
    industry = models.TextField(default = 'Any')
    distance = models.TextField(default = 'Any')
    experience = models.TextField(blank = True)
-   about = models.TextField()
+   about = models.CharField(max_length = 250)
    isActive = models.BooleanField(default = True)
 
    def __str__(self):
