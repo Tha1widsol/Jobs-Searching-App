@@ -34,7 +34,7 @@ export default function LoginPage() {
         return isValid
     }
 
-    function handleSubmitForm(e:any){
+    function handleSubmitForm(e: React.SyntheticEvent){
         e.preventDefault()
 
         if (!validateForm()) return
