@@ -72,7 +72,7 @@ export default function CreateProfilePage() {
     
             else setLastName(prev => {return {...prev,isValid: true}})
 
-            if (!phone.value.match(numbers)){
+            if (!phone.value.match(numbers) || phone.value.length < 9){
                 setPhone(prev => {return {...prev, isValid: false}})
                 errors.push(phone.errorMsg)
                 isValid = false
