@@ -42,13 +42,13 @@ export default function Navbar() {
                     <div className = 'dropdown-content'>
                             {user.values.isAnEmployer ? 
                              <>
-                                <a href="/companies">My companies</a> 
+                                <a href = '/companies'>My companies</a> 
 
                              </> 
                 
                             : <>
-                                <a href="/profile">My Profile</a>
-                                <a href="/applied">My Jobs</a>
+                                <a href ='/profile'>My Profile</a>
+                                <a href = '/applied'>My Jobs</a>
                               </>}
                          <a href = '/' onClick={handleLogout}>Logout</a>
                         </div> : null}
