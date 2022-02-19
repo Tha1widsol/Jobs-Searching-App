@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import {useAppSelector,useAppDispatch} from '../features/hooks'
-import {logout} from '../features/user'
+import {logout} from '../features/Auth/user'
 import axios from 'axios'
 import './css/Navbar.css'
 
