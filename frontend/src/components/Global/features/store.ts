@@ -1,5 +1,5 @@
 import {configureStore} from '@reduxjs/toolkit'
-import userReducer from './user'
+import userReducer from './Auth/user'
 import ProfileReducer from './Jobseekers/Profile/profile'
 import EmployerReducer from './Employers/EmployersPage/employer'
 import successMsgReducer from './successMsg'
