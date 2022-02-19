@@ -1,6 +1,8 @@
+import {UserProps} from '../../Auth/types'
+
 export interface ProfileProps{
     values: {
-        user: {email: string, isHired: boolean | null, isAnEmployer: boolean | null}
+        user: UserProps
         firstName: string
         lastName: string
         middleName?: string
