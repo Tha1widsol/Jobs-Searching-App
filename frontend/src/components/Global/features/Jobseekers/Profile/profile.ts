@@ -5,6 +5,7 @@ import axios from 'axios'
 const token = localStorage.getItem('token')
 const initialState: ProfileProps = {values: {
     user: {
+        id: null,
         email: '',
         isHired: null, 
         isAnEmployer: null
@@ -27,7 +28,7 @@ const initialState: ProfileProps = {values: {
 
 }
   
-export const fetchProfile:any = createAsyncThunk(
+export const fetchProfile = createAsyncThunk(
     'user/fetchProfile',
     async () => {
         const response = await axios.get('/api/profile',{
@@ -54,16 +55,16 @@ export const ProfileSlice = createSlice({
     },
 
     extraReducers: {
-        [fetchProfile.pending]: (state) => {
+        [fetchProfile.pending.toString()]: (state) => {
             state.values.status = 'loading'
         },
         
-        [fetchProfile.fulfilled]: (state,action) => {
+        [fetchProfile.fulfilled.toString()]: (state,action) => {
             state.values = action.payload
             state.values.status = 'success'
         },
 
-        [fetchProfile.rejected]: (state) => {
+        [fetchProfile.rejected.toString()]: (state) => {
             state.values.status = 'rejected'
     }
   }
