@@ -6,6 +6,7 @@ const token = localStorage.getItem('token')
 
 const initialState: EmployerProps = {values:{
     user: {
+        id: null,
         email: '',
         isHired: null, 
         isAnEmployer: null
@@ -18,7 +19,7 @@ const initialState: EmployerProps = {values:{
     status: null
 }}
 
-export const fetchEmployer: any = createAsyncThunk(
+export const fetchEmployer = createAsyncThunk(
     'user/fetchEmployer',
     async () => {
         const response = await axios.get('/api/employer',{
@@ -41,16 +42,16 @@ export const EmployerSlice = createSlice({
     }
     
     ,extraReducers: {
-        [fetchEmployer.pending]: (state) => {
+        [fetchEmployer.pending.toString()]: (state) => {
             state.values.status = 'loading'
         },
         
-        [fetchEmployer.fulfilled]: (state,action) => {
+        [fetchEmployer.fulfilled.toString()]: (state,action) => {
             state.values = action.payload
             state.values.status = 'success'
         },
 
-        [fetchEmployer.rejected]: (state) => {
+        [fetchEmployer.rejected.toString()]: (state) => {
             state.values.status = 'rejected'
      }
     },
