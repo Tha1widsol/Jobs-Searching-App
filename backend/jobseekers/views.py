@@ -40,7 +40,7 @@ class ProfileAPI(APIView):
         return Response(status = status.HTTP_404_NOT_FOUND)
 
     def delete(self,request):
-        profile = Profile.objects.filter(user = request.user)
+        profile = Profile.objects.get(user = request.user)
         profile.delete()
         return Response(status = status.HTTP_200_OK)
 
