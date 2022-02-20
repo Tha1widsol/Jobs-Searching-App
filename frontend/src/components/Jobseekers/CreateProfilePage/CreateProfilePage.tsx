@@ -1,23 +1,23 @@
 import React,{useState,useEffect} from 'react'
 import {useNavigate} from "react-router-dom";
 import Errors from '../../Global/messages/Errors'
-import {useAppDispatch} from '../../Global/features/hooks';
+import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {setMessage} from '../../Global/features/successMsg';
-import axios from 'axios'
 import ReactScrollableFeed from 'react-scrollable-feed';
 import {FieldProps} from '../../Global/types/forms';
 import {handleFixName} from '../../Global/formFunctions';
 import {TextFieldProps} from '../../Global/types/forms';
 import {SkillsProps} from './types/CreateProfileInterface';
 import {FileProps} from '../../Global/types/forms';
-import {fetchProfile} from '../../Global/features/Jobseekers/Profile/profile';
+import axios from 'axios';
 
 export default function CreateProfilePage() {
     let navigate = useNavigate()
     const dispatch = useAppDispatch()
+    const profile = useAppSelector(state => state.profile.values)
     const [currentTab,setCurrentTab] = useState(1)
     const [errors,setErrors] = useState<Array<string>>([])
-
+    
     const [firstName,setFirstName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'First name is invalid'})
     const [middleName,setMiddleName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Middle name is invalid'})
     const [lastName,setLastName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Last name is invalid'})
@@ -34,10 +34,7 @@ export default function CreateProfilePage() {
     const maxTabs = document.querySelectorAll('.tab').length
 
     useEffect(() => {
-       dispatch(fetchProfile()).then((response: any) => {
-        if (!response.error) navigate('/profile')
-       })
-
+        if (profile.firstName) navigate('/')
      },[dispatch,navigate])
 
     const validateForm = () => {
