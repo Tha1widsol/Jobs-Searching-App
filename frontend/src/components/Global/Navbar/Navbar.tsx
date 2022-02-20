@@ -47,7 +47,7 @@ export default function Navbar() {
                              </> 
                 
                             : <>
-                                <a href ='/profile'>My Profile</a>
+                                <a href ={`/profile/${user.values.id}`}>My Profile</a>
                                 <a href = '/applied'>My Jobs</a>
                               </>}
                          <a href = '/' onClick={handleLogout}>Logout</a>
