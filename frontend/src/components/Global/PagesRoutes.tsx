@@ -11,10 +11,13 @@ import CreateCompanyPage from '../Employers/CreateCompanyPage/CreateCompanyPage'
 import CompaniesPage from '../Employers/CompaniesPage/CompaniesPage'
 import {useAppSelector} from './features/hooks'
 import ProfilePage from '../Jobseekers/ProfilePage/ProfilePage'
+import { fetchProfile } from './features/Jobseekers/Profile/profile'
+
 
 export default function PagesRoutes() {
     const isAnEmployer = localStorage.getItem('isAnEmployer')
     const user = useAppSelector(state => state.user)
+    
 
     return (
         <div>
@@ -30,8 +33,8 @@ export default function PagesRoutes() {
                     </Route>
 
                     <Route element = {<CheckJobSeeker/>}>
+                        <Route path = '/profile/:userID' element = {<ProfilePage/>}/>
                         <Route path = '/create-profile' element = {<CreateProfilePage/>}/>
-                        <Route path = '/profile' element = {<ProfilePage/>}/>
                     </Route>
                     
                     <Route element = {<CheckEmployer/>}>
