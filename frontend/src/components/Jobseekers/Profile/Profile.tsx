@@ -1,24 +1,17 @@
 import React,{useState,useEffect} from 'react'
 import './css/Profile.css'
-import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
-import {fetchProfile} from '../../Global/features/Jobseekers/Profile/profile';
+import {useAppDispatch} from '../../Global/features/hooks';
+import {ProfileProps} from '../../Global/features/Jobseekers/Profile/types';
 import {setToggleStatus} from '../../Global/features/Jobseekers/Profile/profile'
 import {setMessage} from '../../Global/features/successMsg';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios'
 
-export default function Profile({userIsOnProfilePage = false} : {userIsOnProfilePage?: boolean}) {
+export default function Profile({userIsOnProfilePage = false, profile} : {userIsOnProfilePage?: boolean, profile: ProfileProps}) {
     let navigate = useNavigate()
     const token = localStorage.getItem('token')
-    const profile = useAppSelector(state => state.profile.values)
     const [dropdown,setDropdown] = useState(false)
     const dispatch = useAppDispatch()
-
-    useEffect(() => {
-       dispatch(fetchProfile()).then((response: any) => {
-            if (response.error) navigate('/create-profile')
-        })
-    },[dispatch,navigate])
 
     function handleToggleStatus(){
         axios.put('/api/toggleProfileStatus',null,{headers: {Authorization: `Token ${token}`}})
@@ -52,7 +45,7 @@ export default function Profile({userIsOnProfilePage = false} : {userIsOnProfile
                 <div className = 'profileDropdown'>
                     {dropdown ? 
                     <div className = 'profileDropdownContent'>
-                        {profile.isActive ? <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
+                        {profile.values.isActive ? <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
                             <button className = 'editNavBtn'>Edit</button>
                             <button className = 'deleteNavBtn' onClick = {() => handleDeleteProfile()}>Delete</button>
                     </div>
@@ -65,19 +58,19 @@ export default function Profile({userIsOnProfilePage = false} : {userIsOnProfile
         : null}
       
             <section style = {{display:'flex'}}>
-                <p className = 'fullName'>{profile.firstName} {profile.middleName} {profile.lastName}</p>
-                {profile.logo ? <img className = 'logo' src = {profile.logo} alt = ''/> : null}
+                <p className = 'fullName'>{profile.values.firstName} {profile.values.middleName} {profile.values.lastName}</p>
+                {profile.values.logo ? <img className = 'logo' src = {profile.values.logo} alt = ''/> : null}
             </section>
         
             <p><i className = 'fa fa-phone icon'></i>000011111</p>
-            <p><i className = 'icon'>&#9993;</i>{profile.user.email}</p>
+            <p><i className = 'icon'>&#9993;</i>{profile.values.user.email}</p>
 
             <section className = 'profileSection'>
                 <section>
                     <label><h2>Skills</h2></label>
                     <hr className = 'mt-0-mb-4'/>
                     <div className = 'skills'>
-                        {profile.skills.map((skill,index) => {
+                        {profile.values.skills.map((skill,index) => {
                             return (<li key = {index}>{skill.name}</li>)
                         })}
                     </div>
@@ -86,7 +79,7 @@ export default function Profile({userIsOnProfilePage = false} : {userIsOnProfile
                 <section className = 'about'>
                     <label><h2>About</h2></label>
                     <hr className = 'mt-0-mb-4'/>
-                    <p className = 'sectionText'>{profile.about}</p>
+                    <p className = 'sectionText'>{profile.values.about}</p>
                 </section>
 
             </section>
@@ -95,23 +88,23 @@ export default function Profile({userIsOnProfilePage = false} : {userIsOnProfile
                 <section className = 'experience'>
                     <label><h2>Experience</h2></label>
                     <hr className = 'mt-0-mb-4'/>
-                    <p className = 'sectionText'>{profile.experience}</p>
+                    <p className = 'sectionText'>{profile.values.experience}</p>
                 </section>
 
                 <section className = 'education'>
                     <label><h2>Education</h2></label>
                     <hr className = 'mt-0-mb-4'/>
-                    <p className = 'sectionText'>{profile.education}</p>
+                    <p className = 'sectionText'>{profile.values.education}</p>
                 </section>
 
             </section>
 
-            {profile.cv ? 
+            {profile.values.cv ? 
             <section className = 'profileSection'>
                     <section className = 'cv'>
                     <label><h2>CV / Resume</h2></label>
                     <hr className = 'mt-0-mb-4'/>
-                    <a href = {`http://localhost:8000${profile.cv}`} target = '_blank' rel = 'noopener noreferrer'><button>Preview</button></a> 
+                    <a href = {`http://localhost:8000${profile.values.cv}`} target = '_blank' rel = 'noopener noreferrer'><button>Preview</button></a> 
                     </section>
 
                     <section className = 'preferences'>
@@ -119,7 +112,7 @@ export default function Profile({userIsOnProfilePage = false} : {userIsOnProfile
                         <hr className = 'mt-0-mb-4'/>
                         <section style = {{width: '300px'}}>
                             <li>Prefered industry: Any</li>
-                            <li>Prefered distance from workplace: {profile.distance}</li>
+                            <li>Prefered distance from workplace: {profile.values.distance}</li>
                         </section>
                     </section>
         
