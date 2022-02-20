@@ -31,12 +31,15 @@ class ProfileAPI(APIView):
         return Response(status = status.HTTP_400_BAD_REQUEST)
 
     def get(self,request):
-        profile = Profile.objects.filter(user = request.user)
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        user = User.objects.get(id = id)
+        profile = Profile.objects.filter(user = user)
         
         if profile.exists():
             serializer_class = ProfileSerializer(profile.first())
             return Response(serializer_class.data, status =  status.HTTP_200_OK)
-
+#
         return Response(status = status.HTTP_404_NOT_FOUND)
 
     def delete(self,request):
