@@ -30,8 +30,8 @@ const initialState: ProfileProps = {values: {
   
 export const fetchProfile = createAsyncThunk(
     'user/fetchProfile',
-    async () => {
-        const response = await axios.get('/api/profile',{
+    async (id: string | undefined) => {
+        const response = await axios.get(`/api/profile?id=${id}`,{
             headers: {
                 Authorization:`Token ${token}`
             }
