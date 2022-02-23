@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState} from 'react'
 import {useNavigate} from "react-router-dom";
 import Errors from '../../Global/messages/Errors'
 import {useAppDispatch} from '../../Global/features/hooks';
@@ -123,7 +123,7 @@ export default function CreateCompanyPage() {
             <Errors errors = {errors}/>
             <hr className = 'mt-0-mb-4'/>
             <label htmlFor = 'companyName'><h3>Company Name:</h3></label>
-            <input id = 'companyName' className = {!name.isValid ? 'inputError' : ''} onChange = {e => setName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {(e: any) => e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)} placeholder = 'Company name...' autoComplete = 'on'/>
+            <input id = 'companyName' className = {!name.isValid ? 'inputError' : ''} onChange = {e => setName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {e => e.currentTarget.value = e.currentTarget.value.charAt(0).toUpperCase() + e.currentTarget.value.slice(1)} placeholder = 'Company name...' autoComplete = 'on'/>
 
             <label htmlFor = 'companyAbout' ><h3>About (Characters remaining: {about.maxLength - about.currentLength}):</h3></label>
             <textarea id = 'companyAbout' className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about your company...' maxLength = {about.maxLength} style = {{height:'100px'}}/>
@@ -143,10 +143,10 @@ export default function CreateCompanyPage() {
             </select>
 
             <label htmlFor = 'companyLogo'><h3>Logo (Optional):</h3></label>
-            <input id = 'companyLogo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {(e :any) => setLogo({value: e.target.files[0], name: e.target.files[0].name})}/>
+            <input id = 'companyLogo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e  => {if (!e.target.files) return; setLogo({value: e.target.files[0], name: e.target.files[0].name})}}/>
 
             <label htmlFor = 'companyBanner'><h3>Banner (Optional):</h3></label>
-            <input id = 'companyBanner' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {(e: any) => setBanner({value: e.target.files[0], name: e.target.files[0].name})}/>
+            <input id = 'companyBanner' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setBanner({value: e.target.files[0], name: e.target.files[0].name})}}/>
 
             <label htmlFor = 'companyWebsite'><h3>Website (Optional):</h3></label>
             <input id = 'companyWebsite' className = {!website.isValid ? 'inputError' : ''} type = 'url' onChange = {e => setWebsite(prev => {return {...prev, value: e.target.value}})} placeholder = 'Website link...' autoComplete = 'on'/>

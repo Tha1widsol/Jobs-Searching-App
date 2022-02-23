@@ -125,7 +125,7 @@ export default function CreateProfilePage() {
         setCurrentTab(currentTab - 1)
     }
 
-    function handleSetSkills(e:any){
+    function handleSetSkills(e: React.ChangeEvent<HTMLInputElement>){
         setSkills(prev => {return {...prev, currentSkill: e.target.value}})
         e.target.value = e.target.value.replace(',','')
     }
@@ -214,11 +214,11 @@ export default function CreateProfilePage() {
     return (
         <div>
             <div className = 'steps'>
-                <span className = {`step ${currentTab === 1 ? 'active' : currentTab > 1 ? 'finish' : null}`} onClick = {(e: any) => e.target.className === 'step finish' ? setCurrentTab(1) : null}><p className = 'step-label'>Personal Details</p></span>
-                <span className = {`step ${currentTab === 2 ? 'active' : currentTab > 2 ? 'finish' : null}`} onClick = {(e: any) => e.target.className === 'step finish' ? setCurrentTab(2) : null}><p className = 'step-label'>Skills</p></span>
-                <span className = {`step ${currentTab === 3 ? 'active' : currentTab > 3 ? 'finish' : null}`} onClick = {(e: any) => e.target.className === 'step finish' ? setCurrentTab(3) : null}><p className = 'step-label'>Work Experience</p></span>
-                <span className = {`step ${currentTab === 4 ? 'active' : currentTab > 4 ? 'finish' : null}`} onClick = {(e: any) => e.target.className === 'step finish' ? setCurrentTab(4) : null}><p className = 'step-label'>Education</p></span>
-                <span className = {`step ${currentTab === 5 ? 'active' : currentTab > 5 ? 'finish' : null}`} onClick = {(e: any) => e.target.className === 'step finish' ? setCurrentTab(5) : null}><p className = 'step-label'>Preferences</p></span>
+                <span className = {`step ${currentTab === 1 ? 'active' : currentTab > 1 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(1) : null}><p className = 'step-label'>Personal Details</p></span>
+                <span className = {`step ${currentTab === 2 ? 'active' : currentTab > 2 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(2) : null}><p className = 'step-label'>Skills</p></span>
+                <span className = {`step ${currentTab === 3 ? 'active' : currentTab > 3 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(3) : null}><p className = 'step-label'>Work Experience</p></span>
+                <span className = {`step ${currentTab === 4 ? 'active' : currentTab > 4 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(4) : null}><p className = 'step-label'>Education</p></span>
+                <span className = {`step ${currentTab === 5 ? 'active' : currentTab > 5 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(5) : null}><p className = 'step-label'>Preferences</p></span>
             </div>
             
             <form>
@@ -242,7 +242,7 @@ export default function CreateProfilePage() {
                     <textarea id = 'about' className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
 
                     <label htmlFor = 'logo'><h3>Profile logo (Optional):</h3></label>
-                    <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {(e: any) => setLogo({value: e.target.files[0], name: e.target.files[0].name})}/>
+                    <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setLogo({value: e.target.files[0], name: e.target.files[0].name})}}/>
 
                 </div>
 
@@ -307,7 +307,7 @@ export default function CreateProfilePage() {
                     </select>
                     
                     <label htmlFor = 'cv'><h3>Resume / CV (Optional) (Please submit only .pdf, .doc or .docx files):</h3></label>
-                    <input type = 'file' id = 'cv' accept = '.pdf,.doc,.docx' onChange = {(e:any) => setCV({value: e.target.files[0],name: e.target.files[0].name})} autoComplete = 'on'/>
+                    <input type = 'file' id = 'cv' accept = '.pdf,.doc,.docx' onChange = {e => {if (!e.target.files) return; setCV({value: e.target.files[0],name: e.target.files[0].name})}} autoComplete = 'on'/>
 
                     <label htmlFor = 'distance'><h3>Job within:</h3></label>
                     <select id = 'distance' onChange = {e => setDistance({value: e.target.value})} autoComplete = 'on'>
