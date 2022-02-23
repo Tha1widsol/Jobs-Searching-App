@@ -23,7 +23,7 @@ const initialState: ProfileProps = {values: {
     experience: '',
     about: '',
     isActive: null,
-    status: null
+    status: ''
     }
 
 }

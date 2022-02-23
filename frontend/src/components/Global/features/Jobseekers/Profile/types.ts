@@ -16,7 +16,7 @@ export interface ProfileProps{
         experience?: string
         about: string
         isActive: boolean | null
-        status: null | string
+        status: string
     }
   
 }

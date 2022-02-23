@@ -13,7 +13,7 @@ const initialState: AuthProps = {values: {
     isAnEmployer: isAnEmployer === 'true' ? true : isAnEmployer === 'false' ? false : null
     },
     isLoggedIn: token ? true : false, 
-    status: null
+    status: ''
 }
 
 export const fetchUser = createAsyncThunk(
