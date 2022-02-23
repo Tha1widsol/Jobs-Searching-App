@@ -1,19 +1,16 @@
 import React,{useEffect} from 'react'
-import {fetchEmployer} from '../../Global/features/Employers/EmployersPage/employer'
+import {fetchCompanies} from '../../Global/features/Employers/Companies/companies'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
-import axios from 'axios'
+import './css/CompaniesPage.css'
 
 export default function CompaniesPage() {
-  const token = localStorage.getItem('token')
+  const dispatch = useAppDispatch()
+  const companies = useAppSelector(state => state.companies.values)
 
   useEffect(() => {
-    axios.get('/api/companies',{headers: {Authorization: `Token ${token}`}})
-    .then(response => {
-      console.log(response.data)
-    })
-
-  },[token])
-
+    dispatch(fetchCompanies())
+  },[dispatch])
+  
   return (
     <div>
         <h1 className = 'title'>Companies</h1>
