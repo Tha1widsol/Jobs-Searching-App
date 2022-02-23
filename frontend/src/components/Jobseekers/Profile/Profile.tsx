@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState} from 'react'
 import './css/Profile.css'
 import {useAppDispatch} from '../../Global/features/hooks';
 import {ProfileProps} from '../../Global/features/Jobseekers/Profile/types';
@@ -40,11 +40,11 @@ export default function Profile({userIsOnProfilePage = false, profile} : {userIs
   return (
     <div id = 'profileContainer'>
         {userIsOnProfilePage ? 
-        <div onMouseEnter = {() => setDropdown(true)} onMouseLeave = {() => setDropdown(false)}>
+        <section onMouseEnter = {() => setDropdown(true)} onMouseLeave = {() => setDropdown(false)}>
             <div className = 'kebabMenuIcon'/>
-                <div className = 'profileDropdown'>
+                <div className = 'containerDropdown'>
                     {dropdown ? 
-                    <div className = 'profileDropdownContent'>
+                    <div className = 'containerDropdownContent'>
                         {profile.values.isActive ? <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
                             <button className = 'editNavBtn'>Edit</button>
                             <button className = 'deleteNavBtn' onClick = {() => handleDeleteProfile()}>Delete</button>
@@ -53,7 +53,7 @@ export default function Profile({userIsOnProfilePage = false, profile} : {userIs
                     : null}
                 
                 </div>
-        </div>
+        </section>
         
         : null}
       
