@@ -101,7 +101,7 @@ export default function CreateCompanyPage() {
         if (logo.value !== '') form.append('logo',logo.value,logo.name)
         if (banner.value !== '') form.append('banner',banner.value,banner.name)
 
-        axios.post('/api/create-company',form,requestOptions)
+        axios.post('/api/company',form,requestOptions)
         .then(response => {
             if (response.status === 201){
                 dispatch(setMessage('Company is successfully added'))
