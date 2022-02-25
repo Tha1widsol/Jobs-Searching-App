@@ -1,3 +1,4 @@
+from codecs import lookup
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -8,7 +9,7 @@ from .serializers import *
 
 # Create your views here.
 
-class CreateCompanyAPI(APIView):
+class CompanyAPI(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self,request):
@@ -23,9 +24,10 @@ class CreateCompanyAPI(APIView):
 
         return Response(status = status.HTTP_400_BAD_REQUEST)
 
-class GetCompanyAPI(APIView):
     def get(self,request):
-        company = Company.objects.filter(user = request.user)
+        lookup_url_kwarg ='id'
+        id = request.GET.get(lookup_url_kwarg)
+        company = Company.objects.filter(id = id)
 
         if company.exists():
             serializer_class = CompanySerializer(company.first())
@@ -42,4 +44,3 @@ class CompaniesListAPI(generics.ListAPIView):
             return companies
 
         return Response(status = status.HTTP_404_NOT_FOUND)
-
