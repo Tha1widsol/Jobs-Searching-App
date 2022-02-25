@@ -42,8 +42,8 @@ export default function CompaniesPage() {
               <hr className = 'mt-0-mb-4'/>
 
               <section style = {{display: 'flex'}}>
-                <button>View</button> 
-                <button>Post Job</button>
+                <a href = {`/companies/${company.id}`}><button>View</button></a>
+                <button>Post job</button> 
               </section>
             </div>
           )
