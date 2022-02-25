@@ -11,8 +11,7 @@ import CreateCompanyPage from '../Employers/CreateCompanyPage/CreateCompanyPage'
 import CompaniesPage from '../Employers/CompaniesPage/CompaniesPage'
 import {useAppSelector} from './features/hooks'
 import ProfilePage from '../Jobseekers/ProfilePage/ProfilePage'
-import { fetchProfile } from './features/Jobseekers/Profile/profile'
-
+import CompanyPage from '../Employers/CompanyPage/CompanyPage'
 
 export default function PagesRoutes() {
     const isAnEmployer = localStorage.getItem('isAnEmployer')
@@ -40,6 +39,7 @@ export default function PagesRoutes() {
                     <Route element = {<CheckEmployer/>}>
                        <Route path = '/create-company' element = {<CreateCompanyPage/>}/>
                        <Route path = '/companies' element = {<CompaniesPage/>}/>
+                       <Route path = '/companies/:companyID' element = {<CompanyPage/>}/>
                     </Route>
                     
                 </Routes>
