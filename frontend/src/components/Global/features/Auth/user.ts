@@ -40,8 +40,12 @@ export const userSlice = createSlice({
     name : 'user',
     initialState,
     reducers: {
+        login: (state) => {
+            state.isLoggedIn = true
+        },
+
         logout: (state) => {
-            state = initialState
+            state.isLoggedIn = false
             localStorage.removeItem('token')
         }
     },
@@ -63,7 +67,7 @@ export const userSlice = createSlice({
 
 })
 
-export const {logout} = userSlice.actions
+export const {login,logout} = userSlice.actions
 
 export default userSlice.reducer
 
