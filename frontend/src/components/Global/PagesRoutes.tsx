@@ -14,7 +14,6 @@ import ProfilePage from '../Jobseekers/ProfilePage/ProfilePage'
 import CompanyPage from '../Employers/CompanyPage/CompanyPage'
 
 export default function PagesRoutes() {
-    const isAnEmployer = localStorage.getItem('isAnEmployer')
     const user = useAppSelector(state => state.user)
     
 
@@ -22,8 +21,8 @@ export default function PagesRoutes() {
         <div>
             <Router>
                 <Routes>
-                    <Route path = '/' element = {isAnEmployer === 'true' && user.isLoggedIn ? <EmployersHomePage/> : isAnEmployer === 'false' && user.isLoggedIn ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
-                    <Route path = '/home' element = {isAnEmployer === 'true' && user.isLoggedIn ? <EmployersHomePage/> : isAnEmployer === 'false' && user.isLoggedIn ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
+                    <Route path = '/' element = {user.isLoggedIn && user.values?.isAnEmployer ? <EmployersHomePage/> : user.isLoggedIn && user.values?.isAnEmployer === false ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
+                    <Route path = '/home' element = {user.isLoggedIn && user.values?.isAnEmployer ? <EmployersHomePage/> : user.isLoggedIn && user.values?.isAnEmployer === false ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
                 
                     <Route element = {<CheckNotLoggedIn/>}>
                         <Route path = '/register/jobseeker' element = {<RegisterPage/>}/>
@@ -35,13 +34,13 @@ export default function PagesRoutes() {
                         <Route path = '/profile/:userID' element = {<ProfilePage/>}/>
                         <Route path = '/create-profile' element = {<CreateProfilePage/>}/>
                     </Route>
-                    
+
                     <Route element = {<CheckEmployer/>}>
                        <Route path = '/create-company' element = {<CreateCompanyPage/>}/>
                        <Route path = '/companies' element = {<CompaniesPage/>}/>
                        <Route path = '/companies/:companyID' element = {<CompanyPage/>}/>
                     </Route>
-                    
+
                 </Routes>
             </Router>
         </div>

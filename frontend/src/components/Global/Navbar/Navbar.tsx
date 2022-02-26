@@ -13,22 +13,21 @@ export default function Navbar() {
     
     function handleLogout(){
         const requestOptions = { 
-            headers:{'Content-Type':'application/json', 
+            headers: { 
             Authorization:`Token ${localStorage.getItem('token')}`
           }
         }
-
         axios.post('/api/auth/logout',null,requestOptions)
-
         .catch(error => {
             console.log(error)
         })
 
         dispatch(logout())
+
     }
     
     return (
-        <div className='nav' id='head-nav'>
+        <div className = 'nav' id = 'head-nav'>
             <a href='/' id = 'firstcast'>FirstCast</a>
             <a href='/home' className = {pathName === '/home' || pathName === '/' ? 'active' : ''}>Home</a>
             <a href='/about' className = {pathName === '/about' ? 'active' : ''}>About</a>
@@ -40,7 +39,7 @@ export default function Navbar() {
                 <button id = 'navDropBtn' onClick={() => setDropdown(!dropdown)}>My account</button>
                   {dropdown ?  
                     <div className = 'dropdown-content'>
-                            {user.values.isAnEmployer ? 
+                            {user.values?.isAnEmployer ? 
                              <>
                                 <a href = '/companies'>My companies</a> 
 
@@ -57,7 +56,7 @@ export default function Navbar() {
               </div>: 
 
               <a href='/login' className = {pathName === '/login' ? 'active' : ''}>Login</a>}
-              {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, {user.values.email}</p> : null}
+              {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, {user.values?.email}</p> : null}
         </div>
     )
 }

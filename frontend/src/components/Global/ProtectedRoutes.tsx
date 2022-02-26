@@ -4,7 +4,6 @@ import {useAppSelector} from './features/hooks';
 import LoginPage from '../public/LoginPage/LoginPage';
 
 const User = () => {
-  console.log(useAppSelector(state => state.user))
   return useAppSelector(state => state.user)
 }
 
@@ -13,15 +12,15 @@ export const CheckNotLoggedIn = () => {
 }
 
 export const CheckJobSeeker = () => {
-  if (!User().isLoggedIn) return <Navigate to = '/login'/>
-  if (User().values.isAnEmployer) return <Navigate to = '/'/>
+  if (!User().isLoggedIn ) return <Navigate to = '/login'/>
+  if (User().values?.isAnEmployer) return <Navigate to = '/'/>
 
   return <Outlet/>
 }
 
 export const CheckEmployer = () => {
-  if (!User().isLoggedIn) return <Navigate to = '/login'/>
-  if (!User().values.isAnEmployer) return <Navigate to = '/'/>
+  if (!User().isLoggedIn ) return <Navigate to = '/login'/>
+  if (!User().values?.isAnEmployer) return <Navigate to = '/'/>
 
   return <Outlet/>
 }
