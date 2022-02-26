@@ -1,12 +1,14 @@
 import React,{useState} from 'react'
 import axios from 'axios'
+import { useAppDispatch } from '../../Global/features/hooks';
+import { login } from '../../Global/features/Auth/user';
 import Errors from '../../Global/messages/Errors';
 import {FieldProps} from '../../Global/types/forms';
 
 export default function LoginPage() {
     const [email,setEmail] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Email is required'})
     const [password,setPassword] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Password is required'})
-
+    const dispatch = useAppDispatch()
     const [errors,setErrors] = useState<Array<string>>([])
 
     const validateForm = () => {
@@ -47,6 +49,7 @@ export default function LoginPage() {
         .then(response => {
                 const data = response.data
                 localStorage.setItem('token',data.token)
+                dispatch(login())
                 window.location.reload()
         })
 
