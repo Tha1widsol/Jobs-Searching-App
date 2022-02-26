@@ -3,14 +3,12 @@ import {AuthProps} from './types'
 import axios from 'axios'
 
 const token = localStorage.getItem('token')
-const email = sessionStorage.getItem('email')
-const isAnEmployer = localStorage.getItem('isAnEmployer')
 
 const initialState: AuthProps = {values: {
     id: null,
-    email: email, 
+    email: '', 
     isHired: null,
-    isAnEmployer: isAnEmployer === 'true' ? true : isAnEmployer === 'false' ? false : null
+    isAnEmployer: null
     },
     isLoggedIn: token ? true : false, 
     status: ''
@@ -18,7 +16,7 @@ const initialState: AuthProps = {values: {
 
 export const fetchUser = createAsyncThunk(
     'user/fetchUser',
-    async () => {
+     async () => {
         if (!token) return
         try{
             const response = await axios.get('/api/currentUser',{
@@ -26,8 +24,7 @@ export const fetchUser = createAsyncThunk(
                     Authorization:`Token ${token}`
                 }
             })
-            sessionStorage.setItem('email', response.data.email)
-            localStorage.setItem('isAnEmployer', response.data.isAnEmployer)
+    
             return response.data
         }
 
@@ -45,9 +42,7 @@ export const userSlice = createSlice({
     reducers: {
         logout: (state) => {
             state = initialState
-            localStorage.removeItem('token');
-            sessionStorage.removeItem('email')
-            localStorage.removeItem('isAnEmployer')
+            localStorage.removeItem('token')
         }
     },
 

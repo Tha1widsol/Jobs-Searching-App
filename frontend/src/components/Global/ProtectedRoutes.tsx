@@ -4,6 +4,7 @@ import {useAppSelector} from './features/hooks';
 import LoginPage from '../public/LoginPage/LoginPage';
 
 const User = () => {
+  console.log(useAppSelector(state => state.user))
   return useAppSelector(state => state.user)
 }
 
