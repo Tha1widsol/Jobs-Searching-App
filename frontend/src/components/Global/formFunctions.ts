@@ -1,6 +1,8 @@
-export function handleFixName(e:any){
+import React  from "react";
+
+export function handleFixName(e: React.KeyboardEvent<HTMLInputElement>){
     const spaceRegex = /\s/g  
-    e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);  
-    e.target.value = e.target.value.replace(spaceRegex, '');
-    e.target.value = e.target.value.charAt(0) + e.target.value.slice(1).toLowerCase()
+    e.currentTarget.value = e.currentTarget.value.charAt(0).toUpperCase() + e.currentTarget.value.slice(1);  
+    e.currentTarget.value = e.currentTarget.value.replace(spaceRegex, '');
+    e.currentTarget.value = e.currentTarget.value.charAt(0) + e.currentTarget.value.slice(1).toLowerCase()
 }
