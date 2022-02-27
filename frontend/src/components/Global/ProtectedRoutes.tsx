@@ -7,24 +7,12 @@ const User = () => {
   return useAppSelector(state => state.user)
 }
 
-export const CheckNotLoggedIn = () => {
+export const CheckAccount = ({isJobSeeker = true}: {isJobSeeker?: boolean}) => {
+  if (isJobSeeker) return User().values?.isAnEmployer ? <Navigate to = '/'/> : <Outlet/>
+  return !User().values?.isAnEmployer ? <Navigate to = '/'/> : <Outlet/>
+}
+
+export const CheckLoggedIn = ({checkLoggedIn = true}: {checkLoggedIn?: boolean}) => { 
+  if (checkLoggedIn) return User().isLoggedIn ? <Outlet/> : <LoginPage/>
   return User().isLoggedIn ? <Navigate to = '/'/> : <Outlet/> 
-}
-
-export const CheckJobSeeker = () => {
-  if (!User().isLoggedIn ) return <Navigate to = '/login'/>
-  if (User().values?.isAnEmployer) return <Navigate to = '/'/>
-
-  return <Outlet/>
-}
-
-export const CheckEmployer = () => {
-  if (!User().isLoggedIn ) return <Navigate to = '/login'/>
-  if (!User().values?.isAnEmployer) return <Navigate to = '/'/>
-
-  return <Outlet/>
-}
-
-export const CheckLoggedIn = () => { 
-    return User().isLoggedIn ? <Outlet/> : <LoginPage/>
 }
