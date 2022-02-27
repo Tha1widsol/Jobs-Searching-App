@@ -8,5 +8,5 @@ export interface UserProps{
 export interface AuthProps {
     values: UserProps
     isLoggedIn: boolean | null
-    status: string
+    status: 'success' | 'loading' | 'rejected' | ''
 }

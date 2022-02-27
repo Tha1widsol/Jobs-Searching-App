@@ -1,7 +1,7 @@
 import {UserProps} from "../../Auth/types";
 
 export interface CompaniesProps{
-    status: string
+    status: 'success' | 'loading' | 'rejected' | ''
     values: [{
             user: UserProps
             id: number | null
