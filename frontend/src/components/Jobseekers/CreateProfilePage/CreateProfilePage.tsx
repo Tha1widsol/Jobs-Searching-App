@@ -10,14 +10,15 @@ import {TextFieldProps} from '../../Global/types/forms';
 import {SkillsProps} from './types/CreateProfileInterface';
 import {FileProps} from '../../Global/types/forms';
 import axios from 'axios';
+import { fetchProfile } from '../../Global/features/Jobseekers/Profile/profile';
 
 export default function CreateProfilePage() {
     let navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const profile = useAppSelector(state => state.profile.values)
+    const user = useAppSelector(state => state.user.values)
+    const profile = useAppSelector(state => state.profile)
     const [currentTab,setCurrentTab] = useState(1)
     const [errors,setErrors] = useState<Array<string>>([])
-    
     const [firstName,setFirstName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'First name is invalid'})
     const [middleName,setMiddleName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Middle name is invalid'})
     const [lastName,setLastName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Last name is invalid'})
@@ -34,8 +35,13 @@ export default function CreateProfilePage() {
     const maxTabs = document.querySelectorAll('.tab').length
 
     useEffect(() => {
-        if (profile.firstName) navigate('/')
-     },[dispatch,navigate])
+        dispatch(fetchProfile(user.id))
+        .then(response => {
+            if (response.meta.requestStatus === 'fulfilled')
+                navigate(`/profile/${user.id}`)
+        })
+    
+     },[dispatch,navigate,user.id])
 
     const validateForm = () => {
         let isValid = true

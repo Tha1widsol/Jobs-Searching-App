@@ -10,13 +10,20 @@ export default function ProfilePage() {
   let navigate = useNavigate()
   const dispatch = useAppDispatch()
   const profile = useAppSelector(state => state.profile)
+  const user = useAppSelector(state => state.user.values)
   const {userID} = useParams()
 
   useEffect(() => {
-    dispatch(fetchProfile(userID)).then((response: any) => {
-      if (response.error) navigate('/create-profile')
+    dispatch(fetchProfile(Number(userID)))
+    .then(response => {
+      if (profile.values.user.id === user.id)
+          navigate(`/profile/${user.id}`)
+          
+      else if (response.meta.requestStatus === 'rejected') 
+          navigate('/create-profile')
     })
- },[dispatch,navigate,userID])
+    
+ },[dispatch,navigate,userID,profile.values.user.id,user.id])
 
   return (
   <div> 
