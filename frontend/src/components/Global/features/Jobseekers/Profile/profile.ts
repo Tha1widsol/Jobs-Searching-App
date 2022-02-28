@@ -3,7 +3,9 @@ import {ProfileProps} from './types'
 import axios from 'axios'
 
 const token = localStorage.getItem('token')
-const initialState: ProfileProps = {values: {
+const initialState: ProfileProps = {
+    status: '',
+    values: {
     user: {
         id: null,
         email: '',
@@ -23,7 +25,6 @@ const initialState: ProfileProps = {values: {
     experience: '',
     about: '',
     isActive: null,
-    status: ''
     }
 
 }
@@ -56,16 +57,16 @@ export const ProfileSlice = createSlice({
 
     extraReducers: {
         [fetchProfile.pending.toString()]: (state) => {
-            state.values.status = 'loading'
+            state.status = 'loading'
         },
         
         [fetchProfile.fulfilled.toString()]: (state,action) => {
             state.values = action.payload
-            state.values.status = 'success'
+            state.status = 'success'
         },
 
         [fetchProfile.rejected.toString()]: (state) => {
-            state.values.status = 'rejected'
+            state.status = 'rejected'
     }
   }
 
