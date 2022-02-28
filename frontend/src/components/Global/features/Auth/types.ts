@@ -1,3 +1,5 @@
+import {StatusProps} from "../../types/status";
+
 export interface UserProps{
     id: number | null
     email: string | null
@@ -5,8 +7,7 @@ export interface UserProps{
     isAnEmployer: boolean | null
 }
 
-export interface AuthProps {
+export interface AuthProps extends StatusProps {
     values: UserProps
     isLoggedIn: boolean | null
-    status: 'success' | 'loading' | 'rejected' | ''
 }

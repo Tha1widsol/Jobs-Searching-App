@@ -1,6 +1,7 @@
 import {UserProps} from '../../Auth/types'
+import {StatusProps} from '../../../types/status'
 
-export interface ProfileProps{
+export interface ProfileProps extends StatusProps{
     values: {
         user: UserProps
         firstName: string
@@ -16,7 +17,7 @@ export interface ProfileProps{
         experience?: string
         about: string
         isActive: boolean | null
-        status: 'success' | 'loading' | 'rejected' | ''
+      
     }
   
 }
