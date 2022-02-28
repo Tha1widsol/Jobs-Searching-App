@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import {fetchCompanies} from '../../Global/features/Employers/Companies/companies'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
-import {CompanyProps} from '../CompanyPage/types'
+import {CompanyProps} from './types'
 import './css/CompaniesPage.css'
 
 export default function CompaniesPage() {
