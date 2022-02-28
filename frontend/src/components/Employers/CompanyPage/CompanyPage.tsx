@@ -1,34 +1,20 @@
-import React,{useState,useEffect} from 'react'
+import React,{useEffect} from 'react'
 import {useParams} from 'react-router-dom';
-import {CompanyProps} from './types';
-import axios from 'axios'
+import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
+import {fetchCompany} from '../../Global/features/Employers/Companies/company';
 
 export default function CompanyPage() {
-  const [company,setCompany] = useState<CompanyProps>({user: {id: null,email: '',isHired: null,isAnEmployer: null},id: null, name: '',email: '',about: '', phone: '',logo: '',banner: '',industry: '',website: ''})
+  const company = useAppSelector(state => state.company)
+  const dispatch = useAppDispatch()
   const {companyID} = useParams()
-  const token = localStorage.getItem('token')
 
   useEffect(() => {
-    axios.get(`/api/company?id=${companyID}`,{
-        headers: {
-            Authorization:`Token ${token}`
-        }
-    })
-    .then(response => {
-        if (response.status === 200){
-            const data = response.data
-            setCompany(data)
-        }
-    })
-    .catch(error => {
-        if (error.response.status === 404) console.log('404')
-    })
-
-  },[companyID, token])
+    dispatch(fetchCompany(Number(companyID)))
+  },[companyID, dispatch])
 
   return (
     <div>
-        <p>{company.name}</p>
+        <p>{company.values?.name}</p>
     </div>
   )
 }
