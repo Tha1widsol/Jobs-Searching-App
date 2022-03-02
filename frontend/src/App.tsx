@@ -3,17 +3,20 @@ import Navbar from './components/Global/Navbar/Navbar'
 import {useAppDispatch} from './components/Global/features/hooks';
 import PagesRoutes from './components/Global/PagesRoutes';
 import {fetchUser} from './components/Global/features/Auth/user';
+import {logout} from './components/Global/features/Auth/user'
 import SuccessAlert from './components/Global/messages/SuccessAlert';
 
 function App() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-      dispatch(fetchUser())
+    const token = localStorage.getItem('token')
+    if (!token) dispatch(logout())
+    dispatch(fetchUser())
   },[dispatch])
 
   return (
-    <div>
+    <div style = {{width: '95%', margin: '0 auto'}}>
       <Navbar/>
       <SuccessAlert/>
       <PagesRoutes/>
