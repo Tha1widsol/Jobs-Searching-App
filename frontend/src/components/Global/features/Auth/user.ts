@@ -1,6 +1,7 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import {AuthProps} from './types'
 import axios from 'axios'
+import storage from 'redux-persist/lib/storage'
 
 const token = localStorage.getItem('token')
 
@@ -46,7 +47,8 @@ export const userSlice = createSlice({
 
         logout: (state) => {
             state.isLoggedIn = false
-            localStorage.removeItem('token')
+            storage.removeItem('token')
+            state = initialState;
         }
     },
 
