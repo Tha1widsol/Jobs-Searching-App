@@ -8,7 +8,10 @@ import {Provider} from 'react-redux'
 import {persistStore} from 'redux-persist'
 import {PersistGate} from 'redux-persist/integration/react'
 
+const token = localStorage.getItem('token')
 let persistor = persistStore(store)
+
+if (!token) persistor.purge()
 
 ReactDOM.render(
   <React.StrictMode>
