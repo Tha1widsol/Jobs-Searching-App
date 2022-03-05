@@ -44,3 +44,17 @@ class CompaniesListAPI(generics.ListAPIView):
             return companies
 
         return Response(status = status.HTTP_404_NOT_FOUND)
+
+class JobAPI(APIView):
+    serializer_class = JobSerializer
+
+
+class JobsListAPI(generics.ListAPIView):
+    serializer_class = JobSerializer
+
+    def get_queryset(self):
+        jobs = Job.objects.filter(user = self.request.user)
+        if jobs.exists():
+            return jobs
+
+        return Response(status = status.HTTP_404_NOT_FOUND)
