@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import User
+from main.models import Skill
 
 # Create your models here.
 
@@ -27,6 +28,45 @@ class Company(models.Model):
     
     def __str__(self):
       return self.name
+  
+class Role(models.Model):
+      name = models.CharField(max_length = 300)
+
+      def __str__(self):
+            return self.name
+
+class Benefit(models.Model):
+      name = models.CharField(max_length = 300)
+
+      def __str__(self):
+            return self.name
+
+class Job(models.Model):
+      user = models.ForeignKey(User,on_delete = models.CASCADE, null = True)
+      company = models.ForeignKey(Company, on_delete = models.CASCADE, null = True)
+      title = models.CharField(max_length = 60, blank = False)
+      description = models.TextField(blank = True)
+      salary = models.CharField(max_length = 50, blank = False)
+      roles = models.ManyToManyField(Role, blank = False)
+      industry = models.TextField(default = 'Any')
+      remote = models.BooleanField(default = False)
+      training = models.BooleanField(default = False)
+      positions = models.IntegerField(default = 1)
+      education = models.CharField(max_length = 50)
+      skills = models.ManyToManyField(Skill, blank = True)
+      startDate = models.DateField()
+      benefits = models.ManyToManyField(Benefit, blank = True)
+      workingDays = models.CharField(max_length = 100, default = 'Monday-Friday')
+      workingHours = models.IntegerField(default = 6)
+      applicantsCount = models.IntegerField(default = 0)
+      datePosted = models.DateTimeField('Job posted',auto_now_add = True)
+
+      def __str__(self):
+        return self.title
+
+      
+
+
 
 
 
