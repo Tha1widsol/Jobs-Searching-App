@@ -20,7 +20,7 @@ export const fetchUser = createAsyncThunk(
      async () => {
         if (!token) return
         try{
-            const response = await axios.get('/api/currentUser',{
+            const response = await axios.get('/api/user',{
                 headers: {
                     Authorization:`Token ${token}`
                 }
