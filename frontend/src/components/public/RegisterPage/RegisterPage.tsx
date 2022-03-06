@@ -3,10 +3,13 @@ import {useNavigate} from "react-router-dom";
 import Errors from '../../Global/messages/Errors';
 import {FieldProps} from '../../Global/types/forms';
 import {EmailProps,PasswordProps} from './types/RegisterInterface'
+import {useAppDispatch} from '../../Global/features/hooks';
+import {login} from '../../Global/features/Auth/user';
 import axios from 'axios'
 
 export default function RegisterPage() {
     let navigate = useNavigate()
+    const dispatch = useAppDispatch()
     const pathName = window.location.pathname
     const [errors,setErrors] = useState<Array<string>>([])
     const [email,setEmail] = useState<EmailProps>({value: '',isValid: true, invalidErrorMsg: 'Invalid email', alreadyExistsErrorMsg: 'Email already exists'})
@@ -91,6 +94,7 @@ export default function RegisterPage() {
         .then(response => {
             const data = response.data
             localStorage.setItem('token',data.token)
+            dispatch(login())
             pathName === '/register/jobseeker' ? navigate('/create-profile') : navigate('/create-company')
             window.location.reload()
         })
