@@ -206,7 +206,10 @@ export default function CreateProfilePage() {
         .then(response => {
             if (response.status === 201){
                 dispatch(setMessage('Profile is successful'))
-                navigate('/profile')
+                setTimeout(() => {
+                    dispatch(setMessage(''))
+                },2000)
+                navigate(`/profile/${user.id}`)
             }
            
         })
