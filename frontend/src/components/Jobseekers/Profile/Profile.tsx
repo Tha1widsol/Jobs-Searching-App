@@ -56,15 +56,15 @@ export default function Profile({userIsOnProfilePage = false, profile} : {userIs
         </section>
         
         : null}
-      
+         <p className = 'fullName'>{profile.values.firstName} {profile.values.middleName} {profile.values.lastName}</p>
             <section style = {{display:'flex'}}>
-                <p className = 'fullName'>{profile.values.firstName} {profile.values.middleName} {profile.values.lastName}</p>
                 {profile.values.logo ? <img className = 'logo' src = {profile.values.logo} alt = ''/> : null}
+                <div className = {profile.values.logo ? 'contact' : ''}> 
+                    <p><i className = 'fa fa-phone icon'></i>000011111</p>
+                    <p><i className = 'icon'>&#9993;</i>{profile.values.user.email}</p>
+                </div>
             </section>
         
-            <p><i className = 'fa fa-phone icon'></i>000011111</p>
-            <p><i className = 'icon'>&#9993;</i>{profile.values.user.email}</p>
-
             <section className = 'profileSection'>
                 <section>
                     <label><h2>Skills</h2></label>
