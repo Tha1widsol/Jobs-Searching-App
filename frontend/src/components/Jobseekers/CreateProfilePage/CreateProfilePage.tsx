@@ -205,7 +205,7 @@ export default function CreateProfilePage() {
         axios.post('/api/profile',form,requestOptions)
         .then(response => {
             if (response.status === 201){
-                dispatch(setMessage('Profile is successful'))
+                dispatch(setMessage('Profile is successfully made'))
                 setTimeout(() => {
                     dispatch(setMessage(''))
                 },2000)
