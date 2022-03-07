@@ -17,6 +17,10 @@
     justify-content: space-between;
   }
 
+  .contact{
+    margin-left: 20px;
+  }
+
   .skills{
     max-height: 135px;
     width: 180px;
@@ -25,7 +29,6 @@
 
   .fullName{
     font-size: 35px;
-    margin-right: 15px;
   }
 
   .experience,.education{margin-top:30px;}
