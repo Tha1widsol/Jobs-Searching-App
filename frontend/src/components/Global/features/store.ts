@@ -14,6 +14,7 @@ import {
 const persistConfig = {
   key: 'root',
   version: 1,
+  blacklist: ['successMsg'],
   storage,
 }
 
