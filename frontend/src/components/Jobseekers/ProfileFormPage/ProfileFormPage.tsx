@@ -1,13 +1,12 @@
 import React,{useState,useEffect} from 'react'
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from 'react-router-dom';
 import Errors from '../../Global/messages/Errors'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {setMessage} from '../../Global/features/successMsg';
 import ReactScrollableFeed from 'react-scrollable-feed';
-import {FieldProps} from '../../Global/types/forms';
+import {FieldProps,TextFieldProps} from '../../Global/types/forms';
 import {handleFixName} from '../../Global/formFunctions';
-import {TextFieldProps} from '../../Global/types/forms';
-import {SkillsProps} from './types/CreateProfileInterface';
+import {ListProps} from '../../Global/types/forms';
 import {FileProps} from '../../Global/types/forms';
 import axios from 'axios';
 import { fetchProfile } from '../../Global/features/Jobseekers/Profile/profile';
@@ -24,7 +23,7 @@ export default function CreateProfilePage() {
     const [lastName,setLastName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Last name is invalid'})
     const [phone,setPhone] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Phone number is invalid'})
     const [about,setAbout] = useState<TextFieldProps>({value: '', isValid: true, currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
-    const [skills,setSkills] = useState<SkillsProps>({value: [], currentSkill: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',skillAddedMsg:'Skill added',skillRemovedMsg: 'Skill removed'})
+    const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
     const [experience,setExperience] = useState<TextFieldProps>({value: '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 450})
     const [education,setEducation] = useState({value: 'No formal education'})
     const [industry,setIndustry] = useState({value: 'Any'})
@@ -137,7 +136,7 @@ export default function CreateProfilePage() {
     }
 
     function handleAddSkill(){
-       const currentSkill = skills.currentSkill.trim()
+       const currentSkill = skills.currentVal.trim()
        let errors:Array<string> = []
 
        if (currentSkill.match(/^ *$/)) {
@@ -260,7 +259,7 @@ export default function CreateProfilePage() {
                     <Errors errors = {errors}/>
 
                     <label htmlFor = 'skills'><h3>Specific Key skills:</h3></label>
-                    <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentSkill} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
+                    <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
                     <button type = 'button' style = {{marginTop:'10px'}} onClick = {handleAddSkill}>Add skill</button>
 
                     {skills.value.length ? <p>Your skills ({skills.value.length}):</p> : null}
