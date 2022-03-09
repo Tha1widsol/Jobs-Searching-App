@@ -1,16 +1,24 @@
 import React,{useState,useEffect} from 'react'
+import {useNavigate} from 'react-router-dom'
 import {fetchCompanies} from '../../Global/features/Employers/Companies/companies'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {CompanyProps} from './types'
 import './css/CompaniesPage.css'
+import { Navigate } from 'react-router-dom'
 
 export default function CompaniesPage() {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const [dropdown,setDropdown] = useState(false)
   const companies = useAppSelector(state => state.companies.values)
 
   useEffect(() => {
-    dispatch(fetchCompanies())
+    dispatch(fetchCompanies()).then(response => {
+      if (response.meta.requestStatus === 'rejected') {
+        navigate('/create-company')
+        window.location.reload()
+      }
+    })
   },[dispatch])
   
   return (
