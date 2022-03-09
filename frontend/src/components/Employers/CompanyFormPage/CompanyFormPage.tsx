@@ -105,6 +105,9 @@ export default function CreateCompanyPage() {
         .then(response => {
             if (response.status === 201){
                 dispatch(setMessage('Company is successfully added'))
+                setTimeout(() => {
+                    dispatch(setMessage(''))
+                },2000)
                 navigate('/companies')
             }
         })
