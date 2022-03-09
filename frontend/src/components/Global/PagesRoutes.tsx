@@ -3,15 +3,16 @@ import {BrowserRouter as Router,Routes,Route} from "react-router-dom"
 import PublicHomePage from '../public/PublicHomePage/PublicHomePage'
 import RegisterPage from '../public/RegisterPage/RegisterPage'
 import LoginPage from '../public/LoginPage/LoginPage'
-import CreateProfilePage from '../Jobseekers/CreateProfilePage/CreateProfilePage'
+import CreateProfilePage from '../Jobseekers/ProfileFormPage/ProfileFormPage'
 import {CheckLoggedIn,CheckAccount} from './ProtectedRoutes'
 import JobSeekersHomePage from '../Jobseekers/JobSeekersHomePage/JobSeekersHomePage';
 import EmployersHomePage from '../Employers/EmployersHomePage/EmployersHomePage';
-import CreateCompanyPage from '../Employers/CreateCompanyPage/CreateCompanyPage'
+import CreateCompanyPage from '../Employers/CompanyFormPage/CompanyFormPage'
 import CompaniesPage from '../Employers/CompaniesPage/CompaniesPage'
 import {useAppSelector} from './features/hooks'
 import ProfilePage from '../Jobseekers/ProfilePage/ProfilePage'
 import CompanyPage from '../Employers/CompanyPage/CompanyPage'
+import JobFormPage from '../Employers/JobFormPage/JobFormPage'
 
 export default function PagesRoutes() {
     const user = useAppSelector(state => state.user)
@@ -40,6 +41,7 @@ export default function PagesRoutes() {
                             <Route path = '/create-company' element = {<CreateCompanyPage/>}/>
                             <Route path = '/companies' element = {<CompaniesPage/>}/>
                             <Route path = '/companies/:companyID' element = {<CompanyPage/>}/>
+                            <Route path = '/post-job' element = {<JobFormPage/>}/>
                         </Route>
                     </Route>
 
