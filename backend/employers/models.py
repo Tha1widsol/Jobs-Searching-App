@@ -51,7 +51,7 @@ class Job(models.Model):
       industry = models.TextField(default = 'Any')
       remote = models.BooleanField(default = False)
       training = models.BooleanField(default = False)
-      positions = models.IntegerField(default = 1)
+      positions = models.TextField(default = "1")
       education = models.CharField(max_length = 50)
       skills = models.ManyToManyField(Skill, blank = True)
       startDate = models.DateField()
