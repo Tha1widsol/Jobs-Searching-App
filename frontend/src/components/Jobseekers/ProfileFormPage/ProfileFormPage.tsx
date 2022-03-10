@@ -131,13 +131,13 @@ export default function CreateProfilePage() {
     }
 
     function handleSetSkills(e: React.ChangeEvent<HTMLInputElement>){
-        setSkills(prev => {return {...prev, currentSkill: e.target.value}})
+        setSkills(prev => {return {...prev, currentVal: e.target.value}})
         e.target.value = e.target.value.replace(',','')
     }
 
     function handleAddSkill(){
        const currentSkill = skills.currentVal.trim()
-       let errors:Array<string> = []
+       let errors: Array<string> = []
 
        if (currentSkill.match(/^ *$/)) {
         setSkills(prev => {return {...prev,isEmpty: true}})
