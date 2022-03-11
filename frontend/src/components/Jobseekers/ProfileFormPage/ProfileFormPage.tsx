@@ -38,8 +38,10 @@ export default function CreateProfilePage() {
         .then(response => {
             if (response.meta.requestStatus === 'fulfilled')
                 navigate(`/profile/${user.id}`)
+
+            else console.clear()
         })
-    
+
      },[dispatch,navigate,user.id])
 
     const validateForm = () => {
@@ -160,7 +162,7 @@ export default function CreateProfilePage() {
        
        setSkills(prev => ({...prev, value: [...prev.value,currentSkill]}))
        setErrors([])
-       setSkills(prev => {return {...prev,currentSkill: ''}})
+       setSkills(prev => {return {...prev,currentVal: ''}})
     }
 
     function handleRemoveSkill(skill: string){
