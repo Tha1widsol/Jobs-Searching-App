@@ -51,7 +51,7 @@ export default function CompaniesPage() {
 
               <section style = {{display: 'flex'}}>
                 <a href = {`/companies/${company.id}`}><button>View</button></a>
-                <button>Post job</button> 
+                <a href = {`/post-job/${company.id}`}><button>Post job</button></a> 
               </section>
             </div>
           )
