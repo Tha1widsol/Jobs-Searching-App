@@ -19,8 +19,13 @@ class ProfileAPI(APIView):
             skills = request.data.get('skills')
 
             for s in skills.split(','):
-                skill = Skill(name = s)
-                skill.save()
+                if not(Skill.objects.filter(name = s).exists()):
+                    skill = Skill(name = s)
+                    skill.save()
+                    
+                else:
+                    skill = Skill.objects.filter(name = s).first()
+
                 profile.skills.add(skill)
 
             profile.user = request.user
