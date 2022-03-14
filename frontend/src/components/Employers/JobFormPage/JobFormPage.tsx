@@ -8,7 +8,6 @@ import ReactScrollableFeed from 'react-scrollable-feed';
 import {getcurrentDate} from '../../Global/formFunctions';
 import List from '../../Global/Forms/List';
 import axios from 'axios';
-import { setPriority } from 'os';
 
 export default function JobFormPage() {
   const navigate = useNavigate()
@@ -29,7 +28,7 @@ export default function JobFormPage() {
   const [education,setEducation] = useState({value: 'No formal education'})
   const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
   const [startDate,setStartDate] = useState({value: ''})
-  const [benefits,setBenefits] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Role already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
+  const [benefits,setBenefits] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Benefit already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
   const [workingDay1,setWorkingDay1] = useState({value: 'Monday'})
   const [workingDay2,setWorkingDay2] = useState({value: 'Friday'})
   const [workingHours,setWorkingHours] = useState({value: 1,errorMsg: 'working hours value is invalid'})
@@ -49,64 +48,14 @@ function handleSetRoles(e: React.ChangeEvent<HTMLInputElement>){
   e.target.value = e.target.value.replace(',','')
 }
 
-function handleSet(currentVal: string){
-  setRoles(prev => ({...prev, value: [...prev.value, currentVal]}))
+function handleSetSkills(e: React.ChangeEvent<HTMLInputElement>){
+  setSkills(prev => {return {...prev, currentVal: e.target.value}})
+  e.target.value = e.target.value.replace(',','')
 }
 
-function handleClearInput(){
-  setRoles(prev => {return {...prev,currentVal: ''}})
-}
-
-function handleSetIsEmpty(empty = true){
-  setRoles(prev => {return{...prev,isEmpty: empty}})
-}
-
-function handleSetAlreadyExists(exists = true){
-  setRoles(prev => {return {...prev,alreadyExists: exists}})
-}
-
-function handleRemove(item?: string){
-  const newItems = [...roles.value]
-  let index = newItems.findIndex(obj => obj === item)
-  newItems.splice(index, 1)
-  setRoles(prev => {return {...prev,value: newItems}})
-  setErrors([])
-}
-
-function handleAddRole(){
-  const currentRole = roles.currentVal.trim()
-  let errors: Array<string> = []
-
-  if (currentRole.match(/^ *$/)) {
-   setRoles(prev => {return {...prev,isEmpty: true}})
-   errors.push(roles.emptyErrorMsg)
-  }
-
-  else setRoles(prev => {return {...prev,isEmpty: false}})
-
-  if (roles.value.filter(role => role === currentRole).length > 0){
-    setRoles(prev => {return {...prev,alreadyExists: true}})
-   errors.push(roles.alreadyExistsMsg)
-  }
-
-  else setRoles(prev => {return {...prev,alreadyExists: false}})
-
-  if (errors.length){
-    setErrors(errors)
-    return
-  }
-  
-  setRoles(prev => ({...prev, value: [...prev.value,currentRole]}))
-  setErrors([])
-  setRoles(prev => {return {...prev,currentVal: ''}})
-}
-
-function handleRemoveRole(role: string){
-  const newRoles= [...roles.value]
-  let index = newRoles.findIndex(obj => obj === role)
-  newRoles.splice(index,1)
-  setRoles(prev => {return {...prev,value: newRoles}})
-  setErrors([])
+function handleSetBenefits(e: React.ChangeEvent<HTMLInputElement>){
+  setBenefits(prev => {return {...prev, currentVal: e.target.value}})
+  e.target.value = e.target.value.replace(',','')
 }
 
 const validateForm = () => {
@@ -138,18 +87,29 @@ const validateForm = () => {
                   <option value = 'Information Technology'>Information Technology</option>
               </select>
               <label><h3>Roles of the job:</h3></label>
+              <input className = {roles.alreadyExists || roles.isEmpty ? 'inputError' : ''}  onChange = {handleSetRoles} value = {roles.currentVal} placeholder = 'E.g Managing files...' autoComplete = 'on' required/>
 
-              <input className = {roles.alreadyExists || roles.isEmpty ? 'inputError' : ''}  onChange = {handleSetRoles} placeholder = 'E.g Managing files...' autoComplete = 'on' required/>
               <List name = 'Roles' 
               state = {roles}
-              handleSet = {() => handleSet(roles.currentVal)}
-              handleClearInput = {() => handleClearInput()}
-              handleSetIsEmpty = {() => handleSetIsEmpty()}
-              handleSetAlreadyExists = {() => handleSetAlreadyExists()}
-              handleRemove = {() => handleRemove()}
-               />
+              handleAdd = {() => setRoles(prev => ({...prev, value: [...prev.value, roles.currentVal]}))}
+              handleClearInput = {() => setRoles(prev => {return {...prev,currentVal: ''}})}
+              handleSetIsEmpty = {(empty = true) => setRoles(prev => {return{...prev,isEmpty: empty}})}
+              handleSetAlreadyExists = {(exists = true) => setRoles(prev => {return {...prev,alreadyExists: exists}})}
+              handleSetAll = {(newItems: Array<string>) => setRoles(prev => {return {...prev,value: newItems}})}
+              />
 
-            
+              <label htmlFor = 'skills'><h3>Skills required:</h3></label>
+              <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on'/>
+
+              <List name = 'Skills' 
+              state = {skills}
+              handleAdd = {() => setSkills(prev => ({...prev, value: [...prev.value, skills.currentVal]}))}
+              handleClearInput = {() => setSkills(prev => {return {...prev,currentVal: ''}})}
+              handleSetIsEmpty = {(empty = true) => setSkills(prev => {return{...prev,isEmpty: empty}})}
+              handleSetAlreadyExists = {(exists = true) => setSkills(prev => {return {...prev,alreadyExists: exists}})}
+              handleSetAll = {(newItems: Array<string>) => setSkills(prev => {return {...prev,value: newItems}})}
+              />
+
               <label htmlFor = 'jobType'><h3>Type:</h3></label>
               <select id = 'jobType' onChange = {e => setType({value: e.target.value})} style = {{width: '130px'}}> 
                 <option value = 'Full=time'>Full-time</option>
@@ -181,6 +141,18 @@ const validateForm = () => {
               <hr className = 'mt-0-mb-4'/>
               <label htmlFor = 'jobPositions'><h3>Number of positions:</h3></label>
               <input type = 'number' id = 'jobPositions'  onChange = {e => setPositions(prev => {return {...prev, value: parseInt(e.target.value)}})} min = '1' defaultValue = '1' required style = {{width: '65px'}}/>
+
+              <label><h3>Benefits:</h3></label>
+              <input className = {benefits.alreadyExists || benefits.isEmpty ? 'inputError' : ''}  onChange = {handleSetBenefits} value = {benefits.currentVal} placeholder = 'E.g Free parking...' autoComplete = 'on' required/>
+
+              <List name = 'Benefits' 
+              state = {benefits}
+              handleAdd = {() => setBenefits(prev => ({...prev, value: [...prev.value, benefits.currentVal]}))}
+              handleClearInput = {() => setBenefits(prev => {return {...prev,currentVal: ''}})}
+              handleSetIsEmpty = {(empty = true) => setBenefits(prev => {return{...prev,isEmpty: empty}})}
+              handleSetAlreadyExists = {(exists = true) => setBenefits(prev => {return {...prev,alreadyExists: exists}})}
+              handleSetAll = {(newItems: Array<string>) => setBenefits(prev => {return {...prev,value: newItems}})}
+              />
 
               <label htmlFor = 'jobRemote'><h3>Remote:</h3></label>
               <select id = 'jobRemote' style = {{width:'80px'}}onChange = {e => e.target.value === 'Yes' ? setIsTrainingProvided(true) : setIsTrainingProvided(false)}>
