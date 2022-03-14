@@ -3,11 +3,11 @@ import {useNavigate} from 'react-router-dom';
 import Errors from '../../Global/messages/Errors'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {setMessage} from '../../Global/features/successMsg';
-import ReactScrollableFeed from 'react-scrollable-feed';
 import {FieldProps,TextFieldProps} from '../../Global/types/forms';
 import {handleFixName} from '../../Global/formFunctions';
 import {ListProps} from '../../Global/types/forms';
 import {FileProps} from '../../Global/types/forms';
+import List from '../../Global/Forms/List';
 import axios from 'axios';
 import { fetchProfile } from '../../Global/features/Jobseekers/Profile/profile';
 
@@ -137,42 +137,6 @@ export default function CreateProfilePage() {
         e.target.value = e.target.value.replace(',','')
     }
 
-    function handleAddSkill(){
-       const currentSkill = skills.currentVal.trim()
-       let errors: Array<string> = []
-
-       if (currentSkill.match(/^ *$/)) {
-        setSkills(prev => {return {...prev,isEmpty: true}})
-        errors.push(skills.emptyErrorMsg)
-       }
-
-       else setSkills(prev => {return {...prev,isEmpty: false}})
-
-       if (skills.value.filter(skill => skill === currentSkill).length > 0){
-        setSkills(prev => {return {...prev,alreadyExists: true}})
-        errors.push(skills.alreadyExistsMsg)
-       }
-
-       else setSkills(prev => {return {...prev,alreadyExists: false}})
-
-       if (errors.length){
-           setErrors(errors)
-           return
-       }
-       
-       setSkills(prev => ({...prev, value: [...prev.value,currentSkill]}))
-       setErrors([])
-       setSkills(prev => {return {...prev,currentVal: ''}})
-    }
-
-    function handleRemoveSkill(skill: string){
-        const newSkills = [...skills.value]
-        let index = newSkills.findIndex(obj => obj === skill)
-        newSkills.splice(index,1)
-        setSkills(prev => {return {...prev,value: newSkills}})
-        setErrors([])
-    }
-
     function handleSubmitForm(e: React.SyntheticEvent){
         e.preventDefault()
         const token = localStorage.getItem('token')
@@ -262,22 +226,14 @@ export default function CreateProfilePage() {
 
                     <label htmlFor = 'skills'><h3>Specific Key skills:</h3></label>
                     <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
-                    <button type = 'button' style = {{marginTop:'10px'}} onClick = {handleAddSkill}>Add skill</button>
-
-                    {skills.value.length ? <p>Your skills ({skills.value.length}):</p> : null}
-                    <div className = 'list'>
-                        <ReactScrollableFeed>
-                        {skills.value.map((skill,index) => {
-                            return (
-                            <div key = {index} style = {{display:'flex',justifyContent:'space-between'}}>
-                               <li>{skill}</li>
-                               <button type = 'button' onClick = {() => handleRemoveSkill(skill)} style = {{padding:'10px'}}>Remove</button>
-                            </div>
-                            )
-                        
-                        })}
-                        </ReactScrollableFeed>
-                    </div>
+                    <List name = 'Skills' 
+                    state = {skills}
+                    handleAdd = {() => setSkills(prev => ({...prev, value: [...prev.value, skills.currentVal]}))}
+                    handleClearInput = {() => setSkills(prev => {return {...prev,currentVal: ''}})}
+                    handleSetIsEmpty = {(empty = true) => setSkills(prev => {return{...prev,isEmpty: empty}})}
+                    handleSetAlreadyExists = {(exists = true) => setSkills(prev => {return {...prev,alreadyExists: exists}})}
+                    handleSetAll = {(newItems: Array<string>) => setSkills(prev => {return {...prev,value: newItems}})}
+                    />
                 </div>
 
                 <div className = {`tab ${currentTab === 3 ? 'show' : 'hide'}`}>
