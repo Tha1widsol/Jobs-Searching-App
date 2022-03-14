@@ -50,6 +50,7 @@ class Job(models.Model):
       roles = models.ManyToManyField(Role, blank = True)
       industry = models.TextField(default = 'Any')
       remote = models.BooleanField(default = False)
+      type = models.CharField(max_length = 9, default = 'Full-time')
       training = models.BooleanField(default = True)
       positions = models.TextField(default = "1")
       education = models.CharField(max_length = 50)
