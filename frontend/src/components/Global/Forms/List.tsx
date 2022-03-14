@@ -3,32 +3,32 @@ import ReactScrollableFeed from 'react-scrollable-feed';
 import Errors from '../../Global/messages/Errors'
 import {ListProps} from '../types/forms';
 
-export default function List({name, 
+export default function List({
+    name, 
     state, 
-    handleSet,
+    handleAdd,
     handleClearInput,
     handleSetIsEmpty, 
     handleSetAlreadyExists, 
-    handleRemove
+    handleSetAll
     }
     :{
      name: string, 
      state: ListProps, 
-     handleSet: (currentVal: string) => void,
+     handleAdd: (currentVal: string) => void,
      handleClearInput: () => void,
      handleSetIsEmpty: (empty?: boolean) => void, 
      handleSetAlreadyExists: (exists?: boolean) => void, 
-     handleRemove: (newItems: Array<string>) => void}
+     handleSetAll: (newItems: Array<string>) => void}
      ){
 
     const [errors,setErrors] = useState<Array<string>>([])
 
-
     function handleRemoveItem(item: string){
         const newItems = [...state.value]
         let index = newItems.findIndex(obj => obj === item)
-        newItems.splice(index, 1)
-        handleRemove(newItems)
+        newItems.splice(index,1)
+        handleSetAll(newItems)
         setErrors([])
     }
 
@@ -55,29 +55,28 @@ export default function List({name,
             return
         }
 
-        handleSet(currentItem)
+        handleAdd(currentItem)
         handleClearInput()
-        setErrors([])
-        
+        setErrors([]) 
     }
+
     return (
         <div>
-            
-            <button type = 'button' style = {{marginTop:'10px'}} onClick = {handleAddItem}>Add Role</button>
+            <button type = 'button' style = {{marginTop:'10px'}} onClick = {handleAddItem}>Add</button>
             <Errors errors = {errors}/>
             {state.value.length ? <p>{name}: ({state.value.length}):</p> : null}
                 
             <div className = 'list'>
-            <ReactScrollableFeed>
-                {state.value.map((item,index) => {
-                    return (
-                        <div key = {index} style = {{display:'flex',justifyContent:'space-between'}}>
-                            <li>{item}</li>
-                            <button type = 'button' onClick = {() => handleRemoveItem(item)} style = {{padding:'10px'}}>Remove</button>
-                        </div>
-                    )
-                })}
-            </ReactScrollableFeed>
+                <ReactScrollableFeed>
+                    {state.value.map((item,index) => {
+                        return (
+                            <div key = {index} style = {{display:'flex',justifyContent:'space-between'}}>
+                                <li>{item}</li>
+                                <button type = 'button' onClick = {() => handleRemoveItem(item)} style = {{padding:'10px'}}>Remove</button>
+                            </div>
+                        )
+                    })}
+                </ReactScrollableFeed>
             </div>
         </div>
     )
