@@ -1,9 +1,10 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import Errors from '../../Global/messages/Errors'
 import {ListProps} from '../../Global/types/forms';
 import {handleFixName} from '../../Global/formFunctions';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
+import {setMessage} from '../../Global/features/successMsg';
 import ReactScrollableFeed from 'react-scrollable-feed';
 import {getcurrentDate} from '../../Global/formFunctions';
 import List from '../../Global/Forms/List';
@@ -24,14 +25,14 @@ export default function JobFormPage() {
   const [industry,setIndustry] = useState({value: 'Any'})
   const [isRemote,setIsRemote] = useState(false)
   const [isTrainingProvided,setIsTrainingProvided] = useState(false)
-  const [positions,setPositions] = useState({value: 1, errorMsg: 'Positions value is invalid'})
+  const [positions,setPositions] = useState({value: '1', errorMsg: 'Positions value is invalid'})
   const [education,setEducation] = useState({value: 'No formal education'})
   const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
   const [startDate,setStartDate] = useState({value: ''})
   const [benefits,setBenefits] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Benefit already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
   const [workingDay1,setWorkingDay1] = useState({value: 'Monday'})
   const [workingDay2,setWorkingDay2] = useState({value: 'Friday'})
-  const [workingHours,setWorkingHours] = useState({value: 1,errorMsg: 'working hours value is invalid'})
+  const [workingHours,setWorkingHours] = useState({value: '6',errorMsg: 'working hours value is invalid'})
   const [applyOnOwnWebsite,setApplyOnOwnWebsite] = useState(false)
   const [website,setWebsite] = useState({value: '',isValid: true, errorMsg: 'Website URL is invalid'})
   const [type,setType] = useState({value: 'Full-time'})
@@ -60,6 +61,49 @@ function handleSetBenefits(e: React.ChangeEvent<HTMLInputElement>){
 
 const validateForm = () => {
   return
+}
+
+function handleSubmitForm(e: React.SyntheticEvent){
+  e.preventDefault()
+  const token = localStorage.getItem('token')
+
+  const requestOptions = {
+    headers: {'Content-Type': 'multipart/form-data', Authorization:`Token ${token}`}
+  }
+
+  let form = new FormData()
+
+  form.append('title',title.value)
+  form.append('description',description.value)
+  form.append('salary', `${salary1.value} - ${salary2.value}`)
+  form.append('roles',roles.value.toString())
+  form.append('industry',industry.value)
+  form.append('remote',isRemote.toString())
+  form.append('type', type.value)
+  form.append('training',isTrainingProvided.toString())
+  form.append('positions',positions.value)
+  form.append('education',education.value)
+  form.append('skills',skills.value.toString())
+  form.append('startDate',startDate.toString())
+  form.append('benefits',benefits.value.toString())
+  form.append('workingDays',`${currency.value}${workingDay1.value} - ${currency.value}${workingDay2.value}`)
+  form.append('workingHours',workingHours.value)
+  form.append('applyOnOwnWebsite',applyOnOwnWebsite.toString())
+
+  axios.post('/api/job',form,requestOptions)
+  .then(response => {
+    if (response.status === 201){
+        dispatch(setMessage('Profile is successfully made'))
+        setTimeout(() => {
+            dispatch(setMessage(''))
+        },2000)
+        navigate(`/jobs`)
+    }
+})
+
+  .catch(error => {
+      if (error.response.status === 400) setErrors(['Something went wrong'])
+  })
 }
 
   return (
@@ -98,18 +142,6 @@ const validateForm = () => {
               handleSetAll = {(newItems: Array<string>) => setRoles(prev => {return {...prev,value: newItems}})}
               />
 
-              <label htmlFor = 'skills'><h3>Skills required:</h3></label>
-              <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on'/>
-
-              <List name = 'Skills' 
-              state = {skills}
-              handleAdd = {() => setSkills(prev => ({...prev, value: [...prev.value, skills.currentVal]}))}
-              handleClearInput = {() => setSkills(prev => {return {...prev,currentVal: ''}})}
-              handleSetIsEmpty = {(empty = true) => setSkills(prev => {return{...prev,isEmpty: empty}})}
-              handleSetAlreadyExists = {(exists = true) => setSkills(prev => {return {...prev,alreadyExists: exists}})}
-              handleSetAll = {(newItems: Array<string>) => setSkills(prev => {return {...prev,value: newItems}})}
-              />
-
               <label htmlFor = 'jobType'><h3>Type:</h3></label>
               <select id = 'jobType' onChange = {e => setType({value: e.target.value})} style = {{width: '130px'}}> 
                 <option value = 'Full=time'>Full-time</option>
@@ -140,7 +172,7 @@ const validateForm = () => {
               <br/>
               <hr className = 'mt-0-mb-4'/>
               <label htmlFor = 'jobPositions'><h3>Number of positions:</h3></label>
-              <input type = 'number' id = 'jobPositions'  onChange = {e => setPositions(prev => {return {...prev, value: parseInt(e.target.value)}})} min = '1' defaultValue = '1' required style = {{width: '65px'}}/>
+              <input type = 'number' id = 'jobPositions'  onChange = {e => setPositions(prev => {return {...prev, value: e.target.value}})} min = '1' defaultValue = '1' required style = {{width: '65px'}}/>
 
               <label><h3>Benefits:</h3></label>
               <input className = {benefits.alreadyExists || benefits.isEmpty ? 'inputError' : ''}  onChange = {handleSetBenefits} value = {benefits.currentVal} placeholder = 'E.g Free parking...' autoComplete = 'on' required/>
@@ -164,6 +196,19 @@ const validateForm = () => {
             <div className = {`tab ${currentTab === 2 ? 'show' : 'hide'}`}>
                 <h1 className = 'title'>Requirements</h1> 
                 <hr className = 'mt-0-mb-4'/>
+
+                <label htmlFor = 'skills'><h3>Skills required:</h3></label>
+                <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on'/>
+
+                <List name = 'Skills' 
+                state = {skills}
+                handleAdd = {() => setSkills(prev => ({...prev, value: [...prev.value, skills.currentVal]}))}
+                handleClearInput = {() => setSkills(prev => {return {...prev,currentVal: ''}})}
+                handleSetIsEmpty = {(empty = true) => setSkills(prev => {return{...prev,isEmpty: empty}})}
+                handleSetAlreadyExists = {(exists = true) => setSkills(prev => {return {...prev,alreadyExists: exists}})}
+                handleSetAll = {(newItems: Array<string>) => setSkills(prev => {return {...prev,value: newItems}})}
+                />
+
 
                 <label htmlFor = 'workingDays'><h3>Working days:</h3></label>
 
@@ -190,8 +235,7 @@ const validateForm = () => {
                   </select>
 
                 <label htmlFor = 'workingHours'><h3>Working hours:</h3></label>
-                <input type = 'number' id = 'jobPositions'  onChange = {e => setWorkingHours(prev => {return {...prev, value: parseInt(e.target.value)}})} min = '1' max = '12' defaultValue = '6' required style = {{width: '65px'}}/>
-
+                <input type = 'number' id = 'jobPositions'  onChange = {e => setWorkingHours(prev => {return {...prev, value: e.target.value}})} min = '1' max = '12' defaultValue = '6' required style = {{width: '65px'}}/>
 
                 <label htmlFor = 'startDate'><h3>Expected start date:</h3></label>
                 <input type = 'date' id = 'startDate' min = {getcurrentDate()} required/>
