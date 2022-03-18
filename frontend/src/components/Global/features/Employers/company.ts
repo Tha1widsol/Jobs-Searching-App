@@ -1,6 +1,22 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
-import {CompanyProps} from './types'
+import {StatusProps} from '../../types/status'
+import {UserProps} from '../Auth/types'
 import axios from 'axios'
+
+export interface CompanyProps extends StatusProps{
+    values: {
+        user: UserProps
+        id: number | null
+        name: string
+        email: string
+        about: string
+        phone: string
+        logo?: string
+        banner?: string 
+        industry: string
+        website?: string
+    }
+}
 
 const token = localStorage.getItem('token')
 

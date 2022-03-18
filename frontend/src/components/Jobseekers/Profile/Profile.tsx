@@ -1,8 +1,8 @@
 import React,{useState} from 'react'
 import './css/Profile.css'
 import {useAppDispatch} from '../../Global/features/hooks';
-import {ProfileProps} from '../../Global/features/Jobseekers/Profile/types';
-import {setToggleStatus} from '../../Global/features/Jobseekers/Profile/profile'
+import {ProfileProps} from '../../Global/features/Jobseekers/profile';
+import {setToggleStatus} from '../../Global/features/Jobseekers/profile'
 import {setMessage} from '../../Global/features/successMsg';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios'

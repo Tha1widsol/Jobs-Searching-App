@@ -1,10 +1,10 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {combineReducers} from "redux"
 import userReducer from './Auth/user'
-import ProfileReducer from './Jobseekers/Profile/profile'
+import ProfileReducer from './Jobseekers/profile'
 import successMsgReducer from './successMsg'
-import CompaniesReducer from './Employers/Companies/companies'
-import CompanyReducer from './Employers/Companies/company'
+import CompaniesReducer from './Employers/companies'
+import CompanyReducer from './Employers/company'
 import storage from 'redux-persist/lib/storage'
 
 import {

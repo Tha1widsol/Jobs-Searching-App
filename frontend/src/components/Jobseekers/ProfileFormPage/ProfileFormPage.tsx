@@ -9,7 +9,7 @@ import {ListProps} from '../../Global/types/forms';
 import {FileProps} from '../../Global/types/forms';
 import List from '../../Global/Forms/List';
 import axios from 'axios';
-import { fetchProfile } from '../../Global/features/Jobseekers/Profile/profile';
+import { fetchProfile } from '../../Global/features/Jobseekers/profile';
 
 export default function CreateProfilePage() {
     let navigate = useNavigate()

@@ -2,7 +2,7 @@ import React,{useEffect} from 'react';
 import './css/ProfilePage.css'
 import Profile from '../Profile/Profile';
 import {useParams} from 'react-router-dom';
-import {fetchProfile} from '../../Global/features/Jobseekers/Profile/profile';
+import {fetchProfile} from '../../Global/features/Jobseekers/profile';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {useNavigate} from 'react-router-dom';
 
