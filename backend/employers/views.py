@@ -51,6 +51,7 @@ class JobAPI(APIView):
 
     def post(self,request):
         serializer = self.serializer_class(data = request.data)
+        
         if serializer.is_valid():
             job = serializer.save()
             roles = request.data.get('roles')
@@ -101,6 +102,10 @@ class JobAPI(APIView):
             
             job.user = request.user
             job.save()
+            return Response(status = status.HTTP_201_CREATED)
+
+        return Response(status = status.HTTP_400_BAD_REQUEST)
+
             
 class JobsListAPI(generics.ListAPIView):
     serializer_class = JobSerializer
