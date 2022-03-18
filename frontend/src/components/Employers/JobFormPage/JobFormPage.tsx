@@ -2,11 +2,10 @@ import React,{useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import Errors from '../../Global/messages/Errors'
 import {ListProps} from '../../Global/types/forms';
-import {handleFixName} from '../../Global/formFunctions';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {setMessage} from '../../Global/features/successMsg';
-import ReactScrollableFeed from 'react-scrollable-feed';
 import {getcurrentDate} from '../../Global/formFunctions';
+import {capitalizeFirstCharacter} from '../../Global/formFunctions';
 import List from '../../Global/Forms/List';
 import axios from 'axios';
 
@@ -16,23 +15,23 @@ export default function JobFormPage() {
   const user = useAppSelector(state => state.user)
   const [currentTab,setCurrentTab] = useState(1)
   const [errors,setErrors] = useState<Array<string>>([])
-  const [title,setTitle] = useState({value: '', isValid: true, errorMsg: 'Title is invalid'})
+  const [title,setTitle] = useState({value: '', isValid: true, errorMsg: 'Title is invalid', lengthErrorMsg: 'Length must be 60 characters or shorter'})
   const [description,setDescription] = useState({value: '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 300})
-  const [salary1,setSalary1] = useState({value: '', errorMsg: 'Salary value is invalid'})
-  const [salary2,setSalary2] = useState({value: '', errorMsg: 'Salary value is invalid'})
+  const [salary1,setSalary1] = useState({value: '', isValid: true, errorMsg: 'Salary 1 value is invalid'})
+  const [salary2,setSalary2] = useState({value: '', isValid: true, errorMsg: 'Salary 2 value is invalid'})
   const [currency,setCurrency] = useState({value: '$'})
-  const [roles,setRoles] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid Role', alreadyExists: false, alreadyExistsMsg: 'Role already exists',AddedMsg:'Role added',RemovedMsg: 'Role removed'})
+  const [roles,setRoles] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid role', alreadyExists: false, alreadyExistsMsg: 'Role already exists',AddedMsg:'Role added',RemovedMsg: 'Role removed'})
   const [industry,setIndustry] = useState({value: 'Any'})
   const [isRemote,setIsRemote] = useState(false)
   const [isTrainingProvided,setIsTrainingProvided] = useState(false)
-  const [positions,setPositions] = useState({value: '1', errorMsg: 'Positions value is invalid'})
+  const [positions,setPositions] = useState({value: '1', isValid: true, errorMsg: 'Positions value is invalid'})
   const [education,setEducation] = useState({value: 'No formal education'})
   const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-  const [startDate,setStartDate] = useState({value: ''})
+  const [startDate,setStartDate] = useState({value: '',isValid: true, errorMsg: 'Start date is invalid'})
   const [benefits,setBenefits] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Benefit already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
   const [workingDay1,setWorkingDay1] = useState({value: 'Monday'})
   const [workingDay2,setWorkingDay2] = useState({value: 'Friday'})
-  const [workingHours,setWorkingHours] = useState({value: '6',errorMsg: 'working hours value is invalid'})
+  const [workingHours,setWorkingHours] = useState({value: '6',isValid: true, errorMsg: 'working hours value is invalid'})
   const [applyOnOwnWebsite,setApplyOnOwnWebsite] = useState(false)
   const [website,setWebsite] = useState({value: '',isValid: true, errorMsg: 'Website URL is invalid'})
   const [type,setType] = useState({value: 'Full-time'})
@@ -44,7 +43,7 @@ export default function JobFormPage() {
     setCurrentTab(currentTab - 1)
 }
 
-function handleSetRoles(e: React.ChangeEvent<HTMLInputElement>){
+function handleSetRole(e: React.ChangeEvent<HTMLInputElement>){
   setRoles(prev => {return {...prev, currentVal: e.target.value}})
   e.target.value = e.target.value.replace(',','')
 }
@@ -54,18 +53,117 @@ function handleSetSkills(e: React.ChangeEvent<HTMLInputElement>){
   e.target.value = e.target.value.replace(',','')
 }
 
-function handleSetBenefits(e: React.ChangeEvent<HTMLInputElement>){
+function handleSetBenefit(e: React.ChangeEvent<HTMLInputElement>){
   setBenefits(prev => {return {...prev, currentVal: e.target.value}})
   e.target.value = e.target.value.replace(',','')
 }
 
 const validateForm = () => {
-  return
+  let isValid = true
+  let errors : Array<string> = []
+  const urlregex = /((([A-Za-z]{3,9}:(?:)?)(?:[;:&=,\w]+@)?[A-Za-z0-9]+|(?:www|[;:&=,\w]+@)[A-Za-z0-9]+)((?:[~%\w_]*)?\??(?:[=&;%@\w_]*)#?(?:[\\\w]*))?)/
+  const numbers = /^(([1-9]\d*))$/;
+
+  switch(currentTab){
+    case 1:
+      if (title.value === ''){
+          setTitle(prev => {return {...prev,isValid: false}})
+          errors.push(title.errorMsg)
+          isValid = false
+      }
+
+      else if (title.value.length > 60){
+            setTitle(prev => {return {...prev,isValid: false}})
+            errors.push(title.lengthErrorMsg)
+            isValid = false
+      }
+
+      else setTitle(prev => {return {...prev,isValid: true}})
+
+      if (description.value === ''){
+          setDescription(prev => {return {...prev,isValid: false}})
+          errors.push(description.errorMsg)
+          isValid = false
+      }
+
+      else setDescription(prev => {return {...prev,isValid: true}})
+
+      if (roles.value.length === 0){
+          setRoles(prev => {return {...prev,isEmpty: true}})
+          errors.push(roles.emptyErrorMsg)
+          isValid = false
+      }
+
+      else setRoles(prev => {return {...prev,isEmpty: false}})
+
+      if (!salary1.value.match(numbers)){
+          setSalary1(prev => {return {...prev,isValid: false}})
+          errors.push(salary1.errorMsg)
+          isValid = false
+      }
+
+      else setSalary1(prev => {return {...prev,isValid: true}})
+
+      if (salary2.value !== '' && !salary2.value.match(numbers)){
+          setSalary2(prev => {return {...prev,isValid: false}})
+          errors.push(salary2.errorMsg)
+          isValid = false
+      }
+
+     if (parseInt(salary1.value) >= parseInt(salary2.value)){
+          setSalary2(prev => {return {...prev,isValid: false}})
+          errors.push('Salary 2 must be greater than salary 1')
+          isValid = false
+      }
+
+      else setSalary2(prev => {return {...prev,isValid: true}})
+
+
+      if (!positions.value.match(numbers)){
+          setPositions(prev => {return {...prev,isValid: false}})
+          errors.push(positions.errorMsg)
+          isValid = false
+      }
+
+      else setPositions(prev => {return {...prev,isValid: true}})
+
+      if (website.value !== '' && !website.value.match(urlregex) && website.value !== ''){
+        setWebsite(prev => {return {...prev,isValid: false}})
+        errors.push(website.errorMsg)
+        isValid = false
+    }
+
+      else setWebsite(prev => {return {...prev,isValid: true}})
+
+      break
+
+      case 2:
+        if (startDate.value === ''){
+          setStartDate(prev => {return {...prev,isValid: false}})
+          errors.push(startDate.errorMsg)
+          isValid = false
+        }
+
+        else setStartDate(prev => {return {...prev,isValid: true}})
+  }
+
+  if (!isValid){
+    setErrors(errors)
+    window.scrollTo(0, 0)
+    return
+}
+  
+  setErrors([])
+  setCurrentTab(currentTab + 1)
+
+  return isValid
 }
 
 function handleSubmitForm(e: React.SyntheticEvent){
   e.preventDefault()
   const token = localStorage.getItem('token')
+  
+  if(!validateForm()) return
 
   const requestOptions = {
     headers: {'Content-Type': 'multipart/form-data', Authorization:`Token ${token}`}
@@ -75,7 +173,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
 
   form.append('title',title.value)
   form.append('description',description.value)
-  form.append('salary', `${salary1.value} - ${salary2.value}`)
+  form.append('salary', `${currency.value}${salary1.value} - ${currency.value}${salary2.value}`)
   form.append('roles',roles.value.toString())
   form.append('industry',industry.value)
   form.append('remote',isRemote.toString())
@@ -84,16 +182,16 @@ function handleSubmitForm(e: React.SyntheticEvent){
   form.append('positions',positions.value)
   form.append('education',education.value)
   form.append('skills',skills.value.toString())
-  form.append('startDate',startDate.toString())
+  form.append('startDate',startDate.value)
   form.append('benefits',benefits.value.toString())
-  form.append('workingDays',`${currency.value}${workingDay1.value} - ${currency.value}${workingDay2.value}`)
+  form.append('workingDays',`${workingDay1.value} - ${workingDay2.value}`)
   form.append('workingHours',workingHours.value)
   form.append('applyOnOwnWebsite',applyOnOwnWebsite.toString())
 
   axios.post('/api/job',form,requestOptions)
   .then(response => {
     if (response.status === 201){
-        dispatch(setMessage('Profile is successfully made'))
+        dispatch(setMessage('Job is successfully made'))
         setTimeout(() => {
             dispatch(setMessage(''))
         },2000)
@@ -119,9 +217,9 @@ function handleSubmitForm(e: React.SyntheticEvent){
               <hr className = 'mt-0-mb-4'/>
               <Errors errors = {errors}/>
               <label htmlFor = 'jobTitle'><h3>Title:</h3></label>
-              <input id = 'jobTitle' className = {!title.isValid ? 'inputError' : ''} onChange = {e => setTitle(prev => {return {...prev, value: e.target.value}})} onKeyUp = {handleFixName} placeholder = 'Title...' autoComplete = 'on' required/>
+              <input id = 'jobTitle' className = {!title.isValid ? 'inputError' : ''} onChange = {e => setTitle(prev => {return {...prev, value: e.target.value}})} onKeyUp = {capitalizeFirstCharacter} placeholder = 'Title...' autoComplete = 'on' required/>
               <label htmlFor = 'jobDescription' ><h3>Description (Characters remaining: {description.maxLength - description.currentLength}):</h3></label>
-              <textarea id = 'jobDescription' className = {!description.isValid ? 'inputError' : ''} onChange = {e => setDescription(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about the job...' maxLength = {description.maxLength} style = {{height: '100px'}}/>
+              <textarea id = 'jobDescription' className = {!description.isValid ? 'inputError' : ''} onChange = {e => setDescription(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} onKeyUp = {capitalizeFirstCharacter} placeholder = 'Tell us about the job...' maxLength = {description.maxLength} style = {{height: '100px'}}/>
 
               <label htmlFor = 'jobIndustry'><h3>Industry:</h3></label>
               <select id = 'jobIndustry' onChange = {e => setIndustry({value: e.target.value})} autoComplete = 'on'>
@@ -131,7 +229,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
                   <option value = 'Information Technology'>Information Technology</option>
               </select>
               <label><h3>Roles of the job:</h3></label>
-              <input className = {roles.alreadyExists || roles.isEmpty ? 'inputError' : ''}  onChange = {handleSetRoles} value = {roles.currentVal} placeholder = 'E.g Managing files...' autoComplete = 'on' required/>
+              <input className = {roles.alreadyExists || roles.isEmpty ? 'inputError' : ''}  onChange = {handleSetRole} value = {roles.currentVal} placeholder = 'E.g Managing files...' autoComplete = 'on' required/>
 
               <List name = 'Roles' 
               state = {roles}
@@ -165,17 +263,17 @@ function handleSubmitForm(e: React.SyntheticEvent){
               </select>
 
               <label><h4>From:</h4></label>
-              <input placeholder = 'E.g 20000' onChange = {e => setSalary1(prev => {return {...prev, value: e.target.value}})} autoComplete = 'on' required/>
-              <label><h4>To:</h4></label>
-              <input placeholder = 'E.g 30000' onChange = {e => setSalary2(prev => {return {...prev, value: e.target.value}})} autoComplete = 'on' required/>
+              <input placeholder = 'E.g 20000' onChange = {e => setSalary1(prev => {return {...prev, value: e.target.value}})} className = {!salary1.isValid ? 'inputError' : ''} autoComplete = 'on' required/>
+              <label><h4>To (Optional):</h4></label>
+              <input placeholder = 'E.g 30000' onChange = {e => setSalary2(prev => {return {...prev, value: e.target.value}})} className = {!salary2.isValid ? 'inputError' : ''} autoComplete = 'on'/>
               <br/>
               <br/>
               <hr className = 'mt-0-mb-4'/>
               <label htmlFor = 'jobPositions'><h3>Number of positions:</h3></label>
-              <input type = 'number' id = 'jobPositions'  onChange = {e => setPositions(prev => {return {...prev, value: e.target.value}})} min = '1' defaultValue = '1' required style = {{width: '65px'}}/>
+              <input type = 'number' className = {!positions.isValid ? 'inputError' : ''} id = 'jobPositions'  onChange = {e => setPositions(prev => {return {...prev, value: e.target.value}})} min = '1' defaultValue = '1' required style = {{width: '65px'}}/>
 
-              <label><h3>Benefits:</h3></label>
-              <input className = {benefits.alreadyExists || benefits.isEmpty ? 'inputError' : ''}  onChange = {handleSetBenefits} value = {benefits.currentVal} placeholder = 'E.g Free parking...' autoComplete = 'on' required/>
+              <label><h3>Benefits (Optional):</h3></label>
+              <input className = {benefits.alreadyExists || benefits.isEmpty ? 'inputError' : ''}  onChange = {handleSetBenefit} value = {benefits.currentVal} placeholder = 'E.g Free parking...' autoComplete = 'on' required/>
 
               <List name = 'Benefits' 
               state = {benefits}
@@ -187,17 +285,24 @@ function handleSubmitForm(e: React.SyntheticEvent){
               />
 
               <label htmlFor = 'jobRemote'><h3>Remote:</h3></label>
-              <select id = 'jobRemote' style = {{width:'80px'}}onChange = {e => e.target.value === 'Yes' ? setIsTrainingProvided(true) : setIsTrainingProvided(false)}>
+              <select id = 'jobRemote' style = {{width:'80px'}} onChange = {e => e.target.value === 'Yes' ? setIsRemote(true) : setIsRemote(false)}>
                   <option value = 'Yes'>Yes</option>
                   <option value = 'No'>No</option>
               </select>
+
+              <label htmlFor = 'jobTraining'><h3>Training Provided:</h3></label>
+              <select id = 'jobTraining' style = {{width:'80px'}} onChange = {e => e.target.value === 'Yes' ? setIsTrainingProvided(true) : setIsTrainingProvided(false)}>
+                  <option value = 'Yes'>Yes</option>
+                  <option value = 'No'>No</option>
+              </select>
+
             </div>
 
             <div className = {`tab ${currentTab === 2 ? 'show' : 'hide'}`}>
                 <h1 className = 'title'>Requirements</h1> 
                 <hr className = 'mt-0-mb-4'/>
 
-                <label htmlFor = 'skills'><h3>Skills required:</h3></label>
+                <label htmlFor = 'skills'><h3>Skills required (Optional):</h3></label>
                 <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on'/>
 
                 <List name = 'Skills' 
@@ -209,10 +314,9 @@ function handleSubmitForm(e: React.SyntheticEvent){
                 handleSetAll = {(newItems: Array<string>) => setSkills(prev => {return {...prev,value: newItems}})}
                 />
 
+                <label><h3>Working days:</h3></label>
 
-                <label htmlFor = 'workingDays'><h3>Working days:</h3></label>
-
-                  <select id = 'workingDays' style = {{width:'auto'}}>
+                  <select id = 'workingDay1' onChange  = {e => setWorkingDay1(prev => {return{...prev, value: e.target.value}})} style = {{width:'auto'}}>
                     <option value = 'Monday'>Monday</option>
                     <option value = 'Tuesday'>Tuesday</option>
                     <option value = 'Wednesday'>Wednesday</option>
@@ -224,7 +328,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
                   
                   <span style = {{marginLeft:'10px',marginRight:'10px'}}>to</span>
 
-                  <select id = 'workingDays' defaultValue = 'Friday' style = {{width:'auto'}}>
+                  <select id = 'workingDay2' onChange  = {e => setWorkingDay2(prev => {return{...prev, value: e.target.value}})} defaultValue = 'Friday' style = {{width:'auto'}}>
                     <option value = 'Monday'>Monday</option>
                     <option value = 'Tuesday'>Tuesday</option>
                     <option value = 'Wednesday'>Wednesday</option>
@@ -235,10 +339,10 @@ function handleSubmitForm(e: React.SyntheticEvent){
                   </select>
 
                 <label htmlFor = 'workingHours'><h3>Working hours:</h3></label>
-                <input type = 'number' id = 'jobPositions'  onChange = {e => setWorkingHours(prev => {return {...prev, value: e.target.value}})} min = '1' max = '12' defaultValue = '6' required style = {{width: '65px'}}/>
+                <input type = 'number' className = {!workingHours.isValid ? 'inputError' : ''} id = 'jobPositions'  onChange = {e => setWorkingHours(prev => {return {...prev, value: e.target.value}})} min = '1' max = '12' defaultValue = '6' required style = {{width: '65px'}}/>
 
                 <label htmlFor = 'startDate'><h3>Expected start date:</h3></label>
-                <input type = 'date' id = 'startDate' min = {getcurrentDate()} required/>
+                <input type = 'date' className = {!startDate.isValid ? 'inputError' : ''} id = 'startDate' min = {getcurrentDate()} onChange = {e => setStartDate(prev => {return {...prev, value: e.target.value}})} required/>
               
                 <label htmlFor = 'jobEducation'><h3>Education:</h3></label>
                     <select id = 'jobEducation' onChange = {e => setEducation({value: e.target.value})} required>
@@ -262,13 +366,13 @@ function handleSubmitForm(e: React.SyntheticEvent){
                 {applyOnOwnWebsite ? 
                   <div>
                     <label htmlFor = 'jobWebsite'><h3>Job link:</h3></label>
-                    <input id = 'jobWebsite' type = 'url' placeholder = 'Job link...' onChange = {e => setWebsite(prev => {return {...prev, value: e.target.value}})}/>
+                    <input id = 'jobWebsite' className = {!website.isValid ? 'inputError' : ''} type = 'url' placeholder = 'Job link...' onChange = {e => setWebsite(prev => {return {...prev, value: e.target.value}})}/>
                   </div>
                 : null}
 
             </div>
 
-            {currentTab === maxTabs ? <button type = 'button' id = 'submit' onClick = {validateForm}>Submit</button> : <button type = 'button' className = 'toggleTabBtn' onClick = {() => setCurrentTab(currentTab + 1)} style = {{float:'right'}}>Next</button>}
+            {currentTab === maxTabs ? <button type = 'button' id = 'submit' onClick = {handleSubmitForm}>Submit</button> : <button type = 'button' className = 'toggleTabBtn' onClick = {validateForm} style = {{float:'right'}}>Next</button>}
             <button type = 'button' className = {currentTab > 1 ? 'toggleTabBtn' : 'hide'} onClick = {handleToPrevTab}>Previous</button>
         </form>
 
