@@ -18,7 +18,7 @@ export default function CompaniesPage() {
         window.location.reload()
       }
     })
-  },[dispatch])
+  },[dispatch,navigate])
   
   return (
     <div>
