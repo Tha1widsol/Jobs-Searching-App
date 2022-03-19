@@ -42,6 +42,8 @@ export default function Navbar() {
                             {user.values?.isAnEmployer ? 
                              <>
                                 <a href = '/companies'>My companies</a> 
+                                <a href = '/jobs'>My jobs</a> 
+
 
                              </> 
                 
