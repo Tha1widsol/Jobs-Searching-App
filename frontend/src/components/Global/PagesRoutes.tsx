@@ -13,10 +13,10 @@ import {useAppSelector} from './features/hooks'
 import ProfilePage from '../Jobseekers/ProfilePage/ProfilePage'
 import CompanyPage from '../Employers/CompanyPage/CompanyPage'
 import JobFormPage from '../Employers/JobFormPage/JobFormPage'
+import JobsPage from '../Employers/JobsPage'
 
 export default function PagesRoutes() {
     const user = useAppSelector(state => state.user)
-    
 
     return (
         <div>
@@ -42,6 +42,7 @@ export default function PagesRoutes() {
                             <Route path = '/companies' element = {<CompaniesPage/>}/>
                             <Route path = '/companies/:companyID' element = {<CompanyPage/>}/>
                             <Route path = '/post-job/:companyID' element = {<JobFormPage/>}/>
+                            <Route path = '/jobs' element = {<JobsPage/>}/>
                         </Route>
                     </Route>
 
