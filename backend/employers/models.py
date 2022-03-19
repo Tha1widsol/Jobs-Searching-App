@@ -58,7 +58,7 @@ class Job(models.Model):
       startDate = models.DateField(null = True,blank = True)
       benefits = models.ManyToManyField(Benefit, blank = True)
       workingDays = models.CharField(max_length = 100, default = 'Monday-Friday')
-      workingHours = models.IntegerField(default = 6)
+      workingHours = models.CharField(default = '6', max_length = 2)
       applicantsCount = models.IntegerField(default = 0)
       applyOnOwnWebsite = models.BooleanField(default = False)
       datePosted = models.DateTimeField('Job posted',auto_now_add = True)
