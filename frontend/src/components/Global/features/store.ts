@@ -5,6 +5,7 @@ import ProfileReducer from './Jobseekers/profile'
 import successMsgReducer from './successMsg'
 import CompaniesReducer from './Employers/companies'
 import CompanyReducer from './Employers/company'
+import JobsReducer from './Employers/jobs'
 import storage from 'redux-persist/lib/storage'
 
 import {
@@ -24,6 +25,7 @@ const reducers = combineReducers({
   profile: ProfileReducer,
   company: CompanyReducer,
   companies: CompaniesReducer, 
+  jobs: JobsReducer
  })
 
  const persistedReducer = persistReducer(persistConfig, reducers)
