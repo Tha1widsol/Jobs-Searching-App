@@ -57,6 +57,7 @@ export default function LoginPage() {
             if (error.response.status === 400) {
                 setPassword(prev => {return {...prev,isValid: true}})
                 setErrors(['Email or password is invalid'])
+                console.clear()
             }
         })
 
