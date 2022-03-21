@@ -113,23 +113,29 @@ button {
 
   .containerDropdown,.containerDropdownContent,.containerDropdownContent button {display: block;}
 
-  .statusNavBtn,.deleteNavBtn,.editNavBtn{
+  .dropdownBtn,.deleteNavBtn{
     background-color: unset;
     border:unset;
     padding: 14px 16px;
     margin: 0;
     width:100%;
     color: unset;
-    color:black;
     text-align: start;
   }
 
-  .deleteNavBtn,.deleteNavBtn:hover{color: red;}
+.deleteNavBtn{color: red}
+   
+.deleteNavBtn:hover{
+  color: red;
+  background-color: lightgray;
+}
 
-  .statusNavBtn:hover,.deleteNavBtn:hover,.editNavBtn:hover{background-color: lightgray;}
-  
-  .statusNavBtn:hover,.editNavBtn:hover{color:black;}
+.dropdownBtn{color:black}
 
+.dropdownBtn:hover{
+  color: black;
+  background-color: lightgray;
+}
   
   /* ################
 Form styles
@@ -212,3 +218,14 @@ Icons styles
   font-size: 35px;
   color:grey;
   }
+
+/* ################
+Container styles
+##################*/
+
+.Container{
+    padding: 20px;
+    border-style: groove;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
