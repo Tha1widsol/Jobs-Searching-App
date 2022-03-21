@@ -3,12 +3,11 @@ import {useNavigate} from 'react-router-dom'
 import {fetchCompanies} from '../../Global/features/Employers/companies'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {CompanyProps} from './types'
-import './css/CompaniesPage.css'
 
 export default function CompaniesPage() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const [dropdown,setDropdown] = useState(false)
+  const [dropdown,setDropdown] = useState<number | null>(null)
   const companies = useAppSelector(state => state.companies.values)
 
   useEffect(() => {
@@ -25,13 +24,14 @@ export default function CompaniesPage() {
         <h1 className = 'title'>Companies</h1>
         {companies.map((company: CompanyProps, index: number) => {
           return (
-            <div className = 'companyContainer' key = {index}>
-              <section onMouseEnter = {() => setDropdown(true)} onMouseLeave = {() => setDropdown(false)}>
+            <div className = 'Container' key = {index}>
+              <section onMouseEnter = {() => setDropdown(index)} onMouseLeave = {() => setDropdown(null)}>
                 <div className = 'kebabMenuIcon'/>
                 <div className = 'containerDropdown'>
-                  {dropdown ? 
+                  {dropdown === index ? 
                     <div className = 'containerDropdownContent'>
-                        <button className = 'editNavBtn'>Edit</button>
+                        <button className = 'dropdownBtn'>Edit</button>
+                        <button className = 'dropdownBtn'>View all jobs</button>
                         <button className = 'deleteNavBtn'>Delete</button>
                     </div>
                 : null}
