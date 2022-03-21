@@ -13,7 +13,7 @@ import {useAppSelector} from './features/hooks'
 import ProfilePage from '../Jobseekers/ProfilePage/ProfilePage'
 import CompanyPage from '../Employers/CompanyPage/CompanyPage'
 import JobFormPage from '../Employers/JobFormPage/JobFormPage'
-import JobsPage from '../Employers/JobsPage'
+import JobsPage from '../Employers/JobsPage/JobsPage'
 
 export default function PagesRoutes() {
     const user = useAppSelector(state => state.user)
