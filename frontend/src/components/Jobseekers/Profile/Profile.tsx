@@ -45,8 +45,8 @@ export default function Profile({userIsOnProfilePage = false, profile} : {userIs
                 <div className = 'containerDropdown'>
                     {dropdown ? 
                     <div className = 'containerDropdownContent'>
-                        {profile.values.isActive ? <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'statusNavBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
-                            <button className = 'editNavBtn'>Edit</button>
+                        {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
+                            <button className = 'dropdownBtn'>Edit</button>
                             <button className = 'deleteNavBtn' onClick = {() => handleDeleteProfile()}>Delete</button>
                     </div>
 
