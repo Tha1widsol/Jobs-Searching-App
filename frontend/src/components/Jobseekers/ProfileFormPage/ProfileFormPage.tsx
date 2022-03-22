@@ -3,13 +3,12 @@ import {useNavigate} from 'react-router-dom';
 import Errors from '../../Global/messages/Errors'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {setMessage} from '../../Global/features/successMsg';
-import {FieldProps,TextFieldProps} from '../../Global/types/forms';
 import {handleFixName} from '../../Global/formFunctions';
 import {ListProps} from '../../Global/types/forms';
 import {FileProps} from '../../Global/types/forms';
 import List from '../../Global/Forms/List';
 import axios from 'axios';
-import { fetchProfile } from '../../Global/features/Jobseekers/profile';
+import {fetchProfile} from '../../Global/features/Jobseekers/profile';
 
 export default function CreateProfilePage() {
     let navigate = useNavigate()
@@ -18,13 +17,13 @@ export default function CreateProfilePage() {
     const profile = useAppSelector(state => state.profile)
     const [currentTab,setCurrentTab] = useState(1)
     const [errors,setErrors] = useState<Array<string>>([])
-    const [firstName,setFirstName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'First name is invalid'})
-    const [middleName,setMiddleName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Middle name is invalid'})
-    const [lastName,setLastName] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Last name is invalid'})
-    const [phone,setPhone] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Phone number is invalid'})
-    const [about,setAbout] = useState<TextFieldProps>({value: '', isValid: true, currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
+    const [firstName,setFirstName] = useState({value: '', isValid: true, errorMsg: 'First name is invalid'})
+    const [middleName,setMiddleName] = useState({value: '', isValid: true, errorMsg: 'Middle name is invalid'})
+    const [lastName,setLastName] = useState({value: '', isValid: true, errorMsg: 'Last name is invalid'})
+    const [phone,setPhone] = useState({value: '', isValid: true, errorMsg: 'Phone number is invalid'})
+    const [about,setAbout] = useState({value: '', isValid: true, currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
     const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-    const [experience,setExperience] = useState<TextFieldProps>({value: '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 450})
+    const [experience,setExperience] = useState({value: '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 450})
     const [education,setEducation] = useState({value: 'No formal education'})
     const [industry,setIndustry] = useState({value: 'Any'})
     const [distance,setDistance] = useState({value: 'Any'})

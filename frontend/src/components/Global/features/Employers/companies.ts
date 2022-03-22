@@ -1,12 +1,15 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
+import {user} from '../Auth/user'
+import {UserProps} from '../Auth/user'
 import {StatusProps} from '../../types/status'
-import {UserProps} from '../Auth/types'
 import axios from 'axios'
+
+const token = localStorage.getItem('token')
 
 export interface CompaniesProps extends StatusProps{
     values: [{
             user: UserProps
-            id: number | null
+            id: number
             name: string
             email: string
             about: string
@@ -19,18 +22,11 @@ export interface CompaniesProps extends StatusProps{
   
 }
 
-const token = localStorage.getItem('token')
-
 const initialState: CompaniesProps = {
 status: '',
   values: [{
-    user: {
-        id: null,
-        email: '',
-        isHired: null, 
-        isAnEmployer: null
-    },
-    id: null,
+    user,
+    id: 0,
     name: '',
     email: '',
     about: '',
@@ -39,7 +35,6 @@ status: '',
     banner: '',
     industry: '',
     website: ''
-
   }],
 
 }

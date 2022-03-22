@@ -1,8 +1,10 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import axios from 'axios'
-
-import {UserProps} from '../Auth/types'
+import {UserProps} from '../Auth/user'
 import {StatusProps} from '../../types/status'
+import {user} from '../Auth/user'
+
+const token = localStorage.getItem('token')
 
 export interface ProfileProps extends StatusProps{
     values: {
@@ -19,22 +21,15 @@ export interface ProfileProps extends StatusProps{
         distance: string
         experience?: string
         about: string
-        isActive: boolean | null
-      
+        isActive: boolean
     }
   
 }
 
-const token = localStorage.getItem('token')
 const initialState: ProfileProps = {
     status: '',
     values: {
-    user: {
-        id: null,
-        email: '',
-        isHired: null, 
-        isAnEmployer: null
-    },
+    user,
     firstName: '',
     middleName: '',
     lastName: '',
@@ -47,14 +42,14 @@ const initialState: ProfileProps = {
     distance: '',
     experience: '',
     about: '',
-    isActive: null,
+    isActive: false,
     }
 
 }
   
 export const fetchProfile = createAsyncThunk(
     'user/fetchProfile',
-    async (id: number | null) => {
+    async (id: number) => {
         const response = await axios.get(`/api/profile?id=${id}`,{
             headers: {
                 Authorization:`Token ${token}`

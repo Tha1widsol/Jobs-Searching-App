@@ -1,8 +1,7 @@
 import React,{useState} from 'react'
 import {useNavigate} from "react-router-dom";
 import Errors from '../../Global/messages/Errors';
-import {FieldProps} from '../../Global/types/forms';
-import {EmailProps,PasswordProps} from './types/RegisterInterface'
+import {PasswordProps} from './types/RegisterInterface'
 import {useAppDispatch} from '../../Global/features/hooks';
 import {login} from '../../Global/features/Auth/user';
 import axios from 'axios'
@@ -12,9 +11,9 @@ export default function RegisterPage() {
     const dispatch = useAppDispatch()
     const pathName = window.location.pathname
     const [errors,setErrors] = useState<Array<string>>([])
-    const [email,setEmail] = useState<EmailProps>({value: '',isValid: true, invalidErrorMsg: 'Invalid email', alreadyExistsErrorMsg: 'Email already exists'})
+    const [email,setEmail] = useState({value: '',isValid: true, invalidErrorMsg: 'Invalid email', alreadyExistsErrorMsg: 'Email already exists'})
     const [password,setPassword] = useState<PasswordProps>({value: '', hasValidLength: null, hasUppercase: null, hasDigit: null, hasSymbol: null})
-    const [confirmPassword,setConfirmPassword] = useState<FieldProps>({value: '', isValid: true, errorMsg: 'Passwords must match'})
+    const [confirmPassword,setConfirmPassword] = useState({value: '', isValid: true, errorMsg: 'Passwords must match'})
 
     const validateForm = () => {
         let isValid = true

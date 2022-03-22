@@ -2,7 +2,6 @@ import React,{useState,useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {fetchCompanies} from '../../Global/features/Employers/companies'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
-import {CompanyProps} from './types'
 
 export default function CompaniesPage() {
   const dispatch = useAppDispatch()
@@ -22,7 +21,7 @@ export default function CompaniesPage() {
   return (
     <div>
         <h1 className = 'title'>Companies</h1>
-        {companies.map((company: CompanyProps, index: number) => {
+        {companies.map((company, index: number) => {
           return (
             <div className = 'Container' key = {index}>
               <section onMouseEnter = {() => setDropdown(index)} onMouseLeave = {() => setDropdown(null)}>

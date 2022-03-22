@@ -2,8 +2,6 @@ import React,{useState} from 'react'
 import {useNavigate} from "react-router-dom";
 import Errors from '../../Global/messages/Errors'
 import {useAppDispatch} from '../../Global/features/hooks';
-import {FieldProps} from '../../Global/types/forms';
-import {TextFieldProps} from '../../Global/types/forms';
 import {FileProps} from '../../Global/types/forms';
 import axios from 'axios'
 import { setMessage } from '../../Global/features/successMsg';
@@ -12,14 +10,14 @@ export default function CreateCompanyPage() {
     let navigate = useNavigate()
     const dispatch = useAppDispatch()
     const [errors,setErrors] = useState<Array<string>>([])
-    const [name,setName] = useState<FieldProps>({value: '',isValid: true, errorMsg: 'Name is invalid'})
-    const [email,setEmail] = useState<FieldProps>({value: '',isValid: true, errorMsg: 'Email is invalid'})
-    const [about,setAbout] = useState<TextFieldProps>({value:'', isValid: true,currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
-    const [phone,setPhone] = useState<FieldProps>({value: '',isValid: true, errorMsg: 'Phone number is invalid'})
+    const [name,setName] = useState({value: '',isValid: true, errorMsg: 'Name is invalid'})
+    const [email,setEmail] = useState({value: '',isValid: true, errorMsg: 'Email is invalid'})
+    const [about,setAbout] = useState({value:'', isValid: true,currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
+    const [phone,setPhone] = useState({value: '',isValid: true, errorMsg: 'Phone number is invalid'})
     const [industry,setIndustry] = useState({value: 'Any'})
     const [logo,setLogo] = useState<FileProps>({value: '',name:''})
     const [banner,setBanner] = useState<FileProps>({value: '',name:''})
-    const [website,setWebsite] = useState<FieldProps>({value: '',isValid: true, errorMsg: 'Website URL is invalid'})
+    const [website,setWebsite] = useState({value: '',isValid: true, errorMsg: 'Website URL is invalid'})
 
     const validateForm = () => {
         let isValid = true

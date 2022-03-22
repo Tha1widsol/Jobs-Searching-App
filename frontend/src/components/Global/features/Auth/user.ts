@@ -1,15 +1,28 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
-import {AuthProps} from './types'
 import axios from 'axios'
 import storage from 'redux-persist/lib/storage'
 
 const token = localStorage.getItem('token')
 
-const initialState: AuthProps = {values: {
-    id: null,
+export interface UserProps{
+    id: number
+    email: string
+    isHired: boolean
+    isAnEmployer: boolean
+}
+
+export const user: UserProps = {
+    id: 0,
+    email: '',
+    isHired: false, 
+    isAnEmployer: false
+}
+
+const initialState = {values: {
+    id: 0,
     email: '', 
-    isHired: null,
-    isAnEmployer: null
+    isHired: false,
+    isAnEmployer: false
     },
     isLoggedIn: token ? true : false, 
     status: ''

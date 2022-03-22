@@ -1,12 +1,15 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
+import {UserProps} from '../Auth/user'
+import {user} from '../Auth/user'
 import {StatusProps} from '../../types/status'
-import {UserProps} from '../Auth/types'
 import axios from 'axios'
 
-export interface CompanyProps extends StatusProps{
+const token = localStorage.getItem('token')
+
+interface CompanyProps extends StatusProps{
     values: {
         user: UserProps
-        id: number | null
+        id: number
         name: string
         email: string
         about: string
@@ -18,18 +21,11 @@ export interface CompanyProps extends StatusProps{
     }
 }
 
-const token = localStorage.getItem('token')
-
 const initialState: CompanyProps = {
 status: '',
 values: {
-    user: {
-        id: null,
-        email: '',
-        isHired: null, 
-        isAnEmployer: null
-    },
-    id: null,
+   user,
+    id: 0,
     name: '',
     email: '',
     about: '',
@@ -38,13 +34,13 @@ values: {
     banner: '',
     industry: '',
     website: ''
-}
+  }
    
 }
 
 export const fetchCompany = createAsyncThunk(
     'user/fetchCompany',
-     async (id: number | null) => {
+     async (id: number) => {
         const response = await axios.get(`/api/company?id=${id}`,{
             headers: {
                 Authorization:`Token ${token}`

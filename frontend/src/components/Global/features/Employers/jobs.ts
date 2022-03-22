@@ -1,4 +1,5 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
+import {user} from '../Auth/user'
 import axios from 'axios'
 
 const token = localStorage.getItem('token')
@@ -6,12 +7,7 @@ const token = localStorage.getItem('token')
 const initialState = {
     status: '',
     values: [{
-        user: {
-            id: 0,
-            email: '',
-            isHired: false,
-            isAnEmployer: false
-        },
+        user,
         company: {
             id: 0,
             name: '',
