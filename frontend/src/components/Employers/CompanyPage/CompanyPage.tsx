@@ -23,7 +23,7 @@ export default function CompanyPage() {
               <div className = 'containerDropdown'>
                 {dropdown ? 
                   <div className = 'containerDropdownContent'>
-                      <button className = 'editNavBtn'>Edit</button>
+                      <button className = 'dropdownBtn'>Edit</button>
                       <button className = 'deleteNavBtn'>Delete</button>
                   </div>
               : null}
