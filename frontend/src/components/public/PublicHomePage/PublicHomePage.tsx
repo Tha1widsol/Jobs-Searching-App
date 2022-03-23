@@ -10,7 +10,7 @@ export default function PublicHomePage() {
                 <section className = 'container'>
                     <h2 className = 'heading'><u>Looking for a job:</u></h2>
                     <p>Find your dream job right now with one of the most trusted job searching engines on the web.</p>
-                    <a href = '/register/jobseeker' ><button id = 'jobseeker' >Add your profile</button></a> 
+                    <a href = '/register?choice=jobseeker' ><button id = 'jobseeker' >Add your profile</button></a> 
                 </section>
                 
                 <div id = 'divider'/>
@@ -18,7 +18,7 @@ export default function PublicHomePage() {
                 <section className = 'container'>
                     <h2 className = 'heading'><u>An employer:</u></h2>
                     <p>Setup your company and start adding jobs using our system.</p>
-                    <a href = '/register/employer' ><button id = 'company' >Add your company</button></a> 
+                    <a href = '/register?choice=employer' ><button id = 'company' >Add your company</button></a> 
                 </section>
             </section>
           
