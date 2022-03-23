@@ -1,19 +1,28 @@
-import React,{useState} from 'react'
-import {useNavigate} from "react-router-dom";
+import React,{useState,useEffect} from 'react'
+import {useNavigate,useLocation} from "react-router-dom";
 import Errors from '../../Global/messages/Errors';
 import {PasswordProps} from './types/RegisterInterface'
 import {useAppDispatch} from '../../Global/features/hooks';
 import {login} from '../../Global/features/Auth/user';
 import axios from 'axios'
 
+function useQuery(){
+    return new URLSearchParams(useLocation().search)
+}
+
 export default function RegisterPage() {
+    let query = useQuery()
+    const choice = query.get('choice')
     let navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const pathName = window.location.pathname
     const [errors,setErrors] = useState<Array<string>>([])
     const [email,setEmail] = useState({value: '',isValid: true, invalidErrorMsg: 'Invalid email', alreadyExistsErrorMsg: 'Email already exists'})
     const [password,setPassword] = useState<PasswordProps>({value: '', hasValidLength: null, hasUppercase: null, hasDigit: null, hasSymbol: null})
     const [confirmPassword,setConfirmPassword] = useState({value: '', isValid: true, errorMsg: 'Passwords must match'})
+
+    useEffect(() => {
+       if (choice !== 'jobseeker' && choice !== 'employer') navigate('/')
+    },[choice,navigate])
 
     const validateForm = () => {
         let isValid = true
@@ -89,12 +98,12 @@ export default function RegisterPage() {
             headers:{'Content-Type':'application/json'}
         }
 
-        axios.post(`/api/auth/${pathName}`,JSON.stringify({email: email.value,password: password.value}),requestOptions)
+        axios.post(`/api/auth/register/${choice}`,JSON.stringify({email: email.value,password: password.value}),requestOptions)
         .then(response => {
             const data = response.data
             localStorage.setItem('token',data.token)
             dispatch(login())
-            pathName === '/register/jobseeker' ? navigate('/create-profile') : navigate('/create-company')
+            choice === 'jobseeker' ? navigate('/create-profile') : navigate('/create-company')
             window.location.reload()
         })
 
