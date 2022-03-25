@@ -229,3 +229,9 @@ Container styles
     border-radius: 5px;
     margin-bottom: 20px;
 }
+
+.listContainer{
+  max-height: 135px;
+  width: 180px;
+  overflow: auto;
+}
