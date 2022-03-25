@@ -69,7 +69,7 @@ export default function Profile({userIsOnProfilePage = false, profile} : {userIs
                 <section>
                     <label><h2>Skills</h2></label>
                     <hr className = 'mt-0-mb-4'/>
-                    <div className = 'skills'>
+                    <div className = 'listContainer'>
                         {profile.values.skills.map((skill,index) => {
                             return (<li key = {index}>{skill.name}</li>)
                         })}
