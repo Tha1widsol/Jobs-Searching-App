@@ -14,6 +14,7 @@ import ProfilePage from '../Jobseekers/ProfilePage/ProfilePage'
 import CompanyPage from '../Employers/CompanyPage/CompanyPage'
 import JobFormPage from '../Employers/JobFormPage/JobFormPage'
 import JobsPage from '../Employers/JobsPage/JobsPage'
+import JobPage from '../public/JobPage/JobPage'
 
 export default function PagesRoutes() {
     const user = useAppSelector(state => state.user)
@@ -24,6 +25,7 @@ export default function PagesRoutes() {
                 <Routes>
                     <Route path = '/' element = {user.isLoggedIn && user.values?.isAnEmployer ? <EmployersHomePage/> : user.isLoggedIn && user.values?.isAnEmployer === false ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
                     <Route path = '/home' element = {user.isLoggedIn && user.values?.isAnEmployer ? <EmployersHomePage/> : user.isLoggedIn && user.values?.isAnEmployer === false ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
+                    <Route path = '/jobs/:jobID' element = {<JobPage/>}/>
                 
                     <Route element = {<CheckLoggedIn checkLoggedIn = {false}/>}>
                         <Route path = '/register' element = {<RegisterPage/>}/>
