@@ -61,7 +61,8 @@ class Job(models.Model):
       workingHours = models.CharField(default = '6', max_length = 2)
       applicantsCount = models.IntegerField(default = 0)
       applyOnOwnWebsite = models.BooleanField(default = False)
-      datePosted = models.DateTimeField('Job posted',auto_now_add = True)
+      link = models.URLField(max_length = 200, blank = True)
+      datePosted = models.DateField('Job posted',auto_now_add = True)
 
       def __str__(self):
         return self.title
