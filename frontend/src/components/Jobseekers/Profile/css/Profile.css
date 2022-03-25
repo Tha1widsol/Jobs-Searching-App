@@ -21,12 +21,6 @@
     margin-left: 20px;
   }
 
-  .skills{
-    max-height: 135px;
-    width: 180px;
-    overflow: auto;
-  }
-
   .fullName{
     font-size: 35px;
   }
