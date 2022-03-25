@@ -33,7 +33,7 @@ export default function JobFormPage() {
   const [workingDay2,setWorkingDay2] = useState({value: 'Friday'})
   const [workingHours,setWorkingHours] = useState({value: '6',isValid: true, errorMsg: 'working hours value is invalid'})
   const [applyOnOwnWebsite,setApplyOnOwnWebsite] = useState(false)
-  const [website,setWebsite] = useState({value: '',isValid: true, errorMsg: 'Website URL is invalid'})
+  const [link,setLink] = useState({value: '',isValid: true, errorMsg: 'Website URL is invalid'})
   const [type,setType] = useState({value: 'Full-time'})
 
   const maxTabs = document.querySelectorAll('.tab').length
@@ -127,13 +127,13 @@ const validateForm = () => {
 
       else setPositions(prev => {return {...prev,isValid: true}})
 
-      if (website.value !== '' && !website.value.match(urlregex) && website.value !== ''){
-        setWebsite(prev => {return {...prev,isValid: false}})
-        errors.push(website.errorMsg)
+      if (link.value !== '' && !link.value.match(urlregex) && link.value !== ''){
+        setLink(prev => {return {...prev,isValid: false}})
+        errors.push(link.errorMsg)
         isValid = false
     }
 
-      else setWebsite(prev => {return {...prev,isValid: true}})
+      else setLink(prev => {return {...prev,isValid: true}})
 
       break
 
@@ -186,6 +186,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
   form.append('benefits',benefits.value.toString())
   form.append('workingDays',`${workingDay1.value} - ${workingDay2.value}`)
   form.append('workingHours',workingHours.value)
+  form.append('link',link.value)
   form.append('applyOnOwnWebsite',applyOnOwnWebsite.toString())
 
   axios.post('/api/job',form,requestOptions)
@@ -365,8 +366,8 @@ function handleSubmitForm(e: React.SyntheticEvent){
 
                 {applyOnOwnWebsite ? 
                   <div>
-                    <label htmlFor = 'jobWebsite'><h3>Job link:</h3></label>
-                    <input id = 'jobWebsite' className = {!website.isValid ? 'inputError' : ''} type = 'url' placeholder = 'Job link...' onChange = {e => setWebsite(prev => {return {...prev, value: e.target.value}})}/>
+                    <label htmlFor = 'jobLink'><h3>Job link:</h3></label>
+                    <input id = 'jobLink' className = {!link.isValid ? 'inputError' : ''} type = 'url' placeholder = 'Job link...' onChange = {e => setLink(prev => {return {...prev, value: e.target.value}})}/>
                   </div>
                 : null}
 
