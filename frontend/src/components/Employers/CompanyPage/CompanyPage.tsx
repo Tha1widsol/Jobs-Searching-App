@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import {useParams} from 'react-router-dom';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
-import {fetchCompany} from '../../Global/features/Employers/company';
+import {fetchCompany} from '../../Global/features/Employers/companies/company';
 import './css/CompanyPage.css'
 
 export default function CompanyPage() {

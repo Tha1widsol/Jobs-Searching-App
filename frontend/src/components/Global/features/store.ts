@@ -3,9 +3,10 @@ import {combineReducers} from "redux"
 import userReducer from './Auth/user'
 import ProfileReducer from './Jobseekers/profile'
 import successMsgReducer from './successMsg'
-import CompaniesReducer from './Employers/companies'
-import CompanyReducer from './Employers/company'
-import JobsReducer from './Employers/jobs'
+import CompaniesReducer from './Employers/companies/companies'
+import CompanyReducer from './Employers/companies/company'
+import JobsReducer from './Employers/jobs/jobs'
+import JobReducer from './Employers/jobs/job'
 import storage from 'redux-persist/lib/storage'
 
 import {
@@ -25,7 +26,8 @@ const reducers = combineReducers({
   profile: ProfileReducer,
   company: CompanyReducer,
   companies: CompaniesReducer, 
-  jobs: JobsReducer
+  jobs: JobsReducer,
+  job: JobReducer
  })
 
  const persistedReducer = persistReducer(persistConfig, reducers)

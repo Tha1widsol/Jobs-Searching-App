@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
-import {fetchJobs} from '../../Global/features/Employers/jobs'
+import {fetchJobs} from '../../Global/features/Employers/jobs/jobs'
 
 export default function JobsPage() {
   const dispatch = useAppDispatch()

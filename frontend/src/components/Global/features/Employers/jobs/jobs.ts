@@ -1,10 +1,49 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
-import {user} from '../Auth/user'
+import {user} from '../../Auth/user'
+import {StatusProps} from '../../../types/status'
+import {UserProps} from '../../Auth/user'
 import axios from 'axios'
 
 const token = localStorage.getItem('token')
 
-const initialState = {
+interface JobsProps extends StatusProps{
+    values: [{
+        user: UserProps
+        company:{
+            id: number
+            name: string
+            email: string
+            about: string
+            phone: string
+            logo: string
+            banner: string
+            industry: string
+            website: string
+        },
+        id: number,
+        title: string,
+        description: string,
+        salary: string,
+        roles: [{name: string}],
+        industry: string,
+        remote: boolean,
+        type: string,
+        training: boolean,
+        positions: string,
+        education: string,
+        skills: [{name: string}],
+        startDate: string,
+        benefits: [{name: string}],
+        workingDays: string,
+        workingHours: string,
+        applicantsCount: number,
+        applyOnOwnWebsite: boolean,
+        datePosted: string
+
+    }]
+}
+
+const initialState: JobsProps = {
     status: '',
     values: [{
         user,

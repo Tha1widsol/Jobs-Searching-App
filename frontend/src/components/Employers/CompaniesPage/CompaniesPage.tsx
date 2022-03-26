@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {fetchCompanies} from '../../Global/features/Employers/companies'
+import {fetchCompanies} from '../../Global/features/Employers/companies/companies'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 
 export default function CompaniesPage() {
