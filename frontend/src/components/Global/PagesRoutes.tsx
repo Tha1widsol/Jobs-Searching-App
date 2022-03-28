@@ -13,7 +13,7 @@ import {useAppSelector} from './features/hooks'
 import ProfilePage from '../Jobseekers/ProfilePage/ProfilePage'
 import CompanyPage from '../Employers/CompanyPage/CompanyPage'
 import JobFormPage from '../Employers/JobFormPage/JobFormPage'
-import JobsPage from '../Employers/JobsPage/JobsPage'
+import EmployerJobsPage from '../Employers/EmployerJobsPage/EmployerJobsPage'
 import JobPage from '../public/JobPage/JobPage'
 
 export default function PagesRoutes() {
@@ -33,6 +33,8 @@ export default function PagesRoutes() {
                     </Route>
 
                     <Route element = {<CheckLoggedIn/>}>
+                    <Route path = '/companies/:companyID' element = {<CompanyPage/>}/>
+                    
                         <Route element = {<CheckAccount/>}>
                             <Route path = '/profile/:userID' element = {<ProfilePage/>}/>
                             <Route path = '/create-profile' element = {<CreateProfilePage/>}/>
@@ -41,9 +43,8 @@ export default function PagesRoutes() {
                         <Route element = {<CheckAccount isJobSeeker = {false}/>}>
                             <Route path = '/create-company' element = {<CreateCompanyPage/>}/>
                             <Route path = '/companies' element = {<CompaniesPage/>}/>
-                            <Route path = '/companies/:companyID' element = {<CompanyPage/>}/>
                             <Route path = '/post-job/:companyID' element = {<JobFormPage/>}/>
-                            <Route path = '/jobs' element = {<JobsPage/>}/>
+                            <Route path = '/jobs' element = {<EmployerJobsPage/>}/>
                         </Route>
                     </Route>
 

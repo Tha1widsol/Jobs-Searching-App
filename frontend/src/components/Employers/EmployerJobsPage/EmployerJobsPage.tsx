@@ -2,13 +2,13 @@ import React,{useState,useEffect} from 'react'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {fetchJobs} from '../../Global/features/Employers/jobs/jobs'
 
-export default function JobsPage() {
+export default function EmployerJobsPage() {
   const dispatch = useAppDispatch()
   const jobs = useAppSelector(state => state.jobs)
   const [dropdown,setDropdown] = useState<number | null>(null)
 
   useEffect(() => {
-    dispatch(fetchJobs())
+    dispatch(fetchJobs('employer'))
   },[dispatch])
 
   return (
