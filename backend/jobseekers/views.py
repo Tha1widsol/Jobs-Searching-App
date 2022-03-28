@@ -1,8 +1,10 @@
-from rest_framework import status
+from rest_framework import status,generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser,FormParser
 from .models import *
+from employers.models import Job
+from employers.serializers import JobSerializer
 from .serializers import *
 
 # Create your views here.
@@ -44,7 +46,7 @@ class ProfileAPI(APIView):
         if profile.exists():
             serializer_class = ProfileSerializer(profile.first())
             return Response(serializer_class.data, status =  status.HTTP_200_OK)
-#
+
         return Response(status = status.HTTP_404_NOT_FOUND)
 
     def delete(self,request):
@@ -58,3 +60,13 @@ class ToggleProfileStatus(APIView):
         profile.isActive = not(profile.isActive)
         profile.save()
         return Response({'success':'Profile status has been changed'},status = status.HTTP_200_OK)
+
+class JobsListAPI(generics.ListAPIView):
+    serializer_class = JobSerializer
+
+    def get_queryset(self):
+        jobs = Job.objects.all()
+        if jobs.exists():
+            return jobs
+
+        return Response(status = status.HTTP_404_NOT_FOUND)
