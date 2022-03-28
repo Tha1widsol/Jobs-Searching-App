@@ -82,8 +82,8 @@ const initialState: JobsProps = {
 
 export const fetchJobs = createAsyncThunk(
     'user/fetchJobs',
-    async () => {
-        const response = await axios.get('/api/jobs',{
+    async (type: 'employer' | 'jobseeker') => {
+        const response = await axios.get(`/api/${type}/jobs`,{
             headers: {
                 Authorization: `Token ${token}`
             }
