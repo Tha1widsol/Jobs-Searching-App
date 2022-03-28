@@ -223,15 +223,25 @@ Icons styles
 Container styles
 ##################*/
 
-.Container{
+.Container,.featuredContainer{
     padding: 20px;
     border-style: groove;
     border-radius: 5px;
     margin-bottom: 20px;
 }
 
+.featuredContainer{
+  width: 350px;
+  margin-right: 25px;
+  box-shadow: 0 0 8px 0  rgba(0,0,0,0.5);
+}
+
 .listContainer{
-  max-height: 135px;
-  width: 180px;
+  height: 135px;
+  overflow: auto;
+}
+
+.containerText{
+  height: 100px; 
   overflow: auto;
 }
