@@ -1,9 +1,7 @@
-from codecs import lookup
-from rest_framework import status
+from rest_framework import status,generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser,FormParser
-from rest_framework import generics
 from .models import *
 from .serializers import *
 
