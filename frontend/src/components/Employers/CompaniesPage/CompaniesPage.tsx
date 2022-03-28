@@ -21,7 +21,7 @@ export default function CompaniesPage() {
   return (
     <div>
         <h1 className = 'title'>Companies</h1>
-        {companies.map((company, index: number) => {
+        {companies.map((company, index) => {
           return (
             <div className = 'Container' key = {index}>
               <section onMouseEnter = {() => setDropdown(index)} onMouseLeave = {() => setDropdown(null)}>
