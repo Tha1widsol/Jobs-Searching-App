@@ -1,7 +1,8 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {combineReducers} from "redux"
 import userReducer from './Auth/user'
-import ProfileReducer from './Jobseekers/profile'
+import ProfileReducer from './Jobseekers/profiles/profile'
+import ProfilesReducer from './Jobseekers/profiles/profiles'
 import successMsgReducer from './successMsg'
 import CompaniesReducer from './Employers/companies/companies'
 import CompanyReducer from './Employers/companies/company'
@@ -24,6 +25,7 @@ const reducers = combineReducers({
   user: userReducer,
   successMsg: successMsgReducer,
   profile: ProfileReducer,
+  profiles: ProfilesReducer,
   company: CompanyReducer,
   companies: CompaniesReducer, 
   jobs: JobsReducer,
