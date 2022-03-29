@@ -1,10 +1,10 @@
 import React,{useState} from 'react'
 import './css/Profile.css'
 import {useAppDispatch} from '../../Global/features/hooks';
-import {setToggleStatus} from '../../Global/features/Jobseekers/profile'
+import {setToggleStatus} from '../../Global/features/Jobseekers/profiles/profile'
 import {setMessage} from '../../Global/features/successMsg';
 import {useNavigate} from 'react-router-dom';
-import {ProfileProps} from '../../Global/features/Jobseekers/profile';
+import {ProfileProps} from '../../Global/features/Jobseekers/profiles/profile';
 import axios from 'axios'
 
 export default function Profile({userIsOnProfilePage = false, profile} : {userIsOnProfilePage?: boolean, profile: ProfileProps}) {
