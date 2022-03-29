@@ -2,6 +2,8 @@ from rest_framework import status,generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser,FormParser
+from jobseekers.models import Profile
+from jobseekers.serializers import ProfileSerializer
 from .models import *
 from .serializers import *
 
@@ -121,5 +123,15 @@ class JobsListAPI(generics.ListAPIView):
         jobs = Job.objects.filter(user = self.request.user)
         if jobs.exists():
             return jobs
+
+        return Response(status = status.HTTP_404_NOT_FOUND)
+
+class ProfilesListAPI(generics.ListAPIView):
+    serializer_class = ProfileSerializer
+        
+    def get_queryset(self):
+        profiles = Profile.objects.all()
+        if profiles.exists():
+            return profiles
 
         return Response(status = status.HTTP_404_NOT_FOUND)
