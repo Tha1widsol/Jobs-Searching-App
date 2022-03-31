@@ -23,7 +23,7 @@ export default function JobSeekersHomePage() {
                 <div className = 'containerDropdown'>
                   {dropdown === index ? 
                     <div className = 'containerDropdownContent'>
-                        <a href = {`jobs/${job.id}`}><button className = 'dropdownBtn'>View</button></a> 
+                        <a href = {`job/${job.id}`}><button className = 'dropdownBtn'>View</button></a> 
                         <button className = 'dropdownBtn'>Hide</button>
                         <button className = 'deleteNavBtn'>Report</button>
                     </div>
@@ -31,7 +31,7 @@ export default function JobSeekersHomePage() {
                 </div>
               </section>
 
-              <a href = {`/jobs/${job.id}`}><h2>{job.title}</h2></a>
+              <a href = {`/job/${job.id}`}><h2>{job.title}</h2></a>
               <a href = {`/companies/${job.company.id}`}><p>{job.company.name}</p></a>
               <p>{job.salary} a year</p>
               <hr className = 'mt-0-mb-4'/>
@@ -39,11 +39,11 @@ export default function JobSeekersHomePage() {
 
                  
               <label><h3>Skills required:</h3></label>
-                <div className = 'listContainer'>
+                <section className = 'listContainer'>
                     {job.skills.map((skill,index) => {
                         return (<li key = {index}>{skill.name}</li>)
                     })}
-                </div>
+                </section>
       
               <section style = {{textAlign:'center'}}>
                    <button>Apply</button>

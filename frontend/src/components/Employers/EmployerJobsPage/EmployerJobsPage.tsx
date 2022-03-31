@@ -38,7 +38,7 @@ export default function EmployerJobsPage() {
                 <p>{job.industry}</p>
                 <p>Applicants: {job.applicantsCount}</p>
                 <hr className = 'mt-0-mb-4'/>
-                <a href = {`/jobs/${job.id}`}><button>View</button></a>
+                <a href = {`/job/${job.id}`}><button>View</button></a>
                 {job.applicantsCount > 0 ? <a href = {`/applicants/${job.id}`}><button>View applicants</button></a> : null}
              </div>
            )

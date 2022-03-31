@@ -25,7 +25,7 @@ export default function PagesRoutes() {
                 <Routes>
                     <Route path = '/' element = {user.isLoggedIn && user.values?.isAnEmployer ? <EmployersHomePage/> : user.isLoggedIn && user.values?.isAnEmployer === false ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
                     <Route path = '/home' element = {user.isLoggedIn && user.values?.isAnEmployer ? <EmployersHomePage/> : user.isLoggedIn && user.values?.isAnEmployer === false ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
-                    <Route path = '/jobs/:jobID' element = {<JobPage/>}/>
+                    <Route path = '/job/:jobID' element = {<JobPage/>}/>
                 
                     <Route element = {<CheckLoggedIn checkLoggedIn = {false}/>}>
                         <Route path = '/register' element = {<RegisterPage/>}/>
