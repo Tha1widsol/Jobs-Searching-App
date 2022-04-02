@@ -3,7 +3,7 @@ import {BrowserRouter as Router,Routes,Route} from "react-router-dom"
 import PublicHomePage from '../public/PublicHomePage/PublicHomePage'
 import RegisterPage from '../public/RegisterPage/RegisterPage'
 import LoginPage from '../public/LoginPage/LoginPage'
-import CreateProfilePage from '../Jobseekers/ProfileFormPage/ProfileFormPage'
+import ProfileFormPage from '../Jobseekers/ProfileFormPage/ProfileFormPage'
 import {CheckLoggedIn,CheckAccount} from './ProtectedRoutes'
 import JobSeekersHomePage from '../Jobseekers/JobSeekersHomePage/JobSeekersHomePage';
 import EmployersHomePage from '../Employers/EmployersHomePage/EmployersHomePage';
@@ -37,7 +37,7 @@ export default function PagesRoutes() {
                     
                         <Route element = {<CheckAccount/>}>
                             <Route path = '/profile/:userID' element = {<ProfilePage/>}/>
-                            <Route path = '/create-profile' element = {<CreateProfilePage/>}/>
+                            <Route path = '/create-profile' element = {<ProfileFormPage/>}/>
                         </Route>
 
                         <Route element = {<CheckAccount isJobSeeker = {false}/>}>

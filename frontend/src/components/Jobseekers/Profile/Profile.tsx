@@ -6,6 +6,7 @@ import {setMessage} from '../../Global/features/successMsg';
 import {useNavigate} from 'react-router-dom';
 import {ProfileProps} from '../../Global/features/Jobseekers/profiles/profile';
 import axios from 'axios'
+import ProfileFormPage from '../ProfileFormPage/ProfileFormPage';
 
 export default function Profile({userIsOnProfilePage = false, profile} : {userIsOnProfilePage?: boolean, profile: ProfileProps}) {
     let navigate = useNavigate()
@@ -46,7 +47,7 @@ export default function Profile({userIsOnProfilePage = false, profile} : {userIs
                     {dropdown ? 
                     <div className = 'containerDropdownContent'>
                         {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
-                            <button className = 'dropdownBtn'>Edit</button>
+                            <button className = 'dropdownBtn' onClick = {() => navigate('/create-profile')} >Edit</button>
                             <button className = 'deleteNavBtn' onClick = {() => handleDeleteProfile()}>Delete</button>
                     </div>
 
