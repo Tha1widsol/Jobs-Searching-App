@@ -9,24 +9,25 @@ import {FileProps} from '../../Global/types/forms';
 import List from '../../Global/Forms/List';
 import axios from 'axios';
 import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile';
+import { profileEnd } from 'console';
 
-export default function CreateProfilePage() {
+export default function ProfileFormPage() {
     let navigate = useNavigate()
     const dispatch = useAppDispatch()
     const user = useAppSelector(state => state.user.values)
     const profile = useAppSelector(state => state.profile)
     const [currentTab,setCurrentTab] = useState(1)
     const [errors,setErrors] = useState<Array<string>>([])
-    const [firstName,setFirstName] = useState({value: '', isValid: true, errorMsg: 'First name is invalid'})
-    const [middleName,setMiddleName] = useState({value: '', isValid: true, errorMsg: 'Middle name is invalid'})
-    const [lastName,setLastName] = useState({value: '', isValid: true, errorMsg: 'Last name is invalid'})
-    const [phone,setPhone] = useState({value: '', isValid: true, errorMsg: 'Phone number is invalid'})
-    const [about,setAbout] = useState({value: '', isValid: true, currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
-    const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-    const [experience,setExperience] = useState({value: '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 450})
-    const [education,setEducation] = useState({value: 'No formal education'})
-    const [industry,setIndustry] = useState({value: 'Any'})
-    const [distance,setDistance] = useState({value: 'Any'})
+    const [firstName,setFirstName] = useState({value: profile.values?.firstName, isValid: true, errorMsg: 'First name is invalid'})
+    const [middleName,setMiddleName] = useState({value: profile.values?.middleName, isValid: true, errorMsg: 'Middle name is invalid'})
+    const [lastName,setLastName] = useState({value: profile.values?.lastName, isValid: true, errorMsg: 'Last name is invalid'})
+    const [phone,setPhone] = useState({value: profile.values?.phone, isValid: true, errorMsg: 'Phone number is invalid'})
+    const [about,setAbout] = useState({value: profile.values?.about, isValid: true, currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
+    const [skills,setSkills] = useState<ListProps>({value: profile.values?.skills.map(skill => skill.name), currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
+    const [experience,setExperience] = useState({value: profile.values?.experience, isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 450})
+    const [education,setEducation] = useState({value: profile.values?.education})
+    const [industry,setIndustry] = useState({value: profile.values?.industry})
+    const [distance,setDistance] = useState({value: profile.values?.distance})
     const [logo,setLogo] = useState<FileProps>({value: '',name:''})
     const [cv,setCV] = useState<FileProps>({value: '',name:''})
  
@@ -34,14 +35,7 @@ export default function CreateProfilePage() {
 
     useEffect(() => {
         dispatch(fetchProfile(user.id))
-        .then(response => {
-            if (response.meta.requestStatus === 'fulfilled')
-                navigate(`/profile/${user.id}`)
-
-            else console.clear()
-        })
-
-     },[dispatch,navigate,user.id])
+     },[dispatch,user.id])
 
     const validateForm = () => {
         let isValid = true
@@ -59,7 +53,7 @@ export default function CreateProfilePage() {
     
             else setFirstName(prev => {return {...prev,isValid: true}})
     
-            if (middleName.value !== '' && !middleName.value.match(letters)){
+            if (middleName.value !== '' && !middleName.value?.match(letters)){
                 setMiddleName(prev => {return {...prev,isValid: false}})
                 errors.push(middleName.errorMsg)
                 isValid = false
@@ -105,7 +99,7 @@ export default function CreateProfilePage() {
               break
 
           case 3:
-              if (experience.value.length && experience.value.length < 100){
+              if (experience.value?.length && experience.value.length < 100){
                     setExperience(prev => {return {...prev, isValid: false}})
                     errors.push(experience.errorMsg)
                     isValid = false
@@ -149,7 +143,7 @@ export default function CreateProfilePage() {
         let form = new FormData();
 
         form.append('firstName',firstName.value)
-        form.append('middleName',middleName.value)
+        if (middleName.value) form.append('middleName',middleName?.value)
         form.append('lastName',lastName.value)
         form.append('phone',phone.value)
         form.append('about',about.value)
@@ -161,7 +155,7 @@ export default function CreateProfilePage() {
            form.append('logo',logo.value,logo.name)
         
         form.append('skills',skills.value.toString())
-        form.append('experience',experience.value)
+        if (experience.value) form.append('experience',experience.value)
         form.append('education',education.value)
         form.append('industry',industry.value)
         form.append('distance',distance.value)
@@ -200,19 +194,19 @@ export default function CreateProfilePage() {
                     <Errors errors = {errors}/>
 
                     <label htmlFor = 'firstName'><h3>First name:</h3></label>
-                    <input id = 'firstName' className = {!firstName.isValid ? 'inputError' : ''} onChange = {e => setFirstName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {handleFixName} placeholder = 'First name...' autoComplete = 'on' required/>
+                    <input id = 'firstName' defaultValue = {profile.values?.firstName} className = {!firstName.isValid ? 'inputError' : ''} onChange = {e => setFirstName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {handleFixName} placeholder = 'First name...' autoComplete = 'on' required/>
 
                     <label htmlFor = 'middleName'><h3>Middle name (Optional):</h3></label>
-                    <input id = 'middleName' className = {!middleName.isValid ? 'inputError' : ''} onChange = {e => setMiddleName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Middle name...' onKeyUp = {handleFixName} autoComplete = 'on'/>
+                    <input id = 'middleName' defaultValue = {profile.values?.middleName} className = {!middleName.isValid ? 'inputError' : ''} onChange = {e => setMiddleName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Middle name...' onKeyUp = {handleFixName} autoComplete = 'on'/>
 
                     <label htmlFor = 'lastName'><h3>Last name:</h3></label>
-                    <input id = 'lastName' className = {!lastName.isValid ? 'inputError' : ''}  onChange = {e => setLastName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Last name...' onKeyUp = {handleFixName} autoComplete = 'on' required/>
+                    <input id = 'lastName' defaultValue = {profile.values?.lastName} className = {!lastName.isValid ? 'inputError' : ''}  onChange = {e => setLastName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Last name...' onKeyUp = {handleFixName} autoComplete = 'on' required/>
 
                     <label htmlFor = 'phone'><h3>Phone number: (Only provided to employers)</h3></label>
-                    <input id = 'phone' type = 'tel' className = {!phone.isValid ? 'inputError' : ''} onChange = {e => setPhone(prev => {return {...prev, value: e.target.value}})} placeholder = 'Phone number...' autoComplete = 'on' maxLength = {15} required/>
+                    <input id = 'phone'  defaultValue = {profile.values?.phone} type = 'tel' className = {!phone.isValid ? 'inputError' : ''} onChange = {e => setPhone(prev => {return {...prev, value: e.target.value}})} placeholder = 'Phone number...' autoComplete = 'on' maxLength = {15} required/>
 
                     <label htmlFor = 'about' ><h3>About (Characters remaining: {about.maxLength - about.currentLength}):</h3></label>
-                    <textarea id = 'about' className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
+                    <textarea id = 'about' defaultValue = {profile.values?.about} className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
 
                     <label htmlFor = 'logo'><h3>Profile logo (Optional):</h3></label>
                     <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setLogo({value: e.target.files[0], name: e.target.files[0].name})}}/>
