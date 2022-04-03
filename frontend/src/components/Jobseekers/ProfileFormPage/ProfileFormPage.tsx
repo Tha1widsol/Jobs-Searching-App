@@ -9,9 +9,8 @@ import {FileProps} from '../../Global/types/forms';
 import List from '../../Global/Forms/List';
 import axios from 'axios';
 import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile';
-import { profileEnd } from 'console';
 
-export default function ProfileFormPage() {
+export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
     let navigate = useNavigate()
     const dispatch = useAppDispatch()
     const user = useAppSelector(state => state.user.values)
@@ -22,10 +21,10 @@ export default function ProfileFormPage() {
     const [middleName,setMiddleName] = useState({value: profile.values?.middleName, isValid: true, errorMsg: 'Middle name is invalid'})
     const [lastName,setLastName] = useState({value: profile.values?.lastName, isValid: true, errorMsg: 'Last name is invalid'})
     const [phone,setPhone] = useState({value: profile.values?.phone, isValid: true, errorMsg: 'Phone number is invalid'})
-    const [about,setAbout] = useState({value: profile.values?.about, isValid: true, currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
+    const [about,setAbout] = useState({value: profile.values?.about, isValid: true, currentLength: Number(profile?.values?.about?.length), maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
     const [skills,setSkills] = useState<ListProps>({value: profile.values?.skills.map(skill => skill.name), currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-    const [experience,setExperience] = useState({value: profile.values?.experience, isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 450})
-    const [education,setEducation] = useState({value: profile.values?.education})
+    const [experience,setExperience] = useState({value: profile.values?.experience, isValid: true, errorMsg: 'Experience section is invalid',currentLength: Number(profile?.values?.experience?.length), maxLength: 450})
+    const [education,setEducation] = useState({value: profile.values.education ? profile.values.education : 'No formal education'})
     const [industry,setIndustry] = useState({value: profile.values?.industry})
     const [distance,setDistance] = useState({value: profile.values?.distance})
     const [logo,setLogo] = useState<FileProps>({value: '',name:''})
@@ -160,22 +159,40 @@ export default function ProfileFormPage() {
         form.append('industry',industry.value)
         form.append('distance',distance.value)
 
-        axios.post('/api/profile',form,requestOptions)
-        .then(response => {
-            if (response.status === 201){
-                dispatch(setMessage('Profile is successfully made'))
-                setTimeout(() => {
-                    dispatch(setMessage(''))
-                },2000)
+        if (edit){
+            axios.put('/api/profile',form,requestOptions)
+            .then(response => {
+                 if (response.status === 200){
+                    dispatch(setMessage('Profile is successfully saved'))
+                    setTimeout(() => {
+                        dispatch(setMessage(''))
+                    },2000)
+                }
                 navigate(`/profile/${user.id}`)
-            }
-           
-        })
+            })
 
-        .catch(error => {
-            if (error.response.status === 400) setErrors(['Something went wrong'])
-        })
-      
+            .catch(error => {
+                if (error.response.status === 400) setErrors(['Something went wrong'])
+            })
+        }
+        
+        else{
+            axios.post('/api/profile',form,requestOptions)
+            .then(response => {
+                if (response.status === 201){
+                    dispatch(setMessage('Profile is successfully saved'))
+                    setTimeout(() => {
+                        dispatch(setMessage(''))
+                    },2000)
+                }
+                
+            })
+
+            .catch(error => {
+                if (error.response.status === 400) setErrors(['Something went wrong'])
+            })
+        }
+
     }
 
     return (
@@ -210,6 +227,7 @@ export default function ProfileFormPage() {
 
                     <label htmlFor = 'logo'><h3>Profile logo (Optional):</h3></label>
                     <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setLogo({value: e.target.files[0], name: e.target.files[0].name})}}/>
+                    {profile.values.logo ? <p>Current logo: {profile.values.logo}</p> : null} 
 
                 </div>
 
@@ -233,7 +251,7 @@ export default function ProfileFormPage() {
                     <h1 className = 'title'>Work Experience</h1> 
                     <Errors errors = {errors}/>
                     <label htmlFor = 'experience'><h3>Work Experience (Optional) Characters remaining: {experience.maxLength - experience.currentLength}</h3></label>
-                    <textarea id = 'experience' className = {!experience.isValid ? 'inputError' : ''}   style = {{height: '200px'}} onChange = {e => setExperience(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Work experience...' autoComplete = 'on' maxLength = {experience.maxLength}/>
+                    <textarea id = 'experience' defaultValue = {profile.values?.experience} className = {!experience.isValid ? 'inputError' : ''}   style = {{height: '200px'}} onChange = {e => setExperience(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Work experience...' autoComplete = 'on' maxLength = {experience.maxLength}/>
                 </div>
 
                 <div className = {`tab ${currentTab === 4 ? 'show' : 'hide'}`}>
@@ -241,9 +259,8 @@ export default function ProfileFormPage() {
                     <Errors errors = {errors}/>
 
                     <label htmlFor = 'education'><h3>Highest level of education:</h3></label>
-                    <select id = 'education' onChange = {e => setEducation({value: e.target.value})} required>
+                    <select id = 'education' onChange = {e => setEducation({value: e.target.value})} defaultValue = {profile.values?.education} required>
                         <option value = 'No formal education'>No formal education</option>
-                        <option value = 'Primary education'>Primary education</option>
                         <option value = 'Secondary education'>Secondary education or high school</option>
                         <option value = 'GED'>GED</option>
                         <option value = 'Vocational qualification'>Vocational qualification</option>
@@ -258,7 +275,7 @@ export default function ProfileFormPage() {
                     <h1 className = 'title'>Preferences</h1> 
                     <Errors errors = {errors}/>
                     <label htmlFor = 'industry'><h3>Industry: (What job industry are you looking to work in ?)</h3></label>
-                    <select id = 'industry' onChange = {e => setIndustry({value: e.target.value})} autoComplete = 'on'>
+                    <select id = 'industry' onChange = {e => setIndustry({value: e.target.value})} defaultValue = {profile.values?.industry} autoComplete = 'on'>
                         <option value = 'Any'>Any</option>
                         <option value = 'Beauty'>Beauty</option>
                         <option value = 'Construction'>Construction</option>
@@ -267,9 +284,10 @@ export default function ProfileFormPage() {
                     
                     <label htmlFor = 'cv'><h3>Resume / CV (Optional) (Please submit only .pdf, .doc or .docx files):</h3></label>
                     <input type = 'file' id = 'cv' accept = '.pdf,.doc,.docx' onChange = {e => {if (!e.target.files) return; setCV({value: e.target.files[0],name: e.target.files[0].name})}} autoComplete = 'on'/>
+                    {profile.values.cv ? <p>Current CV: {profile.values.cv}</p> : null} 
 
                     <label htmlFor = 'distance'><h3>Job within:</h3></label>
-                    <select id = 'distance' onChange = {e => setDistance({value: e.target.value})} autoComplete = 'on'>
+                    <select id = 'distance' onChange = {e => setDistance({value: e.target.value})} defaultValue = {profile.values?.distance} autoComplete = 'on'>
                         <option value = 'Any'>Any</option>
                         <option value = '10'>10 miles</option>
                         <option value = '20'>20 miles</option>
