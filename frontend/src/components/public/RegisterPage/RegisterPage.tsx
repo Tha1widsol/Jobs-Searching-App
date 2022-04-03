@@ -103,7 +103,7 @@ export default function RegisterPage() {
             const data = response.data
             localStorage.setItem('token',data.token)
             dispatch(login())
-            choice === 'jobseeker' ? navigate('/create-profile') : navigate('/create-company')
+            choice === 'jobseeker' ? navigate('/profile/create') : navigate('/create-company')
             window.location.reload()
         })
 

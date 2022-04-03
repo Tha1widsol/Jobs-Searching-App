@@ -20,7 +20,7 @@ export default function ProfilePage() {
           navigate(`/profile/${user.id}`)
           
       else if (response.meta.requestStatus === 'rejected') 
-          navigate('/create-profile')
+          navigate('/profile/create')
     })
     
  },[dispatch,navigate,userID,profile.values.user.id,user.id])
