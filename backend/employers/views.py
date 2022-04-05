@@ -11,10 +11,10 @@ from .serializers import *
 
 class CompanyAPI(APIView):
     parser_classes = (MultiPartParser, FormParser)
+    serializer_class = CompanySerializer
 
     def post(self,request):
-        serializer_class = CompanySerializer
-        serializer = serializer_class(data = request.data)
+        serializer = self.serializer_class(data = request.data)
 
         if serializer.is_valid():
             employer = serializer.save()
@@ -34,6 +34,22 @@ class CompanyAPI(APIView):
             return Response(serializer_class.data, status =  status.HTTP_200_OK)
 
         return Response(status = status.HTTP_404_NOT_FOUND)
+    
+    def put(self,request):
+        lookup_url_kwarg ='id'
+        id = request.GET.get(lookup_url_kwarg)
+        company = Company.objects.get(id = id)
+        serializer = self.serializer_class(data = request.data, instance = company)
+
+        if serializer.is_valid():
+            company = serializer.save()
+            company.user = request.user
+            company.save()
+
+            return Response(status = status.HTTP_200_OK)
+
+        return Response(status = status.HTTP_400_BAD_REQUEST) 
+
 
 class CompaniesListAPI(generics.ListAPIView):
     serializer_class = CompanySerializer
