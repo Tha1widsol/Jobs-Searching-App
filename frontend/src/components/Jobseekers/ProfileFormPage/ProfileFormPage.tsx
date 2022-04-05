@@ -33,6 +33,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
     const maxTabs = document.querySelectorAll('.tab').length
 
     useEffect(() => {
+        if (!edit) return
         dispatch(fetchProfile(user.id))
      },[dispatch,user.id])
 
