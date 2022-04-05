@@ -29,7 +29,7 @@ export default function CompaniesPage() {
                 <div className = 'containerDropdown'>
                   {dropdown === index ? 
                     <div className = 'containerDropdownContent'>
-                        <button className = 'dropdownBtn'>Edit</button>
+                        <a href = {`/edit-company/${company.id}`}><button className = 'dropdownBtn'>Edit</button></a>
                         <button className = 'dropdownBtn'>View all jobs</button>
                         <button className = 'deleteNavBtn'>Delete</button>
                     </div>
