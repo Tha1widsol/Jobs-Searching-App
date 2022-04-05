@@ -1,23 +1,31 @@
-import React,{useState} from 'react'
-import {useNavigate} from "react-router-dom";
+import React,{useState,useEffect} from 'react'
+import {useNavigate,useParams} from 'react-router-dom';
 import Errors from '../../Global/messages/Errors'
-import {useAppDispatch} from '../../Global/features/hooks';
+import {useAppDispatch, useAppSelector} from '../../Global/features/hooks';
 import {FileProps} from '../../Global/types/forms';
+import {setMessage} from '../../Global/features/successMsg';
+import {fetchCompany} from '../../Global/features/Employers/companies/company';
 import axios from 'axios'
-import { setMessage } from '../../Global/features/successMsg';
 
-export default function CreateCompanyPage() {
+export default function CompanyFormPage({edit = false}: {edit?: boolean}) {
     let navigate = useNavigate()
     const dispatch = useAppDispatch()
+    const company = useAppSelector(state => state.company)
     const [errors,setErrors] = useState<Array<string>>([])
-    const [name,setName] = useState({value: '',isValid: true, errorMsg: 'Name is invalid'})
-    const [email,setEmail] = useState({value: '',isValid: true, errorMsg: 'Email is invalid'})
-    const [about,setAbout] = useState({value:'', isValid: true,currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
-    const [phone,setPhone] = useState({value: '',isValid: true, errorMsg: 'Phone number is invalid'})
-    const [industry,setIndustry] = useState({value: 'Any'})
-    const [logo,setLogo] = useState<FileProps>({value: '',name:''})
-    const [banner,setBanner] = useState<FileProps>({value: '',name:''})
-    const [website,setWebsite] = useState({value: '',isValid: true, errorMsg: 'Website URL is invalid'})
+    const [name,setName] = useState({value: edit ? company.values?.name : '', isValid: true, errorMsg: 'Name is invalid'})
+    const [email,setEmail] = useState({value: edit ? company.values?.email : '', isValid: true, errorMsg: 'Email is invalid'})
+    const [about,setAbout] = useState({value: edit ? company.values?.about : '', isValid: true,currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
+    const [phone,setPhone] = useState({value: edit ? company.values?.phone : '', isValid: true, errorMsg: 'Phone number is invalid'})
+    const [industry,setIndustry] = useState({value: edit ? company.values?.industry : ''})
+    const [logo,setLogo] = useState<FileProps>({value: edit && company.values.logo ? company.values.logo : '',name: ''})
+    const [banner,setBanner] = useState<FileProps>({value: edit && company.values.banner ? company.values.banner : '',name:''})
+    const [website,setWebsite] = useState({value: edit ? company.values?.website : '', isValid: true, errorMsg: 'Website URL is invalid'})
+    const {companyID} = useParams()
+
+    useEffect(() => {
+        if (!edit) return
+        dispatch(fetchCompany(Number(companyID)))
+    },[companyID, dispatch])
 
     const validateForm = () => {
         let isValid = true
@@ -59,7 +67,7 @@ export default function CreateCompanyPage() {
 
         else setPhone(prev => {return {...prev, isValid: true}})
 
-        if (!website.value.match(urlregex) && website.value !== ''){
+        if (!website.value?.match(urlregex) && website.value !== ''){
             setWebsite(prev => {return {...prev,isValid: false}})
             errors.push(website.errorMsg)
             isValid = false
@@ -94,7 +102,7 @@ export default function CreateCompanyPage() {
         form.append('about',about.value)
         form.append('phone',phone.value)
         form.append('industry',industry.value)
-        form.append('website',website.value)
+        if (website.value) form.append('website',website.value)
 
         if (logo.value !== '') form.append('logo',logo.value,logo.name)
         if (banner.value !== '') form.append('banner',banner.value,banner.name)
@@ -124,19 +132,19 @@ export default function CreateCompanyPage() {
             <Errors errors = {errors}/>
             <hr className = 'mt-0-mb-4'/>
             <label htmlFor = 'companyName'><h3>Company Name:</h3></label>
-            <input id = 'companyName' className = {!name.isValid ? 'inputError' : ''} onChange = {e => setName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {e => e.currentTarget.value = e.currentTarget.value.charAt(0).toUpperCase() + e.currentTarget.value.slice(1)} placeholder = 'Company name...' autoComplete = 'on'/>
+            <input id = 'companyName' key = {company.values?.name} defaultValue = {edit ? company.values?.name : ''} className = {!name.isValid ? 'inputError' : ''} onChange = {e => setName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {e => e.currentTarget.value = e.currentTarget.value.charAt(0).toUpperCase() + e.currentTarget.value.slice(1)} placeholder = 'Company name...' autoComplete = 'on'/>
 
             <label htmlFor = 'companyAbout' ><h3>About (Characters remaining: {about.maxLength - about.currentLength}):</h3></label>
-            <textarea id = 'companyAbout' className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about your company...' maxLength = {about.maxLength} style = {{height:'100px'}}/>
+            <textarea id = 'companyAbout' key = {company.values?.about} defaultValue = {edit ? company.values?.about: ''} className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about your company...' maxLength = {about.maxLength} style = {{height:'100px'}}/>
 
             <label htmlFor = 'companyEmail'><h3>Company Email address:</h3></label>
-            <input type = 'email' id = 'companyEmail' className = {!email.isValid ? 'inputError' : ''} onChange = {e => setEmail(prev => {return {...prev, value: e.target.value}})} placeholder = 'E.g 123@example.com' autoComplete = 'on'/>
+            <input type = 'email' key = {company.values?.email} defaultValue = {edit ? company.values?.email: ''} id = 'companyEmail' className = {!email.isValid ? 'inputError' : ''} onChange = {e => setEmail(prev => {return {...prev, value: e.target.value}})} placeholder = 'E.g 123@example.com' autoComplete = 'on'/>
 
             <label htmlFor = 'companyPhone'><h3>Company phone number:</h3></label>
-            <input id = 'companyPhone' type = 'tel' className = {!phone.isValid ? 'inputError' : ''} onChange = {e => setPhone(prev => {return {...prev, value: e.target.value}})} placeholder = 'Phone number...' autoComplete = 'on' maxLength = {15}/>
+            <input id = 'companyPhone'  key = {company.values?.phone} defaultValue = {edit ? company.values?.phone: ''} type = 'tel' className = {!phone.isValid ? 'inputError' : ''} onChange = {e => setPhone(prev => {return {...prev, value: e.target.value}})} placeholder = 'Phone number...' autoComplete = 'on' maxLength = {15}/>
 
             <label htmlFor = 'companyIndustry'><h3>Industry: (What job industry is your company associated with?)</h3></label>
-            <select id = 'companyIndustry' onChange = {e => setIndustry({value: e.target.value})} autoComplete = 'on'>
+            <select id = 'companyIndustry' key = {company.values?.industry} defaultValue = {edit ? company.values?.industry: 'Any'} onChange = {e => setIndustry({value: e.target.value})} autoComplete = 'on'>
                 <option value = 'Any'>Any</option>
                 <option value = 'Beauty'>Beauty</option>
                 <option value = 'Construction'>Construction</option>
@@ -145,12 +153,14 @@ export default function CreateCompanyPage() {
 
             <label htmlFor = 'companyLogo'><h3>Logo (Optional):</h3></label>
             <input id = 'companyLogo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e  => {if (!e.target.files) return; setLogo({value: e.target.files[0], name: e.target.files[0].name})}}/>
+            {company.values.logo && edit ? <p>Current logo: {company.values.logo}</p> : null} 
 
             <label htmlFor = 'companyBanner'><h3>Banner (Optional):</h3></label>
-            <input id = 'companyBanner' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setBanner({value: e.target.files[0], name: e.target.files[0].name})}}/>
+            <input id = 'companyBanner' key = {company.values?.banner} type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setBanner({value: e.target.files[0], name: e.target.files[0].name})}}/>
+            {company.values.banner && edit? <p>Current banner: {company.values.banner}</p> : null}
 
             <label htmlFor = 'companyWebsite'><h3>Website (Optional):</h3></label>
-            <input id = 'companyWebsite' className = {!website.isValid ? 'inputError' : ''} type = 'url' onChange = {e => setWebsite(prev => {return {...prev, value: e.target.value}})} placeholder = 'Website link...' autoComplete = 'on'/>
+            <input id = 'companyWebsite' key = {company.values?.website} defaultValue = {edit ? company.values?.website: ''} className = {!website.isValid ? 'inputError' : ''} type = 'url' onChange = {e => setWebsite(prev => {return {...prev, value: e.target.value}})} placeholder = 'Website link...' autoComplete = 'on'/>
 
             <button type = 'submit' id = 'submit'>Submit</button>
         </form>
