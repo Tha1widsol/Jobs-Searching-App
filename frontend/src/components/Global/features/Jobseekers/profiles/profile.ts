@@ -1,8 +1,7 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
-import axios from 'axios'
-import {UserProps} from '../../Auth/user'
+import {UserProps,user} from '../../Auth/user'
 import {StatusProps} from '../../../types/status'
-import {user} from '../../Auth/user'
+import axios from 'axios'
 
 const token = localStorage.getItem('token')
 
