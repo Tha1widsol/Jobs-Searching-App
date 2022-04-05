@@ -7,7 +7,7 @@ import ProfileFormPage from '../Jobseekers/ProfileFormPage/ProfileFormPage'
 import {CheckLoggedIn,CheckAccount} from './ProtectedRoutes'
 import JobSeekersHomePage from '../Jobseekers/JobSeekersHomePage/JobSeekersHomePage';
 import EmployersHomePage from '../Employers/EmployersHomePage/EmployersHomePage';
-import CreateCompanyPage from '../Employers/CompanyFormPage/CompanyFormPage'
+import CompanyFormPage from '../Employers/CompanyFormPage/CompanyFormPage'
 import CompaniesPage from '../Employers/CompaniesPage/CompaniesPage'
 import {useAppSelector} from './features/hooks'
 import ProfilePage from '../Jobseekers/ProfilePage/ProfilePage'
@@ -42,7 +42,8 @@ export default function PagesRoutes() {
                         </Route>
 
                         <Route element = {<CheckAccount isJobSeeker = {false}/>}>
-                            <Route path = '/create-company' element = {<CreateCompanyPage/>}/>
+                            <Route path = '/create-company' element = {<CompanyFormPage/>}/>
+                            <Route path = '/edit-company/:companyID' element = {<CompanyFormPage edit = {true}/>}/>
                             <Route path = '/companies' element = {<CompaniesPage/>}/>
                             <Route path = '/post-job/:companyID' element = {<JobFormPage/>}/>
                             <Route path = '/jobs' element = {<EmployerJobsPage/>}/>
