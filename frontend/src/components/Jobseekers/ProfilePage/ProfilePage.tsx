@@ -20,16 +20,21 @@ export default function ProfilePage() {
           navigate(`/profile/${user.id}`)
           
       else if (response.meta.requestStatus === 'rejected') 
-          navigate('/profile/create')
+          navigate('/create-profile')
     })
     
  },[dispatch,navigate,userID,profile.values.user.id,user.id])
 
   return (
   <div> 
-    <label><p id = 'status'>Status:</p></label>
-    <div className = {profile.values.isActive ? 'public' : 'private'}></div>
-    <Profile profile = {profile} userIsOnProfilePage = {true}/>
+    {!user.isAnEmployer ?  
+    <div>
+        <label><p id = 'status'>Status:</p></label>
+        <div className = {profile.values.isActive ? 'public' : 'private'}/>
+    </div>
+    : null}
+
+    <Profile profile = {profile}/>
   </div>
   
   )
