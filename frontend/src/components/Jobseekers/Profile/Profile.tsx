@@ -1,15 +1,16 @@
 import React,{useState} from 'react'
 import './css/Profile.css'
-import {useAppDispatch} from '../../Global/features/hooks';
+import {useAppDispatch, useAppSelector} from '../../Global/features/hooks';
 import {setToggleStatus} from '../../Global/features/Jobseekers/profiles/profile'
 import {setMessage} from '../../Global/features/successMsg';
 import {useNavigate} from 'react-router-dom';
 import {ProfileProps} from '../../Global/features/Jobseekers/profiles/profile';
 import axios from 'axios'
 
-export default function Profile({userIsOnProfilePage = false, profile} : {userIsOnProfilePage?: boolean, profile: ProfileProps}) {
+export default function Profile({profile} : {profile: ProfileProps}) {
     let navigate = useNavigate()
     const token = localStorage.getItem('token')
+    const user = useAppSelector(state => state.user.values)
     const [dropdown,setDropdown] = useState(false)
     const dispatch = useAppDispatch()
 
@@ -39,14 +40,14 @@ export default function Profile({userIsOnProfilePage = false, profile} : {userIs
 
   return (
     <div id = 'profileContainer'>
-        {userIsOnProfilePage ? 
+        {!user.isAnEmployer ? 
         <section onMouseEnter = {() => setDropdown(true)} onMouseLeave = {() => setDropdown(false)}>
-            <div className = 'kebabMenuIcon'/>
+            {!user.isAnEmployer ? <div className = 'kebabMenuIcon'/> : null}
                 <div className = 'containerDropdown'>
                     {dropdown ? 
                     <div className = 'containerDropdownContent'>
                         {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
-                            <button className = 'dropdownBtn' onClick = {() => navigate('/profile/edit')} >Edit</button>
+                            <button className = 'dropdownBtn' onClick = {() => navigate('/edit-profile')} >Edit</button>
                             <button className = 'deleteNavBtn' onClick = {() => handleDeleteProfile()}>Delete</button>
                     </div>
 
