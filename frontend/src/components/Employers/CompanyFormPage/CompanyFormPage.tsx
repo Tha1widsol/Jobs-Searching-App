@@ -25,7 +25,7 @@ export default function CompanyFormPage({edit = false}: {edit?: boolean}) {
     useEffect(() => {
         if (!edit) return
         dispatch(fetchCompany(Number(companyID)))
-    },[companyID, dispatch])
+    },[companyID, dispatch, edit])
 
     const validateForm = () => {
         let isValid = true
@@ -107,27 +107,47 @@ export default function CompanyFormPage({edit = false}: {edit?: boolean}) {
         if (logo.value !== '') form.append('logo',logo.value,logo.name)
         if (banner.value !== '') form.append('banner',banner.value,banner.name)
 
-        axios.post('/api/company',form,requestOptions)
-        .then(response => {
-            if (response.status === 201){
-                dispatch(setMessage('Company is successfully added'))
-                setTimeout(() => {
-                    dispatch(setMessage(''))
-                },2000)
-                navigate('/companies')
-            }
-        })
+        if (edit){
+            axios.put(`/api/company?id=${companyID}`,form,requestOptions)
+            .then(response => {
+                if (response.status === 200){
+                    dispatch(setMessage('Company is successfully saved'))
+                    setTimeout(() => {
+                        dispatch(setMessage(''))
+                    },2000)
+                    window.scrollTo(0, 0)
+                    navigate(`/company/${companyID}`)
+                }
+            })
 
-        .catch(error => {
-            if (error.response.status === 400) setErrors(['Something went wrong'])
-        })
+            .catch(error => {
+                if (error.response.status === 400) setErrors(['Something went wrong'])
+            })
+        }
 
+        else{
+            axios.post('/api/company',form,requestOptions)
+            .then(response => {
+                if (response.status === 201){
+                    dispatch(setMessage('Company is successfully saved'))
+                    setTimeout(() => {
+                        dispatch(setMessage(''))
+                    },2000)
+                    navigate('/companies')
+                }
+            })
+    
+            .catch(error => {
+                if (error.response.status === 400) setErrors(['Something went wrong'])
+            })
+    
+        }
         
     }
 
   return (
     <div>
-        <h1 className = 'title'>Create Company</h1>
+        <h1 className = 'title'>{edit ? 'Edit Company' : 'Create Company'}</h1>
         <form onSubmit = {handleSubmitForm} noValidate>  
             <Errors errors = {errors}/>
             <hr className = 'mt-0-mb-4'/>
