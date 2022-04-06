@@ -23,7 +23,7 @@ export default function CompanyPage() {
               <div className = 'containerDropdown'>
                 {dropdown ? 
                   <div className = 'containerDropdownContent'>
-                      <button className = 'dropdownBtn'>Edit</button>
+                      <a href = {`/edit-company/${company.values?.id}`}><button className = 'dropdownBtn'>Edit</button></a>
                       <button className = 'deleteNavBtn'>Delete</button>
                   </div>
               : null}
