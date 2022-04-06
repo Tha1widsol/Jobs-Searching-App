@@ -35,7 +35,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
     useEffect(() => {
         if (!edit) return
         dispatch(fetchProfile(user.id))
-     },[dispatch,user.id])
+     },[dispatch, user.id, edit])
 
     const validateForm = () => {
         let isValid = true
@@ -169,7 +169,6 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                         dispatch(setMessage(''))
                     },2000)
                 }
-                navigate(`/profile/${user.id}`)
             })
 
             .catch(error => {
@@ -185,6 +184,8 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                     setTimeout(() => {
                         dispatch(setMessage(''))
                     },2000)
+
+                    
                 }
                 
             })
@@ -194,6 +195,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
             })
         }
 
+        navigate(`/profile/${user.id}`)
     }
 
     return (
