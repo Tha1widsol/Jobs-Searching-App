@@ -49,7 +49,7 @@ export default function CompaniesPage() {
               <hr className = 'mt-0-mb-4'/>
 
               <section style = {{display: 'flex'}}>
-                <a href = {`/companies/${company.id}`}><button>View</button></a>
+                <a href = {`/company/${company.id}`}><button>View</button></a>
                 <a href = {`/post-job/${company.id}`}><button>Post job</button></a> 
               </section>
             </div>
