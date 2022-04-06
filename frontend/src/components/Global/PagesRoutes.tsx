@@ -33,12 +33,12 @@ export default function PagesRoutes() {
                     </Route>
 
                     <Route element = {<CheckLoggedIn/>}>
-                    <Route path = '/companies/:companyID' element = {<CompanyPage/>}/>
-                    
+                        <Route path = '/company/:companyID' element = {<CompanyPage/>}/>
+                        <Route path = '/profile/:userID' element = {<ProfilePage/>}/>
+
                         <Route element = {<CheckAccount/>}>
-                            <Route path = '/profile/:userID' element = {<ProfilePage/>}/>
-                            <Route path = '/profile/create' element = {<ProfileFormPage/>}/>
-                            <Route path = '/profile/edit' element = {<ProfileFormPage edit = {true}/>}/>
+                            <Route path = '/create-profile' element = {<ProfileFormPage/>}/>
+                            <Route path = '/edit-profile' element = {<ProfileFormPage edit = {true}/>}/>
                         </Route>
 
                         <Route element = {<CheckAccount isJobSeeker = {false}/>}>
