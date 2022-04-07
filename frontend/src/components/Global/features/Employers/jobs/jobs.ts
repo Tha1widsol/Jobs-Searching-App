@@ -1,10 +1,7 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
-import {user} from '../../Auth/user'
+import {user,UserProps,token} from '../../Auth/user'
 import {StatusProps} from '../../../types/status'
-import {UserProps} from '../../Auth/user'
 import axios from 'axios'
-
-const token = localStorage.getItem('token')
 
 interface JobsProps extends StatusProps{
     values: [{

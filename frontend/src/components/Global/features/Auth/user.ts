@@ -2,7 +2,7 @@ import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import axios from 'axios'
 import storage from 'redux-persist/lib/storage'
 
-const token = localStorage.getItem('token')
+export const token = localStorage.getItem('token')
 
 export interface UserProps{
     id: number

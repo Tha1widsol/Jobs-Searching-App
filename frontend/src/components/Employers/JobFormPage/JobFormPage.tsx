@@ -2,17 +2,17 @@ import React,{useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import Errors from '../../Global/messages/Errors'
 import {ListProps} from '../../Global/types/forms';
-import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
+import {useAppDispatch} from '../../Global/features/hooks'
 import {setMessage} from '../../Global/features/successMsg';
 import {getcurrentDate} from '../../Global/formFunctions';
 import {capitalizeFirstCharacter} from '../../Global/formFunctions';
 import List from '../../Global/Forms/List';
+import {token} from '../../Global/features/Auth/user';
 import axios from 'axios';
 
 export default function JobFormPage() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const user = useAppSelector(state => state.user)
   const [currentTab,setCurrentTab] = useState(1)
   const [errors,setErrors] = useState<Array<string>>([])
   const [title,setTitle] = useState({value: '', isValid: true, errorMsg: 'Title is invalid', lengthErrorMsg: 'Length must be 60 characters or shorter'})
@@ -161,10 +161,8 @@ const validateForm = () => {
 
 function handleSubmitForm(e: React.SyntheticEvent){
   e.preventDefault()
-  const token = localStorage.getItem('token')
-  
-  if(!validateForm()) return
 
+  if(!validateForm()) return
   const requestOptions = {
     headers: {'Content-Type': 'multipart/form-data', Authorization:`Token ${token}`}
   }

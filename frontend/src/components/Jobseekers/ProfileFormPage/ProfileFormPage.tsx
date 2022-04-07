@@ -4,10 +4,10 @@ import Errors from '../../Global/messages/Errors'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {setMessage} from '../../Global/features/successMsg';
 import {handleFixName} from '../../Global/formFunctions';
-import {ListProps} from '../../Global/types/forms';
-import {FileProps} from '../../Global/types/forms';
+import {ListProps,FileProps} from '../../Global/types/forms';
 import List from '../../Global/Forms/List';
 import axios from 'axios';
+import {token} from '../../Global/features/Auth/user';
 import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile';
 
 export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
@@ -132,10 +132,8 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
 
     function handleSubmitForm(e: React.SyntheticEvent){
         e.preventDefault()
-        const token = localStorage.getItem('token')
 
         if (!validateForm()) return
-
         const requestOptions = {
             headers: {'Content-Type': 'multipart/form-data', Authorization:`Token ${token}`}
         }

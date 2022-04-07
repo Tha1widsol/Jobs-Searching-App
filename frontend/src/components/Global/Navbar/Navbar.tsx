@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import {useAppSelector,useAppDispatch} from '../features/hooks'
-import {logout} from '../features/Auth/user'
+import {token,logout} from '../features/Auth/user'
 import axios from 'axios'
 import './css/Navbar.css'
 
@@ -14,7 +14,7 @@ export default function Navbar() {
     function handleLogout(){
         const requestOptions = { 
             headers: { 
-            Authorization:`Token ${localStorage.getItem('token')}`
+            Authorization:`Token ${token}`
           }
         }
         axios.post('/api/auth/logout',null,requestOptions)

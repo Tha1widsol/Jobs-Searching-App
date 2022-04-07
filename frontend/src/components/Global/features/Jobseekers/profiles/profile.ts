@@ -1,9 +1,7 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
-import {UserProps,user} from '../../Auth/user'
+import {UserProps,user,token} from '../../Auth/user'
 import {StatusProps} from '../../../types/status'
 import axios from 'axios'
-
-const token = localStorage.getItem('token')
 
 export interface ProfileProps extends StatusProps{
     values: {

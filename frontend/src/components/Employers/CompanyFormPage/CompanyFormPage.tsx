@@ -5,6 +5,7 @@ import {useAppDispatch, useAppSelector} from '../../Global/features/hooks';
 import {FileProps} from '../../Global/types/forms';
 import {setMessage} from '../../Global/features/successMsg';
 import {fetchCompany} from '../../Global/features/Employers/companies/company';
+import {token} from '../../Global/features/Auth/user';
 import axios from 'axios'
 
 export default function CompanyFormPage({edit = false}: {edit?: boolean}) {
@@ -17,8 +18,8 @@ export default function CompanyFormPage({edit = false}: {edit?: boolean}) {
     const [about,setAbout] = useState({value: edit ? company.values?.about : '', isValid: true,currentLength: 0, maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
     const [phone,setPhone] = useState({value: edit ? company.values?.phone : '', isValid: true, errorMsg: 'Phone number is invalid'})
     const [industry,setIndustry] = useState({value: edit ? company.values?.industry : ''})
-    const [logo,setLogo] = useState<FileProps>({value: edit && company.values.logo ? company.values.logo : '',name: ''})
-    const [banner,setBanner] = useState<FileProps>({value: edit && company.values.banner ? company.values.banner : '',name:''})
+    const [logo,setLogo] = useState<FileProps>({value: '',name: ''})
+    const [banner,setBanner] = useState<FileProps>({value: '',name:''})
     const [website,setWebsite] = useState({value: edit ? company.values?.website : '', isValid: true, errorMsg: 'Website URL is invalid'})
     const {companyID} = useParams()
 
@@ -87,10 +88,8 @@ export default function CompanyFormPage({edit = false}: {edit?: boolean}) {
 
     function handleSubmitForm(e: React.SyntheticEvent){
         e.preventDefault()
-        const token = localStorage.getItem('token')
 
         if (!validateForm()) return
-
         const requestOptions = {
             headers: {'Content-Type': 'multipart/form-data', Authorization:`Token ${token}`}
         }

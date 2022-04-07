@@ -93,7 +93,6 @@ export default function RegisterPage() {
         e.preventDefault()
         
         if (!validateForm()) return 
-
         const requestOptions = { 
             headers:{'Content-Type':'application/json'}
         }
@@ -103,7 +102,7 @@ export default function RegisterPage() {
             const data = response.data
             localStorage.setItem('token',data.token)
             dispatch(login())
-            choice === 'jobseeker' ? navigate('/profile/create') : navigate('/create-company')
+            choice === 'jobseeker' ? navigate('/create-profile') : navigate('/create-company')
             window.location.reload()
         })
 
@@ -127,7 +126,7 @@ export default function RegisterPage() {
                     <li className = {password.hasUppercase === false ? 'error' : password.hasUppercase ? 'valid' : ''}>Contains atleast one uppercase character</li>
                     <li className = {password.hasDigit === false ? 'error' : password.hasDigit ? 'valid' : ''}>Contains atleast one digit</li>
                     <li className = {password.hasSymbol === false ? 'error' : password.hasSymbol ? 'valid' : ''}>Contains atleast one of these symbols: !,£,$,%,^,&,*,(,)</li>
-                    <hr className="mt-0-mb-4" />
+                    <hr className = 'mt-0-mb-4' />
                 </div>
             
                 <label htmlFor = 'email'><h3>Email address:</h3></label>

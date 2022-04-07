@@ -7,8 +7,8 @@ import {store} from './components/Global/features/store'
 import {Provider} from 'react-redux'
 import {persistStore} from 'redux-persist'
 import {PersistGate} from 'redux-persist/integration/react'
+import {token} from './components/Global/features/Auth/user';
 
-const token = localStorage.getItem('token')
 let persistor = persistStore(store)
 
 if (!token) persistor.purge()
