@@ -1,43 +1,52 @@
-import React,{useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import React,{useState,useEffect} from 'react'
+import {useNavigate,useParams} from 'react-router-dom'
 import Errors from '../../Global/messages/Errors'
 import {ListProps} from '../../Global/types/forms';
-import {useAppDispatch} from '../../Global/features/hooks'
+import {useAppDispatch, useAppSelector} from '../../Global/features/hooks'
 import {setMessage} from '../../Global/features/successMsg';
 import {getcurrentDate} from '../../Global/formFunctions';
 import {capitalizeFirstCharacter} from '../../Global/formFunctions';
 import List from '../../Global/Forms/List';
 import {token} from '../../Global/features/Auth/user';
+import {fetchJob} from '../../Global/features/Employers/jobs/job';
 import axios from 'axios';
+import { profile } from 'console';
 
-export default function JobFormPage() {
+export default function JobFormPage({edit = false}) {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const job = useAppSelector(state => state.job)
   const [currentTab,setCurrentTab] = useState(1)
   const [errors,setErrors] = useState<Array<string>>([])
-  const [title,setTitle] = useState({value: '', isValid: true, errorMsg: 'Title is invalid', lengthErrorMsg: 'Length must be 60 characters or shorter'})
-  const [description,setDescription] = useState({value: '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 300})
-  const [salary1,setSalary1] = useState({value: '', isValid: true, errorMsg: 'Salary 1 value is invalid'})
-  const [salary2,setSalary2] = useState({value: '', isValid: true, errorMsg: 'Salary 2 value is invalid'})
-  const [currency,setCurrency] = useState({value: '$'})
-  const [roles,setRoles] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid role', alreadyExists: false, alreadyExistsMsg: 'Role already exists',AddedMsg:'Role added',RemovedMsg: 'Role removed'})
-  const [industry,setIndustry] = useState({value: 'Any'})
-  const [isRemote,setIsRemote] = useState(false)
-  const [isTrainingProvided,setIsTrainingProvided] = useState(false)
-  const [positions,setPositions] = useState({value: '1', isValid: true, errorMsg: 'Positions value is invalid'})
-  const [education,setEducation] = useState({value: 'No formal education'})
-  const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-  const [startDate,setStartDate] = useState({value: '',isValid: true, errorMsg: 'Start date is invalid'})
-  const [benefits,setBenefits] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Benefit already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
-  const [workingDay1,setWorkingDay1] = useState({value: 'Monday'})
-  const [workingDay2,setWorkingDay2] = useState({value: 'Friday'})
-  const [workingHours,setWorkingHours] = useState({value: '6',isValid: true, errorMsg: 'working hours value is invalid'})
-  const [applyOnOwnWebsite,setApplyOnOwnWebsite] = useState(false)
-  const [link,setLink] = useState({value: '',isValid: true, errorMsg: 'Website URL is invalid'})
-  const [type,setType] = useState({value: 'Full-time'})
+  const [title,setTitle] = useState({value: edit ? job.values?.title : '' , isValid: true, errorMsg: 'Title is invalid', lengthErrorMsg: 'Length must be 60 characters or shorter'})
+  const [description,setDescription] = useState({value: edit ? job.values?.description : '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 300})
+  const [salary1,setSalary1] = useState({value: edit ? job.values?.salary.split('-')[0] : '', isValid: true, errorMsg: 'Salary 1 value is invalid'})
+  const [salary2,setSalary2] = useState({value: edit ? job.values?.salary.split('-')[1] : '', isValid: true, errorMsg: 'Salary 2 value is invalid'})
+  const [currency,setCurrency] = useState({value: edit ? job.values?.salary[0] : '$'})
+  const [roles,setRoles] = useState<ListProps>({value: edit ? job.values?.roles.map(role => role.name) : [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid role', alreadyExists: false, alreadyExistsMsg: 'Role already exists',AddedMsg:'Role added',RemovedMsg: 'Role removed'})
+  const [industry,setIndustry] = useState({value: edit ? job.values?.industry : 'Any'})
+  const [isRemote,setIsRemote] = useState(edit ? job.values?.remote ? true : false : false)
+  const [isTrainingProvided,setIsTrainingProvided] = useState(edit ? job.values?.training ? true : false : false)
+  const [positions,setPositions] = useState({value: edit ? job.values?.positions : '1', isValid: true, errorMsg: 'Positions value is invalid'})
+  const [education,setEducation] = useState({value: edit ? job.values?.education : 'No formal education'})
+  const [skills,setSkills] = useState<ListProps>({value: edit ? job.values?.skills.map(skill => skill.name) : [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
+  const [startDate,setStartDate] = useState({value: edit ? job.values?.startDate : '',isValid: true, errorMsg: 'Start date is invalid'})
+  const [benefits,setBenefits] = useState<ListProps>({value: edit ? job.values?.benefits.map(benefit => benefit.name) : [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Benefit already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
+  const [workingDay1,setWorkingDay1] = useState({value: edit ? job.values?.workingDays.split('-')[0] : 'Monday'})
+  const [workingDay2,setWorkingDay2] = useState({value: edit ? job.values?.workingDays.split('-')[1] : 'Friday'})
+  const [workingHours,setWorkingHours] = useState({value: edit ? job.values?.workingHours : '6',isValid: true, errorMsg: 'working hours value is invalid'})
+  const [applyOnOwnWebsite,setApplyOnOwnWebsite] = useState(edit ? job.values?.applyOnOwnWebsite ? true : false : false)
+  const [link,setLink] = useState({value: edit ? job.values?.link : '',isValid: true, errorMsg: 'Website URL is invalid'})
+  const [type,setType] = useState({value: edit ? job.values?.type : 'Full-time'})
+  const {jobID} = useParams()
 
   const maxTabs = document.querySelectorAll('.tab').length
 
+  useEffect(() => {
+    if (!edit) return
+    dispatch(fetchJob(Number(jobID)))
+  },[jobID, dispatch, edit])
+  
   function handleToPrevTab(){
     setErrors([])
     setCurrentTab(currentTab - 1)
@@ -60,7 +69,7 @@ function handleSetBenefit(e: React.ChangeEvent<HTMLInputElement>){
 
 const validateForm = () => {
   let isValid = true
-  let errors : Array<string> = []
+  let errors: Array<string> = []
   const urlregex = /((([A-Za-z]{3,9}:(?:)?)(?:[;:&=,\w]+@)?[A-Za-z0-9]+|(?:www|[;:&=,\w]+@)[A-Za-z0-9]+)((?:[~%\w_]*)?\??(?:[=&;%@\w_]*)#?(?:[\\\w]*))?)/
   const numbers = /^(([1-9]\d*))$/;
 
@@ -216,12 +225,12 @@ function handleSubmitForm(e: React.SyntheticEvent){
               <hr className = 'mt-0-mb-4'/>
               <Errors errors = {errors}/>
               <label htmlFor = 'jobTitle'><h3>Title:</h3></label>
-              <input id = 'jobTitle' className = {!title.isValid ? 'inputError' : ''} onChange = {e => setTitle(prev => {return {...prev, value: e.target.value}})} onKeyUp = {capitalizeFirstCharacter} placeholder = 'Title...' autoComplete = 'on' required/>
+              <input id = 'jobTitle' key = {job.values?.title} defaultValue = {edit ? job.values?.title : ''} className = {!title.isValid ? 'inputError' : ''} onChange = {e => setTitle(prev => {return {...prev, value: e.target.value}})} onKeyUp = {capitalizeFirstCharacter} placeholder = 'Title...' autoComplete = 'on' required/>
               <label htmlFor = 'jobDescription' ><h3>Description (Characters remaining: {description.maxLength - description.currentLength}):</h3></label>
-              <textarea id = 'jobDescription' className = {!description.isValid ? 'inputError' : ''} onChange = {e => setDescription(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} onKeyUp = {capitalizeFirstCharacter} placeholder = 'Tell us about the job...' maxLength = {description.maxLength} style = {{height: '100px'}}/>
+              <textarea id = 'jobDescription' key = {job.values?.description} defaultValue = {edit ? job.values?.description : ''} className = {!description.isValid ? 'inputError' : ''} onChange = {e => setDescription(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} onKeyUp = {capitalizeFirstCharacter} placeholder = 'Tell us about the job...' maxLength = {description.maxLength} style = {{height: '100px'}}/>
 
               <label htmlFor = 'jobIndustry'><h3>Industry:</h3></label>
-              <select id = 'jobIndustry' onChange = {e => setIndustry({value: e.target.value})} autoComplete = 'on'>
+              <select id = 'jobIndustry' key = {job.values?.industry} defaultValue = {edit ? job.values?.industry : ''} onChange = {e => setIndustry({value: e.target.value})} autoComplete = 'on'>
                   <option value = 'Any'>Any</option>
                   <option value = 'Beauty'>Beauty</option>
                   <option value = 'Construction'>Construction</option>
@@ -229,9 +238,10 @@ function handleSubmitForm(e: React.SyntheticEvent){
               </select>
               <label><h3>Roles of the job:</h3></label>
               <input className = {roles.alreadyExists || roles.isEmpty ? 'inputError' : ''}  onChange = {handleSetRole} value = {roles.currentVal} placeholder = 'E.g Managing files...' autoComplete = 'on' required/>
-
+              <p>{roles.value}</p>
               <List name = 'Roles' 
               state = {roles}
+              values = {job.values.roles}
               handleAdd = {() => setRoles(prev => ({...prev, value: [...prev.value, roles.currentVal]}))}
               handleClearInput = {() => setRoles(prev => {return {...prev,currentVal: ''}})}
               handleSetIsEmpty = {(empty = true) => setRoles(prev => {return{...prev,isEmpty: empty}})}
@@ -240,7 +250,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
               />
 
               <label htmlFor = 'jobType'><h3>Type:</h3></label>
-              <select id = 'jobType' onChange = {e => setType({value: e.target.value})} style = {{width: '130px'}}> 
+              <select id = 'jobType' key = {job.values?.type} defaultValue = {edit ? job.values?.type : ''} onChange = {e => setType({value: e.target.value})} style = {{width: '130px'}}> 
                 <option value = 'Full=time'>Full-time</option>
                 <option value = 'Part-time'>Part-time</option>
                 <option value = 'Contract'>Contract</option>
@@ -253,7 +263,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
               <label><h3>Salary:</h3></label>
 
               <label htmlFor = 'jobCurrency'><h4>Currency:</h4></label>
-              <select id = 'jobCurrency' style = {{width:'65px'}} onChange = {e => setCurrency({value: e.target.value})}>
+              <select id = 'jobCurrency' key = {job.values?.salary[0]} defaultValue = {edit ? job.values?.salary[0] : ''} style = {{width:'65px'}} onChange = {e => setCurrency({value: e.target.value})}>
                 <option value = '&#36;'>&#36;</option>
                 <option value = '&#163;'>&#163;</option>
                 <option value = '&#165;'>&#165;</option>
@@ -262,7 +272,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
               </select>
 
               <label><h4>From:</h4></label>
-              <input placeholder = 'E.g 20000' onChange = {e => setSalary1(prev => {return {...prev, value: e.target.value}})} className = {!salary1.isValid ? 'inputError' : ''} autoComplete = 'on' required/>
+              <input placeholder = 'E.g 20000' key = {job.values?.salary.split('-')[0]} defaultValue = {edit ? job.values?.salary.split('-')[0] : ''} onChange = {e => setSalary1(prev => {return {...prev, value: e.target.value}})} className = {!salary1.isValid ? 'inputError' : ''} autoComplete = 'on' required/>
               <label><h4>To (Optional):</h4></label>
               <input placeholder = 'E.g 30000' onChange = {e => setSalary2(prev => {return {...prev, value: e.target.value}})} className = {!salary2.isValid ? 'inputError' : ''} autoComplete = 'on'/>
               <br/>
@@ -272,9 +282,9 @@ function handleSubmitForm(e: React.SyntheticEvent){
               <input type = 'number' className = {!positions.isValid ? 'inputError' : ''} id = 'jobPositions'  onChange = {e => setPositions(prev => {return {...prev, value: e.target.value}})} min = '1' defaultValue = '1' required style = {{width: '65px'}}/>
 
               <label><h3>Benefits (Optional):</h3></label>
-              <input className = {benefits.alreadyExists || benefits.isEmpty ? 'inputError' : ''}  onChange = {handleSetBenefit} value = {benefits.currentVal} placeholder = 'E.g Free parking...' autoComplete = 'on' required/>
-
+              <input className = {benefits.alreadyExists || benefits.isEmpty ? 'inputError' : ''} onChange = {handleSetBenefit} value = {benefits.currentVal} placeholder = 'E.g Free parking...' autoComplete = 'on' required/>
               <List name = 'Benefits' 
+              values = {job.values.benefits}
               state = {benefits}
               handleAdd = {() => setBenefits(prev => ({...prev, value: [...prev.value, benefits.currentVal]}))}
               handleClearInput = {() => setBenefits(prev => {return {...prev,currentVal: ''}})}
@@ -305,6 +315,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
                 <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on'/>
 
                 <List name = 'Skills' 
+                values = {job.values?.skills}
                 state = {skills}
                 handleAdd = {() => setSkills(prev => ({...prev, value: [...prev.value, skills.currentVal]}))}
                 handleClearInput = {() => setSkills(prev => {return {...prev,currentVal: ''}})}

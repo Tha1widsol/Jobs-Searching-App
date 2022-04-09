@@ -3,7 +3,7 @@ import {user,UserProps,token} from '../../Auth/user'
 import {StatusProps} from '../../../types/status'
 import axios from 'axios'
 
-interface JobProps extends StatusProps{
+export interface JobProps extends StatusProps{
     values: {
         user: UserProps
         company:{
@@ -35,12 +35,13 @@ interface JobProps extends StatusProps{
         workingHours: string,
         applicantsCount: number,
         applyOnOwnWebsite: boolean,
+        link: string,
         datePosted: string
 
     }
 }
 
-const initialState: JobProps = {
+export const initialState: JobProps = {
     status: '',
     values: {
         user,
@@ -73,6 +74,7 @@ const initialState: JobProps = {
         workingHours: '',
         applicantsCount: 0,
         applyOnOwnWebsite: false,
+        link: '',
         datePosted: ''
     }
 }

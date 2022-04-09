@@ -9,7 +9,7 @@ interface ProfilesProps extends StatusProps{
         firstName: string
         lastName: string
         middleName?: string
-        skills: {name: string}[]
+        skills: [{name: string}]
         phone: string
         logo?: string
         cv: string
@@ -30,7 +30,7 @@ const initialState: ProfilesProps = {
     firstName: '',
     middleName: '',
     lastName: '',
-    skills: [],
+    skills: [{name: ''}],
     phone: '',
     logo: '',
     cv: '',

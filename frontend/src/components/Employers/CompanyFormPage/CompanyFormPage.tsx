@@ -8,7 +8,7 @@ import {fetchCompany} from '../../Global/features/Employers/companies/company';
 import {token} from '../../Global/features/Auth/user';
 import axios from 'axios'
 
-export default function CompanyFormPage({edit = false}: {edit?: boolean}) {
+export default function CompanyFormPage({edit = false}) {
     let navigate = useNavigate()
     const dispatch = useAppDispatch()
     const company = useAppSelector(state => state.company)
