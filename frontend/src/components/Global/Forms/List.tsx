@@ -1,10 +1,11 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import ReactScrollableFeed from 'react-scrollable-feed';
 import Errors from '../../Global/messages/Errors'
 import {ListProps} from '../types/forms';
 
 export default function List({
     name, 
+    values,
     state, 
     handleAdd,
     handleClearInput,
@@ -14,6 +15,7 @@ export default function List({
     }
     :{
      name: string, 
+     values: [{name: string}]
      state: ListProps, 
      handleAdd: (currentVal: string) => void,
      handleClearInput: () => void,
@@ -23,6 +25,7 @@ export default function List({
      ){
 
     const [errors,setErrors] = useState<Array<string>>([])
+
 
     function handleRemoveItem(item: string){
         const newItems = [...state.value]
@@ -68,11 +71,11 @@ export default function List({
                 
             <div className = 'list'>
                 <ReactScrollableFeed>
-                    {state.value.map((item,index) => {
+                    {values.map((item,index) => {
                         return (
                             <div key = {index} style = {{display:'flex',justifyContent:'space-between'}}>
-                                <li>{item}</li>
-                                <button type = 'button' onClick = {() => handleRemoveItem(item)} style = {{padding:'10px'}}>Remove</button>
+                                <li>{item.name}</li>
+                                <button type = 'button' onClick = {() => handleRemoveItem(item.name)} style = {{padding:'10px'}}>Remove</button>
                             </div>
                         )
                     })}

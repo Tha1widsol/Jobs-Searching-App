@@ -46,6 +46,7 @@ export default function PagesRoutes() {
                             <Route path = '/edit-company/:companyID' element = {<CompanyFormPage edit = {true}/>}/>
                             <Route path = '/companies' element = {<CompaniesPage/>}/>
                             <Route path = '/post-job/:companyID' element = {<JobFormPage/>}/>
+                            <Route path = '/edit-job/:jobID' element = {<JobFormPage edit = {true}/>}/>
                             <Route path = '/jobs' element = {<EmployerJobsPage/>}/>
                         </Route>
                     </Route>

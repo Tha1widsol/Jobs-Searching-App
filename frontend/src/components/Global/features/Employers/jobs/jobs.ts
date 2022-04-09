@@ -35,6 +35,7 @@ interface JobsProps extends StatusProps{
         workingHours: string,
         applicantsCount: number,
         applyOnOwnWebsite: boolean,
+        link: string
         datePosted: string
 
     }]
@@ -73,6 +74,7 @@ const initialState: JobsProps = {
         workingHours: '',
         applicantsCount: 0,
         applyOnOwnWebsite: false,
+        link: '',
         datePosted: ''
     }]
 }
