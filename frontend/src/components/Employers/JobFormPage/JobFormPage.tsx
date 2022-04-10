@@ -10,7 +10,6 @@ import List from '../../Global/Forms/List';
 import {token} from '../../Global/features/Auth/user';
 import {fetchJob} from '../../Global/features/Employers/jobs/job';
 import axios from 'axios';
-import { profile } from 'console';
 
 export default function JobFormPage({edit = false}) {
   const navigate = useNavigate()
@@ -238,10 +237,10 @@ function handleSubmitForm(e: React.SyntheticEvent){
               </select>
               <label><h3>Roles of the job:</h3></label>
               <input className = {roles.alreadyExists || roles.isEmpty ? 'inputError' : ''}  onChange = {handleSetRole} value = {roles.currentVal} placeholder = 'E.g Managing files...' autoComplete = 'on' required/>
-              <p>{roles.value}</p>
               <List name = 'Roles' 
+              edit = {edit}
               state = {roles}
-              values = {job.values.roles}
+              values = {job.values?.roles}
               handleAdd = {() => setRoles(prev => ({...prev, value: [...prev.value, roles.currentVal]}))}
               handleClearInput = {() => setRoles(prev => {return {...prev,currentVal: ''}})}
               handleSetIsEmpty = {(empty = true) => setRoles(prev => {return{...prev,isEmpty: empty}})}
@@ -283,8 +282,9 @@ function handleSubmitForm(e: React.SyntheticEvent){
 
               <label><h3>Benefits (Optional):</h3></label>
               <input className = {benefits.alreadyExists || benefits.isEmpty ? 'inputError' : ''} onChange = {handleSetBenefit} value = {benefits.currentVal} placeholder = 'E.g Free parking...' autoComplete = 'on' required/>
-              <List name = 'Benefits' 
-              values = {job.values.benefits}
+              <List name = 'Benefits'
+              edit = {edit}
+              values = {job.values?.benefits}
               state = {benefits}
               handleAdd = {() => setBenefits(prev => ({...prev, value: [...prev.value, benefits.currentVal]}))}
               handleClearInput = {() => setBenefits(prev => {return {...prev,currentVal: ''}})}
@@ -315,7 +315,8 @@ function handleSubmitForm(e: React.SyntheticEvent){
                 <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on'/>
 
                 <List name = 'Skills' 
-                values = {job.values?.skills}
+                edit = {edit}
+                values = {edit ? job.values?.skills : [{name: ''}]}
                 state = {skills}
                 handleAdd = {() => setSkills(prev => ({...prev, value: [...prev.value, skills.currentVal]}))}
                 handleClearInput = {() => setSkills(prev => {return {...prev,currentVal: ''}})}

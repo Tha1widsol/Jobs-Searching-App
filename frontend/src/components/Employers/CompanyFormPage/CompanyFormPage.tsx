@@ -12,6 +12,8 @@ export default function CompanyFormPage({edit = false}) {
     let navigate = useNavigate()
     const dispatch = useAppDispatch()
     const company = useAppSelector(state => state.company)
+    const {companyID} = useParams()
+    
     const [errors,setErrors] = useState<Array<string>>([])
     const [name,setName] = useState({value: edit ? company.values?.name : '', isValid: true, errorMsg: 'Name is invalid'})
     const [email,setEmail] = useState({value: edit ? company.values?.email : '', isValid: true, errorMsg: 'Email is invalid'})
@@ -21,8 +23,7 @@ export default function CompanyFormPage({edit = false}) {
     const [logo,setLogo] = useState<FileProps>({value: '',name: ''})
     const [banner,setBanner] = useState<FileProps>({value: '',name:''})
     const [website,setWebsite] = useState({value: edit ? company.values?.website : '', isValid: true, errorMsg: 'Website URL is invalid'})
-    const {companyID} = useParams()
-
+    
     useEffect(() => {
         if (!edit) return
         dispatch(fetchCompany(Number(companyID)))
@@ -151,10 +152,10 @@ export default function CompanyFormPage({edit = false}) {
             <Errors errors = {errors}/>
             <hr className = 'mt-0-mb-4'/>
             <label htmlFor = 'companyName'><h3>Company Name:</h3></label>
-            <input id = 'companyName' key = {company.values?.name} defaultValue = {edit ? company.values?.name : ''} className = {!name.isValid ? 'inputError' : ''} onChange = {e => setName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {e => e.currentTarget.value = e.currentTarget.value.charAt(0).toUpperCase() + e.currentTarget.value.slice(1)} placeholder = 'Company name...' autoComplete = 'on'/>
+            <input id = 'companyName' key = {company.values?.name} value = {company.values?.name} className = {!name.isValid ? 'inputError' : ''} onChange = {e => setName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {e => e.currentTarget.value = e.currentTarget.value.charAt(0).toUpperCase() + e.currentTarget.value.slice(1)} placeholder = 'Company name...' autoComplete = 'on'/>
 
             <label htmlFor = 'companyAbout' ><h3>About (Characters remaining: {about.maxLength - about.currentLength}):</h3></label>
-            <textarea id = 'companyAbout' key = {company.values?.about} defaultValue = {edit ? company.values?.about: ''} className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about your company...' maxLength = {about.maxLength} style = {{height:'100px'}}/>
+            <textarea id = 'companyAbout' key = {company.values?.about} value = {edit ? company.values?.about: ''} className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about your company...' maxLength = {about.maxLength} style = {{height:'100px'}}/>
 
             <label htmlFor = 'companyEmail'><h3>Company Email address:</h3></label>
             <input type = 'email' key = {company.values?.email} defaultValue = {edit ? company.values?.email: ''} id = 'companyEmail' className = {!email.isValid ? 'inputError' : ''} onChange = {e => setEmail(prev => {return {...prev, value: e.target.value}})} placeholder = 'E.g 123@example.com' autoComplete = 'on'/>
