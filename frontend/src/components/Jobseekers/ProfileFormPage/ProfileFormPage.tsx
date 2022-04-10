@@ -240,7 +240,8 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                     <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
                     
                     <List name = 'Skills' 
-                    values = {profile.values.skills}
+                    edit = {edit}
+                    values = {profile.values?.skills}
                     state = {skills}
                     handleAdd = {() => setSkills(prev => ({...prev, value: [...prev.value, skills.currentVal]}))}
                     handleClearInput = {() => setSkills(prev => {return {...prev,currentVal: ''}})}

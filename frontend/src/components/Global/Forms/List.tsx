@@ -5,6 +5,7 @@ import {ListProps} from '../types/forms';
 
 export default function List({
     name, 
+    edit,
     values,
     state, 
     handleAdd,
@@ -15,6 +16,7 @@ export default function List({
     }
     :{
      name: string, 
+     edit: boolean
      values: [{name: string}]
      state: ListProps, 
      handleAdd: (currentVal: string) => void,
@@ -23,14 +25,23 @@ export default function List({
      handleSetAlreadyExists: (exists?: boolean) => void, 
      handleSetAll: (newItems: Array<string>) => void}
      ){
-
+       
+    const [items,setItems] = useState<Array<{name: string}>>([])
     const [errors,setErrors] = useState<Array<string>>([])
 
+    useEffect(() => {
+        if (!edit) return
+        setItems(values)
+    },[edit, values])
 
     function handleRemoveItem(item: string){
         const newItems = [...state.value]
+        const frontendNewItems = [...items]
         let index = newItems.findIndex(obj => obj === item)
+        let frontendIndex = items.findIndex(obj => obj.name === item)
         newItems.splice(index,1)
+        frontendNewItems.splice(frontendIndex,1)
+        setItems(frontendNewItems)
         handleSetAll(newItems)
         setErrors([])
     }
@@ -58,6 +69,7 @@ export default function List({
             return
         }
 
+        setItems(prev => [...prev,{ name: currentItem}])
         handleAdd(currentItem)
         handleClearInput()
         setErrors([]) 
@@ -68,10 +80,10 @@ export default function List({
             <button type = 'button' style = {{marginTop:'10px'}} onClick = {handleAddItem}>Add</button>
             <Errors errors = {errors}/>
             {state.value.length ? <p>{name}: ({state.value.length}):</p> : null}
-                
+            
             <div className = 'list'>
                 <ReactScrollableFeed>
-                    {values.map((item,index) => {
+                    {items.map((item,index) => {
                         return (
                             <div key = {index} style = {{display:'flex',justifyContent:'space-between'}}>
                                 <li>{item.name}</li>
