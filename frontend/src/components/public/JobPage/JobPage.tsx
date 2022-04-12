@@ -17,9 +17,9 @@ export default function JobPage() {
       <section className = 'Container'>
           <div style = {{display: 'flex'}}>
           <h2>{job.values?.title}</h2>
-            {job.values?.company.logo ? <img src = {`/media/${job.values?.company.logo}`} className = 'logo' alt = ''/> : null}
+            {job.values?.company?.logo ? <img src = {`/media/${job.values?.company?.logo}`} className = 'logo' alt = ''/> : null}
           </div>
-          <a href = {`/companies/${job.values?.company.id}`}><p>{job.values?.company.name}</p></a>
+          <a href = {`/companies/${job.values?.company?.id}`}><p>{job.values?.company?.name}</p></a>
           <hr className = 'mt-0-mb-4'/>
           <p>{job.values?.description}</p> 
        </section>
@@ -38,6 +38,9 @@ export default function JobPage() {
             })}
           </div>
          
+
+          {job.values?.skills[0].name ? 
+          <div>
             <hr className = 'mt-0-mb-4'/>
             <label><h3>Skills:</h3></label>
             <div className = 'listContainer'>
@@ -45,13 +48,20 @@ export default function JobPage() {
                   return (<li key = {index}>{skill.name}</li>)
               })}
             </div>
-            <hr className = 'mt-0-mb-4'/>
-            <label><h3>Benefits:</h3></label>
-            <div className = 'listContainer'>
-              {job.values?.benefits.map((benefit,index) => {
-                return (<li key = {index}>{benefit.name}</li>)
-              })}
+          </div> 
+          : null}
+          
+            {job.values?.benefits[0].name ? 
+            <div>
+              <hr className = 'mt-0-mb-4'/>
+              <label><h3>Benefits:</h3></label>
+              <div className = 'listContainer'>
+                {job.values?.benefits.map((benefit,index) => {
+                  return (<li key = {index}>{benefit.name}</li>)
+                })}
+              </div>
             </div>
+              : null}
         </section>
        
         <section className = 'Container'>
