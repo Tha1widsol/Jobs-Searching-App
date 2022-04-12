@@ -32,7 +32,7 @@ export default function JobSeekersHomePage() {
               </section>
 
               <a href = {`/job/${job.id}`}><h2>{job.title}</h2></a>
-              <a href = {`/companies/${job.company.id}`}><p>{job.company.name}</p></a>
+              <a href = {`/companies/${job.company?.id}`}><p>{job.company?.name}</p></a>
               <p>{job.salary} a year</p>
               <hr className = 'mt-0-mb-4'/>
               <p className = 'containerText'>{job.description}</p>
