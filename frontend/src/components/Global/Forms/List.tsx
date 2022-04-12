@@ -79,7 +79,7 @@ export default function List({
         <div>
             <button type = 'button' style = {{marginTop:'10px'}} onClick = {handleAddItem}>Add</button>
             <Errors errors = {errors}/>
-            {state.value.length ? <p>{name}: ({state.value.length}):</p> : null}
+            {items.length ? <p>{name}: ({items.length}):</p> : null}
             
             <div className = 'list'>
                 <ReactScrollableFeed>
