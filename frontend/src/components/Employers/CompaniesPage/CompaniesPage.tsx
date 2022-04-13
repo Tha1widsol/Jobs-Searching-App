@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate,Link} from 'react-router-dom'
 import {fetchCompanies} from '../../Global/features/Employers/companies/companies'
+import job from '../../Global/features/Employers/jobs/job'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 
 export default function CompaniesPage() {
@@ -29,7 +30,7 @@ export default function CompaniesPage() {
                 <div className = 'containerDropdown'>
                   {dropdown === index ? 
                     <div className = 'containerDropdownContent'>
-                        <a href = {`/edit-company/${company.id}`}><button className = 'dropdownBtn'>Edit</button></a>
+                        <Link to = {`/edit-company/${company.id}`}><button className = 'dropdownBtn'>Edit</button></Link>
                         <button className = 'dropdownBtn'>View all jobs</button>
                         <button className = 'deleteNavBtn'>Delete</button>
                     </div>
