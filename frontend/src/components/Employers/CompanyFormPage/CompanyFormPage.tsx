@@ -152,19 +152,19 @@ export default function CompanyFormPage({edit = false}) {
             <Errors errors = {errors}/>
             <hr className = 'mt-0-mb-4'/>
             <label htmlFor = 'companyName'><h3>Company Name:</h3></label>
-            <input id = 'companyName' key = {company.values?.name} value = {company.values?.name} className = {!name.isValid ? 'inputError' : ''} onChange = {e => setName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {e => e.currentTarget.value = e.currentTarget.value.charAt(0).toUpperCase() + e.currentTarget.value.slice(1)} placeholder = 'Company name...' autoComplete = 'on'/>
+            <input id = 'companyName' key = {company.values?.name || 'name'} defaultValue = {edit ? company.values?.name : ''} className = {!name.isValid ? 'inputError' : ''} onChange = {e => setName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {e => e.currentTarget.value = e.currentTarget.value.charAt(0).toUpperCase() + e.currentTarget.value.slice(1)} placeholder = 'Company name...' autoComplete = 'on'/>
 
             <label htmlFor = 'companyAbout' ><h3>About (Characters remaining: {about.maxLength - about.currentLength}):</h3></label>
-            <textarea id = 'companyAbout' key = {company.values?.about} value = {edit ? company.values?.about: ''} className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about your company...' maxLength = {about.maxLength} style = {{height:'100px'}}/>
+            <textarea id = 'companyAbout' key = {company.values?.about || 'about'} defaultValue = {edit ? company.values?.about: ''} className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about your company...' maxLength = {about.maxLength} style = {{height:'100px'}}/>
 
             <label htmlFor = 'companyEmail'><h3>Company Email address:</h3></label>
-            <input type = 'email' key = {company.values?.email} defaultValue = {edit ? company.values?.email: ''} id = 'companyEmail' className = {!email.isValid ? 'inputError' : ''} onChange = {e => setEmail(prev => {return {...prev, value: e.target.value}})} placeholder = 'E.g 123@example.com' autoComplete = 'on'/>
+            <input type = 'email' key = {company.values?.email || 'email'} defaultValue = {edit ? company.values?.email: ''} id = 'companyEmail' className = {!email.isValid ? 'inputError' : ''} onChange = {e => setEmail(prev => {return {...prev, value: e.target.value}})} placeholder = 'E.g 123@example.com' autoComplete = 'on'/>
 
             <label htmlFor = 'companyPhone'><h3>Company phone number:</h3></label>
-            <input id = 'companyPhone'  key = {company.values?.phone} defaultValue = {edit ? company.values?.phone: ''} type = 'tel' className = {!phone.isValid ? 'inputError' : ''} onChange = {e => setPhone(prev => {return {...prev, value: e.target.value}})} placeholder = 'Phone number...' autoComplete = 'on' maxLength = {15}/>
+            <input id = 'companyPhone'  key = {company.values?.phone || 'phone'} defaultValue = {edit ? company.values?.phone: ''} type = 'tel' className = {!phone.isValid ? 'inputError' : ''} onChange = {e => setPhone(prev => {return {...prev, value: e.target.value}})} placeholder = 'Phone number...' autoComplete = 'on' maxLength = {15}/>
 
             <label htmlFor = 'companyIndustry'><h3>Industry: (What job industry is your company associated with?)</h3></label>
-            <select id = 'companyIndustry' key = {company.values?.industry} defaultValue = {edit ? company.values?.industry: 'Any'} onChange = {e => setIndustry({value: e.target.value})} autoComplete = 'on'>
+            <select id = 'companyIndustry' key = {company.values?.industry || 'industry'} defaultValue = {edit ? company.values?.industry: 'Any'} onChange = {e => setIndustry({value: e.target.value})} autoComplete = 'on'>
                 <option value = 'Any'>Any</option>
                 <option value = 'Beauty'>Beauty</option>
                 <option value = 'Construction'>Construction</option>
@@ -176,11 +176,11 @@ export default function CompanyFormPage({edit = false}) {
             {company.values.logo && edit ? <p>Current logo: {company.values.logo}</p> : null} 
 
             <label htmlFor = 'companyBanner'><h3>Banner (Optional):</h3></label>
-            <input id = 'companyBanner' key = {company.values?.banner} type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setBanner({value: e.target.files[0], name: e.target.files[0].name})}}/>
+            <input id = 'companyBanner'  type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setBanner({value: e.target.files[0], name: e.target.files[0].name})}}/>
             {company.values.banner && edit? <p>Current banner: {company.values.banner}</p> : null}
 
             <label htmlFor = 'companyWebsite'><h3>Website (Optional):</h3></label>
-            <input id = 'companyWebsite' key = {company.values?.website} defaultValue = {edit ? company.values?.website: ''} className = {!website.isValid ? 'inputError' : ''} type = 'url' onChange = {e => setWebsite(prev => {return {...prev, value: e.target.value}})} placeholder = 'Website link...' autoComplete = 'on'/>
+            <input id = 'companyWebsite' key = {company.values?.website || 'website'} defaultValue = {edit ? company.values?.website: ''} className = {!website.isValid ? 'inputError' : ''} type = 'url' onChange = {e => setWebsite(prev => {return {...prev, value: e.target.value}})} placeholder = 'Website link...' autoComplete = 'on'/>
 
             <button type = 'submit' id = 'submit'>Submit</button>
         </form>
