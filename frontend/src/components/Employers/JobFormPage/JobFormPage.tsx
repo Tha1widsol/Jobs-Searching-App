@@ -21,7 +21,7 @@ export default function JobFormPage({edit = false}) {
   const [description,setDescription] = useState({value: edit ? job.values?.description : '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 300})
   const [salary1,setSalary1] = useState({value: '', isValid: true, errorMsg: 'Salary 1 value is invalid'})
   const [salary2,setSalary2] = useState({value: '', isValid: true, errorMsg: 'Salary 2 value is invalid'})
-  const [currency,setCurrency] = useState({value: edit ? job.values?.salary[0] : '$'})
+  const [currency,setCurrency] = useState({value: edit ? job.values?.currency : '$'})
   const [roles,setRoles] = useState<ListProps>({value: edit ? job.values?.roles.map(role => role.name) : [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid role', alreadyExists: false, alreadyExistsMsg: 'Role already exists',AddedMsg:'Role added',RemovedMsg: 'Role removed'})
   const [industry,setIndustry] = useState({value: edit ? job.values?.industry : 'Any'})
   const [isRemote,setIsRemote] = useState(edit ? job.values?.remote ? true : false : false)
@@ -31,8 +31,8 @@ export default function JobFormPage({edit = false}) {
   const [skills,setSkills] = useState<ListProps>({value: edit ? job.values?.skills.map(skill => skill.name) : [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
   const [startDate,setStartDate] = useState({value: edit ? job.values?.startDate : '',isValid: true, errorMsg: 'Start date is invalid'})
   const [benefits,setBenefits] = useState<ListProps>({value: edit ? job.values?.benefits.map(benefit => benefit.name) : [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Benefit already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
-  const [workingDay1,setWorkingDay1] = useState({value: edit ? job.values?.workingDays.split('-')[0] : 'Monday'})
-  const [workingDay2,setWorkingDay2] = useState({value: edit ? job.values?.workingDays.split('-')[1] : 'Friday'})
+  const [workingDay1,setWorkingDay1] = useState({value: edit ? job.values?.workingDay1 : 'Monday'})
+  const [workingDay2,setWorkingDay2] = useState({value: edit ? job.values?.workingDay2 : 'Friday'})
   const [workingHours,setWorkingHours] = useState({value: edit ? job.values?.workingHours : '6',isValid: true, errorMsg: 'working hours value is invalid'})
   const [applyOnOwnWebsite,setApplyOnOwnWebsite] = useState(edit ? job.values?.applyOnOwnWebsite ? true : false : false)
   const [link,setLink] = useState({value: edit ? job.values?.link : '',isValid: true, errorMsg: 'Website URL is invalid'})
@@ -179,10 +179,9 @@ function handleSubmitForm(e: React.SyntheticEvent){
 
   form.append('title',title.value)
   form.append('description',description.value)
-
-  if (salary2.value !== '') form.append('salary', `${currency.value}${salary1.value} - ${currency.value}${salary2.value}`)
-  else form.append('salary', `${currency.value}${salary1.value}`)
-
+  form.append('salary1', salary1.value)
+  if (salary2.value) form.append('salary2',salary2.value)
+  form.append('currency', currency.value)
   form.append('roles',roles.value.toString())
   form.append('industry',industry.value)
   form.append('remote',isRemote.toString())
@@ -193,7 +192,8 @@ function handleSubmitForm(e: React.SyntheticEvent){
   form.append('skills',skills.value.toString())
   form.append('startDate',startDate.value)
   form.append('benefits',benefits.value.toString())
-  form.append('workingDays',`${workingDay1.value} - ${workingDay2.value}`)
+  form.append('workingDay1',workingDay1.value)
+  form.append('workingDay2',workingDay2.value)
   form.append('workingHours',workingHours.value)
   form.append('link',link.value)
   form.append('applyOnOwnWebsite',applyOnOwnWebsite.toString())
@@ -286,7 +286,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
               <label><h3>Salary:</h3></label>
 
               <label htmlFor = 'jobCurrency'><h4>Currency:</h4></label>
-              <select id = 'jobCurrency' key = {job.values?.salary[0] || 'jobCurrency'} defaultValue = {edit ? job.values?.salary[0] : ''} style = {{width:'65px'}} onChange = {e => setCurrency({value: e.target.value})}>
+              <select id = 'jobCurrency' key = {job.values?.currency|| 'jobCurrency'} defaultValue = {edit ? job.values?.currency : ''} style = {{width:'65px'}} onChange = {e => setCurrency({value: e.target.value})}>
                 <option value = '&#36;'>&#36;</option>
                 <option value = '&#163;'>&#163;</option>
                 <option value = '&#165;'>&#165;</option>
@@ -295,9 +295,9 @@ function handleSubmitForm(e: React.SyntheticEvent){
               </select>
 
               <label><h4>From:</h4></label>
-              <input placeholder = 'E.g 20000' key = {job.values?.salary.split('-')[0] || 'salary1'} onChange = {e => setSalary1(prev => {return {...prev, value: e.target.value}})} className = {!salary1.isValid ? 'inputError' : ''} autoComplete = 'on' required/>
+              <input placeholder = 'E.g 20000' key = {job.values?.salary1 || 'salary1'} onChange = {e => setSalary1(prev => {return {...prev, value: e.target.value}})} className = {!salary1.isValid ? 'inputError' : ''} autoComplete = 'on' required/>
               <label><h4>To (Optional):</h4></label>
-              <input placeholder = 'E.g 30000' key = {job.values?.salary.split('-')[1] || 'salary2'} onChange = {e => setSalary2(prev => {return {...prev, value: e.target.value}})} className = {!salary2.isValid ? 'inputError' : ''} autoComplete = 'on'/>
+              <input placeholder = 'E.g 30000' key = {job.values?.salary2|| 'salary2'} onChange = {e => setSalary2(prev => {return {...prev, value: e.target.value}})} className = {!salary2.isValid ? 'inputError' : ''} autoComplete = 'on'/>
               <br/>
               <br/>
               <hr className = 'mt-0-mb-4'/>
@@ -351,7 +351,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
 
                 <label><h3>Working days:</h3></label>
 
-                  <select id = 'workingDay1' key = 'WorkingDay1' defaultValue = {edit ? job.values?.workingDays.split('-')[0] : 'Monday'} onChange  = {e => setWorkingDay1(prev => {return{...prev, value: e.target.value}})} style = {{width:'auto'}}>
+                  <select id = 'workingDay1' key = 'WorkingDay1' defaultValue = {edit ? job.values?.workingDay1 : 'Monday'} onChange  = {e => setWorkingDay1(prev => {return{...prev, value: e.target.value}})} style = {{width:'auto'}}>
                     <option value = 'Monday'>Monday</option>
                     <option value = 'Tuesday'>Tuesday</option>
                     <option value = 'Wednesday'>Wednesday</option>
@@ -363,7 +363,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
                   
                   <span style = {{marginLeft:'10px',marginRight:'10px'}}>to</span>
               
-                  <select id = 'workingDay2' key = 'WorkingDay2' defaultValue = {edit ? job.values?.workingDays.split('-')[1] : 'Friday'} onChange  = {e => setWorkingDay2(prev => {return{...prev, value: e.target.value}})} style = {{width:'auto'}}>
+                  <select id = 'workingDay2' key = 'WorkingDay2' defaultValue = {edit ? job.values?.workingDay2 : 'Friday'} onChange  = {e => setWorkingDay2(prev => {return{...prev, value: e.target.value}})} style = {{width:'auto'}}>
                     <option value = 'Monday'>Monday</option>
                     <option value = 'Tuesday'>Tuesday</option>
                     <option value = 'Wednesday'>Wednesday</option>
@@ -371,6 +371,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
                     <option value = 'Friday'>Friday</option>
                     <option value = 'Saturday'>Saturday</option>
                     <option value = 'Sunday'>Sunday</option>
+                    <option value = ''>None</option>
                   </select>
 
                 <label htmlFor = 'workingHours'><h3>Working hours:</h3></label>
