@@ -146,10 +146,10 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
         form.append('phone',phone.value)
         form.append('about',about.value)
 
-        if (cv.value !== '')
+        if (cv.value)
            form.append('cv',cv.value,cv.name)
         
-        if (logo.value !== '')
+        if (logo.value)
            form.append('logo',logo.value,logo.name)
         
         form.append('skills',skills.value.toString())

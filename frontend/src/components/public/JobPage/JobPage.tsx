@@ -19,7 +19,7 @@ export default function JobPage() {
           <h2>{job.values?.title}</h2>
             {job.values?.company?.logo ? <img src = {`/media/${job.values?.company?.logo}`} className = 'logo' alt = ''/> : null}
           </div>
-          <a href = {`/companies/${job.values?.company?.id}`}><p>{job.values?.company?.name}</p></a>
+          <a href = {`/company/${job.values?.company?.id}`}><p>{job.values?.company?.name}</p></a>
           <hr className = 'mt-0-mb-4'/>
           <p>{job.values?.description}</p> 
        </section>
@@ -27,7 +27,7 @@ export default function JobPage() {
        <section className = 'Container'>
           <label><h3>Salary:</h3></label>
           <hr className = 'mt-0-mb-4'/>
-          {job.values?.salary} a year
+          {job.values?.salary2 ? <p>{job.values?.currency}{job.values?.salary1} - {job.values?.currency}{job.values?.salary2} a year </p> : <p>{job.values?.currency}{job.values?.salary1} a year</p>} 
         </section>
 
         <section className = 'Container'>
@@ -69,7 +69,7 @@ export default function JobPage() {
            <p>{job.values?.type}</p>
            <hr className = 'mt-0-mb-4'/>
           <label><h3>Working Days/Hours:</h3></label>
-          <p>{job.values?.workingDays}</p>
+          {job.values?.workingDay2 ? <p>{job.values?.workingDay1} - {job.values?.workingDay2}</p> : <p>{job.values?.workingDay1}</p>}
           <p>{job.values?.workingHours} hours a day</p>
         </section>
 

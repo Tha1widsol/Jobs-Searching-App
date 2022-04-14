@@ -104,8 +104,8 @@ export default function CompanyFormPage({edit = false}) {
         form.append('industry',industry.value)
         if (website.value) form.append('website',website.value)
 
-        if (logo.value !== '') form.append('logo',logo.value,logo.name)
-        if (banner.value !== '') form.append('banner',banner.value,banner.name)
+        if (logo.value) form.append('logo',logo.value,logo.name)
+        if (banner.value) form.append('banner',banner.value,banner.name)
 
         if (edit){
             axios.put(`/api/company?id=${companyID}`,form,requestOptions)
