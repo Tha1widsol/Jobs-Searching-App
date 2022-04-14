@@ -21,11 +21,7 @@ export default function JobFormPage({edit = false}) {
   const [description,setDescription] = useState({value: edit ? job.values?.description : '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 300})
   const [salary1,setSalary1] = useState({value: '', isValid: true, errorMsg: 'Salary 1 value is invalid'})
   const [salary2,setSalary2] = useState({value: '', isValid: true, errorMsg: 'Salary 2 value is invalid'})
-<<<<<<< HEAD
-  const [currency,setCurrency] = useState({value: edit ? job.values?.salary[0] : '$'})
-=======
   const [currency,setCurrency] = useState({value: edit ? job.values?.currency : '$'})
->>>>>>> develop
   const [roles,setRoles] = useState<ListProps>({value: edit ? job.values?.roles.map(role => role.name) : [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid role', alreadyExists: false, alreadyExistsMsg: 'Role already exists',AddedMsg:'Role added',RemovedMsg: 'Role removed'})
   const [industry,setIndustry] = useState({value: edit ? job.values?.industry : 'Any'})
   const [isRemote,setIsRemote] = useState(edit ? job.values?.remote ? true : false : false)
@@ -35,13 +31,8 @@ export default function JobFormPage({edit = false}) {
   const [skills,setSkills] = useState<ListProps>({value: edit ? job.values?.skills.map(skill => skill.name) : [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
   const [startDate,setStartDate] = useState({value: edit ? job.values?.startDate : '',isValid: true, errorMsg: 'Start date is invalid'})
   const [benefits,setBenefits] = useState<ListProps>({value: edit ? job.values?.benefits.map(benefit => benefit.name) : [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Benefit already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
-<<<<<<< HEAD
-  const [workingDay1,setWorkingDay1] = useState({value: edit ? job.values?.workingDays.split('-')[0] : 'Monday'})
-  const [workingDay2,setWorkingDay2] = useState({value: edit ? job.values?.workingDays.split('-')[1] : 'Friday'})
-=======
   const [workingDay1,setWorkingDay1] = useState({value: edit ? job.values?.workingDay1 : 'Monday'})
   const [workingDay2,setWorkingDay2] = useState({value: edit ? job.values?.workingDay2 : 'Friday'})
->>>>>>> develop
   const [workingHours,setWorkingHours] = useState({value: edit ? job.values?.workingHours : '6',isValid: true, errorMsg: 'working hours value is invalid'})
   const [applyOnOwnWebsite,setApplyOnOwnWebsite] = useState(edit ? job.values?.applyOnOwnWebsite ? true : false : false)
   const [link,setLink] = useState({value: edit ? job.values?.link : '',isValid: true, errorMsg: 'Website URL is invalid'})
