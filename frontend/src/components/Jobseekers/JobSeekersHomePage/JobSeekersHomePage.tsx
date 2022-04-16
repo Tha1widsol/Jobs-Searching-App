@@ -13,7 +13,7 @@ export default function JobSeekersHomePage() {
   
   return (
     <div>
-      <label><h2>Potential jobs...</h2></label>
+      <label><h2>Potential jobs based on your profile...</h2></label>
       <section style = {{display: 'flex', marginRight: '15px'}}>
         {jobs.values?.map((job,index) => {
           return(
@@ -32,19 +32,20 @@ export default function JobSeekersHomePage() {
               </section>
 
               <a href = {`/job/${job.id}`}><h2>{job.title}</h2></a>
-              <a href = {`/companies/${job.company?.id}`}><p>{job.company?.name}</p></a>
-              <p>{job.salary} a year</p>
+              <a href = {`/company/${job.company?.id}`}><p>{job.company?.name}</p></a>
+              {job.salary2 ? <p>{job.currency}{job.salary1} - {job.currency}{job.salary2} a year </p> : <p>{job.currency}{job.salary1} a year</p>} 
+              <p>{job.type}</p>
               <hr className = 'mt-0-mb-4'/>
               <p className = 'containerText'>{job.description}</p>
 
-                 
-              <label><h3>Skills required:</h3></label>
+                
+              <label><h3>Roles:</h3></label>
                 <section className = 'listContainer'>
-                    {job.skills.map((skill,index) => {
-                        return (<li key = {index}>{skill.name}</li>)
+                    {job.roles.map((role,index) => {
+                        return (<li key = {index}>{role.name}</li>)
                     })}
                 </section>
-      
+             
               <section style = {{textAlign:'center'}}>
                    <button>Apply</button>
                    <button>Save</button>
