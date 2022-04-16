@@ -11,31 +11,61 @@ import {token} from '../../Global/features/Auth/user';
 import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile';
 
 export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
-    let navigate = useNavigate()
+    const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const user = useAppSelector(state => state.user.values)
     const profile = useAppSelector(state => state.profile)
     const [currentTab,setCurrentTab] = useState(1)
     const [errors,setErrors] = useState<Array<string>>([])
-    const [firstName,setFirstName] = useState({value: profile.values?.firstName, isValid: true, errorMsg: 'First name is invalid'})
-    const [middleName,setMiddleName] = useState({value: profile.values?.middleName, isValid: true, errorMsg: 'Middle name is invalid'})
-    const [lastName,setLastName] = useState({value: profile.values?.lastName, isValid: true, errorMsg: 'Last name is invalid'})
-    const [phone,setPhone] = useState({value: profile.values?.phone, isValid: true, errorMsg: 'Phone number is invalid'})
-    const [about,setAbout] = useState({value: profile.values?.about, isValid: true, currentLength: Number(profile?.values?.about?.length), maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
-    const [skills,setSkills] = useState<ListProps>({value: profile.values?.skills.map(skill => skill.name), currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-    const [experience,setExperience] = useState({value: profile.values?.experience, isValid: true, errorMsg: 'Experience section is invalid',currentLength: Number(profile?.values?.experience?.length), maxLength: 450})
-    const [education,setEducation] = useState({value: profile.values.education ? profile.values.education : 'No formal education'})
-    const [industry,setIndustry] = useState({value: profile.values?.industry})
-    const [distance,setDistance] = useState({value: profile.values?.distance})
-    const [logo,setLogo] = useState<FileProps>({value: '',name:''})
-    const [cv,setCV] = useState<FileProps>({value: '',name:''})
+    const [firstName,setFirstName] = useState({value: '', isValid: true, errorMsg: 'First name is invalid'})
+    const [middleName,setMiddleName] = useState({value: '', isValid: true, errorMsg: 'Middle name is invalid'})
+    const [lastName,setLastName] = useState({value: '', isValid: true, errorMsg: 'Last name is invalid'})
+    const [phone,setPhone] = useState({value: '', isValid: true, errorMsg: 'Phone number is invalid'})
+    const [about,setAbout] = useState({value: '', isValid: true, currentLength: Number(profile?.values?.about?.length), maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
+    const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
+    const [experience,setExperience] = useState({value: '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: Number(profile?.values?.experience?.length), maxLength: 450})
+    const [education,setEducation] = useState({value: 'No formal education'})
+    const [industry,setIndustry] = useState({value: ''})
+    const [distance,setDistance] = useState({value: ''})
+    const [logo,setLogo] = useState<FileProps>({value: '', name:''})
+    const [cv,setCV] = useState<FileProps>({value: '' , name:''})
  
     const maxTabs = document.querySelectorAll('.tab').length
 
     useEffect(() => {
-        if (!edit) return
         dispatch(fetchProfile(user.id))
-     },[dispatch, user.id, edit])
+        .then(response => {
+            if (!edit){
+                if (response.meta.requestStatus === 'fulfilled') navigate(`/profile/${user.id}`)
+                return
+            }
+            else if (response.meta.requestStatus === 'rejected') navigate('/create-profile')
+        })
+
+        setFirstName(prev => {return{...prev, value: profile.values?.firstName}})
+        setMiddleName(prev => {return{...prev, value: profile.values?.middleName || ''}})
+        setLastName(prev => {return{...prev, value: profile.values?.lastName}})
+        setPhone(prev => {return{...prev, value: profile.values?.phone}})
+        setAbout(prev => {return{...prev, value: profile.values?.about}})
+        setSkills(prev => {return{...prev, value: profile.values?.skills.map(skill => skill.name)}})
+        setExperience(prev => {return{...prev, value: profile.values?.experience || ''}})
+        setEducation(prev => {return{...prev, value: profile.values?.education}})
+        setIndustry(prev => {return{...prev, value: profile.values?.industry}})
+        setDistance(prev => {return{...prev, value: profile.values?.distance}})
+    
+     },[dispatch, 
+        user.id, 
+        edit,
+        profile.values.firstName,
+        profile.values.middleName,
+        profile.values.lastName,
+        profile.values.phone,
+        profile.values.about,
+        profile.values.experience,
+        profile.values.education,
+        profile.values.industry,
+        profile.values.distance
+    ])
 
     const validateForm = () => {
         let isValid = true
@@ -166,6 +196,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                     setTimeout(() => {
                         dispatch(setMessage(''))
                     },2000)
+                    navigate(`/profile/${user.id}`)
                 }
             })
 
@@ -182,7 +213,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                     setTimeout(() => {
                         dispatch(setMessage(''))
                     },2000)
-
+                    navigate(`/profile/${user.id}`)
                     
                 }
                 
@@ -193,7 +224,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
             })
         }
 
-        navigate(`/profile/${user.id}`)
+        
     }
 
     return (
@@ -212,23 +243,23 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                     <Errors errors = {errors}/>
 
                     <label htmlFor = 'firstName'><h3>First name:</h3></label>
-                    <input id = 'firstName' defaultValue = {profile.values?.firstName} className = {!firstName.isValid ? 'inputError' : ''} onChange = {e => setFirstName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {handleFixName} placeholder = 'First name...' autoComplete = 'on' required/>
+                    <input id = 'firstName' value = {firstName.value} className = {!firstName.isValid ? 'inputError' : ''} onChange = {e => setFirstName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {handleFixName} placeholder = 'First name...' autoComplete = 'on' required/>
 
                     <label htmlFor = 'middleName'><h3>Middle name (Optional):</h3></label>
-                    <input id = 'middleName' defaultValue = {profile.values?.middleName} className = {!middleName.isValid ? 'inputError' : ''} onChange = {e => setMiddleName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Middle name...' onKeyUp = {handleFixName} autoComplete = 'on'/>
+                    <input id = 'middleName' value = {middleName.value} className = {!middleName.isValid ? 'inputError' : ''} onChange = {e => setMiddleName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Middle name...' onKeyUp = {handleFixName} autoComplete = 'on'/>
 
                     <label htmlFor = 'lastName'><h3>Last name:</h3></label>
-                    <input id = 'lastName' defaultValue = {profile.values?.lastName} className = {!lastName.isValid ? 'inputError' : ''}  onChange = {e => setLastName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Last name...' onKeyUp = {handleFixName} autoComplete = 'on' required/>
+                    <input id = 'lastName' value = {lastName.value} className = {!lastName.isValid ? 'inputError' : ''}  onChange = {e => setLastName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Last name...' onKeyUp = {handleFixName} autoComplete = 'on' required/>
 
                     <label htmlFor = 'phone'><h3>Phone number: (Only provided to employers)</h3></label>
-                    <input id = 'phone'  defaultValue = {profile.values?.phone} type = 'tel' className = {!phone.isValid ? 'inputError' : ''} onChange = {e => setPhone(prev => {return {...prev, value: e.target.value}})} placeholder = 'Phone number...' autoComplete = 'on' maxLength = {15} required/>
+                    <input id = 'phone' value = {phone.value} type = 'tel' className = {!phone.isValid ? 'inputError' : ''} onChange = {e => setPhone(prev => {return {...prev, value: e.target.value}})} placeholder = 'Phone number...' autoComplete = 'on' maxLength = {15} required/>
 
                     <label htmlFor = 'about' ><h3>About (Characters remaining: {about.maxLength - about.currentLength}):</h3></label>
-                    <textarea id = 'about' defaultValue = {profile.values?.about} className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
+                    <textarea id = 'about' value = {about.value} className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
 
                     <label htmlFor = 'logo'><h3>Profile logo (Optional):</h3></label>
                     <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setLogo({value: e.target.files[0], name: e.target.files[0].name})}}/>
-                    {profile.values.logo ? <p>Current logo: {profile.values.logo}</p> : null} 
+                    {edit && profile.values.logo ? <p>Current logo: {profile.values.logo}</p> : null} 
 
                 </div>
 
@@ -240,8 +271,6 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                     <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
                     
                     <List name = 'Skills' 
-                    edit = {edit}
-                    values = {profile.values?.skills}
                     state = {skills}
                     handleAdd = {() => setSkills(prev => ({...prev, value: [...prev.value, skills.currentVal]}))}
                     handleClearInput = {() => setSkills(prev => {return {...prev,currentVal: ''}})}
@@ -255,7 +284,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                     <h1 className = 'title'>Work Experience</h1> 
                     <Errors errors = {errors}/>
                     <label htmlFor = 'experience'><h3>Work Experience (Optional) Characters remaining: {experience.maxLength - experience.currentLength}</h3></label>
-                    <textarea id = 'experience' defaultValue = {profile.values?.experience} className = {!experience.isValid ? 'inputError' : ''}   style = {{height: '200px'}} onChange = {e => setExperience(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Work experience...' autoComplete = 'on' maxLength = {experience.maxLength}/>
+                    <textarea id = 'experience' value = {experience.value} className = {!experience.isValid ? 'inputError' : ''}   style = {{height: '200px'}} onChange = {e => setExperience(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Work experience...' autoComplete = 'on' maxLength = {experience.maxLength}/>
                 </div>
 
                 <div className = {`tab ${currentTab === 4 ? 'show' : 'hide'}`}>
@@ -263,7 +292,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                     <Errors errors = {errors}/>
 
                     <label htmlFor = 'education'><h3>Highest level of education:</h3></label>
-                    <select id = 'education' onChange = {e => setEducation({value: e.target.value})} defaultValue = {profile.values?.education} required>
+                    <select id = 'education' onChange = {e => setEducation({value: e.target.value})} value = {education.value} required>
                         <option value = 'No formal education'>No formal education</option>
                         <option value = 'Secondary education'>Secondary education or high school</option>
                         <option value = 'GED'>GED</option>
@@ -288,10 +317,10 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                     
                     <label htmlFor = 'cv'><h3>Resume / CV (Optional) (Please submit only .pdf, .doc or .docx files):</h3></label>
                     <input type = 'file' id = 'cv' accept = '.pdf,.doc,.docx' onChange = {e => {if (!e.target.files) return; setCV({value: e.target.files[0],name: e.target.files[0].name})}} autoComplete = 'on'/>
-                    {profile.values.cv ? <p>Current CV: {profile.values.cv}</p> : null} 
+                    {edit && profile.values.cv ? <p>Current CV: {profile.values.cv}</p> : null} 
 
                     <label htmlFor = 'distance'><h3>Job within:</h3></label>
-                    <select id = 'distance' onChange = {e => setDistance({value: e.target.value})} defaultValue = {profile.values?.distance} autoComplete = 'on'>
+                    <select id = 'distance' onChange = {e => setDistance({value: e.target.value})} value = {distance.value} autoComplete = 'on'>
                         <option value = 'Any'>Any</option>
                         <option value = '10'>10 miles</option>
                         <option value = '20'>20 miles</option>
