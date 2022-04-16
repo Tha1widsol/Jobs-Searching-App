@@ -20,7 +20,9 @@ interface JobsProps extends StatusProps{
         id: number,
         title: string,
         description: string,
-        salary: string,
+        salary1: string,
+        salary2: string,
+        currency: string,
         roles: [{name: string}],
         industry: string,
         remote: boolean,
@@ -31,11 +33,12 @@ interface JobsProps extends StatusProps{
         skills: [{name: string}],
         startDate: string,
         benefits: [{name: string}],
-        workingDays: string,
+        workingDay1: string,
+        workingDay2: string
         workingHours: string,
         applicantsCount: number,
         applyOnOwnWebsite: boolean,
-        link: string
+        link: string,
         datePosted: string
 
     }]
@@ -59,7 +62,9 @@ const initialState: JobsProps = {
         id: 0,
         title: '',
         description: '',
-        salary: '',
+        salary1: '',
+        salary2: '',
+        currency: '',
         roles: [{name: ''}],
         industry: '',
         remote: false,
@@ -70,7 +75,8 @@ const initialState: JobsProps = {
         skills: [{name: ''}],
         startDate: '',
         benefits: [{name: ''}],
-        workingDays: '',
+        workingDay1: '',
+        workingDay2: '',
         workingHours: '',
         applicantsCount: 0,
         applyOnOwnWebsite: false,
