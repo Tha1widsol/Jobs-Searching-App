@@ -13,7 +13,7 @@ export default function EmployersHomePage() {
 
   return (
         <div>
-            <label><h2>Potential candidates...</h2></label>
+            <label><h2>Potential candidates based on your jobs...</h2></label>
             {profiles.status !== 'rejected' ? 
              <section style = {{display: 'flex', marginRight: '15px'}}>
              {profiles.values?.map((profile,index) => {
