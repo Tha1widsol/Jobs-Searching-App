@@ -186,7 +186,6 @@ class JobAPI(APIView):
 
         return Response(status = status.HTTP_400_BAD_REQUEST)
         
-
     def get(self,request):
         lookup_url_kwarg ='id'
         id = request.GET.get(lookup_url_kwarg)
@@ -195,6 +194,8 @@ class JobAPI(APIView):
         if job.exists():
             serializer_class = JobSerializer(job.first())
             return Response(serializer_class.data, status =  status.HTTP_200_OK)
+        
+        return Response(status = status.HTTP_404_NOT_FOUND)
 
             
 class JobsListAPI(generics.ListAPIView):
