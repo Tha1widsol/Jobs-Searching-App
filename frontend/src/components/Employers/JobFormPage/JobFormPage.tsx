@@ -17,26 +17,26 @@ export default function JobFormPage({edit = false}) {
   const job = useAppSelector(state => state.job)
   const [currentTab,setCurrentTab] = useState(1)
   const [errors,setErrors] = useState<Array<string>>([])
-  const [title,setTitle] = useState({value: edit ? job.values?.title : '' , isValid: true, errorMsg: 'Title is invalid', lengthErrorMsg: 'Length must be 60 characters or shorter'})
-  const [description,setDescription] = useState({value: edit ? job.values?.description : '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: 0, maxLength: 300})
+  const [title,setTitle] = useState({value: '' , isValid: true, errorMsg: 'Title is invalid', lengthErrorMsg: 'Length must be 60 characters or shorter'})
+  const [description,setDescription] = useState({value: '', isValid: true, errorMsg: 'Description section is invalid',currentLength: 0, maxLength: 300})
   const [salary1,setSalary1] = useState({value: '', isValid: true, errorMsg: 'Salary 1 value is invalid'})
   const [salary2,setSalary2] = useState({value: '', isValid: true, errorMsg: 'Salary 2 value is invalid'})
-  const [currency,setCurrency] = useState({value: edit ? job.values?.currency : '$'})
-  const [roles,setRoles] = useState<ListProps>({value: edit ? job.values?.roles.map(role => role.name) : [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid role', alreadyExists: false, alreadyExistsMsg: 'Role already exists',AddedMsg:'Role added',RemovedMsg: 'Role removed'})
-  const [industry,setIndustry] = useState({value: edit ? job.values?.industry : 'Any'})
-  const [isRemote,setIsRemote] = useState(edit ? job.values?.remote ? true : false : false)
-  const [isTrainingProvided,setIsTrainingProvided] = useState(edit ? job.values?.training ? true : false : false)
-  const [positions,setPositions] = useState({value: edit ? job.values?.positions : '1', isValid: true, errorMsg: 'Positions value is invalid'})
-  const [education,setEducation] = useState({value: edit ? job.values?.education : 'No formal education'})
-  const [skills,setSkills] = useState<ListProps>({value: edit ? job.values?.skills.map(skill => skill.name) : [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-  const [startDate,setStartDate] = useState({value: edit ? job.values?.startDate : '',isValid: true, errorMsg: 'Start date is invalid'})
-  const [benefits,setBenefits] = useState<ListProps>({value: edit ? job.values?.benefits.map(benefit => benefit.name) : [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Benefit already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
-  const [workingDay1,setWorkingDay1] = useState({value: edit ? job.values?.workingDay1 : 'Monday'})
-  const [workingDay2,setWorkingDay2] = useState({value: edit ? job.values?.workingDay2 : 'Friday'})
-  const [workingHours,setWorkingHours] = useState({value: edit ? job.values?.workingHours : '6',isValid: true, errorMsg: 'working hours value is invalid'})
-  const [applyOnOwnWebsite,setApplyOnOwnWebsite] = useState(edit ? job.values?.applyOnOwnWebsite ? true : false : false)
-  const [link,setLink] = useState({value: edit ? job.values?.link : '',isValid: true, errorMsg: 'Website URL is invalid'})
-  const [type,setType] = useState({value: edit ? job.values?.type : 'Full-time'})
+  const [currency,setCurrency] = useState({value: '$'})
+  const [roles,setRoles] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid role', alreadyExists: false, alreadyExistsMsg: 'Role already exists',AddedMsg:'Role added',RemovedMsg: 'Role removed'})
+  const [industry,setIndustry] = useState({value: 'Any'})
+  const [isRemote,setIsRemote] = useState(false)
+  const [isTrainingProvided,setIsTrainingProvided] = useState( false)
+  const [positions,setPositions] = useState({value: '1', isValid: true, errorMsg: 'Positions value is invalid'})
+  const [education,setEducation] = useState({value: 'No formal education'})
+  const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
+  const [startDate,setStartDate] = useState({value: '',isValid: true, errorMsg: 'Start date is invalid'})
+  const [benefits,setBenefits] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Benefit already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
+  const [workingDay1,setWorkingDay1] = useState({value: 'Monday'})
+  const [workingDay2,setWorkingDay2] = useState({value: 'Friday'})
+  const [workingHours,setWorkingHours] = useState({value: '6',isValid: true, errorMsg: 'working hours value is invalid'})
+  const [applyOnOwnWebsite,setApplyOnOwnWebsite] = useState(false)
+  const [link,setLink] = useState({value: '',isValid: true, errorMsg: 'Website URL is invalid'})
+  const [type,setType] = useState({value: 'Full-time'})
   const {jobID} = useParams()
 
   const maxTabs = document.querySelectorAll('.tab').length
@@ -44,7 +44,49 @@ export default function JobFormPage({edit = false}) {
   useEffect(() => {
     if (!edit) return
     dispatch(fetchJob(Number(jobID)))
-  },[jobID, dispatch, edit])
+
+    setTitle(prev => {return{...prev, value: job.values?.title}})
+    setDescription(prev => {return{...prev, value: job.values?.description}})
+    setSalary1(prev => {return{...prev, value: job.values?.salary1}})
+    setSalary2(prev => {return{...prev, value: job.values?.salary2}})
+    setCurrency({value: job.values?.currency})
+    setRoles(prev => {return{...prev, value: job.values?.roles.map(role => role.name)}})
+    setSkills(prev => {return{...prev, value: job.values?.skills.map(skill => skill.name)}})
+    setBenefits(prev => {return{...prev, value: job.values?.benefits.map(benefit => benefit.name)}})
+    setIndustry({value: job.values?.industry})
+    setIsRemote(job.values?.remote)
+    setIsTrainingProvided(job.values?.training)
+    setPositions(prev => {return{...prev, value: job.values?.positions}})
+    setStartDate(prev => {return{...prev, value: job.values?.startDate}})
+    setEducation({value: job.values?.education})
+    setWorkingDay1(prev => {return{...prev, value: job.values?.workingDay1}})
+    setWorkingDay2(prev => {return{...prev, value: job.values?.workingDay2}})
+    setWorkingHours(prev => {return{...prev, value: job.values?.workingHours}})
+    setApplyOnOwnWebsite(job.values?.applyOnOwnWebsite)
+    setLink(prev => {return{...prev, value: job.values?.link}})
+    setType(prev => {return{...prev, value: job.values?.type}})
+
+  },[jobID, 
+    dispatch, 
+    edit, 
+    job.values.title, 
+    job.values.salary1,
+    job.values.salary2,
+    job.values.currency,
+    job.values.description,
+    job.values.positions, 
+    job.values.startDate,
+    job.values.education,
+    job.values.workingDay1,
+    job.values.workingDay2,
+    job.values.industry,
+    job.values.workingHours,
+    job.values.remote,
+    job.values.training,
+    job.values.applyOnOwnWebsite,
+    job.values.link,
+    job.values.type
+    ])
   
   function handleToPrevTab(){
     setErrors([])
@@ -295,9 +337,9 @@ function handleSubmitForm(e: React.SyntheticEvent){
               </select>
 
               <label><h4>From:</h4></label>
-              <input placeholder = 'E.g 20000' key = {job.values?.salary1 || 'salary1'} onChange = {e => setSalary1(prev => {return {...prev, value: e.target.value}})} className = {!salary1.isValid ? 'inputError' : ''} autoComplete = 'on' required/>
+              <input placeholder = 'E.g 20000' key = {job.values?.salary1 || 'salary1'} defaultValue = {job.values.salary1 || ''} onChange = {e => setSalary1(prev => {return {...prev, value: e.target.value}})} className = {!salary1.isValid ? 'inputError' : ''} autoComplete = 'on' required/>
               <label><h4>To (Optional):</h4></label>
-              <input placeholder = 'E.g 30000' key = {job.values?.salary2|| 'salary2'} onChange = {e => setSalary2(prev => {return {...prev, value: e.target.value}})} className = {!salary2.isValid ? 'inputError' : ''} autoComplete = 'on'/>
+              <input placeholder = 'E.g 30000' key = {job.values?.salary2|| 'salary2'} defaultValue = {job.values.salary2 || ''} onChange = {e => setSalary2(prev => {return {...prev, value: e.target.value}})} className = {!salary2.isValid ? 'inputError' : ''} autoComplete = 'on'/>
               <br/>
               <br/>
               <hr className = 'mt-0-mb-4'/>
@@ -375,10 +417,10 @@ function handleSubmitForm(e: React.SyntheticEvent){
                   </select>
 
                 <label htmlFor = 'workingHours'><h3>Working hours:</h3></label>
-                <input type = 'number' className = {!workingHours.isValid ? 'inputError' : ''} key = 'workingHours1' defaultValue = {job.values?.workingHours} id = 'jobPositions'  onChange = {e => setWorkingHours(prev => {return {...prev, value: e.target.value}})} min = '1' max = '12'  required style = {{width: '65px'}}/>
+                <input type = 'number' className = {!workingHours.isValid ? 'inputError' : ''} key = 'workingHours' defaultValue = {job.values?.workingHours} id = 'jobPositions'  onChange = {e => setWorkingHours(prev => {return {...prev, value: e.target.value}})} min = '1' max = '12'  required style = {{width: '65px'}}/>
 
                 <label htmlFor = 'startDate'><h3>Expected start date:</h3></label>
-                <input type = 'date' className = {!startDate.isValid ? 'inputError' : ''} key = 'workingHours2' defaultValue = {job.values?.startDate} id = 'startDate' min = {getcurrentDate()} onChange = {e => setStartDate(prev => {return {...prev, value: e.target.value}})} required/>
+                <input type = 'date' className = {!startDate.isValid ? 'inputError' : ''} key = 'startDate' defaultValue = {job.values?.startDate} id = 'startDate' min = {getcurrentDate()} onChange = {e => setStartDate(prev => {return {...prev, value: e.target.value}})} required/>
               
                 <label htmlFor = 'jobEducation'><h3>Education:</h3></label>
                     <select id = 'jobEducation' key = 'education' defaultValue = {job.values?.education} onChange = {e => setEducation({value: e.target.value})} required>
