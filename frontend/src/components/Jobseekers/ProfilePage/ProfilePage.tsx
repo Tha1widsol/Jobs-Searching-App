@@ -7,7 +7,7 @@ import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {useNavigate} from 'react-router-dom';
 
 export default function ProfilePage() {
-  let navigate = useNavigate()
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const profile = useAppSelector(state => state.profile)
   const user = useAppSelector(state => state.user.values)
@@ -18,12 +18,12 @@ export default function ProfilePage() {
     .then(response => {
       if (profile.values.user.id === user.id)
           navigate(`/profile/${user.id}`)
-          
+        
       else if (response.meta.requestStatus === 'rejected') 
           navigate('/create-profile')
     })
     
- },[dispatch,navigate,userID,profile.values.user.id,user.id])
+ },[dispatch, navigate, userID, profile.values.user.id, user.id])
 
   return (
   <div> 

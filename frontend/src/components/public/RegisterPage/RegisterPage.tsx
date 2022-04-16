@@ -13,7 +13,7 @@ function useQuery(){
 export default function RegisterPage() {
     let query = useQuery()
     const choice = query.get('choice')
-    let navigate = useNavigate()
+    const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const [errors,setErrors] = useState<Array<string>>([])
     const [email,setEmail] = useState({value: '',isValid: true, invalidErrorMsg: 'Invalid email', alreadyExistsErrorMsg: 'Email already exists'})
