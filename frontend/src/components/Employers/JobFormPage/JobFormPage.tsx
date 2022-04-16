@@ -44,6 +44,9 @@ export default function JobFormPage({edit = false}) {
   useEffect(() => {
     if (!edit) return
     dispatch(fetchJob(Number(jobID)))
+    .then(response => {
+      if (response.meta.requestStatus === 'rejected') navigate('/jobs')
+  })
 
     setTitle(prev => {return{...prev, value: job.values?.title}})
     setDescription(prev => {return{...prev, value: job.values?.description}})
@@ -290,12 +293,13 @@ function handleSubmitForm(e: React.SyntheticEvent){
               <hr className = 'mt-0-mb-4'/>
               <Errors errors = {errors}/>
               <label htmlFor = 'jobTitle'><h3>Title:</h3></label>
-              <input id = 'jobTitle' key = {job.values?.title || 'title'} defaultValue = {edit ? job.values?.title : ''} className = {!title.isValid ? 'inputError' : ''} onChange = {e => setTitle(prev => {return {...prev, value: e.target.value}})} onKeyUp = {capitalizeFirstCharacter} placeholder = 'Title...' autoComplete = 'on' required/>
+              <input id = 'jobTitle' value = {title.value} className = {!title.isValid ? 'inputError' : ''} onChange = {e => setTitle(prev => {return {...prev, value: e.target.value}})} onKeyUp = {capitalizeFirstCharacter} placeholder = 'Title...' autoComplete = 'on' required/>
               <label htmlFor = 'jobDescription' ><h3>Description (Characters remaining: {description.maxLength - description.currentLength}):</h3></label>
-              <textarea id = 'jobDescription' key = {job.values?.description || 'description'} defaultValue = {edit ? job.values?.description : ''} className = {!description.isValid ? 'inputError' : ''} onChange = {e => setDescription(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} onKeyUp = {capitalizeFirstCharacter} placeholder = 'Tell us about the job...' maxLength = {description.maxLength} style = {{height: '100px'}}/>
+              <textarea id = 'jobDescription' value = {description.value} className = {!description.isValid ? 'inputError' : ''} onChange = {e => setDescription(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} onKeyUp = {capitalizeFirstCharacter} placeholder = 'Tell us about the job...' maxLength = {description.maxLength} style = {{height: '100px'}}/>
 
               <label htmlFor = 'jobIndustry'><h3>Industry:</h3></label>
-              <select id = 'jobIndustry' key = {job.values?.industry || 'jobIndustry'} defaultValue = {edit ? job.values?.industry : ''} onChange = {e => setIndustry({value: e.target.value})} autoComplete = 'on'>
+  
+              <select id = 'jobIndustry' value = {industry.value} onChange = {e => setIndustry({value: e.target.value})} autoComplete = 'on'>
                   <option value = 'Any'>Any</option>
                   <option value = 'Beauty'>Beauty</option>
                   <option value = 'Construction'>Construction</option>
@@ -304,9 +308,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
               <label><h3>Roles of the job:</h3></label>
               <input className = {roles.alreadyExists || roles.isEmpty ? 'inputError' : ''}  onChange = {handleSetRole} value = {roles.currentVal} placeholder = 'E.g Managing files...' autoComplete = 'on' required/>
               <List name = 'Roles' 
-              edit = {edit}
               state = {roles}
-              values = {job.values?.roles}
               handleAdd = {() => setRoles(prev => ({...prev, value: [...prev.value, roles.currentVal]}))}
               handleClearInput = {() => setRoles(prev => {return {...prev,currentVal: ''}})}
               handleSetIsEmpty = {(empty = true) => setRoles(prev => {return{...prev,isEmpty: empty}})}
@@ -315,8 +317,8 @@ function handleSubmitForm(e: React.SyntheticEvent){
               />
 
               <label htmlFor = 'jobType'><h3>Type:</h3></label>
-              <select id = 'jobType' key = {job.values?.type || 'jobType'} defaultValue = {edit ? job.values?.type : ''} onChange = {e => setType({value: e.target.value})} style = {{width: '130px'}}> 
-                <option value = 'Full=time'>Full-time</option>
+              <select id = 'jobType' value = {type.value} onChange = {e => setType({value: e.target.value})} style = {{width: '130px'}}> 
+                <option value = 'Full-time'>Full-time</option>
                 <option value = 'Part-time'>Part-time</option>
                 <option value = 'Contract'>Contract</option>
               </select>
@@ -328,7 +330,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
               <label><h3>Salary:</h3></label>
 
               <label htmlFor = 'jobCurrency'><h4>Currency:</h4></label>
-              <select id = 'jobCurrency' key = {job.values?.currency|| 'jobCurrency'} defaultValue = {edit ? job.values?.currency : ''} style = {{width:'65px'}} onChange = {e => setCurrency({value: e.target.value})}>
+              <select id = 'jobCurrency' value = {currency.value} style = {{width:'65px'}} onChange = {e => setCurrency({value: e.target.value})}>
                 <option value = '&#36;'>&#36;</option>
                 <option value = '&#163;'>&#163;</option>
                 <option value = '&#165;'>&#165;</option>
@@ -337,20 +339,18 @@ function handleSubmitForm(e: React.SyntheticEvent){
               </select>
 
               <label><h4>From:</h4></label>
-              <input placeholder = 'E.g 20000' key = {job.values?.salary1 || 'salary1'} defaultValue = {job.values.salary1 || ''} onChange = {e => setSalary1(prev => {return {...prev, value: e.target.value}})} className = {!salary1.isValid ? 'inputError' : ''} autoComplete = 'on' required/>
+              <input placeholder = 'E.g 20000' value = {salary1.value} onChange = {e => setSalary1(prev => {return {...prev, value: e.target.value}})} className = {!salary1.isValid ? 'inputError' : ''} autoComplete = 'on' required/>
               <label><h4>To (Optional):</h4></label>
-              <input placeholder = 'E.g 30000' key = {job.values?.salary2|| 'salary2'} defaultValue = {job.values.salary2 || ''} onChange = {e => setSalary2(prev => {return {...prev, value: e.target.value}})} className = {!salary2.isValid ? 'inputError' : ''} autoComplete = 'on'/>
+              <input placeholder = 'E.g 30000' value = {salary2.value} onChange = {e => setSalary2(prev => {return {...prev, value: e.target.value}})} className = {!salary2.isValid ? 'inputError' : ''} autoComplete = 'on'/>
               <br/>
               <br/>
               <hr className = 'mt-0-mb-4'/>
               <label htmlFor = 'jobPositions'><h3>Number of positions:</h3></label>
-              <input type = 'number' className = {!positions.isValid ? 'inputError' : ''} id = 'jobPositions'  onChange = {e => setPositions(prev => {return {...prev, value: e.target.value}})} min = '1' key = 'jobPositions' defaultValue = {edit ? job.values?.positions : '1'} required style = {{width: '65px'}}/>
+              <input type = 'number' className = {!positions.isValid ? 'inputError' : ''} id = 'jobPositions'  onChange = {e => setPositions(prev => {return {...prev, value: e.target.value}})} min = '1' value = {positions.value} required style = {{width: '65px'}}/>
 
               <label><h3>Benefits (Optional):</h3></label>
               <input className = {benefits.alreadyExists || benefits.isEmpty ? 'inputError' : ''} onChange = {handleSetBenefit} value = {benefits.currentVal} placeholder = 'E.g Free parking...' autoComplete = 'on' required/>
               <List name = 'Benefits'
-              edit = {edit}
-              values = {job.values?.benefits}
               state = {benefits}
               handleAdd = {() => setBenefits(prev => ({...prev, value: [...prev.value, benefits.currentVal]}))}
               handleClearInput = {() => setBenefits(prev => {return {...prev,currentVal: ''}})}
@@ -360,13 +360,13 @@ function handleSubmitForm(e: React.SyntheticEvent){
               />
 
               <label htmlFor = 'jobRemote'><h3>Remote:</h3></label>
-              <select id = 'jobRemote' key = 'remote' defaultValue = {job.values?.remote ? 'Yes' : 'No'} style = {{width:'80px'}} onChange = {e => e.target.value === 'Yes' ? setIsRemote(true) : setIsRemote(false)}>
+              <select id = 'jobRemote' value = {isRemote ? 'Yes' : 'No'} style = {{width:'80px'}} onChange = {e => e.target.value === 'Yes' ? setIsRemote(true) : setIsRemote(false)}>
                   <option value = 'Yes'>Yes</option>
                   <option value = 'No'>No</option>
               </select>
 
               <label htmlFor = 'jobTraining'><h3>Training Provided:</h3></label>
-              <select id = 'jobTraining' key = 'training' defaultValue = {job.values?.training ? 'Yes' : 'No'} style = {{width:'80px'}} onChange = {e => e.target.value === 'Yes' ? setIsTrainingProvided(true) : setIsTrainingProvided(false)}>
+              <select id = 'jobTraining' value = {isTrainingProvided ? 'Yes' : 'No'} style = {{width:'80px'}} onChange = {e => e.target.value === 'Yes' ? setIsTrainingProvided(true) : setIsTrainingProvided(false)}>
                   <option value = 'Yes'>Yes</option>
                   <option value = 'No'>No</option>
               </select>
@@ -381,8 +381,6 @@ function handleSubmitForm(e: React.SyntheticEvent){
                 <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on'/>
 
                 <List name = 'Skills' 
-                edit = {edit}
-                values = {edit ? job.values?.skills : [{name: ''}]}
                 state = {skills}
                 handleAdd = {() => setSkills(prev => ({...prev, value: [...prev.value, skills.currentVal]}))}
                 handleClearInput = {() => setSkills(prev => {return {...prev,currentVal: ''}})}
@@ -393,7 +391,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
 
                 <label><h3>Working days:</h3></label>
 
-                  <select id = 'workingDay1' key = 'WorkingDay1' defaultValue = {edit ? job.values?.workingDay1 : 'Monday'} onChange  = {e => setWorkingDay1(prev => {return{...prev, value: e.target.value}})} style = {{width:'auto'}}>
+                  <select id = 'workingDay1' value = {workingDay1.value} onChange  = {e => setWorkingDay1(prev => {return{...prev, value: e.target.value}})} style = {{width:'auto'}}>
                     <option value = 'Monday'>Monday</option>
                     <option value = 'Tuesday'>Tuesday</option>
                     <option value = 'Wednesday'>Wednesday</option>
@@ -405,7 +403,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
                   
                   <span style = {{marginLeft:'10px',marginRight:'10px'}}>to</span>
               
-                  <select id = 'workingDay2' key = 'WorkingDay2' defaultValue = {edit ? job.values?.workingDay2 : 'Friday'} onChange  = {e => setWorkingDay2(prev => {return{...prev, value: e.target.value}})} style = {{width:'auto'}}>
+                  <select id = 'workingDay2' value = {workingDay2.value} onChange  = {e => setWorkingDay2(prev => {return{...prev, value: e.target.value}})} style = {{width:'auto'}}>
                     <option value = 'Monday'>Monday</option>
                     <option value = 'Tuesday'>Tuesday</option>
                     <option value = 'Wednesday'>Wednesday</option>
@@ -417,13 +415,13 @@ function handleSubmitForm(e: React.SyntheticEvent){
                   </select>
 
                 <label htmlFor = 'workingHours'><h3>Working hours:</h3></label>
-                <input type = 'number' className = {!workingHours.isValid ? 'inputError' : ''} key = 'workingHours' defaultValue = {job.values?.workingHours} id = 'jobPositions'  onChange = {e => setWorkingHours(prev => {return {...prev, value: e.target.value}})} min = '1' max = '12'  required style = {{width: '65px'}}/>
+                <input type = 'number' className = {!workingHours.isValid ? 'inputError' : ''} value = {workingHours.value} id = 'jobPositions'  onChange = {e => setWorkingHours(prev => {return {...prev, value: e.target.value}})} min = '1' max = '12'  required style = {{width: '65px'}}/>
 
                 <label htmlFor = 'startDate'><h3>Expected start date:</h3></label>
-                <input type = 'date' className = {!startDate.isValid ? 'inputError' : ''} key = 'startDate' defaultValue = {job.values?.startDate} id = 'startDate' min = {getcurrentDate()} onChange = {e => setStartDate(prev => {return {...prev, value: e.target.value}})} required/>
+                <input type = 'date' className = {!startDate.isValid ? 'inputError' : ''} value = {startDate.value} id = 'startDate' min = {getcurrentDate()} onChange = {e => setStartDate(prev => {return {...prev, value: e.target.value}})} required/>
               
                 <label htmlFor = 'jobEducation'><h3>Education:</h3></label>
-                    <select id = 'jobEducation' key = 'education' defaultValue = {job.values?.education} onChange = {e => setEducation({value: e.target.value})} required>
+                    <select id = 'jobEducation' value = {education.value} onChange = {e => setEducation({value: e.target.value})} required>
                         <option value = 'No formal education'>No formal education</option>
                         <option value = 'Primary education'>Primary education</option>
                         <option value = 'Secondary education'>Secondary education or high school</option>
@@ -436,7 +434,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
                     </select>
                   
                 <label htmlFor = 'applicationPreference'><h3>Apply on here:</h3></label>
-                <select id = 'applicationPreference' key = 'applyOnOwnWebsite' defaultValue = {job.values?.applyOnOwnWebsite ? 'Yes' : 'No'} style = {{width: '80px'}} onChange = {e => e.target.value === 'No' ? setApplyOnOwnWebsite(true) : setApplyOnOwnWebsite(false)}>
+                <select id = 'applicationPreference' value = {applyOnOwnWebsite ? 'No' : 'Yes'} style = {{width: '80px'}} onChange = {e => e.target.value === 'No' ? setApplyOnOwnWebsite(true) : setApplyOnOwnWebsite(false)}>
                   <option value = 'Yes'>Yes</option>
                   <option value = 'No'>No</option>
                 </select>
@@ -444,7 +442,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
                 {applyOnOwnWebsite ? 
                   <div>
                     <label htmlFor = 'jobLink'><h3>Job link:</h3></label>
-                    <input id = 'jobLink' key = 'jobLink' defaultValue = {edit ? job.values?.link : ''} className = {!link.isValid ? 'inputError' : ''} type = 'url' placeholder = 'Job link...' onChange = {e => setLink(prev => {return {...prev, value: e.target.value}})}/>
+                    <input id = 'jobLink' value = {link.value} className = {!link.isValid ? 'inputError' : ''} type = 'url' placeholder = 'Job link...' onChange = {e => setLink(prev => {return {...prev, value: e.target.value}})}/>
                   </div>
                 : null}
 

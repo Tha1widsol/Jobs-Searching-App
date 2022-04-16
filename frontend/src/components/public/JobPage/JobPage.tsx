@@ -1,16 +1,20 @@
 import React,{useEffect} from 'react'
-import {useParams} from 'react-router-dom'
+import {useParams, useNavigate} from 'react-router-dom'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {fetchJob} from '../../Global/features/Employers/jobs/job'
 
 export default function JobPage() {
+    const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const {jobID} = useParams()
     const job = useAppSelector(state => state.job)
 
     useEffect(() => {
       dispatch(fetchJob(Number(jobID)))
-    },[dispatch,jobID])
+      .then(response => {
+        if (response.meta.requestStatus === 'rejected') navigate('/')
+      })
+    },[dispatch, jobID, navigate])
 
   return (
     <div>
@@ -39,7 +43,7 @@ export default function JobPage() {
           </div>
          
 
-          {job.values?.skills[0].name ? 
+          {job.values?.skills.filter(skill => skill.name).length ? 
           <div>
             <hr className = 'mt-0-mb-4'/>
             <label><h3>Skills:</h3></label>
@@ -51,7 +55,7 @@ export default function JobPage() {
           </div> 
           : null}
           
-            {job.values?.benefits[0].name ? 
+            {job.values?.benefits.filter(benefit => benefit.name).length ? 
             <div>
               <hr className = 'mt-0-mb-4'/>
               <label><h3>Benefits:</h3></label>

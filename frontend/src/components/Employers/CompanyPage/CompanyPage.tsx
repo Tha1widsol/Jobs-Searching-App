@@ -1,10 +1,11 @@
 import React,{useState,useEffect} from 'react'
-import {useParams} from 'react-router-dom';
+import {useParams,useNavigate} from 'react-router-dom';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {fetchCompany} from '../../Global/features/Employers/companies/company';
 import './css/CompanyPage.css'
 
 export default function CompanyPage() {
+  const navigate = useNavigate()
   const company = useAppSelector(state => state.company)
   const [dropdown,setDropdown] = useState(false)
   const dispatch = useAppDispatch()
@@ -12,6 +13,10 @@ export default function CompanyPage() {
 
   useEffect(() => {
     dispatch(fetchCompany(Number(companyID)))
+    .then(response => {
+      if (response.meta.requestStatus === 'rejected') navigate('/companies')
+    })
+
   },[companyID, dispatch])
 
   return (
