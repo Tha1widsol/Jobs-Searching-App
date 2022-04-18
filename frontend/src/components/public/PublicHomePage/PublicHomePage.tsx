@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 import './css/HomePage.css'
 
 export default function PublicHomePage() {
@@ -10,7 +11,7 @@ export default function PublicHomePage() {
                 <section className = 'container'>
                     <h2 className = 'heading'><u>Looking for a job:</u></h2>
                     <p>Find your dream job right now with one of the most trusted job searching engines on the web.</p>
-                    <a href = '/register?choice=jobseeker' ><button id = 'jobseeker' >Add your profile</button></a> 
+                    <Link to = '/register?choice=jobseeker' ><button id = 'jobseeker' >Add your profile</button></Link> 
                 </section>
                 
                 <div id = 'divider'/>
@@ -18,7 +19,7 @@ export default function PublicHomePage() {
                 <section className = 'container'>
                     <h2 className = 'heading'><u>An employer:</u></h2>
                     <p>Setup your company and start adding jobs using our system.</p>
-                    <a href = '/register?choice=employer' ><button id = 'company' >Add your company</button></a> 
+                    <Link to = '/register?choice=employer' ><button id = 'company' >Add your company</button></Link> 
                 </section>
             </section>
           
