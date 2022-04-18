@@ -1,7 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import {useNavigate,Link} from 'react-router-dom'
 import {fetchCompanies} from '../../Global/features/Employers/companies/companies'
-import job from '../../Global/features/Employers/jobs/job'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 
 export default function CompaniesPage() {
