@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react'
+import React,{useState,useEffect} from 'react'
 import {useParams, useNavigate} from 'react-router-dom'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {fetchJob} from '../../Global/features/Employers/jobs/job'
@@ -6,8 +6,10 @@ import {fetchJob} from '../../Global/features/Employers/jobs/job'
 export default function JobPage() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
+    const user = useAppSelector(state => state.user.values)
     const {jobID} = useParams()
     const job = useAppSelector(state => state.job)
+    const [dropdown,setDropdown] = useState(false)
 
     useEffect(() => {
       dispatch(fetchJob(Number(jobID)))
@@ -19,6 +21,19 @@ export default function JobPage() {
   return (
     <div>
       <section className = 'Container'>
+        <section onMouseEnter = {() => setDropdown(true)} onMouseLeave = {() => setDropdown(false)}>
+                {user.isAnEmployer ? <div className = 'kebabMenuIcon'/> : null}
+                    <div className = 'containerDropdown'>
+                        {dropdown ? 
+                        <div className = 'containerDropdownContent'>
+                            <button className = 'dropdownBtn' onClick = {() => navigate(`/edit-job/${jobID}`)} >Edit</button>
+                            <button className = 'deleteNavBtn'>Delete</button>
+                        </div>
+
+                        : null}
+                    
+                    </div>
+          </section>
           <div style = {{display: 'flex'}}>
           <h2>{job.values?.title}</h2>
             {job.values?.company?.logo ? <img src = {`/media/${job.values?.company?.logo}`} className = 'logo' alt = ''/> : null}
