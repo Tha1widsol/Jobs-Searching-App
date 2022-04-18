@@ -1,4 +1,5 @@
 import React,{useState,useEffect} from 'react'
+import {Link} from 'react-router-dom'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {fetchJobs} from '../../Global/features/Employers/jobs/jobs'
 
@@ -23,7 +24,7 @@ export default function EmployerJobsPage() {
                 <div className = 'containerDropdown'>
                   {dropdown === index ? 
                     <div className = 'containerDropdownContent'>
-                        <a href = {`/edit-job/${job.id}`}><button className = 'dropdownBtn'>Edit</button></a>
+                        <Link to = {`/edit-job/${job.id}`}><button className = 'dropdownBtn'>Edit</button></Link>
                         <button className = 'deleteNavBtn'>Delete</button>
                     </div>
                 : null}
@@ -38,7 +39,7 @@ export default function EmployerJobsPage() {
                 <p>{job.industry}</p>
                 <p>Applicants: {job.applicantsCount}</p>
                 <hr className = 'mt-0-mb-4'/>
-                <a href = {`/job/${job.id}`}><button>View</button></a>
+                <Link to = {`/job/${job.id}`}><button>View</button></Link>
                 {job.applicantsCount > 0 ? <a href = {`/applicants/${job.id}`}><button>View applicants</button></a> : null}
              </div>
            )

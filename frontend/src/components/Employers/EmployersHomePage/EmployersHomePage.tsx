@@ -1,4 +1,5 @@
 import React,{useState,useEffect} from 'react';
+import {Link} from 'react-router-dom';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {fetchProfiles} from '../../Global/features/Jobseekers/profiles/profiles';
 
@@ -24,7 +25,7 @@ export default function EmployersHomePage() {
                              <div className = 'containerDropdown'>
                              {dropdown === index ? 
                                  <div className = 'containerDropdownContent'>
-                                     <a href = {`profile/${profile.user.id}`}><button className = 'dropdownBtn'>View</button></a> 
+                                     <Link to = {`/profile/${profile.user.id}`}><button className = 'dropdownBtn'>View</button></Link> 
                                      <button className = 'dropdownBtn'>Hide</button>
                                      <button className = 'deleteNavBtn'>Report</button>
                                  </div>
