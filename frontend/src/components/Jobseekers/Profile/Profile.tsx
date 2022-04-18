@@ -1,15 +1,14 @@
 import React,{useState} from 'react'
 import './css/Profile.css'
 import {useAppDispatch, useAppSelector} from '../../Global/features/hooks';
-import {setToggleStatus} from '../../Global/features/Jobseekers/profiles/profile'
+import {ProfileProps,setToggleStatus} from '../../Global/features/Jobseekers/profiles/profile'
 import {setMessage} from '../../Global/features/successMsg';
 import {useNavigate} from 'react-router-dom';
-import {ProfileProps} from '../../Global/features/Jobseekers/profiles/profile';
+import {token} from '../../Global/features/Auth/user';
 import axios from 'axios'
 
 export default function Profile({profile} : {profile: ProfileProps}) {
     let navigate = useNavigate()
-    const token = localStorage.getItem('token')
     const user = useAppSelector(state => state.user.values)
     const [dropdown,setDropdown] = useState(false)
     const dispatch = useAppDispatch()
