@@ -33,7 +33,7 @@ export default function EmployersHomePage() {
                              </div>
                            </section>
 
-                         <a href = {`/profile/${profile.user.id}`}><h2>{profile.firstName} {profile.middleName} {profile.lastName}</h2></a>
+                         <Link to = {`/profile/${profile.user.id}`}><h2>{profile.firstName} {profile.middleName} {profile.lastName}</h2></Link>
                          <p>(Looking for work)</p>
                          <p><i className = 'fa fa-phone icon'></i>000011111</p>
                          <p><i className = 'icon'>&#9993;</i>{profile.user.email}</p>

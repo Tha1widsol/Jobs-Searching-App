@@ -1,4 +1,5 @@
 import React,{useState,useEffect} from 'react';
+import {Link} from 'react-router-dom';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {fetchJobs} from '../../Global/features/Employers/jobs/jobs'
 
@@ -31,8 +32,8 @@ export default function JobSeekersHomePage() {
                 </div>
               </section>
 
-              <a href = {`/job/${job.id}`}><h2>{job.title}</h2></a>
-              <a href = {`/company/${job.company?.id}`}><p>{job.company?.name}</p></a>
+              <Link to = {`/job/${job.id}`}><h2>{job.title}</h2></Link>
+              <Link to = {`/company/${job.company?.id}`}><p>{job.company?.name}</p></Link>
               {job.salary2 ? <p>{job.currency}{job.salary1} - {job.currency}{job.salary2} a year </p> : <p>{job.currency}{job.salary1} a year</p>} 
               <p>{job.type}</p>
               <hr className = 'mt-0-mb-4'/>
