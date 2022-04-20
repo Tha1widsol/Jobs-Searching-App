@@ -1,15 +1,17 @@
 import React,{useState} from 'react'
 import './css/Profile.css'
 import {useAppDispatch, useAppSelector} from '../../Global/features/hooks';
-import {ProfileProps,setToggleStatus} from '../../Global/features/Jobseekers/profiles/profile'
+import {ProfileProps,setToggleStatus,setDeleteProfile} from '../../Global/features/Jobseekers/profiles/profile'
 import {setMessage} from '../../Global/features/successMsg';
 import {useNavigate} from 'react-router-dom';
 import {token} from '../../Global/features/Auth/user';
+import Popup from '../../Global/Popup/Popup';
 import axios from 'axios'
 
 export default function Profile({profile} : {profile: ProfileProps}) {
     let navigate = useNavigate()
     const user = useAppSelector(state => state.user.values)
+    const [popup,setPopup] = useState(false)
     const [dropdown,setDropdown] = useState(false)
     const dispatch = useAppDispatch()
 
@@ -33,12 +35,28 @@ export default function Profile({profile} : {profile: ProfileProps}) {
     function handleDeleteProfile(){
         axios.delete('/api/profile',{headers: {Authorization: `Token ${token}`}})
         .then(response => {
-        if (response.status === 200) navigate('/create-profile')
-        })
+        if (response.status === 200){
+            dispatch(setDeleteProfile())
+            navigate('/create-profile')
+            dispatch(setMessage('Profile is successfully removed'))
+            window.scrollTo(0, 0)
+            setTimeout(() => {
+                dispatch(setMessage(''))
+            },2000)
+        } 
+
+      })
     }
 
   return (
     <div id = 'profileContainer'>
+        <Popup 
+         heading = 'Are you sure you want to remove your profile ?'
+         popup = {popup} 
+         setPopupOff = {() => setPopup(false)}
+         submitFunction = {handleDeleteProfile}
+         />
+
         {!user.isAnEmployer ? 
         <section onMouseEnter = {() => setDropdown(true)} onMouseLeave = {() => setDropdown(false)}>
             {!user.isAnEmployer ? <div className = 'kebabMenuIcon'/> : null}
@@ -47,7 +65,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                     <div className = 'containerDropdownContent'>
                         {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
                             <button className = 'dropdownBtn' onClick = {() => navigate('/edit-profile')} >Edit</button>
-                            <button className = 'deleteNavBtn' onClick = {() => handleDeleteProfile()}>Delete</button>
+                            <button className = 'deleteNavBtn' onClick = {() => setPopup(true)}>Delete</button>
                     </div>
 
                     : null}
