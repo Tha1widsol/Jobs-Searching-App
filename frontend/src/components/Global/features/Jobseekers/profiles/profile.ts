@@ -67,6 +67,10 @@ export const ProfileSlice = createSlice({
 
         setToggleStatus: (state) => {
             state.values.isActive = !state.values.isActive
+        },
+
+        setDeleteProfile: (state) => {
+            state.values = initialState.values
         }
     },
 
@@ -87,6 +91,6 @@ export const ProfileSlice = createSlice({
 
 })
 
-export const {setProfile,setToggleStatus} = ProfileSlice.actions
+export const {setProfile,setToggleStatus,setDeleteProfile} = ProfileSlice.actions
 
 export default ProfileSlice.reducer
