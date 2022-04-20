@@ -37,9 +37,11 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
         .then(response => {
             if (!edit){
                 if (response.meta.requestStatus === 'fulfilled') navigate(`/profile/${user.id}`)
+
+                else if (response.meta.requestStatus === 'rejected') navigate('/create-profile')
                 return
             }
-            else if (response.meta.requestStatus === 'rejected') navigate('/create-profile')
+          
         })
 
         setFirstName(prev => {return{...prev, value: profile.values?.firstName}})
