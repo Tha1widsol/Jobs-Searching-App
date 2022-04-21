@@ -3,7 +3,7 @@ import {useNavigate,useParams} from 'react-router-dom'
 import Errors from '../../Global/messages/Errors'
 import {ListProps} from '../../Global/types/forms';
 import {useAppDispatch, useAppSelector} from '../../Global/features/hooks'
-import {setMessage} from '../../Global/features/successMsg';
+import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
 import {getcurrentDate} from '../../Global/formFunctions';
 import {capitalizeFirstCharacter} from '../../Global/formFunctions';
 import List from '../../Global/Forms/List';
@@ -247,11 +247,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
     axios.put(`/api/job?id=${jobID}`,form,requestOptions)
     .then(response => {
       if (response.status === 200){
-          dispatch(setMessage('Job is successfully saved'))
-          setTimeout(() => {
-              dispatch(setMessage(''))
-          },2000)
-          window.scrollTo(0, 0)
+          handleAddSuccessMsg('Job is successfully saved', dispatch)
           navigate(`/job/${jobID}`)
       }
   })
@@ -265,10 +261,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
     axios.post('/api/job',form,requestOptions)
     .then(response => {
       if (response.status === 201){
-          dispatch(setMessage('Job is successfully saved'))
-          setTimeout(() => {
-              dispatch(setMessage(''))
-          },2000)
+          handleAddSuccessMsg('Job is successfully saved', dispatch)
           navigate(`/jobs`)
       }
   })

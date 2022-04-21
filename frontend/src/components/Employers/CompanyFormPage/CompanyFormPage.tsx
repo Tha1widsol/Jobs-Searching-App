@@ -3,7 +3,7 @@ import {useNavigate,useParams} from 'react-router-dom';
 import Errors from '../../Global/messages/Errors'
 import {useAppDispatch, useAppSelector} from '../../Global/features/hooks';
 import {FileProps} from '../../Global/types/forms';
-import {setMessage} from '../../Global/features/successMsg';
+import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
 import {fetchCompany} from '../../Global/features/Employers/companies/company';
 import {token} from '../../Global/features/Auth/user';
 import axios from 'axios'
@@ -132,11 +132,7 @@ export default function CompanyFormPage({edit = false}) {
             axios.put(`/api/company?id=${companyID}`,form,requestOptions)
             .then(response => {
                 if (response.status === 200){
-                    dispatch(setMessage('Company is successfully saved'))
-                    setTimeout(() => {
-                        dispatch(setMessage(''))
-                    },2000)
-                    window.scrollTo(0, 0)
+                   handleAddSuccessMsg('Company is successfully saved', dispatch)
                     navigate(`/company/${companyID}`)
                 }
             })
@@ -150,10 +146,7 @@ export default function CompanyFormPage({edit = false}) {
             axios.post('/api/company',form,requestOptions)
             .then(response => {
                 if (response.status === 201){
-                    dispatch(setMessage('Company is successfully saved'))
-                    setTimeout(() => {
-                        dispatch(setMessage(''))
-                    },2000)
+                    handleAddSuccessMsg('Company is successfully saved', dispatch)
                     navigate('/companies')
                 }
             })
