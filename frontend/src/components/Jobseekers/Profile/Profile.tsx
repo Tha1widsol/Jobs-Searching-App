@@ -2,14 +2,14 @@ import React,{useState} from 'react'
 import './css/Profile.css'
 import {useAppDispatch, useAppSelector} from '../../Global/features/hooks';
 import {ProfileProps,setToggleStatus,setDeleteProfile} from '../../Global/features/Jobseekers/profiles/profile'
-import {setMessage} from '../../Global/features/successMsg';
 import {useNavigate} from 'react-router-dom';
+import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
 import {token} from '../../Global/features/Auth/user';
 import Popup from '../../Global/Popup/Popup';
 import axios from 'axios'
 
 export default function Profile({profile} : {profile: ProfileProps}) {
-    let navigate = useNavigate()
+    const navigate = useNavigate()
     const user = useAppSelector(state => state.user.values)
     const [popup,setPopup] = useState(false)
     const [dropdown,setDropdown] = useState(false)
@@ -20,12 +20,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
         .then(response => {
         if (response.status === 200){
             const message = response.data
-            dispatch(setMessage(message.success))
-            window.scrollTo(0, 0)
-            setTimeout(() => {
-                dispatch(setMessage(''))
-            },2000)
-
+            handleAddSuccessMsg(message.success, dispatch)
             dispatch(setToggleStatus())
             setDropdown(false)
             }
@@ -38,11 +33,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
         if (response.status === 200){
             dispatch(setDeleteProfile())
             navigate('/create-profile')
-            dispatch(setMessage('Profile is successfully removed'))
-            window.scrollTo(0, 0)
-            setTimeout(() => {
-                dispatch(setMessage(''))
-            },2000)
+            handleAddSuccessMsg('Profile is successfully removed', dispatch)
         } 
 
       })
@@ -50,12 +41,11 @@ export default function Profile({profile} : {profile: ProfileProps}) {
 
   return (
     <div id = 'profileContainer'>
-        <Popup 
-         heading = 'Are you sure you want to remove your profile ?'
-         popup = {popup} 
-         setPopupOff = {() => setPopup(false)}
-         submitFunction = {handleDeleteProfile}
-         />
+        <Popup trigger = {popup} switchOff = {() => setPopup(false)}>
+         <p>Are you sure you want to remove your profile?</p>
+         <p style = {{fontSize: 'small'}}>(This action cannot be undone)</p>
+         <button onClick = {handleDeleteProfile}>Confirm</button>
+         </Popup>
 
         {!user.isAnEmployer ? 
         <section onMouseEnter = {() => setDropdown(true)} onMouseLeave = {() => setDropdown(false)}>
