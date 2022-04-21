@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
+import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import {fetchProfiles} from '../../Global/features/Jobseekers/profiles/profiles';
 
 export default function EmployersHomePage() {
@@ -20,18 +21,11 @@ export default function EmployersHomePage() {
              {profiles.values?.map((profile,index) => {
                  return(
                      <div className = 'featuredContainer' key = {index}>
-                          <section onMouseEnter = {() => setDropdown(index)} onMouseLeave = {() => setDropdown(null)}>
-                             <div className = 'kebabMenuIcon'/>
-                             <div className = 'containerDropdown'>
-                             {dropdown === index ? 
-                                 <div className = 'containerDropdownContent'>
-                                     <Link to = {`/profile/${profile.user.id}`}><button className = 'dropdownBtn'>View</button></Link> 
-                                     <button className = 'dropdownBtn'>Hide</button>
-                                     <button className = 'deleteNavBtn'>Report</button>
-                                 </div>
-                             : null}
-                             </div>
-                           </section>
+                        <KebabMenu current = {dropdown} many = {true} index = {index} switchOn = {() => setDropdown(index)} switchOff = {() => setDropdown(null)}>
+                            <Link to = {`/profile/${profile.user.id}`}><button className = 'dropdownBtn'>View</button></Link> 
+                            <button className = 'dropdownBtn'>Hide</button>
+                            <button className = 'deleteNavBtn'>Report</button>
+                        </KebabMenu>
 
                          <Link to = {`/profile/${profile.user.id}`}><h2>{profile.firstName} {profile.middleName} {profile.lastName}</h2></Link>
                          <p>(Looking for work)</p>

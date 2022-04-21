@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import './css/Profile.css'
 import {useAppDispatch, useAppSelector} from '../../Global/features/hooks';
 import {ProfileProps,setToggleStatus,setDeleteProfile} from '../../Global/features/Jobseekers/profiles/profile'
+import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import {useNavigate} from 'react-router-dom';
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
 import {token} from '../../Global/features/Auth/user';
@@ -48,22 +49,13 @@ export default function Profile({profile} : {profile: ProfileProps}) {
          </Popup>
 
         {!user.isAnEmployer ? 
-        <section onMouseEnter = {() => setDropdown(true)} onMouseLeave = {() => setDropdown(false)}>
-            {!user.isAnEmployer ? <div className = 'kebabMenuIcon'/> : null}
-                <div className = 'containerDropdown'>
-                    {dropdown ? 
-                    <div className = 'containerDropdownContent'>
-                        {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
-                            <button className = 'dropdownBtn' onClick = {() => navigate('/edit-profile')} >Edit</button>
-                            <button className = 'deleteNavBtn' onClick = {() => setPopup(true)}>Delete</button>
-                    </div>
-
-                    : null}
-                
-                </div>
-        </section>
-        
+        <KebabMenu current = {dropdown} switchOn = {() => setDropdown(true)} switchOff = {() => setDropdown(false)}>
+            {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
+            <button className = 'dropdownBtn' onClick = {() => navigate('/edit-profile')} >Edit</button>
+            <button className = 'deleteNavBtn' onClick = {() => setPopup(true)}>Delete</button>
+        </KebabMenu>
         : null}
+
          <p className = 'fullName'>{profile.values.firstName} {profile.values.middleName} {profile.values.lastName}</p>
             <section style = {{display:'flex'}}>
                 {profile.values.logo ? <img className = 'logo' src = {profile.values.logo} alt = ''/> : null}
