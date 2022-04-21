@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import {useNavigate,Link} from 'react-router-dom'
 import {fetchCompanies} from '../../Global/features/Employers/companies/companies'
+import KebabMenu from '../../Global/KebabMenu/KebabMenu'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 
 export default function CompaniesPage() {
@@ -24,18 +25,11 @@ export default function CompaniesPage() {
         {companies.map((company, index) => {
           return (
             <div className = 'Container' key = {index}>
-              <section onMouseEnter = {() => setDropdown(index)} onMouseLeave = {() => setDropdown(null)}>
-                <div className = 'kebabMenuIcon'/>
-                <div className = 'containerDropdown'>
-                  {dropdown === index ? 
-                    <div className = 'containerDropdownContent'>
-                        <Link to = {`/edit-company/${company.id}`}><button className = 'dropdownBtn'>Edit</button></Link>
-                        <button className = 'dropdownBtn'>View all jobs</button>
-                        <button className = 'deleteNavBtn'>Delete</button>
-                    </div>
-                : null}
-                </div>
-              </section>
+              <KebabMenu current = {dropdown} many = {true} index = {index} switchOn = {() => setDropdown(index)} switchOff = {() => setDropdown(null)}>
+                <Link to = {`/edit-company/${company.id}`}><button className = 'dropdownBtn'>Edit</button></Link>
+                <button className = 'dropdownBtn'>View all jobs</button>
+                <button className = 'deleteNavBtn'>Delete</button>
+              </KebabMenu>
 
               <section style = {{display: 'flex'}}>
                  <h2>{company.name}</h2>
