@@ -2,32 +2,23 @@ import React from 'react'
 import './css/Popup.css'
 
 export default function Popup({
-    heading, 
-    subheading = '(This action cannot be undone)',
-    popup, 
-    setPopupOff, 
-    submitFunction
+    children,
+    trigger,
+    switchOff
     }: 
     {
-    heading: string, 
-    subheading?: string, 
-    popup: boolean, 
-    setPopupOff: () => void, 
-    submitFunction: () => void}) {
-        
-  return (
-      <div>
-          {popup ? 
-          <div className = 'modalBackground'>
-                <div className = 'popup'>
-                    <div className = 'close' onClick = {setPopupOff}>&times;</div>
-                    <p>{heading}</p>
-                    <p style = {{fontSize: 'small'}}>{subheading}</p>
-                    <button onClick = {submitFunction}>Confirm</button>
-                    <button onClick = {setPopupOff}>Cancel</button>
-                </div>
+    trigger: boolean, 
+    switchOff: () => void
+    children: unknown}
+    ){
+      
+  return trigger ? (
+      <div className = 'modalBackground'>
+          <div className = 'popup'>
+              <div className = 'close' onClick = {switchOff}>&times;</div>
+              {children}
+              <button onClick = {switchOff}>Cancel</button>
           </div>
-        : null}
       </div>
-  )
+  ): null
 }
