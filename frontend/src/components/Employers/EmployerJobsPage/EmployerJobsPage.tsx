@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
+import KebabMenu from '../../Global/KebabMenu/KebabMenu'
 import {fetchJobs} from '../../Global/features/Employers/jobs/jobs'
 
 export default function EmployerJobsPage() {
@@ -19,17 +20,10 @@ export default function EmployerJobsPage() {
        {jobs.values?.map((job,index) => {
            return (
              <div className = 'Container' key = {index}>
-               <section onMouseEnter = {() => setDropdown(index)} onMouseLeave = {() => setDropdown(null)}>
-                <div className = 'kebabMenuIcon'/>
-                <div className = 'containerDropdown'>
-                  {dropdown === index ? 
-                    <div className = 'containerDropdownContent'>
-                        <Link to = {`/edit-job/${job.id}`}><button className = 'dropdownBtn'>Edit</button></Link>
-                        <button className = 'deleteNavBtn'>Delete</button>
-                    </div>
-                : null}
-                </div>
-              </section>
+              <KebabMenu current = {dropdown} many = {true} index = {index} switchOn = {() => setDropdown(index)} switchOff = {() => setDropdown(null)}>
+                <Link to = {`/edit-job/${job.id}`}><button className = 'dropdownBtn'>Edit</button></Link>
+                <button className = 'deleteNavBtn'>Delete</button>
+              </KebabMenu>
 
                 <section style = {{display: 'flex'}}>
                     <h2>{job.title}</h2>

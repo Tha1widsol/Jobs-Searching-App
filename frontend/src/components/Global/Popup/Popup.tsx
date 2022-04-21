@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{ReactNode} from 'react'
 import './css/Popup.css'
 
 export default function Popup({
@@ -7,10 +7,10 @@ export default function Popup({
     switchOff
     }: 
     {
-    trigger: boolean, 
+    trigger: boolean
     switchOff: () => void
-    children: unknown}
-    ){
+    children: ReactNode
+  }){
       
   return trigger ? (
       <div className = 'modalBackground'>
