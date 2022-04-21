@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 import {useNavigate} from 'react-router-dom';
 import Errors from '../../Global/messages/Errors'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
-import {setMessage} from '../../Global/features/successMsg';
+import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
 import {handleFixName} from '../../Global/formFunctions';
 import {ListProps,FileProps} from '../../Global/types/forms';
 import List from '../../Global/Forms/List';
@@ -194,10 +194,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
             axios.put('/api/profile',form,requestOptions)
             .then(response => {
                  if (response.status === 200){
-                    dispatch(setMessage('Profile is successfully saved'))
-                    setTimeout(() => {
-                        dispatch(setMessage(''))
-                    },2000)
+                    handleAddSuccessMsg('Profile is successfully saved', dispatch)
                     navigate(`/profile/${user.id}`)
                 }
             })
@@ -211,12 +208,8 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
             axios.post('/api/profile',form,requestOptions)
             .then(response => {
                 if (response.status === 201){
-                    dispatch(setMessage('Profile is successfully saved'))
-                    setTimeout(() => {
-                        dispatch(setMessage(''))
-                    },2000)
+                    handleAddSuccessMsg('Profile is successfully saved', dispatch)
                     navigate(`/profile/${user.id}`)
-                    
                 }
                 
             })
