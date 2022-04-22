@@ -2,10 +2,8 @@ import React,{useState,useEffect} from 'react'
 import {useNavigate,Link} from 'react-router-dom'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu'
-import {token} from '../../Global/features/Auth/user'
 import Popup from '../../Global/Popup/Popup'
-import {fetchJobs} from '../../Global/features/Employers/jobs/jobs'
-import {setJobs} from '../../Global/features/Employers/jobs/jobs'
+import {fetchJobs,setJobs} from '../../Global/features/Employers/jobs/jobs'
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
 import axios from 'axios'
 
@@ -27,7 +25,7 @@ export default function EmployerJobsPage() {
   }
 
   function handleDeleteJob(){
-    axios.delete(`/api/job?id=${chosenJob.id}`,{headers: {Authorization: `Token ${token}`}})
+    axios.delete(`/api/job?id=${chosenJob.id}`)
     .then(response => {
     if (response.status === 200){
         const newJobs = [...jobs.values]
