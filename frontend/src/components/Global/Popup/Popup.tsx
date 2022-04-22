@@ -9,7 +9,7 @@ export default function Popup({
     {
     trigger: boolean, 
     switchOff: () => void
-    children: unknown}
+    children: ReactNode}
     ){
       
   return trigger ? (
