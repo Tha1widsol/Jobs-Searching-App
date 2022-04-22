@@ -7,10 +7,10 @@ export default function Popup({
     switchOff
     }: 
     {
-    trigger: boolean
+    trigger: boolean, 
     switchOff: () => void
-    children: ReactNode
-  }){
+    children: unknown}
+    ){
       
   return trigger ? (
       <div className = 'modalBackground'>
