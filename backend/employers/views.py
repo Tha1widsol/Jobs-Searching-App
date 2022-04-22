@@ -187,7 +187,7 @@ class JobAPI(APIView):
         return Response(status = status.HTTP_400_BAD_REQUEST)
         
     def get(self,request):
-        lookup_url_kwarg ='id'
+        lookup_url_kwarg = 'id'
         id = request.GET.get(lookup_url_kwarg)
         job = Job.objects.filter(id = id)
 
@@ -197,7 +197,13 @@ class JobAPI(APIView):
         
         return Response(status = status.HTTP_404_NOT_FOUND)
 
-            
+    def delete(self,request):
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        job = Job.objects.get(id = id)
+        job.delete()
+        return Response(status = status.HTTP_200_OK)
+
 class JobsListAPI(generics.ListAPIView):
     serializer_class = JobSerializer
 
