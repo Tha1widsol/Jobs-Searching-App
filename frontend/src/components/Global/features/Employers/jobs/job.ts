@@ -104,7 +104,12 @@ export const JobSlice = createSlice({
     reducers:{
         setJob: (state,action) => {
             state.values = action.payload
+        },
+        
+        setDeleteJob:(state) => {
+            state.values = initialState.values
         }
+    
     },
 
     extraReducers: {
@@ -124,6 +129,6 @@ export const JobSlice = createSlice({
 
 })
 
-export const {setJob} = JobSlice.actions
+export const {setJob,setDeleteJob} = JobSlice.actions
 
 export default JobSlice.reducer
