@@ -1,14 +1,19 @@
 import React,{useState,useEffect} from 'react'
 import {useNavigate,Link} from 'react-router-dom'
-import {fetchCompanies} from '../../Global/features/Employers/companies/companies'
+import {fetchCompanies,setCompanies} from '../../Global/features/Employers/companies/companies'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
+import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
+import Popup from '../../Global/Popup/Popup'
+import axios from 'axios'
 
 export default function CompaniesPage() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const [dropdown,setDropdown] = useState<number | null>(null)
-  const companies = useAppSelector(state => state.companies.values)
+  const [chosenCompany,setChosenCompany] = useState({id: 0, name: ''})
+  const [popup,setPopup] = useState(false)
+  const companies = useAppSelector(state => state.companies)
 
   useEffect(() => {
     dispatch(fetchCompanies()).then(response => {
@@ -18,17 +23,44 @@ export default function CompaniesPage() {
       }
     })
   },[dispatch,navigate])
+
+  function ShowPopup(id: number, name: string){
+    setChosenCompany({id: id, name: name})
+    setPopup(true)
+  }
+
+  function handleDeleteCompany(){
+    axios.delete(`/api/company?id=${chosenCompany.id}`)
+    .then(response => {
+    if (response.status === 200){
+        const newCompanies = [...companies.values]
+        let index = newCompanies.findIndex(company => company.id === chosenCompany.id)
+        newCompanies.splice(index, 1)
+        dispatch(setCompanies(newCompanies))
+        handleAddSuccessMsg('Company is successfully removed', dispatch)
+        navigate('/companies')
+        setPopup(false)
+    } 
+
+  })
+}
   
   return (
     <div>
+      <Popup trigger = {popup} switchOff = {() => setPopup(false)}>
+          <p>Are you sure you want to remove {chosenCompany.name}?</p>
+          <p style = {{fontSize: 'small'}}>(This action cannot be undone)</p>
+          <button onClick = {handleDeleteCompany}>Confirm</button>
+      </Popup>
+
         <h1 className = 'title'>Companies</h1>
-        {companies.map((company, index) => {
+        {companies.values?.map((company, index) => {
           return (
             <div className = 'Container' key = {index}>
               <KebabMenu current = {dropdown} many = {true} index = {index} switchOn = {() => setDropdown(index)} switchOff = {() => setDropdown(null)}>
                 <Link to = {`/edit-company/${company.id}`}><button className = 'dropdownBtn'>Edit</button></Link>
                 <button className = 'dropdownBtn'>View all jobs</button>
-                <button className = 'deleteNavBtn'>Delete</button>
+                <button className = 'deleteNavBtn' onClick = {() => ShowPopup(company.id,company.name)}>Delete</button>
               </KebabMenu>
 
               <section style = {{display: 'flex'}}>
