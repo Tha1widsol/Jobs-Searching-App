@@ -36,7 +36,7 @@ class CompanyAPI(APIView):
         return Response(status = status.HTTP_404_NOT_FOUND)
     
     def put(self,request):
-        lookup_url_kwarg ='id'
+        lookup_url_kwarg = 'id'
         id = request.GET.get(lookup_url_kwarg)
         company = Company.objects.get(id = id)
         serializer = self.serializer_class(data = request.data, instance = company)
@@ -50,6 +50,12 @@ class CompanyAPI(APIView):
 
         return Response(status = status.HTTP_400_BAD_REQUEST) 
 
+    def delete(self,request):
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        company = Company.objects.get(id = id)
+        company.delete()
+        return Response(status = status.HTTP_200_OK)
 
 class CompaniesListAPI(generics.ListAPIView):
     serializer_class = CompanySerializer
