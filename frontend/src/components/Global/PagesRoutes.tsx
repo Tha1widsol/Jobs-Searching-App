@@ -1,5 +1,5 @@
 import React from 'react'
-import {BrowserRouter as Router,Routes,Route} from "react-router-dom"
+import {Routes,Route} from "react-router-dom"
 import PublicHomePage from '../public/PublicHomePage/PublicHomePage'
 import RegisterPage from '../public/RegisterPage/RegisterPage'
 import LoginPage from '../public/LoginPage/LoginPage'
@@ -15,44 +15,45 @@ import CompanyPage from '../Employers/CompanyPage/CompanyPage'
 import JobFormPage from '../Employers/JobFormPage/JobFormPage'
 import EmployerJobsPage from '../Employers/EmployerJobsPage/EmployerJobsPage'
 import JobPage from '../public/JobPage/JobPage'
+import ApplicationPage from '../Jobseekers/ApplicationPage/ApplicationPage'
 
 export default function PagesRoutes() {
     const user = useAppSelector(state => state.user)
 
     return (
         <div>
-            <Router>
-                <Routes>
-                    <Route path = '/' element = {user.isLoggedIn && user.values?.isAnEmployer ? <EmployersHomePage/> : user.isLoggedIn && user.values?.isAnEmployer === false ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
-                    <Route path = '/home' element = {user.isLoggedIn && user.values?.isAnEmployer ? <EmployersHomePage/> : user.isLoggedIn && user.values?.isAnEmployer === false ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
-                    <Route path = '/job/:jobID' element = {<JobPage/>}/>
-                
-                    <Route element = {<CheckLoggedIn checkLoggedIn = {false}/>}>
-                        <Route path = '/register' element = {<RegisterPage/>}/>
-                        <Route path = '/login' element = {<LoginPage/>}/>
+            <Routes>
+                <Route path = '/' element = {user.isLoggedIn && user.values?.isAnEmployer ? <EmployersHomePage/> : user.isLoggedIn && user.values?.isAnEmployer === false ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
+                <Route path = '/home' element = {user.isLoggedIn && user.values?.isAnEmployer ? <EmployersHomePage/> : user.isLoggedIn && user.values?.isAnEmployer === false ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
+                <Route path = '/job/:jobID' element = {<JobPage/>}/>
+            
+                <Route element = {<CheckLoggedIn checkLoggedIn = {false}/>}>
+                    <Route path = '/register' element = {<RegisterPage/>}/>
+                    <Route path = '/login' element = {<LoginPage/>}/>
+                </Route>
+
+                <Route element = {<CheckLoggedIn/>}>
+                    <Route path = '/company/:companyID' element = {<CompanyPage/>}/>
+                    <Route path = '/profile/:userID' element = {<ProfilePage/>}/>
+
+                    <Route element = {<CheckAccount/>}>
+                        <Route path = '/create-profile' element = {<ProfileFormPage/>}/>
+                        <Route path = '/edit-profile' element = {<ProfileFormPage edit = {true}/>}/>
+                        <Route path = '/apply/:jobID' element = {<ApplicationPage/>}/>
                     </Route>
 
-                    <Route element = {<CheckLoggedIn/>}>
-                        <Route path = '/company/:companyID' element = {<CompanyPage/>}/>
-                        <Route path = '/profile/:userID' element = {<ProfilePage/>}/>
-
-                        <Route element = {<CheckAccount/>}>
-                            <Route path = '/create-profile' element = {<ProfileFormPage/>}/>
-                            <Route path = '/edit-profile' element = {<ProfileFormPage edit = {true}/>}/>
-                        </Route>
-
-                        <Route element = {<CheckAccount isJobSeeker = {false}/>}>
-                            <Route path = '/create-company' element = {<CompanyFormPage/>}/>
-                            <Route path = '/edit-company/:companyID' element = {<CompanyFormPage edit = {true}/>}/>
-                            <Route path = '/companies' element = {<CompaniesPage/>}/>
-                            <Route path = '/post-job/:companyID' element = {<JobFormPage/>}/>
-                            <Route path = '/edit-job/:jobID' element = {<JobFormPage edit = {true}/>}/>
-                            <Route path = '/jobs' element = {<EmployerJobsPage/>}/>
-                        </Route>
+                    <Route element = {<CheckAccount isJobSeeker = {false}/>}>
+                        <Route path = '/create-company' element = {<CompanyFormPage/>}/>
+                        <Route path = '/edit-company/:companyID' element = {<CompanyFormPage edit = {true}/>}/>
+                        <Route path = '/companies' element = {<CompaniesPage/>}/>
+                        <Route path = '/post-job/:companyID' element = {<JobFormPage/>}/>
+                        <Route path = '/edit-job/:jobID' element = {<JobFormPage edit = {true}/>}/>
+                        <Route path = '/jobs' element = {<EmployerJobsPage/>}/>
                     </Route>
+                </Route>
 
-                </Routes>
-            </Router>
+            </Routes>
+          
         </div>
     )
 }
