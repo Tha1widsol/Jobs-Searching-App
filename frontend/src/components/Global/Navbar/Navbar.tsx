@@ -1,11 +1,11 @@
 import React,{useState} from 'react'
 import {useAppSelector,useAppDispatch} from '../features/hooks'
+import {NavLink} from 'react-router-dom'
 import {token,logout} from '../features/Auth/user'
 import axios from 'axios'
 import './css/Navbar.css'
 
 export default function Navbar() {
-    const pathName = window.location.pathname
     const user = useAppSelector(state => state.user)
     const [dropdown,setDropdown] = useState(false)
 
@@ -21,17 +21,18 @@ export default function Navbar() {
         .catch(error => {
             console.log(error)
         })
-
+        
+        setDropdown(false)
         dispatch(logout())
 
     }
     
     return (
         <div className = 'nav' id = 'head-nav'>
-            <a href='/' id = 'firstcast'>FirstCast</a>
-            <a href='/home' className = {pathName === '/home' || pathName === '/' ? 'active' : ''}>Home</a>
-            <a href='/about' className = {pathName === '/about' ? 'active' : ''}>About</a>
-            <a href='/contact' className = {pathName === '/contact' ? 'active' : ''}>Contact</a>
+            <NavLink to = '/'  id = 'firstcast'>FirstCast</NavLink>
+            <NavLink to = '/home'>Home</NavLink>
+            <NavLink to = '/about'>About</NavLink>
+            <NavLink to = '/contact'>Contact</NavLink>
 
              {user.isLoggedIn ?
              <div>
@@ -41,23 +42,21 @@ export default function Navbar() {
                     <div className = 'dropdown-content'>
                             {user.values?.isAnEmployer ? 
                              <>
-                                <a href = '/companies'>My companies</a> 
-                                <a href = '/jobs'>My jobs</a> 
-
-
+                                <NavLink to = '/companies' onClick = {() => setDropdown(false)}>My companies</NavLink> 
+                                <NavLink to = '/jobs' onClick = {() => setDropdown(false)}>My jobs</NavLink> 
                              </> 
                 
                             : <>
-                                <a href ={`/profile/${user.values?.id}`}>My Profile</a>
-                                <a href = '/applied'>My Jobs</a>
+                                <NavLink to = {`/profile/${user.values?.id}`} onClick = {() => setDropdown(false)}>My Profile</NavLink>
+                                <NavLink to  = '/applied' onClick = {() => setDropdown(false)}>My Jobs</NavLink>
                               </>}
-                         <a href = '/' onClick={handleLogout}>Logout</a>
+                         <NavLink to = '/' onClick = {handleLogout}>Logout</NavLink>
                         </div> : null}
   
                   </div>
               </div>: 
 
-              <a href='/login' className = {pathName === '/login' ? 'active' : ''}>Login</a>}
+              <NavLink to = '/login' onClick = {() => setDropdown(false)} >Login</NavLink>}
               {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, {user.values?.email}</p> : null}
         </div>
     )
