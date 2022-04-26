@@ -8,6 +8,9 @@ import {Provider} from 'react-redux'
 import {persistStore} from 'redux-persist'
 import {PersistGate} from 'redux-persist/integration/react'
 import {token} from './components/Global/features/Auth/user';
+import {
+  BrowserRouter as Router,
+} from "react-router-dom";
 
 let persistor = persistStore(store)
 
@@ -17,7 +20,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store = {store}>
       <PersistGate loading = {<div>Loading...</div>} persistor = {persistor}>
+        <Router>
         <App />
+        </Router>
       </PersistGate>
     </Provider>
   </React.StrictMode>,
