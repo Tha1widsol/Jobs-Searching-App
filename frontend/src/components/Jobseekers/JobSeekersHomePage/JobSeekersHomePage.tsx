@@ -42,7 +42,7 @@ export default function JobSeekersHomePage() {
                 </section>
              
               <section style = {{textAlign:'center'}}>
-                   <button>Apply</button>
+                   <Link to = {`/apply/${job.id}`}><button>Apply</button></Link>
                    <button>Save</button>
               </section>   
 
