@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import User
+from jobseekers.models import Profile
 from main.models import Skill
 
 # Create your models here.
@@ -70,8 +71,12 @@ class Job(models.Model):
       def __str__(self):
         return self.title
 
-      
 
+class Application(models.Model):
+      profile = models.ForeignKey(Profile, on_delete = models.CASCADE)
+      job = models.ForeignKey(Job, on_delete = models.CASCADE,null = True, blank = True)
+      coverLetter = models.TextField(blank = True)
+      applicationDate = models.DateTimeField('ApplicationDate',auto_now_add = True)
 
 
 

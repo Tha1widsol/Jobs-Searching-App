@@ -95,3 +95,5 @@ class JobsListAPI(generics.ListAPIView):
             return jobs
 
         return Response(status = status.HTTP_404_NOT_FOUND)
+
+

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from jobseekers.serializers import ProfileSerializer
 from main.serializers import UserSerializer
 from jobseekers.serializers import SkillSerializer
 from .models import *
@@ -33,4 +34,12 @@ class JobSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Job
+        fields = '__all__'
+
+class ApplicationSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(read_only = True)
+    job = JobSerializer(read_only = True)
+
+    class Meta:
+        model = Application
         fields = '__all__'
