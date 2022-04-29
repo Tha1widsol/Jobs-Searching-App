@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser,FormParser
 from .models import *
-from employers.models import Job
-from employers.serializers import JobSerializer
+from employers.models import Job,Application
+from employers.serializers import JobSerializer,ApplicationSerializer
 from .serializers import *
 
 # Create your views here.
@@ -78,6 +78,24 @@ class ProfileAPI(APIView):
         profile = Profile.objects.get(user = request.user)
         profile.delete()
         return Response(status = status.HTTP_200_OK)
+
+
+class ApplicationAPI(APIView):
+     parser_classes = (MultiPartParser, FormParser)
+     serializer_class = ApplicationSerializer
+
+     def post(self, request):
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        coverLetter = request.data.get('coverLetter')
+        profile = Profile.objects.get(user = request.user)
+        job = Job.objects.get(id = id)
+        application = Application(profile = profile, job = job, coverLetter = coverLetter)
+        application.save()
+        job.applicantsCount += 1
+        job.save()
+        return Response(status = status.HTTP_201_CREATED) 
+
 
 class ToggleProfileStatus(APIView):
     def put(self,request):
