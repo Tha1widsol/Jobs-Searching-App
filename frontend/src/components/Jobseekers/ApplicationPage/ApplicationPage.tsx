@@ -1,9 +1,12 @@
 import React,{useState,useEffect} from 'react'
 import {fetchJob} from '../../Global/features/Employers/jobs/job'
+import {token} from '../../Global/features/Auth/user'
 import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile'
 import Profile from '../Profile/Profile'
+import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
-import {useParams} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
+import axios from 'axios'
 
 export default function ApplicationPage() {
     const dispatch = useAppDispatch()
@@ -13,6 +16,7 @@ export default function ApplicationPage() {
     const profile = useAppSelector(state => state.profile)
     const [coverLetter,setCoverLetter] = useState({value: '', isValid: true, currentLength: 0, maxLength: 250, errorMsg: 'Cover letter needs to have atleast 150 characters'})
     const [currentTab,setCurrentTab] = useState(1)
+    const navigate = useNavigate()
 
     const maxTabs = document.querySelectorAll('.tab').length
 
@@ -22,7 +26,28 @@ export default function ApplicationPage() {
     },[dispatch, jobID, userID])
 
     function handleSubmitForm(e: React.SyntheticEvent){
-        return
+        e.preventDefault()
+        const requestOptions = {
+            headers: {'Content-Type': 'multipart/form-data', Authorization:`Token ${token}`}
+        }
+
+        let form = new FormData()
+
+        form.append('jobID', jobID || '')
+        form.append('coverLetter', coverLetter.value)
+        
+       axios.post('/api/application',form, requestOptions)
+       .then(response => {
+           if (response.status === 201){
+               handleAddSuccessMsg('Job is successfully applied', dispatch)
+               navigate('/')
+           }
+       })
+
+       .catch(error => {
+           console.log(error)
+       })
+
     }
 
   return (
