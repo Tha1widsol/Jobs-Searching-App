@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser,FormParser
 from .models import *
+from rest_framework.decorators import api_view
 from employers.models import Job,Application
 from employers.serializers import JobSerializer,ApplicationSerializer
 from .serializers import *
@@ -85,17 +86,45 @@ class ApplicationAPI(APIView):
      serializer_class = ApplicationSerializer
 
      def post(self, request):
+        serializer = self.serializer_class(data = request.data)
+
+        if serializer.is_valid():
+            application = serializer.save()
+            jobID = request.data.get('jobID')
+            profile = Profile.objects.get(user = request.user)
+            job = Job.objects.get(id = jobID)
+            application.profile = profile
+            application.job = job
+            application.save()
+            job.applicantsCount += 1
+            job.save()
+
+            return Response(status = status.HTTP_201_CREATED) 
+
+        return Response(status = status.HTTP_400_BAD_REQUEST) 
+
+     def get(self, request):
         lookup_url_kwarg = 'id'
         id = request.GET.get(lookup_url_kwarg)
-        coverLetter = request.data.get('coverLetter')
-        profile = Profile.objects.get(user = request.user)
-        job = Job.objects.get(id = id)
-        application = Application(profile = profile, job = job, coverLetter = coverLetter)
-        application.save()
-        job.applicantsCount += 1
-        job.save()
-        return Response(status = status.HTTP_201_CREATED) 
+        application = Application.objects.filter(id = id)
 
+        if application.exists():
+           serializer_class = ApplicationSerializer(application.first())
+           return Response(serializer_class.data, status = status.HTTP_200_OK)
+
+        return Response(status = status.HTTP_404_NOT_FOUND)
+
+@api_view()
+def checkApplicationExists(request):
+    lookup_url_kwarg = 'jobID'
+    jobID = request.GET.get(lookup_url_kwarg)
+    job = Job.objects.get(id = jobID)
+    profile = Profile.objects.get(user = request.user)
+    application = Application.objects.filter(profile = profile, job = job)
+    if application.exists():
+        return Response(status = status.HTTP_200_OK)
+
+    return Response(status = status.HTTP_404_NOT_FOUND)
 
 class ToggleProfileStatus(APIView):
     def put(self,request):
@@ -108,7 +137,10 @@ class JobsListAPI(generics.ListAPIView):
     serializer_class = JobSerializer
 
     def get_queryset(self):
-        jobs = Job.objects.all()
+        profile = Profile.objects.get(user = self.request.user)
+        applications = Application.objects.filter(profile = profile).values_list('job')
+        jobs = Job.objects.exclude(id__in = applications)
+
         if jobs.exists():
             return jobs
 
