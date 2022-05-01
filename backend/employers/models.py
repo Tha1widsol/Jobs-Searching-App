@@ -73,8 +73,8 @@ class Job(models.Model):
 
 
 class Application(models.Model):
-      profile = models.ForeignKey(Profile, on_delete = models.CASCADE)
-      job = models.ForeignKey(Job, on_delete = models.CASCADE,null = True, blank = True)
+      profile = models.ForeignKey(Profile, on_delete = models.CASCADE, null = True, blank = True)
+      job = models.ForeignKey(Job, on_delete = models.CASCADE, null = True, blank = True)
       coverLetter = models.TextField(blank = True)
       applicationDate = models.DateTimeField('ApplicationDate',auto_now_add = True)
 
