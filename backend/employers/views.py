@@ -230,5 +230,3 @@ class ProfilesListAPI(generics.ListAPIView):
 
         return Response(status = status.HTTP_404_NOT_FOUND)
         
-class ApplicationAPI(generics.ListAPIView):
-    pass
