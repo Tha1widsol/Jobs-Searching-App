@@ -9,6 +9,7 @@ import CompanyReducer from './Employers/companies/company'
 import JobsReducer from './Employers/jobs/jobs'
 import JobReducer from './Employers/jobs/job'
 import storage from 'redux-persist/lib/storage'
+import ApplicationsReducer from './Jobseekers/applications/applications'
 
 import {
   persistReducer
@@ -29,7 +30,8 @@ const reducers = combineReducers({
   company: CompanyReducer,
   companies: CompaniesReducer, 
   jobs: JobsReducer,
-  job: JobReducer
+  job: JobReducer,
+  applications: ApplicationsReducer
  })
 
  const persistedReducer = persistReducer(persistConfig, reducers)

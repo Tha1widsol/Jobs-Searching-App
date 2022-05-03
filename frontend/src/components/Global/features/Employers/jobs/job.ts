@@ -44,6 +44,44 @@ export interface JobProps extends StatusProps{
     }
 }
 
+export const job = {
+    user,
+    company: {
+        id: 0,
+        name: '',
+        email: '',
+        about: '',
+        phone: '',
+        logo: '',
+        banner: '',
+        industry: '',
+        website: ''
+    },
+    id: 0,
+    title: '',
+    description: '',
+    salary1: '',
+    salary2: '',
+    currency: '',
+    roles: [{name: ''}],
+    industry: '',
+    remote: false,
+    type: '',
+    training: false,
+    positions: '',
+    education: '',
+    skills: [{name: ''}],
+    startDate: '',
+    benefits: [{name: ''}],
+    workingDay1: '',
+    workingDay2: '',
+    workingHours: '',
+    applicantsCount: 0,
+    applyOnOwnWebsite: false,
+    link: '',
+    datePosted: ''
+}
+
 export const initialState: JobProps = {
     status: '',
     values: {

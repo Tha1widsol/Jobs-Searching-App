@@ -23,6 +23,23 @@ export interface ProfileProps extends StatusProps{
   
 }
 
+export const profile = {
+    user,
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    skills: [{name: ''}],
+    phone: '',
+    logo: '',
+    cv: '',
+    education: '',
+    industry: '',
+    distance: '',
+    experience: '',
+    about: '',
+    isActive: false,
+}
+
 const initialState: ProfileProps = {
     status: '',
     values: {

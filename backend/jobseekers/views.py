@@ -126,6 +126,18 @@ def checkApplicationExists(request):
 
     return Response(status = status.HTTP_404_NOT_FOUND)
 
+class ApplicationsListAPI(generics.ListAPIView):
+    serializer_class = JobSerializer
+
+    def get_queryset(self):
+        profile = Profile.objects.get(user = self.request.user)
+        applications = Application.objects.filter(profile = profile)
+
+        if applications.exists():
+            return applications
+
+        return Response(status = status.HTTP_404_NOT_FOUND)
+
 class ToggleProfileStatus(APIView):
     def put(self,request):
         profile = Profile.objects.get(user = request.user)
