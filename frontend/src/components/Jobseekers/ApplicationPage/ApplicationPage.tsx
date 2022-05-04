@@ -5,13 +5,15 @@ import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile'
 import Profile from '../Profile/Profile'
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
+import {fetchApplications} from '../../Global/features/Jobseekers/applications/applications'
 import {useNavigate, useParams} from 'react-router-dom'
 import axios from 'axios'
 
 export default function ApplicationPage() {
     const dispatch = useAppDispatch()
     const {jobID} = useParams()
-    const userID = useAppSelector(state => state.user.values.id)
+    const userID = useAppSelector(state => state.user.values?.id)
+    const applications = useAppSelector(state => state.applications)
     const job = useAppSelector(state => state.job.values)
     const profile = useAppSelector(state => state.profile)
     const [coverLetter,setCoverLetter] = useState({value: '', isValid: true, currentLength: 0, maxLength: 250, errorMsg: 'Cover letter needs to have atleast 150 characters'})
@@ -23,7 +25,13 @@ export default function ApplicationPage() {
     useEffect(() => {
         dispatch(fetchJob(Number(jobID)))
         dispatch(fetchProfile(userID))
-    },[dispatch, jobID, userID])
+
+        dispatch(fetchApplications('jobseeker/applications'))
+        if (applications.values?.filter(application => application.job.id === Number(jobID)).length > 0){
+            navigate('/')
+        }
+       
+    },[dispatch, jobID, userID, applications.values, navigate])
 
     function handleSubmitForm(e: React.SyntheticEvent){
         e.preventDefault()
