@@ -48,7 +48,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
          <button onClick = {handleDeleteProfile}>Confirm</button>
          </Popup>
 
-        {!user.isAnEmployer ? 
+        {!user?.isAnEmployer ? 
         <KebabMenu current = {dropdown} switchOn = {() => setDropdown(true)} switchOff = {() => setDropdown(false)}>
             {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
             <button className = 'dropdownBtn' onClick = {() => navigate('/edit-profile')} >Edit</button>
