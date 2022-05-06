@@ -48,7 +48,7 @@ export default function Navbar() {
                 
                             : <>
                                 <NavLink to = {`/profile/${user.values?.id}`} onClick = {() => setDropdown(false)}>My Profile</NavLink>
-                                <NavLink to  = '/applied' onClick = {() => setDropdown(false)}>My Jobs</NavLink>
+                                <NavLink to  = '/my-jobs?tab=applications' onClick = {() => setDropdown(false)}>My Jobs</NavLink>
                               </>}
                          <NavLink to = '/' onClick = {handleLogout}>Logout</NavLink>
                         </div> : null}
