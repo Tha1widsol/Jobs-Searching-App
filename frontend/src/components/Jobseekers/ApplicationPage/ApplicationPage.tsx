@@ -5,7 +5,6 @@ import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile'
 import Profile from '../Profile/Profile'
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
-import {fetchApplications} from '../../Global/features/Jobseekers/applications/applications'
 import {useNavigate, useParams} from 'react-router-dom'
 import axios from 'axios'
 
@@ -23,13 +22,13 @@ export default function ApplicationPage() {
     const maxTabs = document.querySelectorAll('.tab').length
 
     useEffect(() => {
-        dispatch(fetchJob(Number(jobID)))
         dispatch(fetchProfile(userID))
+        dispatch(fetchJob(Number(jobID)))
+        .then(response => {
+            if (response.meta.requestStatus === 'rejected') navigate('/')
+        })
 
-        dispatch(fetchApplications('jobseeker/applications'))
-        if (applications.values?.filter(application => application.job.id === Number(jobID)).length > 0){
-            navigate('/')
-        }
+        if (applications.values?.find(application => application.job.id === Number(jobID))) navigate('/')
        
     },[dispatch, jobID, userID, applications.values, navigate])
 
