@@ -11,14 +11,13 @@ const initialState = {
         job,
         coverLetter: '',
         applicationDate: ''
-
     }]
 }
 
 export const fetchApplications = createAsyncThunk(
     'user/fetchApplications',
-    async (endpoint: string) => {
-        const response = await axios.get(`/api/${endpoint}`,{
+    async (type: string) => {
+        const response = await axios.get(`/api/${type}/applications`,{
             headers: {
                 Authorization:`Token ${token}`
             }
