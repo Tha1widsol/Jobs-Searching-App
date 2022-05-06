@@ -116,15 +116,20 @@ class ApplicationAPI(APIView):
 
 @api_view()
 def checkApplicationExists(request):
-    lookup_url_kwarg = 'jobID'
-    jobID = request.GET.get(lookup_url_kwarg)
-    job = Job.objects.get(id = jobID)
-    profile = Profile.objects.get(user = request.user)
-    application = Application.objects.filter(profile = profile, job = job)
-    if application.exists():
-        return Response(status = status.HTTP_200_OK)
-
-    return Response(status = status.HTTP_404_NOT_FOUND)
+    try:
+        lookup_url_kwarg = 'id'
+        jobID = request.GET.get(lookup_url_kwarg)
+        job = Job.objects.get(id = jobID)
+        profile = Profile.objects.get(user = request.user)
+        application = Application.objects.filter(profile = profile, job = job)
+        if application.exists():
+            return Response(status = status.HTTP_200_OK)
+        return Response(status = status.HTTP_404_NOT_FOUND)
+        
+    except:
+        return Response({})
+    
+  
 
 class ApplicationsListAPI(generics.ListAPIView):
     serializer_class = ApplicationSerializer
