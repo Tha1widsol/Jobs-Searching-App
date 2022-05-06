@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import {useParams, useNavigate} from 'react-router-dom'
+import {useParams, useNavigate, Link} from 'react-router-dom'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {fetchJob} from '../../Global/features/Employers/jobs/job'
 
@@ -39,8 +39,16 @@ export default function JobPage() {
             {job.values?.company?.logo ? <img src = {`/media/${job.values?.company?.logo}`} className = 'logo' alt = ''/> : null}
           </div>
           <a href = {`/company/${job.values?.company?.id}`}><p>{job.values?.company?.name}</p></a>
-          <hr className = 'mt-0-mb-4'/>
+    
           <p>{job.values?.description}</p> 
+          <hr className = 'mt-0-mb-4'/>
+          {!user.isAnEmployer ?
+            <div>
+              <Link to={{ pathname:`https://${"d"}`}}><button>Apply</button></Link>
+              <button>Save</button>
+            </div>
+            : null}
+ 
        </section>
 
        <section className = 'Container'>

@@ -42,8 +42,11 @@ export default function JobSeekersHomePage() {
                 </section>
              
               <section style = {{textAlign:'center'}}>
-                   <Link to = {`/apply/${job.id}`}><button>Apply</button></Link>
-                   <button>Save</button>
+                  {job.applyOnOwnWebsite ? 
+                   <a href = {job.link} target = 'blank'><button>Apply Externally</button></a>
+                  : <Link to = {`/apply/${job.id}`}><button>Apply</button></Link>}
+
+                  <button>Save</button>
               </section>   
 
             </div>
