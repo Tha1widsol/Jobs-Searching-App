@@ -10,6 +10,7 @@ const initialState = {
         profile,
         job,
         coverLetter: '',
+        status: '',
         applicationDate: ''
     }
 }
