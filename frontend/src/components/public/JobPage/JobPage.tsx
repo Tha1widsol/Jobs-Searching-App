@@ -1,7 +1,13 @@
 import React,{useState,useEffect} from 'react'
-import {useParams, useNavigate, Link} from 'react-router-dom'
+import {useParams, useNavigate, Link, useSearchParams} from 'react-router-dom'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
-import {fetchJob} from '../../Global/features/Employers/jobs/job'
+import {fetchJob,setDeleteJob} from '../../Global/features/Employers/jobs/job'
+import {fetchApplications} from '../../Global/features/Jobseekers/applications/applications'
+import {token} from '../../Global/features/Auth/user'
+import KebabMenu from '../../Global/KebabMenu/KebabMenu'
+import Popup from '../../Global/Popup/Popup'
+import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
+import axios from 'axios'
 
 export default function JobPage() {
     const navigate = useNavigate()
@@ -9,6 +15,8 @@ export default function JobPage() {
     const user = useAppSelector(state => state.user.values)
     const {jobID} = useParams()
     const job = useAppSelector(state => state.job)
+    const applications = useAppSelector(state => state.applications)
+    const [popup,setPopup] = useState(false)
     const [dropdown,setDropdown] = useState(false)
 
     useEffect(() => {
@@ -18,37 +26,59 @@ export default function JobPage() {
       })
     },[dispatch, jobID, navigate])
 
+    function handleDeleteJob(){
+      axios.delete(`/api/job?id=${jobID}`,{headers: {Authorization: `Token ${token}`}})
+      .then(response => {
+      if (response.status === 200){
+          dispatch(setDeleteJob())
+          navigate('/')
+          handleAddSuccessMsg('Profile is successfully removed', dispatch)
+      } 
+
+    })
+  }
+
   return (
     <div>
       <section className = 'Container'>
-        <section onMouseEnter = {() => setDropdown(true)} onMouseLeave = {() => setDropdown(false)}>
-                {user.isAnEmployer ? <div className = 'kebabMenuIcon'/> : null}
-                    <div className = 'containerDropdown'>
-                        {dropdown ? 
-                        <div className = 'containerDropdownContent'>
-                            <button className = 'dropdownBtn' onClick = {() => navigate(`/edit-job/${jobID}`)} >Edit</button>
-                            <button className = 'deleteNavBtn'>Delete</button>
-                        </div>
+      <Popup trigger = {popup} switchOff = {() => setPopup(false)}>
+         <p>Are you sure you want to remove this job?</p>
+         <p style = {{fontSize: 'small'}}>(This action cannot be undone)</p>
+         <button onClick = {handleDeleteJob}>Confirm</button>
+      </Popup>
 
-                        : null}
-                    
-                    </div>
-          </section>
-          <div style = {{display: 'flex'}}>
-          <h2>{job.values?.title}</h2>
-            {job.values?.company?.logo ? <img src = {`/media/${job.values?.company?.logo}`} className = 'logo' alt = ''/> : null}
+      <KebabMenu current = {dropdown} switchOn = {() => setDropdown(true)} switchOff = {() => setDropdown(false)}>
+        {user.isAnEmployer ? 
+        <div>
+           <button className = 'dropdownBtn' onClick = {() => navigate(`/edit-job/${jobID}`)} >Edit</button>
+           <button className = 'deleteNavBtn' onClick = {() => setPopup(true)}>Delete</button>
+        </div> 
+        : 
+        <div>
+            <button className = 'deleteNavBtn'>Report</button>
+        </div>
+        }
+        
+      </KebabMenu>
+                      
+      <div style = {{display: 'flex'}}>
+      <h2>{job.values?.title}</h2>
+        {job.values?.company?.logo ? <img src = {`/media/${job.values?.company?.logo}`} className = 'logo' alt = ''/> : null}
+      </div>
+      <a href = {`/company/${job.values?.company?.id}`}><p>{job.values?.company?.name}</p></a>
+
+      <p>{job.values?.description}</p> 
+      <hr className = 'mt-0-mb-4'/>
+      {!applications.values?.find(application => application.job.id === Number(jobID)) ? 
+        !user.isAnEmployer ?
+          <div>
+          {job.values?.applyOnOwnWebsite ? 
+                  <a href = {job.values?.link} target = 'blank'><button>Apply Externally</button></a>
+                : <Link to = {`/apply/${job.values?.id}`}><button>Apply</button></Link>}
           </div>
-          <a href = {`/company/${job.values?.company?.id}`}><p>{job.values?.company?.name}</p></a>
-    
-          <p>{job.values?.description}</p> 
-          <hr className = 'mt-0-mb-4'/>
-          {!user.isAnEmployer ?
-            <div>
-              <Link to={{ pathname:`https://${"d"}`}}><button>Apply</button></Link>
-              <button>Save</button>
-            </div>
-            : null}
- 
+          : null
+          
+      : <p><b>Already applied</b></p>}
        </section>
 
        <section className = 'Container'>
@@ -64,7 +94,6 @@ export default function JobPage() {
                 return (<li key = {index}>{role.name}</li>)
             })}
           </div>
-         
 
           {job.values?.skills.filter(skill => skill.name).length ? 
           <div>
