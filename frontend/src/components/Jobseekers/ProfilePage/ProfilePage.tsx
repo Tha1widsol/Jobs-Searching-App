@@ -29,9 +29,9 @@ export default function ProfilePage() {
   return (
   <div> 
     {!user.isAnEmployer ?  
-    <div>
-        <label><p id = 'status'>Status:</p></label>
-        <div className = {profile.values.isActive ? 'public' : 'private'}/>
+    <div className = 'status'>
+        <label><p style = {{marginRight: '5px', fontSize: 'large'}}>Status:</p></label>
+        <div className = {profile.values.isActive ? 'indicator green' : 'indicator red'}/>
     </div>
     : null}
 
