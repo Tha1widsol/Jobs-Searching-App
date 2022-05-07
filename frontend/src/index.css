@@ -221,6 +221,19 @@ Icons styles
   color:grey;
   }
 
+.indicator{
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  border-width: 0.1px;
+  border-style: dotted;
+  z-index: -1;
+}
+
+.amber{background-color: yellow}
+.green{background-color:green}
+.red{background-color:red;}
+
 /* ################
 Container styles
 ##################*/
