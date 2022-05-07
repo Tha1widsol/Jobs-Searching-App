@@ -1,18 +1,5 @@
-  #status{
-    text-align: center;
-    font-size: large;
+  .status{
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-
-  .public,.private{
-    margin: 0 auto;
-    height: 25px;
-    width: 25px;
-    border-radius: 50%;
-    z-index:-1;
-    margin-bottom: 20px;
-  }
-
-  .public{background-color:green;}
-
-  .private{background-color:red;}
-
