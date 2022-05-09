@@ -1,8 +1,8 @@
 import React,{useState,useEffect} from 'react'
-import {useParams, useNavigate, Link, useSearchParams} from 'react-router-dom'
+import {useParams, useNavigate, Link} from 'react-router-dom'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {fetchJob,setDeleteJob} from '../../Global/features/Employers/jobs/job'
-import {fetchApplications} from '../../Global/features/Jobseekers/applications/applications'
+import {checkApplicationExists,setApplicationExists} from '../../Global/features/Jobseekers/applications/checkApplicationExists'
 import {token} from '../../Global/features/Auth/user'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu'
 import Popup from '../../Global/Popup/Popup'
@@ -13,9 +13,9 @@ export default function JobPage() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const user = useAppSelector(state => state.user.values)
+    const applicationExists = useAppSelector(state => state.checkApplicationExists.values.doesExist)
     const {jobID} = useParams()
     const job = useAppSelector(state => state.job)
-    const applications = useAppSelector(state => state.applications)
     const [popup,setPopup] = useState(false)
     const [dropdown,setDropdown] = useState(false)
 
@@ -24,6 +24,15 @@ export default function JobPage() {
       .then(response => {
         if (response.meta.requestStatus === 'rejected') navigate('/')
       })
+      
+      dispatch(checkApplicationExists(Number(jobID)))
+      .unwrap()
+      .then(response => {
+        if (response.doesExist) dispatch(setApplicationExists({doesExist: true})) 
+
+        else dispatch(setApplicationExists({doesExist: false})) 
+      })
+  
     },[dispatch, jobID, navigate])
 
     function handleDeleteJob(){
@@ -48,7 +57,7 @@ export default function JobPage() {
       </Popup>
 
       <KebabMenu current = {dropdown} switchOn = {() => setDropdown(true)} switchOff = {() => setDropdown(false)}>
-        {user.isAnEmployer ? 
+        {user?.isAnEmployer ? 
         <div>
            <button className = 'dropdownBtn' onClick = {() => navigate(`/edit-job/${jobID}`)} >Edit</button>
            <button className = 'deleteNavBtn' onClick = {() => setPopup(true)}>Delete</button>
@@ -69,8 +78,8 @@ export default function JobPage() {
 
       <p>{job.values?.description}</p> 
       <hr className = 'mt-0-mb-4'/>
-      {!applications.values?.find(application => application.job.id === Number(jobID)) ? 
-        !user.isAnEmployer ?
+      {!applicationExists ? 
+        !user?.isAnEmployer ?
           <div>
           {job.values?.applyOnOwnWebsite ? 
                   <a href = {job.values?.link} target = 'blank'><button>Apply Externally</button></a>
@@ -90,7 +99,7 @@ export default function JobPage() {
         <section className = 'Container'>
           <label><h3>Roles:</h3></label>
           <div className = 'listContainer'>
-            {job.values?.roles.map((role,index) => {
+            {job.values?.roles?.map((role,index) => {
                 return (<li key = {index}>{role.name}</li>)
             })}
           </div>

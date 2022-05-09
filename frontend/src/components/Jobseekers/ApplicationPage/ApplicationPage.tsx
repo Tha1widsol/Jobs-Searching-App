@@ -5,8 +5,10 @@ import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile'
 import Profile from '../Profile/Profile'
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
+import {checkApplicationExists} from '../../Global/features/Jobseekers/applications/checkApplicationExists'
 import {useNavigate, useParams} from 'react-router-dom'
 import axios from 'axios'
+import { getSystemErrorMap } from 'util'
 
 export default function ApplicationPage() {
     const dispatch = useAppDispatch()
@@ -24,12 +26,29 @@ export default function ApplicationPage() {
     useEffect(() => {
         dispatch(fetchProfile(userID))
         dispatch(fetchJob(Number(jobID)))
+        .unwrap()
         .then(response => {
-            if (response.meta.requestStatus === 'rejected') navigate('/')
+            if (!response.doesExist) navigate('/')
         })
 
-        if (applications.values?.find(application => application.job.id === Number(jobID))) navigate('/')
+        .catch(() => {
+            return
+         })
+ 
+
+
+        dispatch(checkApplicationExists(Number(jobID)))
+        .unwrap()
+        .then(response => {
+          if (response.doesExist) navigate('/') 
+        })
+
+        .catch(() => {
+           return
+        })
+
        
+
     },[dispatch, jobID, userID, applications.values, navigate])
 
     function handleSubmitForm(e: React.SyntheticEvent){

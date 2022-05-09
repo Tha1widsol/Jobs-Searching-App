@@ -61,7 +61,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                 {profile.values.logo ? <img className = 'logo' src = {profile.values.logo} alt = ''/> : null}
                 <div className = {profile.values.logo ? 'contact' : ''}> 
                     <p><i className = 'fa fa-phone icon'></i>000011111</p>
-                    <p><i className = 'icon'>&#9993;</i>{profile.values.user.email}</p>
+                    <p><i className = 'icon'>&#9993;</i>example@gmail.com</p>
                 </div>
             </section>
         

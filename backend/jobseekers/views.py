@@ -123,14 +123,13 @@ def checkApplicationExists(request):
         profile = Profile.objects.get(user = request.user)
         application = Application.objects.filter(profile = profile, job = job)
         if application.exists():
-            return Response(status = status.HTTP_200_OK)
-        return Response(status = status.HTTP_404_NOT_FOUND)
+            return Response({'doesExist': True}, status = status.HTTP_200_OK)
+
+        return Response({'doesExist': False}, status = status.HTTP_202_ACCEPTED)
         
     except:
-        return Response({})
+         return Response({'doesExist': False}, status = status.HTTP_404_NOT_FOUND)
     
-  
-
 class ApplicationsListAPI(generics.ListAPIView):
     serializer_class = ApplicationSerializer
 
