@@ -21,18 +21,21 @@ export default function JobPage() {
 
     useEffect(() => {
       dispatch(fetchJob(Number(jobID)))
-      .then(response => {
-        if (response.meta.requestStatus === 'rejected') navigate('/')
+      .unwrap()
+
+      .catch(() => {
+        navigate('/')
       })
-      
+  
       dispatch(checkApplicationExists(Number(jobID)))
       .unwrap()
       .then(response => {
         if (response.doesExist) dispatch(setApplicationExists({doesExist: true})) 
 
-        else dispatch(setApplicationExists({doesExist: false})) 
+        else dispatch(setApplicationExists({doesExist: false}))
       })
-  
+      
+
     },[dispatch, jobID, navigate])
 
     function handleDeleteJob(){
@@ -104,7 +107,7 @@ export default function JobPage() {
             })}
           </div>
 
-          {job.values?.skills.filter(skill => skill.name).length ? 
+          {job.values?.skills?.filter(skill => skill.name).length ? 
           <div>
             <hr className = 'mt-0-mb-4'/>
             <label><h3>Skills:</h3></label>
@@ -116,7 +119,7 @@ export default function JobPage() {
           </div> 
           : null}
           
-            {job.values?.benefits.filter(benefit => benefit.name).length ? 
+            {job.values?.benefits?.filter(benefit => benefit.name).length ? 
             <div>
               <hr className = 'mt-0-mb-4'/>
               <label><h3>Benefits:</h3></label>

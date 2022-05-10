@@ -28,14 +28,12 @@ export default function ApplicationPage() {
         dispatch(fetchJob(Number(jobID)))
         .unwrap()
         .then(response => {
-            if (!response.doesExist) navigate('/')
+           if (response.status === 404) navigate('/')
         })
 
         .catch(() => {
-            return
-         })
- 
-
+            navigate('/')
+        })
 
         dispatch(checkApplicationExists(Number(jobID)))
         .unwrap()

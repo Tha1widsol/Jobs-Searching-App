@@ -199,7 +199,7 @@ class JobAPI(APIView):
 
         if job.exists():
             serializer_class = JobSerializer(job.first())
-            return Response(serializer_class.data, status =  status.HTTP_200_OK)
+            return Response(serializer_class.data, status = status.HTTP_200_OK)
         
         return Response(status = status.HTTP_404_NOT_FOUND)
 
