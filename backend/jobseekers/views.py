@@ -133,11 +133,7 @@ class ApplicationsListAPI(generics.ListAPIView):
     def get_queryset(self):
         profile = Profile.objects.get(user = self.request.user)
         applications = Application.objects.filter(profile = profile)
-
-        if applications.exists():
-            return applications
-
-        return Response(status = status.HTTP_404_NOT_FOUND)
+        return applications
 
 class ToggleProfileStatus(APIView):
     def put(self,request):
@@ -153,10 +149,6 @@ class JobsListAPI(generics.ListAPIView):
         profile = Profile.objects.get(user = self.request.user)
         applications = Application.objects.filter(profile = profile).values_list('job')
         jobs = Job.objects.exclude(id__in = applications)
-
-        if jobs.exists():
-            return jobs
-
-        return Response(status = status.HTTP_404_NOT_FOUND)
+        return jobs
 
 

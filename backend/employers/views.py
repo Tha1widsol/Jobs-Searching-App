@@ -215,18 +215,13 @@ class JobsListAPI(generics.ListAPIView):
 
     def get_queryset(self):
         jobs = Job.objects.filter(user = self.request.user)
-        if jobs.exists():
-            return jobs
-
-        return Response(status = status.HTTP_404_NOT_FOUND)
+        return jobs
 
 class ProfilesListAPI(generics.ListAPIView):
     serializer_class = ProfileSerializer
         
     def get_queryset(self):
         profiles = Profile.objects.all()
-        if profiles.exists():
-            return profiles
-
-        return Response(status = status.HTTP_404_NOT_FOUND)
+        return profiles
+        
         
