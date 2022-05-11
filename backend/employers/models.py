@@ -1,12 +1,11 @@
 from django.db import models
-from accounts.models import User
 from jobseekers.models import Profile
 from main.models import Skill
 
 # Create your models here.
 
 class Employer(models.Model):
-   user = models.OneToOneField(User,on_delete = models.CASCADE, null = True)
+   user = models.OneToOneField('accounts.User',on_delete = models.CASCADE, null = True)
    firstName = models.CharField(max_length = 200)
    middleName = models.CharField(max_length = 200,blank = True)
    lastName = models.CharField(max_length = 200)
@@ -17,7 +16,7 @@ class Employer(models.Model):
     return self.firstName
 
 class Company(models.Model):
-    user = models.ForeignKey(User,on_delete = models.CASCADE, null = True)
+    user = models.ForeignKey('accounts.User',on_delete = models.CASCADE, null = True)
     name = models.CharField(max_length = 200)
     email = models.EmailField(unique = True)
     about = models.CharField(max_length = 250)
@@ -43,7 +42,7 @@ class Benefit(models.Model):
             return self.name
 
 class Job(models.Model):
-      user = models.ForeignKey(User,on_delete = models.CASCADE, null = True, blank = True)
+      employer = models.ForeignKey('accounts.User',on_delete = models.CASCADE, null = True, blank = True)
       company = models.ForeignKey(Company, on_delete = models.CASCADE, null = True, blank = True)
       title = models.CharField(max_length = 60, blank = True)
       description = models.TextField(blank = True)
@@ -80,8 +79,9 @@ class Application(models.Model):
       applicationDate = models.DateTimeField('ApplicationDate',auto_now_add = True)
 
 
+class Saved(models.Model):
+      user = models.ForeignKey('accounts.User', on_delete = models.CASCADE, null = True, blank = True)
+      job = models.ForeignKey(Job, on_delete = models.CASCADE, null = True, blank = True)
+      savedDate = models.DateTimeField('savedDate',auto_now_add = True)
 
 
-
-
-    
