@@ -62,10 +62,7 @@ class CompaniesListAPI(generics.ListAPIView):
 
     def get_queryset(self):
         companies = Company.objects.filter(user = self.request.user)
-        if companies.exists():
-            return companies
-
-        return Response(status = status.HTTP_404_NOT_FOUND)
+        return companies
 
 class JobAPI(APIView):
     parser_classes = (MultiPartParser, FormParser)
