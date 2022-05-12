@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import {useNavigate,Link} from 'react-router-dom'
-import {fetchCompanies,setCompanies} from '../../Global/features/Employers/companies/companies'
+import {fetchCompanies,deleteCompany} from '../../Global/features/Employers/companies/companies'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
@@ -33,10 +33,7 @@ export default function CompaniesPage() {
     axios.delete(`/api/company?id=${chosenCompany.id}`)
     .then(response => {
     if (response.status === 200){
-        const newCompanies = [...companies.values]
-        let index = newCompanies.findIndex(company => company.id === chosenCompany.id)
-        newCompanies.splice(index, 1)
-        dispatch(setCompanies(newCompanies))
+        dispatch(deleteCompany(chosenCompany.id))
         handleAddSuccessMsg('Company is successfully removed', dispatch)
         navigate('/companies')
         setPopup(false)
