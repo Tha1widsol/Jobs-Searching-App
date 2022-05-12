@@ -26,11 +26,17 @@ class UserManager(BaseUserManager):
             raise ValueError(_('Superuser must have is_superuser=True.'))
         return self.create_user(email, password, **extra_fields)
 
+class SavedJob(models.Model):
+      job = models.ForeignKey('employers.Job', on_delete = models.CASCADE, null = True, blank = True)
+      savedDate = models.DateTimeField('savedDate',auto_now_add = True)
+
+
 class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
     isHired = models.BooleanField('is_hired',default=False)
     isAnEmployer = models.BooleanField('is_an_employer',default=False)
+    savedJobs = models.ManyToManyField(SavedJob, blank = True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
