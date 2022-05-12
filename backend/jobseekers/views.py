@@ -5,7 +5,8 @@ from rest_framework.parsers import MultiPartParser,FormParser
 from .models import *
 from rest_framework.decorators import api_view
 from employers.models import Job,Application
-from employers.serializers import JobSerializer,ApplicationSerializer
+from employers.serializers import JobSerializer, ApplicationSerializer
+from accounts.serializers import SavedJobSerializer
 from .serializers import *
 
 # Create your views here.
@@ -152,3 +153,14 @@ class JobsListAPI(generics.ListAPIView):
         return jobs
 
 
+class SavedJobsListAPI(generics.ListAPIView):
+    serializer_class = SavedJobSerializer
+
+    def post(self):
+        lookup_url_kwarg = 'id'
+        jobID = self.request.GET.get(lookup_url_kwarg)
+        job = Job.objects.filter(id = jobID).first()
+        self.request.user.savedJobs.add(job)
+
+    def get_queryset(self):
+        return self.request.user.savedJobs
