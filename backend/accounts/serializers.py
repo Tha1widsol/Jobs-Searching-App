@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, SavedJob
+from employers.serializers import JobSerializer
 from django.contrib.auth import authenticate
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -22,3 +23,10 @@ class LoginSerializer(serializers.Serializer):
             return user
         
         raise serializers.ValidationError("Incorrect Credentials")
+
+class SavedJobSerializer(serializers.ModelSerializer):
+    job = JobSerializer(read_only = True)
+
+    class Meta:
+        model = SavedJob
+        fields = '__all__'
