@@ -51,11 +51,12 @@ export default function JobSeekerApplicationsPage() {
                             <div className = {application.status === 'applied' ? 'indicator amber' : applications.status === 'accepted' ? 'indicator green' : application.status === 'rejected' ? 'indicator red' : ''}></div>
                         </section>
     
-                        <section style = {{fontSize: 'small'}}>
+                        <section style = {{fontSize: 'small', color: 'gray'}}>
                             <p>Start date: {application.job.startDate}</p>
                             <p>Applied date: {application.applicationDate.substring(0,10)}</p>
                         </section>
                         <button>Track</button>
+                        {application.coverLetter ? <button>View cover letter</button> : null}
                     </div>
                 )
             })}
