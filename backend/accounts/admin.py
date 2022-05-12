@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User
+from .models import User,SavedJob
 
 # Register your models here.
 
@@ -22,3 +22,4 @@ class UserAdmin(UserAdmin):
     ordering = ('email',)
 
 admin.site.register(User)
+admin.site.register(SavedJob)
