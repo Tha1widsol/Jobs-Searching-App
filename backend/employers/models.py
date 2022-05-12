@@ -79,9 +79,4 @@ class Application(models.Model):
       applicationDate = models.DateTimeField('ApplicationDate',auto_now_add = True)
 
 
-class Saved(models.Model):
-      user = models.ForeignKey('accounts.User', on_delete = models.CASCADE, null = True, blank = True)
-      job = models.ForeignKey(Job, on_delete = models.CASCADE, null = True, blank = True)
-      savedDate = models.DateTimeField('savedDate',auto_now_add = True)
-
 
