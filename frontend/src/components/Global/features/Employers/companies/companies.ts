@@ -55,6 +55,10 @@ export const CompaniesSlice = createSlice({
     reducers: {
         setCompanies: (state,action) => {
             state.values = action.payload
+        },
+
+        deleteCompany: (state, action) => {
+            state.values.splice(state.values.findIndex(company => company.id === action.payload))
         }
     },
 
@@ -76,6 +80,6 @@ export const CompaniesSlice = createSlice({
 })
 
 
-export const {setCompanies} = CompaniesSlice.actions
+export const {setCompanies,deleteCompany} = CompaniesSlice.actions
 
 export default CompaniesSlice.reducer
