@@ -26,7 +26,7 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class JobSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only = True)
+    employer = UserSerializer(read_only = True)
     company = CompanySerializer(read_only = True)
     roles = RoleSerializer(read_only = True, many = True)
     skills = SkillSerializer(read_only = True, many = True)

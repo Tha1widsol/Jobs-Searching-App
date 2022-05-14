@@ -119,7 +119,7 @@ class JobAPI(APIView):
 
                 job.skills.add(skill)
             
-            job.user = request.user
+            job.employer = request.user
             job.save()
             return Response(status = status.HTTP_201_CREATED)
 
@@ -211,7 +211,7 @@ class JobsListAPI(generics.ListAPIView):
     serializer_class = JobSerializer
 
     def get_queryset(self):
-        jobs = Job.objects.filter(user = self.request.user)
+        jobs = Job.objects.filter(employer = self.request.user)
         return jobs
 
 class ProfilesListAPI(generics.ListAPIView):
