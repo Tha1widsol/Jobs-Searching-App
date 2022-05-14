@@ -16,11 +16,10 @@ export default function CompaniesPage() {
   const companies = useAppSelector(state => state.companies)
 
   useEffect(() => {
-    dispatch(fetchCompanies()).then(response => {
-      if (response.meta.requestStatus === 'rejected') {
-        navigate('/create-company')
-        window.location.reload()
-      }
+    dispatch(fetchCompanies())
+    .unwrap()
+    .then(response => {
+      if (!response.length) navigate('/create-company')
     })
   },[dispatch,navigate])
 
