@@ -3,6 +3,9 @@ import {Link} from 'react-router-dom';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import {fetchJobs} from '../../Global/features/Employers/jobs/jobs'
+import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
+import axios from 'axios'
+import {token} from '../../Global/features/Auth/user';
 
 export default function JobSeekersHomePage() {
   const dispatch = useAppDispatch()
@@ -12,6 +15,18 @@ export default function JobSeekersHomePage() {
   useEffect(() => {
     dispatch(fetchJobs('jobseeker'))
   },[dispatch])
+
+  function handleSaveJob(id: number){
+    axios.post(`/api/save-job?id=${id}`,null,{
+      headers: {
+        Authorization: `Token ${token}`
+      }
+      
+    })
+    .then(() => {
+      handleAddSuccessMsg('Job is successfully saved', dispatch)
+    })
+  }
   
   return (
     <div>
@@ -46,7 +61,7 @@ export default function JobSeekersHomePage() {
                    <a href = {job.link} target = 'blank'><button>Apply Externally</button></a>
                   : <Link to = {`/apply/${job.id}`}><button>Apply</button></Link>}
 
-                  <button>Save</button>
+                  <button onClick = {() => handleSaveJob(job.id)}>Save</button>
               </section>   
 
             </div>
