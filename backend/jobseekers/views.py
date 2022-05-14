@@ -152,15 +152,22 @@ class JobsListAPI(generics.ListAPIView):
         jobs = Job.objects.exclude(id__in = applications)
         return jobs
 
+class SaveJobAPI(APIView):
+    def post(self, request):
+        try:
+            lookup_url_kwarg = 'id'
+            jobID = request.GET.get(lookup_url_kwarg)
+            job = Job.objects.filter(id = jobID).first()
+            savedJob = SavedJob(job = job).save()
+            self.request.user.savedJobs.add(savedJob)
+            return Response(status = status.HTTP_201_CREATED)
+
+        except:
+            return Response(status = status.HTTP_400_BAD_REQUEST)
+
 
 class SavedJobsListAPI(generics.ListAPIView):
     serializer_class = SavedJobSerializer
-
-    def post(self):
-        lookup_url_kwarg = 'id'
-        jobID = self.request.GET.get(lookup_url_kwarg)
-        job = Job.objects.filter(id = jobID).first()
-        self.request.user.savedJobs.add(job)
 
     def get_queryset(self):
         return self.request.user.savedJobs
