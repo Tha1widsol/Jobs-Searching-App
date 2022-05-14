@@ -5,6 +5,7 @@ urlpatterns = [
     path('profile',views.ProfileAPI.as_view(),name = 'profile'),
     path('toggleProfileStatus',views.ToggleProfileStatus.as_view(),name = 'toggleProfileStatus'),
     path('jobseeker/jobs',views.JobsListAPI.as_view(), name = 'jobs'),
+    path('save-job',views.SaveJobAPI.as_view(), name = 'save-job'),
     path('application',views.ApplicationAPI.as_view(), name = 'application'),
     path('jobseeker/applications',views.ApplicationsListAPI.as_view(), name = 'applications'),
     path('checkApplication',views.checkApplicationExists, name = 'checkApplication')
