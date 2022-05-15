@@ -1,9 +1,13 @@
 import React,{useState,useEffect} from 'react'
 import {Link,useLocation} from 'react-router-dom'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
+import {fetchSavedJobs} from '../../Global/features/Jobseekers/savedJobs/savedJobs'
 import {fetchApplications} from '../../Global/features/Jobseekers/applications/applications'
-import './css/JobSeekerApplicationsPage.css'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
+import {setDeleteSavedJob} from '../../Global/features/Jobseekers/savedJobs/savedJobs'
+import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
+import './css/JobSeekerApplicationsPage.css'
+import axios from 'axios'
 
 function useQuery(){
     return new URLSearchParams(useLocation().search)
@@ -15,10 +19,23 @@ export default function JobSeekerApplicationsPage() {
   const tab = query.get('tab')
   const dispatch = useAppDispatch();
   const applications = useAppSelector(state => state.applications)
+  const savedJobs = useAppSelector(state => state.savedJobs)
 
   useEffect(() => {
     dispatch(fetchApplications('jobseeker'))
+    dispatch(fetchSavedJobs())
   },[dispatch])
+
+
+function handleRemoveSavedJob(id: number){
+    axios.delete(`/api/save-job?id=${id}`)
+    .then(response => {
+        if (response.status === 200){
+            dispatch(setDeleteSavedJob(id))
+            handleAddSuccessMsg('Job is removed from saved', dispatch)
+        } 
+    })
+}
 
   return (
     <div>
@@ -30,7 +47,27 @@ export default function JobSeekerApplicationsPage() {
         <div style = {{marginTop: '50px'}}>
             {tab === 'saved' ? 
             <div>
-                <p>Saved</p>
+                 {savedJobs.values?.map((savedJobs, index) => {
+                    return (
+                        <div className = 'Container' key = {index}>
+                            <KebabMenu current = {dropdown} many = {true} index = {index} switchOn = {() => setDropdown(index)} switchOff = {() => setDropdown(null)}>
+                                <Link to = {`/job/${savedJobs.job.id}`}><button className = 'dropdownBtn'>View</button></Link> 
+                                <button className = 'deleteNavBtn'>Report</button>
+                                <button className = 'deleteNavBtn' onClick = {() => handleRemoveSavedJob(savedJobs.id)}>Remove</button>
+                           </KebabMenu>
+
+                            <Link to = {`/job/${savedJobs.job.id}`}><h2>{savedJobs.job.title}</h2></Link>
+                            <Link to = {`/company/${savedJobs.job.company?.id}`}><p>{savedJobs.job.company.name}</p></Link>
+                            <hr className = 'mt-0-mb-4'/>
+                            <section style = {{fontSize: 'small', color: 'gray'}}>
+                            <p>Saved on: {savedJobs.savedDate.substring(0,10)}</p>
+                           </section>
+                           {savedJobs.job.applyOnOwnWebsite ? 
+                            <a href = {savedJobs.job.link} target = 'blank'><button>Apply Externally</button></a>
+                            : <Link to = {`/apply/${savedJobs.job.id}`}><button>Apply</button></Link>}
+                        </div>
+                    )
+                  })}
              </div>
             : 
             applications.values?.map((application, index) => {
