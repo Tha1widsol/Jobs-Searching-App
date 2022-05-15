@@ -158,16 +158,23 @@ class SaveJobAPI(APIView):
             lookup_url_kwarg = 'id'
             jobID = request.GET.get(lookup_url_kwarg)
             job = Job.objects.filter(id = jobID).first()
-            savedJob = SavedJob(job = job).save()
+            savedJob = SavedJob(job = job)
+            savedJob.save()
             self.request.user.savedJobs.add(savedJob)
             return Response(status = status.HTTP_201_CREATED)
 
         except:
             return Response(status = status.HTTP_400_BAD_REQUEST)
 
-
+    def delete(self, request):
+        lookup_url_kwarg = 'id'
+        savedJobID = request.GET.get(lookup_url_kwarg)
+        savedJob = SavedJob.objects.get(id = savedJobID)
+        savedJob.delete()
+        return Response(status = status.HTTP_200_OK)
+        
 class SavedJobsListAPI(generics.ListAPIView):
     serializer_class = SavedJobSerializer
 
     def get_queryset(self):
-        return self.request.user.savedJobs
+        return self.request.user.savedJobs.all()
