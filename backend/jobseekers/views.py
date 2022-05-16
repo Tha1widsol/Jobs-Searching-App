@@ -166,6 +166,15 @@ class SaveJobAPI(APIView):
         except:
             return Response(status = status.HTTP_400_BAD_REQUEST)
 
+    def get(self, request):
+          lookup_url_kwarg = 'id'
+          jobID = request.GET.get(lookup_url_kwarg)
+          job = Job.objects.filter(id = jobID).first()
+          if SavedJob.objects.filter(job = job).exists():
+              return Response({'alreadySaved': True}, status = status.HTTP_200_OK)
+
+          return Response({'alreadySaved': False}, status = status.HTTP_200_OK)
+
     def delete(self, request):
         lookup_url_kwarg = 'id'
         savedJobID = request.GET.get(lookup_url_kwarg)

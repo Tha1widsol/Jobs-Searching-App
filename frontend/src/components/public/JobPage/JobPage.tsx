@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react'
 import {useParams, useNavigate, Link} from 'react-router-dom'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {fetchJob,setDeleteJob} from '../../Global/features/Employers/jobs/job'
+import {fetchSavedJobs} from '../../Global/features/Jobseekers/savedJobs/savedJobs'
 import {checkApplicationExists,setApplicationExists} from '../../Global/features/Jobseekers/applications/checkApplicationExists'
 import {token} from '../../Global/features/Auth/user'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu'
@@ -18,6 +19,7 @@ export default function JobPage() {
     const job = useAppSelector(state => state.job)
     const [popup,setPopup] = useState(false)
     const [dropdown,setDropdown] = useState(false)
+    const savedJobs = useAppSelector(state => state.savedJobs)
 
     useEffect(() => {
       dispatch(fetchJob(Number(jobID)))
@@ -26,7 +28,7 @@ export default function JobPage() {
       .catch(() => {
         navigate('/')
       })
-  
+      dispatch(fetchSavedJobs())
       dispatch(checkApplicationExists(Number(jobID)))
       .unwrap()
       .then(response => {
@@ -47,6 +49,18 @@ export default function JobPage() {
           handleAddSuccessMsg('Profile is successfully removed', dispatch)
       } 
 
+    })
+  }
+
+  function handleSaveJob(id: number){
+    axios.post(`/api/save-job?id=${id}`,null,{
+      headers: {
+        Authorization: `Token ${token}`
+      }
+      
+    })
+    .then(() => {
+      handleAddSuccessMsg('Job is successfully saved', dispatch)
     })
   }
 
@@ -83,14 +97,16 @@ export default function JobPage() {
       <hr className = 'mt-0-mb-4'/>
       {!applicationExists ? 
         !user?.isAnEmployer ?
-          <div>
+        <div>
           {job.values?.applyOnOwnWebsite ? 
                   <a href = {job.values?.link} target = 'blank'><button>Apply Externally</button></a>
-                : <Link to = {`/apply/${job.values?.id}`}><button>Apply</button></Link>}
+                  : <Link to = {`/apply/${job.values?.id}`}><button>Apply</button></Link>}
+
+           {!savedJobs.values?.find(savedJob => savedJob.job.id === Number(jobID)) ? <button onClick = {() => handleSaveJob(Number(jobID))}>Save</button> : null}
           </div>
           : null
           
-      : <p><b>Already applied</b></p>}
+          : <p><b>Already applied</b></p>}
        </section>
 
        <section className = 'Container'>

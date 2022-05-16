@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import {fetchJobs} from '../../Global/features/Employers/jobs/jobs'
+import {fetchSavedJobs} from '../../Global/features/Jobseekers/savedJobs/savedJobs';
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
 import axios from 'axios'
 import {token} from '../../Global/features/Auth/user';
@@ -10,11 +11,13 @@ import {token} from '../../Global/features/Auth/user';
 export default function JobSeekersHomePage() {
   const dispatch = useAppDispatch()
   const jobs = useAppSelector(state => state.jobs)
+  const savedJobs = useAppSelector(state => state.savedJobs)
   const [dropdown,setDropdown] = useState<number | null>(null)
 
   useEffect(() => {
     dispatch(fetchJobs('jobseeker'))
-  },[dispatch])
+    dispatch(fetchSavedJobs())
+  },[dispatch, jobs, savedJobs])
 
   function handleSaveJob(id: number){
     axios.post(`/api/save-job?id=${id}`,null,{
@@ -60,8 +63,7 @@ export default function JobSeekersHomePage() {
                   {job.applyOnOwnWebsite ? 
                    <a href = {job.link} target = 'blank'><button>Apply Externally</button></a>
                   : <Link to = {`/apply/${job.id}`}><button>Apply</button></Link>}
-
-                  <button onClick = {() => handleSaveJob(job.id)}>Save</button>
+                  {!savedJobs.values?.find(savedJob => savedJob.job.id === job.id) ? <button onClick = {() => handleSaveJob(job.id)}>Save</button> : null}
               </section>   
 
             </div>
