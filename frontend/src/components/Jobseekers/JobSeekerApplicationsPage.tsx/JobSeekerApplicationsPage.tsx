@@ -22,9 +22,9 @@ export default function JobSeekerApplicationsPage() {
   const savedJobs = useAppSelector(state => state.savedJobs)
 
   useEffect(() => {
-    dispatch(fetchApplications('jobseeker'))
+    dispatch(fetchApplications('jobseeker/applications'))
     dispatch(fetchSavedJobs())
-  },[dispatch])
+  },[dispatch, savedJobs])
 
 
 function handleRemoveSavedJob(id: number){

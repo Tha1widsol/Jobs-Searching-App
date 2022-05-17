@@ -31,8 +31,28 @@ export default function Navbar() {
         <div className = 'nav' id = 'head-nav'>
             <NavLink to = '/'  id = 'firstcast'>FirstCast</NavLink>
             <NavLink to = '/home'>Home</NavLink>
-            <NavLink to = '/about'>About</NavLink>
-            <NavLink to = '/contact'>Contact</NavLink>
+            {user.isLoggedIn ? 
+            <div>
+                {user.values?.isAnEmployer ? 
+                <>
+                     <NavLink to = '/applicants'>Applicants</NavLink> 
+                    <NavLink to = '/companies'>Post Job</NavLink> 
+                </>
+                :
+                <>
+                  <NavLink to = '/find-companies'>Find companies</NavLink> 
+                  <NavLink to = '/salaries'>Find salaries</NavLink> 
+                </>
+             }
+            
+                   
+            </div>
+            : 
+            <>
+                <NavLink to = '/about'>About</NavLink>
+                <NavLink to = '/contact'>Contact</NavLink>
+            </>
+            }
 
              {user.isLoggedIn ?
              <div>

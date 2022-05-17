@@ -17,6 +17,7 @@ import EmployerJobsPage from '../Employers/EmployerJobsPage/EmployerJobsPage'
 import JobPage from '../public/JobPage/JobPage'
 import ApplicationPage from '../Jobseekers/ApplicationPage/ApplicationPage'
 import JobSeekerApplicationsPage from '../Jobseekers/JobSeekerApplicationsPage.tsx/JobSeekerApplicationsPage'
+import EmployerApplicantsPage from '../Employers/EmployerApplicantsPage/EmployerApplicantsPage'
 
 export default function PagesRoutes() {
     const user = useAppSelector(state => state.user)
@@ -51,6 +52,7 @@ export default function PagesRoutes() {
                         <Route path = '/post-job/:companyID' element = {<JobFormPage/>}/>
                         <Route path = '/edit-job/:jobID' element = {<JobFormPage edit = {true}/>}/>
                         <Route path = '/jobs' element = {<EmployerJobsPage/>}/>
+                        <Route path = '/applicants' element = {<EmployerApplicantsPage/>}/>
                     </Route>
                 </Route>
 

@@ -29,13 +29,17 @@ export default function JobPage() {
         navigate('/')
       })
       dispatch(fetchSavedJobs())
-      dispatch(checkApplicationExists(Number(jobID)))
-      .unwrap()
-      .then(response => {
-        if (response.doesExist) dispatch(setApplicationExists({doesExist: true})) 
 
-        else dispatch(setApplicationExists({doesExist: false}))
-      })
+      if (!user.isAnEmployer){
+        dispatch(checkApplicationExists(Number(jobID)))
+        .unwrap()
+        .then(response => {
+          if (response.doesExist) dispatch(setApplicationExists({doesExist: true})) 
+  
+          else dispatch(setApplicationExists({doesExist: false}))
+        })
+
+      }
       
 
     },[dispatch, jobID, navigate])
@@ -106,7 +110,7 @@ export default function JobPage() {
           </div>
           : null
           
-          : <p><b>Already applied</b></p>}
+          : !user.isAnEmployer ? <p><b>Already applied</b></p> : null}
        </section>
 
        <section className = 'Container'>

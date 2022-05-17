@@ -222,3 +222,9 @@ class ProfilesListAPI(generics.ListAPIView):
         return profiles
         
         
+class ApplicantsListAPI(generics.ListAPIView):
+    serializer_class = ApplicationSerializer
+
+    def get_queryset(self):
+        applicants = Application.objects.filter(job__employer = self.request.user)
+        return applicants

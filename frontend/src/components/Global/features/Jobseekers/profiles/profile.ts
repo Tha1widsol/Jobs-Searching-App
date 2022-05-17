@@ -5,6 +5,7 @@ import axios from 'axios'
 
 export interface ProfileProps extends StatusProps{
     values: {
+        id: number
         user: UserProps
         firstName: string
         lastName: string
@@ -24,6 +25,7 @@ export interface ProfileProps extends StatusProps{
 }
 
 export const profile = {
+    id: 0,
     user,
     firstName: '',
     middleName: '',
@@ -43,6 +45,7 @@ export const profile = {
 const initialState: ProfileProps = {
     status: '',
     values: {
+    id: 0,
     user,
     firstName: '',
     middleName: '',

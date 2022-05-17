@@ -17,7 +17,7 @@ export default function JobSeekersHomePage() {
   useEffect(() => {
     dispatch(fetchJobs('jobseeker'))
     dispatch(fetchSavedJobs())
-  },[dispatch, jobs, savedJobs])
+  },[dispatch])
 
   function handleSaveJob(id: number){
     axios.post(`/api/save-job?id=${id}`,null,{

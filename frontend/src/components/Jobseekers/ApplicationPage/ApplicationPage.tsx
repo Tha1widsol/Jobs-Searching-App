@@ -8,7 +8,6 @@ import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {checkApplicationExists} from '../../Global/features/Jobseekers/applications/checkApplicationExists'
 import {useNavigate, useParams} from 'react-router-dom'
 import axios from 'axios'
-import { getSystemErrorMap } from 'util'
 
 export default function ApplicationPage() {
     const dispatch = useAppDispatch()
