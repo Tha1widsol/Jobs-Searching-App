@@ -15,6 +15,13 @@ export default function EmployerApplicantsPage() {
 
   return (
     <div>
+        {!applicants.values?.length ? 
+        <div>
+            <h2>No applicants yet...</h2>
+            <Link to = '/home'><button>Find profiles</button></Link>
+        </div>
+         : null}
+
         {applicants.values?.map((applicant, index) => {
             return (
                 <div className = 'Container' key = {index}>

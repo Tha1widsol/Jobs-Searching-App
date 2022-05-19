@@ -1,10 +1,9 @@
 import React,{useState,useEffect} from 'react'
 import {Link,useLocation} from 'react-router-dom'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
-import {fetchSavedJobs} from '../../Global/features/Jobseekers/savedJobs/savedJobs'
 import {fetchApplications} from '../../Global/features/Jobseekers/applications/applications'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
-import {setDeleteSavedJob} from '../../Global/features/Jobseekers/savedJobs/savedJobs'
+import {setDeleteSavedJob,fetchSavedJobs} from '../../Global/features/Jobseekers/savedJobs/savedJobs'
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
 import './css/JobSeekerApplicationsPage.css'
 import axios from 'axios'
@@ -22,10 +21,9 @@ export default function JobSeekerApplicationsPage() {
   const savedJobs = useAppSelector(state => state.savedJobs)
 
   useEffect(() => {
-    dispatch(fetchApplications('jobseeker/applications'))
-    dispatch(fetchSavedJobs())
-  },[dispatch, savedJobs])
-
+      dispatch(fetchApplications('jobseeker/applications'))
+      dispatch(fetchSavedJobs())
+  },[dispatch])
 
 function handleRemoveSavedJob(id: number){
     axios.delete(`/api/save-job?id=${id}`)
@@ -47,6 +45,12 @@ function handleRemoveSavedJob(id: number){
         <div style = {{marginTop: '50px'}}>
             {tab === 'saved' ? 
             <div>
+                {!savedJobs.values.length ? 
+                <div>
+                   <h2>No jobs saved...</h2>
+                   <Link to = '/home'><button>Find jobs</button></Link>
+                </div>
+                : null}
                  {savedJobs.values?.map((savedJobs, index) => {
                     return (
                         <div className = 'Container' key = {index}>
@@ -70,6 +74,11 @@ function handleRemoveSavedJob(id: number){
                   })}
              </div>
             : 
+            !applications.values.length ? 
+            <div>
+                <h2>No applications made...</h2>
+                <Link to = '/home'><button>Find jobs</button></Link>
+             </div> : 
             applications.values?.map((application, index) => {
                 return (
                     <div className = 'Container' key = {index}>

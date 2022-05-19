@@ -49,6 +49,11 @@ export default function EmployerJobsPage() {
       </Popup>
 
       <h1 className = 'title'>Jobs</h1>
+      {!jobs.values?.length ? 
+        <div>
+          <h2>No jobs posted...</h2>
+          <Link to = '/companies'><button>Post job</button></Link>
+        </div> : null}
 
        {jobs.values?.map((job,index) => {
            return (
