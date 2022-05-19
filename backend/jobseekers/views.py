@@ -72,7 +72,7 @@ class ProfileAPI(APIView):
         
         if profile.exists():
             serializer_class = ProfileSerializer(profile.first())
-            return Response(serializer_class.data, status =  status.HTTP_200_OK)
+            return Response(serializer_class.data, status = status.HTTP_200_OK)
 
         return Response(status = status.HTTP_404_NOT_FOUND)
 
@@ -132,8 +132,10 @@ class ApplicationsListAPI(generics.ListAPIView):
     serializer_class = ApplicationSerializer
 
     def get_queryset(self):
-        profile = Profile.objects.get(user = self.request.user)
-        applications = Application.objects.filter(profile = profile)
+        profile = Profile.objects.filter(user = self.request.user)
+        applications = None
+        if (profile.exists()):
+           applications = Application.objects.filter(profile = profile.first())
         return applications
 
 class ToggleProfileStatus(APIView):
@@ -147,9 +149,11 @@ class JobsListAPI(generics.ListAPIView):
     serializer_class = JobSerializer
 
     def get_queryset(self):
-        profile = Profile.objects.get(user = self.request.user)
-        applications = Application.objects.filter(profile = profile).values_list('job')
-        jobs = Job.objects.exclude(id__in = applications)
+        profile = Profile.objects.filter(user = self.request.user)
+        jobs = Job.objects.all()
+        if profile.exists():
+            applications = Application.objects.filter(profile = profile.first()).values_list('job')
+            jobs = Job.objects.exclude(id__in = applications)
         return jobs
 
 class SaveJobAPI(APIView):
