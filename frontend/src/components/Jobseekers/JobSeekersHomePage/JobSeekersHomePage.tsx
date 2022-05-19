@@ -27,6 +27,7 @@ export default function JobSeekersHomePage() {
       
     })
     .then(() => {
+      dispatch(fetchSavedJobs())
       handleAddSuccessMsg('Job is successfully saved', dispatch)
     })
   }
