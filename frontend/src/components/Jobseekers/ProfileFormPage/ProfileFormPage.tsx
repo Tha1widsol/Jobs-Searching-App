@@ -34,28 +34,30 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
 
     useEffect(() => {
         dispatch(fetchProfile(user.id))
+        .unwrap()
         .then(response => {
-            if (!edit){
-                if (response.meta.requestStatus === 'fulfilled') navigate(`/profile/${user.id}`)
-
-                else if (response.meta.requestStatus === 'rejected') navigate('/create-profile')
-                return
-            }
-          
+            if (response.status === 200) navigate(`/profile/${user.id}`)
         })
 
-        setFirstName(prev => {return{...prev, value: profile.values?.firstName}})
-        setMiddleName(prev => {return{...prev, value: profile.values?.middleName || ''}})
-        setLastName(prev => {return{...prev, value: profile.values?.lastName}})
-        setPhone(prev => {return{...prev, value: profile.values?.phone}})
-        setAbout(prev => {return{...prev, value: profile.values?.about}})
-        setSkills(prev => {return{...prev, value: profile.values?.skills.map(skill => skill.name)}})
-        setExperience(prev => {return{...prev, value: profile.values?.experience || ''}})
-        setEducation(prev => {return{...prev, value: profile.values?.education}})
-        setIndustry(prev => {return{...prev, value: profile.values?.industry}})
-        setDistance(prev => {return{...prev, value: profile.values?.distance}})
-    
+        .catch(() => {
+            return
+        })
+
+        if (edit){
+            setFirstName(prev => {return{...prev, value: profile.values?.firstName}})
+            setMiddleName(prev => {return{...prev, value: profile.values?.middleName || ''}})
+            setLastName(prev => {return{...prev, value: profile.values?.lastName}})
+            setPhone(prev => {return{...prev, value: profile.values?.phone}})
+            setAbout(prev => {return{...prev, value: profile.values?.about}})
+            setSkills(prev => {return{...prev, value: profile.values?.skills.map(skill => skill.name)}})
+            setExperience(prev => {return{...prev, value: profile.values?.experience || ''}})
+            setEducation(prev => {return{...prev, value: profile.values?.education}})
+            setIndustry(prev => {return{...prev, value: profile.values?.industry}})
+            setDistance(prev => {return{...prev, value: profile.values?.distance}})
+        }
+
      },[dispatch, 
+        navigate,
         user.id, 
         edit,
         profile.values.firstName,

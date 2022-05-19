@@ -15,16 +15,19 @@ export default function ProfilePage() {
 
   useEffect(() => {
     dispatch(fetchProfile(Number(userID)))
-    .then(response => {
-      if (profile.values.user.id === user.id)
+    .unwrap()
+    .then(() => {
+       if (profile.values.user.id === user.id)
           navigate(`/profile/${user.id}`)
-        
-      if (response.meta.requestStatus === 'rejected') 
-          navigate('/create-profile')
+
+    })
+
+    .catch(() => {
+      navigate('/create-profile')
     })
     
     
- },[dispatch, navigate, userID, profile.values.user.id, user.id])
+ },[dispatch, navigate, profile.values?.user.id, user.id, userID])
 
   return (
   <div> 

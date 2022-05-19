@@ -2,8 +2,8 @@ import React,{useState,useEffect} from 'react'
 import {useParams, useNavigate, Link} from 'react-router-dom'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {fetchJob,setDeleteJob} from '../../Global/features/Employers/jobs/job'
+import {fetchApplications} from '../../Global/features/Jobseekers/applications/applications'
 import {fetchSavedJobs} from '../../Global/features/Jobseekers/savedJobs/savedJobs'
-import {checkApplicationExists,setApplicationExists} from '../../Global/features/Jobseekers/applications/checkApplicationExists'
 import {token} from '../../Global/features/Auth/user'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu'
 import Popup from '../../Global/Popup/Popup'
@@ -14,14 +14,15 @@ export default function JobPage() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const user = useAppSelector(state => state.user.values)
-    const applicationExists = useAppSelector(state => state.checkApplicationExists.values.doesExist)
     const {jobID} = useParams()
     const job = useAppSelector(state => state.job)
     const [popup,setPopup] = useState(false)
     const [dropdown,setDropdown] = useState(false)
     const savedJobs = useAppSelector(state => state.savedJobs)
+    const applications = useAppSelector(state => state.applications)
 
     useEffect(() => {
+      dispatch(fetchApplications('jobseeker/applications'))
       dispatch(fetchJob(Number(jobID)))
       .unwrap()
 
@@ -29,18 +30,6 @@ export default function JobPage() {
         navigate('/')
       })
       dispatch(fetchSavedJobs())
-
-      if (!user.isAnEmployer){
-        dispatch(checkApplicationExists(Number(jobID)))
-        .unwrap()
-        .then(response => {
-          if (response.doesExist) dispatch(setApplicationExists({doesExist: true})) 
-  
-          else dispatch(setApplicationExists({doesExist: false}))
-        })
-
-      }
-      
 
     },[dispatch, jobID, navigate])
 
@@ -99,7 +88,7 @@ export default function JobPage() {
 
       <p>{job.values?.description}</p> 
       <hr className = 'mt-0-mb-4'/>
-      {!applicationExists ? 
+      {!applications.values?.find(application => application.job.id === Number(jobID)) ? 
         !user?.isAnEmployer ?
         <div>
           {job.values?.applyOnOwnWebsite ? 
