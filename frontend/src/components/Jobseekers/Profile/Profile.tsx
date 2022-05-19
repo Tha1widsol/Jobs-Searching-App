@@ -70,7 +70,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                     <label><h2>Skills</h2></label>
                     <hr className = 'mt-0-mb-4'/>
                     <div className = 'listContainer'>
-                        {profile.values.skills.map((skill,index) => {
+                        {profile.values?.skills?.map((skill,index) => {
                             return (<li key = {index}>{skill.name}</li>)
                         })}
                     </div>
