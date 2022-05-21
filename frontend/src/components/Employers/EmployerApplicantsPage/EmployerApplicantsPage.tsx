@@ -10,7 +10,7 @@ export default function EmployerApplicantsPage() {
     const applicants = useAppSelector(state => state.applications)
 
     useEffect(() => {
-        dispatch(fetchApplications('employer/applications'))
+        dispatch(fetchApplications('employers'))
     },[dispatch])
 
   return (
@@ -21,6 +21,11 @@ export default function EmployerApplicantsPage() {
             <Link to = '/home'><button>Find profiles</button></Link>
         </div>
          : null}
+
+         <p><b>Screen applicants now (Go to my jobs):</b></p>
+         <Link to = '/jobs'><button>My Jobs</button></Link>
+         <hr className = 'mt-0-mb-4' style = {{marginBottom: '20px', marginTop: '20px'}}/>
+         <h1>Recent applicants:</h1>
 
         {applicants.values?.map((applicant, index) => {
             return (
