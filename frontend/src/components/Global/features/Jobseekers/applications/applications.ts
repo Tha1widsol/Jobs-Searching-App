@@ -18,7 +18,7 @@ const initialState = {
 export const fetchApplications = createAsyncThunk(
     'user/fetchApplications',
     async (endpoint: string) => {
-        const response = await axios.get(`/api/${endpoint}`,{
+        const response = await axios.get(`/api/applications/${endpoint}`,{
             headers: {
                 Authorization:`Token ${token}`
             }
