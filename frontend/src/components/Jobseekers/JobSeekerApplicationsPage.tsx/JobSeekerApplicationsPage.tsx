@@ -21,7 +21,7 @@ export default function JobSeekerApplicationsPage() {
   const savedJobs = useAppSelector(state => state.savedJobs)
 
   useEffect(() => {
-      dispatch(fetchApplications('jobseeker/applications'))
+      dispatch(fetchApplications('jobseeker'))
       dispatch(fetchSavedJobs())
   },[dispatch])
 
