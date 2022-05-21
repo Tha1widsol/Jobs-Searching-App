@@ -59,20 +59,25 @@ export default function EmployerJobsPage() {
            return (
              <div className = 'Container' key = {index}>
               <KebabMenu current = {dropdown} many = {true} index = {index} switchOn = {() => setDropdown(index)} switchOff = {() => setDropdown(null)}>
+              <Link to = {`/job/${job.id}`}><button className = 'dropdownBtn'>View</button></Link>
                 <Link to = {`/edit-job/${job.id}`}><button className = 'dropdownBtn'>Edit</button></Link>
                 <button className = 'deleteNavBtn' onClick = {() => ShowPopup(job.id,job.title)}>Delete</button>
               </KebabMenu>
 
                 <section style = {{display: 'flex'}}>
-                    <h2>{job.title}</h2>
+                    <Link to = {`/job/${job.id}`}><h2>{job.title}</h2></Link>
                     {job.company?.logo ? <img className = 'logo' src = {job.company.logo} alt = ''/> : null} 
                 </section>
-                <p>{job.company?.name}</p>
-                <p>{job.industry}</p>
-                <p>Applicants: {job.applicantsCount}</p>
-                <hr className = 'mt-0-mb-4'/>
-                <Link to = {`/job/${job.id}`}><button>View</button></Link>
-                {job.applicantsCount > 0 ? <a href = {`/applicants/${job.id}`}><button>View applicants</button></a> : null}
+                <Link to = {`/company/${job.company.id}`}>{job.company?.name}</Link>
+              
+                {job.applicantsCount > 0 ? 
+                <div> 
+                   <p>Applicants: {job.applicantsCount}</p>
+                    <hr className = 'mt-0-mb-4'/>
+                   <Link to =  {`/applicants/${job.id}`}><button>View applicants</button></Link>
+                </div> : 
+                 <p>No applicants yet</p>
+                }
              </div>
            )
        })}
