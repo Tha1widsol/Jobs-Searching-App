@@ -60,7 +60,7 @@ export default function CompaniesPage() {
               </KebabMenu>
 
               <section style = {{display: 'flex'}}>
-                 <h2>{company.name}</h2>
+                 <Link to = {`/company/${company.id}`}><h2>{company.name}</h2></Link>
                  {company.logo ? <img className = 'logo' src = {company.logo} alt = ''/> : null} 
               </section>
 
