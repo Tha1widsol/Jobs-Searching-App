@@ -228,3 +228,17 @@ class ApplicantsListAPI(generics.ListAPIView):
     def get_queryset(self):
         applicants = Application.objects.filter(job__employer = self.request.user)
         return applicants
+
+class JobApplicantsListAPI(generics.ListAPIView):
+      serializer_class = ApplicationSerializer
+
+      def get_queryset(self):
+          applicants = None
+          lookup_url_kwarg = 'jobID'
+          id = self.request.GET.get(lookup_url_kwarg)
+          job = Job.objects.filter(id = id)
+
+          if job.exists():
+              applicants = Application.objects.filter(job = job.first())
+    
+          return applicants
