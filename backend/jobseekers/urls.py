@@ -8,6 +8,6 @@ urlpatterns = [
     path('save-job',views.SaveJobAPI.as_view(), name = 'save-job'),
     path('saved-jobs',views.SavedJobsListAPI.as_view(), name = 'save-jobs'),
     path('application',views.ApplicationAPI.as_view(), name = 'application'),
-    path('jobseeker/applications',views.ApplicationsListAPI.as_view(), name = 'applications'),
+    path('applications/jobseeker',views.ApplicationsListAPI.as_view(), name = 'applications'),
     path('checkApplication',views.checkApplicationExists, name = 'checkApplication')
 ]
