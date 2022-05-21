@@ -19,7 +19,7 @@ if (!token) persistor.purge()
 ReactDOM.render(
   <React.StrictMode>
     <Provider store = {store}>
-      <PersistGate loading = {<h1>Loading...</h1>} persistor = {persistor}>
+      <PersistGate loading = {<span className = 'loader'></span>} persistor = {persistor}>
         <Router>
         <App />
         </Router>
