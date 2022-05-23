@@ -68,7 +68,6 @@ export default function CompaniesPage() {
               <p><i className = 'fa fa-phone icon'></i>000011111</p>
               <p><i className = 'icon'>&#9993;</i>{company.user.email}</p>
               {company.website ? <a href = {company.website} target = '_blank' rel = 'noreferrer'><p>Website: {company.website}</p></a> : null}
-              <hr className = 'mt-0-mb-4'/>
 
               <section style = {{display: 'flex'}}>
                 <Link to = {`/company/${company.id}`}><button>View</button></Link>
