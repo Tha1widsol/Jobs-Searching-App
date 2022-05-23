@@ -34,7 +34,7 @@ export default function JobSeekersHomePage() {
   
   return (
     <div>
-      <label><h2>Potential jobs based on your profile...</h2></label>
+      <label><h2>Potential job matches based on your profile...</h2></label>
       <section style = {{display: 'flex', marginRight: '15px'}}>
         {jobs.values?.map((job,index) => {
           return(
@@ -54,7 +54,7 @@ export default function JobSeekersHomePage() {
 
                 
               <label><h3>Roles:</h3></label>
-                <section className = 'listContainer'>
+                <section className = 'listContainer' style = {{marginBottom: '20px'}}>
                     {job.roles.map((role,index) => {
                         return (<li key = {index}>{role.name}</li>)
                     })}
