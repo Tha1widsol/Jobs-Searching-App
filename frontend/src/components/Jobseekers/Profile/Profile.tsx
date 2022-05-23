@@ -65,7 +65,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                 </div>
             </section>
         
-            <section className = 'profileSection'>
+            <div className = 'profileSection'>
                 <section>
                     <label><h2>Skills</h2></label>
                     <hr className = 'mt-0-mb-4'/>
@@ -76,31 +76,27 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                     </div>
                 </section>
                 
-                <section className = 'about'>
+                <section>
                     <label><h2>About</h2></label>
                     <hr className = 'mt-0-mb-4'/>
                     <p className = 'sectionText'>{profile.values.about}</p>
                 </section>
+            </div>
 
+            <section className = 'profileSubContainer'>
+                <label><h2>Experience</h2></label>
+                <hr className = 'mt-0-mb-4'/>
+                <p>{profile.values.experience}</p>
             </section>
 
-            <section className = 'profileSection'>
-                <section className = 'experience'>
-                    <label><h2>Experience</h2></label>
-                    <hr className = 'mt-0-mb-4'/>
-                    <p className = 'sectionText'>{profile.values.experience}</p>
-                </section>
-
-                <section className = 'education'>
-                    <label><h2>Education</h2></label>
-                    <hr className = 'mt-0-mb-4'/>
-                    <p className = 'sectionText'>{profile.values.education}</p>
-                </section>
-
+            <section className = 'profileSubContainer'>
+                <label><h2>Education</h2></label>
+                <hr className = 'mt-0-mb-4'/>
+                <p>{profile.values.education}</p>
             </section>
 
             {profile.values.cv ? 
-            <section className = 'profileSection'>
+                <div className = 'profileSection'>
                     <section className = 'cv'>
                     <label><h2>CV / Resume</h2></label>
                     <hr className = 'mt-0-mb-4'/>
@@ -115,8 +111,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                             <li>Prefered distance from workplace: {profile.values.distance}</li>
                         </section>
                     </section>
-        
-            </section>
+                </div>
             : null}
 
     
