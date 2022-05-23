@@ -22,7 +22,7 @@ export default function JobPage() {
     const applications = useAppSelector(state => state.applications)
 
     useEffect(() => {
-      dispatch(fetchApplications('jobseeker/applications'))
+      dispatch(fetchApplications('jobseeker'))
       dispatch(fetchJob(Number(jobID)))
       .unwrap()
 
@@ -110,7 +110,8 @@ export default function JobPage() {
 
         <section className = 'Container'>
           <label><h3>Roles:</h3></label>
-          <div className = 'listContainer'>
+          <hr className = 'mt-0-mb-4'/>
+          <div className = 'listContainer' style = {{marginBottom: '50px'}}>
             {job.values?.roles?.map((role,index) => {
                 return (<li key = {index}>{role.name}</li>)
             })}
@@ -118,9 +119,9 @@ export default function JobPage() {
 
           {job.values?.skills?.filter(skill => skill.name).length ? 
           <div>
-            <hr className = 'mt-0-mb-4'/>
             <label><h3>Skills:</h3></label>
-            <div className = 'listContainer'>
+            <hr className = 'mt-0-mb-4'/>
+            <div className = 'listContainer' style = {{marginBottom: '50px'}}>
               {job.values?.skills.map((skill,index) => {
                   return (<li key = {index}>{skill.name}</li>)
               })}
@@ -130,8 +131,8 @@ export default function JobPage() {
           
             {job.values?.benefits?.filter(benefit => benefit.name).length ? 
             <div>
-              <hr className = 'mt-0-mb-4'/>
               <label><h3>Benefits:</h3></label>
+              <hr className = 'mt-0-mb-4'/>
               <div className = 'listContainer'>
                 {job.values?.benefits.map((benefit,index) => {
                   return (<li key = {index}>{benefit.name}</li>)
@@ -143,9 +144,10 @@ export default function JobPage() {
        
         <section className = 'Container'>
         <label><h3>Type:</h3></label> 
-           <p>{job.values?.type}</p>
            <hr className = 'mt-0-mb-4'/>
+            <p>{job.values?.type}</p>
           <label><h3>Working Days/Hours:</h3></label>
+           <hr className = 'mt-0-mb-4'/>
           {job.values?.workingDay2 ? <p>{job.values?.workingDay1} - {job.values?.workingDay2}</p> : <p>{job.values?.workingDay1}</p>}
           <p>{job.values?.workingHours} hours a day</p>
         </section>
@@ -162,7 +164,6 @@ export default function JobPage() {
 
         <section className = 'Container'>
           <label><h3>Education required:</h3></label>
-          <hr className = 'mt-0-mb-4'/>
           <p>{job.values?.education}</p>
         </section>
 
