@@ -134,29 +134,28 @@ button {
 
   .containerDropdown,.containerDropdownContent,.containerDropdownContent button {display: block;}
 
-  .dropdownBtn,.deleteNavBtn{
+  .dropdownBtn{
+    color: black;
     background-color: unset;
     border:unset;
     padding: 14px 16px;
     margin: 0;
     width:100%;
-    color: unset;
     text-align: start;
   }
 
-.deleteNavBtn{color: red}
-   
-.deleteNavBtn:hover{
-  color: red;
+ .redNavBtn{color: red}
+
+ .dropdownBtn:hover{
   background-color: lightgray;
-}
-
-.dropdownBtn{color:black}
-
-.dropdownBtn:hover{
   color: black;
-  background-color: lightgray;
+ }
+
+.redNavBtn:hover{
+  color: red;
 }
+
+
   
   /* ################
 Form styles
