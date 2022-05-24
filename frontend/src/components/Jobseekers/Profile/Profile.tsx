@@ -46,13 +46,13 @@ export default function Profile({profile} : {profile: ProfileProps}) {
          <p>Are you sure you want to remove your profile?</p>
          <p style = {{fontSize: 'small'}}>(This action cannot be undone)</p>
          <button onClick = {handleDeleteProfile}>Confirm</button>
-         </Popup>
+        </Popup>
 
         {!user?.isAnEmployer ? 
         <KebabMenu current = {dropdown} switchOn = {() => setDropdown(true)} switchOff = {() => setDropdown(false)}>
-            {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
+            {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn normalNavBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
             <button className = 'dropdownBtn' onClick = {() => navigate('/edit-profile')} >Edit</button>
-            <button className = 'deleteNavBtn' onClick = {() => setPopup(true)}>Delete</button>
+            <button className = 'dropdownBtn redNavBtn' onClick = {() => setPopup(true)}>Delete</button>
         </KebabMenu>
         : null}
 

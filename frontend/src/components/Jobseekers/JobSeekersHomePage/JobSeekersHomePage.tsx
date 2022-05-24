@@ -42,7 +42,7 @@ export default function JobSeekersHomePage() {
               <KebabMenu current = {dropdown} many = {true} index = {index} switchOn = {() => setDropdown(index)} switchOff = {() => setDropdown(null)}>
                 <Link to = {`/job/${job.id}`}><button className = 'dropdownBtn'>View</button></Link> 
                 <button className = 'dropdownBtn'>Hide</button>
-                <button className = 'deleteNavBtn'>Report</button>
+                <button className = 'dropdownBtn redNavBtn'>Report</button>
               </KebabMenu>
                    
               <Link to = {`/job/${job.id}`}><h2>{job.title}</h2></Link>

@@ -33,7 +33,7 @@ export default function EmployerApplicantsPage() {
                     <KebabMenu current = {dropdown} many = {true} index = {index} switchOn = {() => setDropdown(index)} switchOff = {() => setDropdown(null)}>
                         <Link to = {`/profile/${applicant.profile.id}`}><button className = 'dropdownBtn'>View</button></Link>
                         <button className = 'dropdownBtn'>Track</button>
-                        <button className = 'deleteNavBtn'>Reject</button>
+                        <button className = 'dropdownBtn redNavBtn'>Reject</button>
                     </KebabMenu>
                     
                     <Link to = {`/profile/${applicant.profile.id}`}><h2>{applicant.profile.firstName} {applicant.profile.lastName}</h2></Link>

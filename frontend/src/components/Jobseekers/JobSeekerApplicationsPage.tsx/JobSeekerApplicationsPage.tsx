@@ -56,8 +56,8 @@ function handleRemoveSavedJob(id: number){
                         <div className = 'Container' key = {index}>
                             <KebabMenu current = {dropdown} many = {true} index = {index} switchOn = {() => setDropdown(index)} switchOff = {() => setDropdown(null)}>
                                 <Link to = {`/job/${savedJobs.job.id}`}><button className = 'dropdownBtn'>View</button></Link> 
-                                <button className = 'deleteNavBtn'>Report</button>
-                                <button className = 'deleteNavBtn' onClick = {() => handleRemoveSavedJob(savedJobs.id)}>Remove</button>
+                                <button className = 'dropdownBtn redNavBtn'>Report</button>
+                                <button className = 'dropdownBtn redNavBtn' onClick = {() => handleRemoveSavedJob(savedJobs.id)}>Remove</button>
                            </KebabMenu>
 
                             <Link to = {`/job/${savedJobs.job.id}`}><h2>{savedJobs.job.title}</h2></Link>
@@ -85,7 +85,7 @@ function handleRemoveSavedJob(id: number){
                         <KebabMenu current = {dropdown} many = {true} index = {index} switchOn = {() => setDropdown(index)} switchOff = {() => setDropdown(null)}>
                             <Link to = {`/job/${application.job.id}`}><button className = 'dropdownBtn'>View</button></Link> 
                             <button className = 'dropdownBtn'>Hide</button>
-                            <button className = 'deleteNavBtn'>Delete</button>
+                            <button className = 'dropdownBtn redNavBtn'>Delete</button>
                        </KebabMenu>
 
                        <Link to = {`/job/${application.job.id}`}><h2>{application.job.title}</h2></Link>

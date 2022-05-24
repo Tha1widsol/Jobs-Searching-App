@@ -56,7 +56,7 @@ export default function CompaniesPage() {
               <KebabMenu current = {dropdown} many = {true} index = {index} switchOn = {() => setDropdown(index)} switchOff = {() => setDropdown(null)}>
                 <Link to = {`/edit-company/${company.id}`}><button className = 'dropdownBtn'>Edit</button></Link>
                 <button className = 'dropdownBtn'>View all jobs</button>
-                <button className = 'deleteNavBtn' onClick = {() => ShowPopup(company.id,company.name)}>Delete</button>
+                <button className = 'dropdownBtn redNavBtn' onClick = {() => ShowPopup(company.id,company.name)}>Delete</button>
               </KebabMenu>
 
               <section style = {{display: 'flex'}}>
