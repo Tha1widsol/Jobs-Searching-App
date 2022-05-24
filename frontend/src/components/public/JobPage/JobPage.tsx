@@ -70,11 +70,11 @@ export default function JobPage() {
         {user?.isAnEmployer ? 
         <div>
            <button className = 'dropdownBtn' onClick = {() => navigate(`/edit-job/${jobID}`)} >Edit</button>
-           <button className = 'deleteNavBtn' onClick = {() => setPopup(true)}>Delete</button>
+           <button className = 'dropdownBtn redNavBtn' onClick = {() => setPopup(true)}>Delete</button>
         </div> 
         : 
         <div>
-            <button className = 'deleteNavBtn'>Report</button>
+            <button className = 'dropdownBtn redNavBtn'>Report</button>
         </div>
         }
         
@@ -88,6 +88,13 @@ export default function JobPage() {
 
       <p>{job.values?.description}</p> 
       <hr className = 'mt-0-mb-4'/>
+      {job.values?.applicantsCount > 0 ? 
+              <div> 
+                  <p>Applicants: {job.values?.applicantsCount}</p>
+                  <Link to =  {`/applicants/${job.values?.id}`}><button>View applicants</button></Link>
+              </div> : 
+                <p>No applicants yet</p>
+              }
       {!applications.values?.find(application => application.job.id === Number(jobID)) ? 
         !user?.isAnEmployer ?
         <div>
@@ -104,7 +111,6 @@ export default function JobPage() {
 
        <section className = 'Container'>
           <label><h3>Salary:</h3></label>
-          <hr className = 'mt-0-mb-4'/>
           {job.values?.salary2 ? <p>{job.values?.currency}{job.values?.salary1} - {job.values?.currency}{job.values?.salary2} a year </p> : <p>{job.values?.currency}{job.values?.salary1} a year</p>} 
         </section>
 
