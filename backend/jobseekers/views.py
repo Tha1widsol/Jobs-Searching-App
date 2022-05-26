@@ -11,6 +11,26 @@ from .serializers import *
 
 # Create your views here.
 
+def calculateScore(job, profile):
+    score = 0
+    currentSkills = [skill.name.lower() for skill in profile.skills.all()]
+
+    for skill in job.skills.all():
+        if skill.name.lower() in currentSkills:
+            score += 1
+    
+    return round(score / len(job.skills.all()) * 100, 1)
+
+@api_view()
+def getMatchingScores(request):
+    matchArr = {}
+    profile = Profile.objects.filter(user = request.user)
+    jobs = Job.objects.all()
+    for job in jobs:
+        matchArr[job.id] = calculateScore(job, profile.first())
+
+    return Response({'arr': matchArr})
+
 class ProfileAPI(APIView):
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = CreateProfileSerializer
@@ -145,16 +165,15 @@ class ToggleProfileStatus(APIView):
         profile.save()
         return Response({'success':'Profile status has been changed'},status = status.HTTP_200_OK)
 
-class JobsListAPI(generics.ListAPIView):
-    serializer_class = JobSerializer
-
-    def get_queryset(self):
-        profile = Profile.objects.filter(user = self.request.user)
+class JobsListAPI(APIView):
+    def get(self, request):
+        profile = Profile.objects.filter(user = request.user)
         jobs = Job.objects.all()
         if profile.exists():
             applications = Application.objects.filter(profile = profile.first()).values_list('job')
             jobs = Job.objects.exclude(id__in = applications)
-        return jobs
+            serializer_class = JobSerializer(jobs, many = True)
+        return Response({'jobs': serializer_class.data})
 
 class SaveJobAPI(APIView):
     def post(self, request):
