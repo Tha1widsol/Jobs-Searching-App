@@ -7,3 +7,8 @@ class Skill(models.Model):
       
       def __str__(self):
           return self.name
+
+class Match(models.Model):
+      profile = models.ForeignKey('jobseekers.Profile',blank = True, null = True, on_delete = models.CASCADE)
+      job = models.ForeignKey('employers.Job',blank = True, null = True, on_delete = models.CASCADE)
+      score = models.IntegerField(default = 0)
