@@ -165,15 +165,17 @@ class ToggleProfileStatus(APIView):
         profile.save()
         return Response({'success':'Profile status has been changed'},status = status.HTTP_200_OK)
 
-class JobsListAPI(APIView):
-    def get(self, request):
-        profile = Profile.objects.filter(user = request.user)
+class JobsListAPI(generics.ListAPIView):
+    serializer_class = JobSerializer
+
+    def get_queryset(self):
+        profile = Profile.objects.filter(user = self.request.user)
         jobs = Job.objects.all()
         if profile.exists():
             applications = Application.objects.filter(profile = profile.first()).values_list('job')
             jobs = Job.objects.exclude(id__in = applications)
-            serializer_class = JobSerializer(jobs, many = True)
-        return Response({'jobs': serializer_class.data})
+        
+        return jobs
 
 class SaveJobAPI(APIView):
     def post(self, request):

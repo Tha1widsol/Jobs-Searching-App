@@ -93,7 +93,6 @@ export const fetchJobs = createAsyncThunk(
                 Authorization: `Token ${token}`
             }
         })
-
         return response.data
     }
 )
