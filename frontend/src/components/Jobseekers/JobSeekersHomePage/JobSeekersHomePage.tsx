@@ -21,11 +21,7 @@ export default function JobSeekersHomePage() {
           Authorization:`Token ${token}`
       }
   })
-    .then(response => {
-      const data = response.data
-     setMatches(data.arr)
-     
-    })
+  
     dispatch(fetchJobs('jobseeker'))
     dispatch(fetchSavedJobs())
  

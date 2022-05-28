@@ -90,33 +90,19 @@ class JobAPI(APIView):
                 job.applyOnOwnWebsite = True
 
             for r in roles.split(','):
-                if not(Role.objects.filter(name = r).exists()):
-                    role = Role(name = r)
-                    role.save()
-
-                else:
-                    role = Role.objects.filter(name = r).first()
-
+                role, created = Role.objects.get_or_create(name = r)
+                role.save()
                 job.roles.add(role)
 
             for b in benefits.split(','):
-                if not(Benefit.objects.filter(name = b).exists()):
-                    benefit = Benefit(name = b)
-                    benefit.save()
-
-                else:
-                    benefit = Benefit.objects.filter(name = b).first()
-
+                benefit, created = Benefit.objects.get_or_create(name = b)
+                benefit.save()
                 job.benefits.add(benefit)
 
-            for s in skills.split(','):
-                if not(Skill.objects.filter(name = s).exists()):
-                    skill = Skill(name = s)
-                    skill.save()
-                    
-                else:
-                    skill = Skill.objects.filter(name = s).first()
 
+            for s in skills.split(','):
+                skill, created = Skill.objects.get_or_create(name = s)
+                skill.save()
                 job.skills.add(skill)
             
             job.employer = request.user
@@ -144,6 +130,7 @@ class JobAPI(APIView):
             training = request.data.get('training')
             applyOnOwnWebsite = request.data.get('applyOnOwnWebsite')
 
+            
             if remote == 'true':
                 job.remote = True
             
@@ -153,34 +140,23 @@ class JobAPI(APIView):
             if applyOnOwnWebsite == 'true':
                 job.applyOnOwnWebsite = True
 
+            job.skills.clear()
+            job.benefits.clear()
+            job.roles.clear()
+
             for r in roles.split(','):
-                if not(Role.objects.filter(name = r).exists()):
-                    role = Role(name = r)
-                    role.save()
-
-                else:
-                    role = Role.objects.filter(name = r).first()
-
+                role, created = Role.objects.get_or_create(name = r)
+                role.save()
                 job.roles.add(role)
 
             for b in benefits.split(','):
-                if not(Benefit.objects.filter(name = b).exists()):
-                    benefit = Benefit(name = b)
-                    benefit.save()
-
-                else:
-                    benefit = Benefit.objects.filter(name = b).first()
-
+                benefit, created = Benefit.objects.get_or_create(name = b)
+                benefit.save()
                 job.benefits.add(benefit)
 
             for s in skills.split(','):
-                if not(Skill.objects.filter(name = s).exists()):
-                    skill = Skill(name = s)
-                    skill.save()
-                    
-                else:
-                    skill = Skill.objects.filter(name = s).first()
-
+                skill, created = Skill.objects.get_or_create(name = s)
+                skill.save()
                 job.skills.add(skill)
             
             job.user = request.user

@@ -2,6 +2,7 @@ from rest_framework import status,generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser,FormParser
+from main.models import Match
 from .models import *
 from rest_framework.decorators import api_view
 from employers.models import Job,Application
@@ -23,13 +24,14 @@ def calculateScore(job, profile):
 
 @api_view()
 def getMatchingScores(request):
-    matchArr = {}
-    profile = Profile.objects.filter(user = request.user)
+    profile = Profile.objects.get(user = request.user)
     jobs = Job.objects.all()
     for job in jobs:
-        matchArr[job.id] = calculateScore(job, profile.first())
-
-    return Response({'arr': matchArr})
+        match, created = Match.objects.update_or_create(profile = profile, job = job)
+        match.score = calculateScore(profile, job)
+        match.save()
+        
+    return Response(status = status.HTTP_200_OK)
 
 class ProfileAPI(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -42,14 +44,11 @@ class ProfileAPI(APIView):
             profile = serializer.save()
             skills = request.data.get('skills')
 
+            profile.skills.clear()
+            
             for s in skills.split(','):
-                if not(Skill.objects.filter(name = s).exists()):
-                    skill = Skill(name = s)
-                    skill.save()
-                    
-                else:
-                    skill = Skill.objects.filter(name = s).first()
-
+                skill, created = Skill.objects.get_or_create(name = s)
+                skill.save()
                 profile.skills.add(skill)
 
             profile.user = request.user
@@ -66,15 +65,13 @@ class ProfileAPI(APIView):
         if serializer.is_valid():
             profile = serializer.save()
             skills = request.data.get('skills')
+
+            profile.skills.clear()
             
             for s in skills.split(','):
-                if not(Skill.objects.filter(name = s).exists()):
-                    skill = Skill(name = s)
-                    skill.save()
-                    
-                else:
-                    skill = Skill.objects.filter(name = s).first()
-
+                skill, created = Skill.objects.get_or_create(name = s)
+                skill.save()
+            
                 profile.skills.add(skill)
 
             profile.user = request.user
@@ -100,7 +97,6 @@ class ProfileAPI(APIView):
         profile = Profile.objects.get(user = request.user)
         profile.delete()
         return Response(status = status.HTTP_200_OK)
-
 
 class ApplicationAPI(APIView):
      parser_classes = (MultiPartParser, FormParser)
