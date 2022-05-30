@@ -1,6 +1,7 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import {user as employer,UserProps,token} from '../../Auth/user'
 import {StatusProps} from '../../../types/status'
+import {company} from '../companies/companies'
 import axios from 'axios'
 
 interface JobsProps extends StatusProps{
@@ -48,17 +49,7 @@ const initialState: JobsProps = {
     status: '',
     values: [{
         employer,
-        company: {
-            id: 0,
-            name: '',
-            email: '',
-            about: '',
-            phone: '',
-            logo: '',
-            banner: '',
-            industry: '',
-            website: ''
-        },
+        company,
         id: 0,
         title: '',
         description: '',
