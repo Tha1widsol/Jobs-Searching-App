@@ -88,13 +88,18 @@ export default function JobPage() {
 
       <p>{job.values?.description}</p> 
       <hr className = 'mt-0-mb-4'/>
-      {job.values?.applicantsCount > 0 ? 
+      {user.isAnEmployer ? 
+         <div>
+          {job.values?.applicantsCount > 0 ? 
               <div> 
                   <p>Applicants: {job.values?.applicantsCount}</p>
                   <Link to =  {`/applicants/${job.values?.id}`}><button>View applicants</button></Link>
               </div> : 
                 <p>No applicants yet</p>
               }
+          </div>
+      : null}
+
       {!applications.values?.find(application => application.job.id === Number(jobID)) ? 
         !user?.isAnEmployer ?
         <div>
