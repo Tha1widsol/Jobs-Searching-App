@@ -6,21 +6,24 @@ from main.models import Match
 from .models import *
 from rest_framework.decorators import api_view
 from employers.models import Job,Application
-from employers.serializers import JobSerializer, ApplicationSerializer
+from employers.serializers import MatchingJobsSerializer, ApplicationSerializer
 from accounts.serializers import SavedJobSerializer
 from .serializers import *
 
 # Create your views here.
 
-def calculateScore(job, profile):
+def calculateScore(profile, job):
     score = 0
     currentSkills = [skill.name.lower() for skill in profile.skills.all()]
 
     for skill in job.skills.all():
         if skill.name.lower() in currentSkills:
             score += 1
+
+    if len(job.skills.all()):
+      return round(score / len(job.skills.all()) * 100, 1)
     
-    return round(score / len(job.skills.all()) * 100, 1)
+    return 0
 
 @api_view()
 def getMatchingScores(request):
@@ -162,14 +165,21 @@ class ToggleProfileStatus(APIView):
         return Response({'success':'Profile status has been changed'},status = status.HTTP_200_OK)
 
 class JobsListAPI(generics.ListAPIView):
-    serializer_class = JobSerializer
+    serializer_class = MatchingJobsSerializer
 
     def get_queryset(self):
         profile = Profile.objects.filter(user = self.request.user)
-        jobs = Job.objects.all()
+        jobs = Match.objects.all().order_by('score')
+
         if profile.exists():
+            allJobs = Job.objects.all()
+            for job in allJobs:
+                match, created = Match.objects.update_or_create(profile = profile.first(), job = job)
+                match.score = calculateScore(profile.first(), job)
+                match.save()
+                
             applications = Application.objects.filter(profile = profile.first()).values_list('job')
-            jobs = Job.objects.exclude(id__in = applications)
+            jobs = Match.objects.exclude(job__id__in = applications)
         
         return jobs
 
