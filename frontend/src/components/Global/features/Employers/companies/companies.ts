@@ -19,6 +19,18 @@ export interface CompaniesProps extends StatusProps{
   
 }
 
+export const company = {
+    id: 0,
+    name: '',
+    email: '',
+    about: '',
+    phone: '',
+    logo: '',
+    banner: '',
+    industry: '',
+    website: ''
+}
+
 const initialState: CompaniesProps = {
 status: '',
   values: [{
