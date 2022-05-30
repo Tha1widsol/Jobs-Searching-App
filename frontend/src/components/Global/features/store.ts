@@ -12,6 +12,7 @@ import ApplicationsReducer from './Jobseekers/applications/applications'
 import ApplicationReducer from './Jobseekers/applications/application'
 import checkApplicationExistsReducer from './Jobseekers/applications/checkApplicationExists'
 import savedJobsReducer from './Jobseekers/savedJobs/savedJobs'
+import matchingJobsReducer from './Jobseekers/matchingJobs/matchingJobs'
 import storage from 'redux-persist/lib/storage'
 
 import {
@@ -37,7 +38,8 @@ const reducers = combineReducers({
   applications: ApplicationsReducer,
   application: ApplicationReducer,
   checkApplicationExists: checkApplicationExistsReducer,
-  savedJobs: savedJobsReducer
+  savedJobs: savedJobsReducer,
+  matchingJobs: matchingJobsReducer
  })
 
  const persistedReducer = persistReducer(persistConfig, reducers)
