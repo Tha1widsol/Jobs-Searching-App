@@ -13,22 +13,46 @@ from .serializers import *
 # Create your views here.
 
 def calculateScore(profile, job):
-    score = 0
+    totalScore = SkillsScore = 0
+    educationRank = {
+        'No formal education': 1,
+        'Secondary education': 2,
+        'GED': 3,
+        'A-Levels': 4,
+        "Bachelor's degree": 5,
+        "Master's degree": 6,
+        'Doctorate or higher': 7,
+        'Vocational qualification': 8
+    }
+
     currentSkills = [skill.name.lower() for skill in profile.skills.all()]
 
     for skill in job.skills.all():
         if skill.name.lower() in currentSkills:
-            score += 1
+            SkillsScore += 1
 
     if len(job.skills.all()):
-      return round(score / len(job.skills.all()) * 100, 1)
+       totalScore += (SkillsScore / len(job.skills.all())) * 0.4
+
+    else:
+        totalScore = 0.4
     
-    return 0
+    if educationRank[profile.education] >= educationRank[job.education]:
+        totalScore += 0.2
+
+    if any(c in job.title.lower().split(' ') for c in profile.experience.lower().split(' ')):
+        totalScore += 0.1
+    
+    if len(job.benefits.all()):
+       totalScore += len(job.benefits.all()) * 0.02
+
+    return totalScore * 100
 
 @api_view()
 def getMatchingScores(request):
     profile = Profile.objects.get(user = request.user)
-    jobs = Job.objects.all()
+    jobs = Job.objects.filter(industry = profile.industry)
+    
     for job in jobs:
         match, created = Match.objects.update_or_create(profile = profile, job = job)
         match.score = calculateScore(profile, job)
