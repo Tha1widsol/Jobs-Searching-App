@@ -32,19 +32,29 @@ def calculateScore(profile, job):
             SkillsScore += 1
 
     if len(job.skills.all()):
-       totalScore += (SkillsScore / len(job.skills.all())) * 0.4
+       totalScore += (SkillsScore / len(job.skills.all())) * 0.2
 
     else:
-        totalScore = 0.4
+        totalScore = 0.2
     
     if educationRank[profile.education] >= educationRank[job.education]:
         totalScore += 0.2
 
     if any(c in job.title.lower().split(' ') for c in profile.experience.lower().split(' ')):
-        totalScore += 0.1
+        totalScore += 0.5
+
+    if job.experience:
+        for r in job.roles.all():
+            role = r.name.lower().split(' ')
+            for line in job.experience.lower().split(' '):
+                if role in line:
+                    totalScore += 0.02
     
-    if len(job.benefits.all()):
-       totalScore += len(job.benefits.all()) * 0.02
+    if len(job.benefits.all()) < 10:
+           totalScore += len(job.benefits.all()) * 0.005
+
+    else:
+        totalScore = 0.005
 
     return totalScore * 100
 

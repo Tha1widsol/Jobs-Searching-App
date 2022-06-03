@@ -53,6 +53,7 @@ class Job(models.Model):
       industry = models.TextField(default = 'Any')
       remote = models.BooleanField(default = False)
       type = models.CharField(max_length = 9, default = 'Full-time')
+      experience = models.TextField(blank = True)
       training = models.BooleanField(default = True)
       positions = models.TextField(default = "1")
       education = models.CharField(max_length = 50)
