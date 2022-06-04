@@ -9,6 +9,7 @@ import {capitalizeFirstCharacter} from '../../Global/formFunctions';
 import List from '../../Global/Forms/List';
 import {token} from '../../Global/features/Auth/user';
 import {fetchJob} from '../../Global/features/Employers/jobs/job';
+import ReactScrollableFeed from 'react-scrollable-feed';
 import axios from 'axios';
 
 export default function JobFormPage({edit = false}) {
@@ -29,6 +30,7 @@ export default function JobFormPage({edit = false}) {
   const [positions,setPositions] = useState({value: '1', isValid: true, errorMsg: 'Positions value is invalid'})
   const [education,setEducation] = useState({value: 'No formal education'})
   const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
+  const [experience,setExperience] = useState({value: [{description: '', years: 0, isRequired: false}], currentVal: {description: '', years: 0, isRequired: false}, isEmpty: false, emptyErrorMsg: '', alreadyExists: false, alreadyExistsMsg: 'Experience already exists', AddedMsg:'Experience added', RemovedMsg: 'Experience removed'})
   const [startDate,setStartDate] = useState({value: '',isValid: true, errorMsg: 'Start date is invalid'})
   const [benefits,setBenefits] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Benefit already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
   const [workingDay1,setWorkingDay1] = useState({value: 'Monday'})
@@ -103,6 +105,14 @@ function handleSetRole(e: React.ChangeEvent<HTMLInputElement>){
 
 function handleSetSkills(e: React.ChangeEvent<HTMLInputElement>){
   setSkills(prev => {return {...prev, currentVal: e.target.value}})
+  e.target.value = e.target.value.replace(',','')
+}
+
+function handleSetExperience(e: React.ChangeEvent<HTMLTextAreaElement>){
+  setExperience(prev => ({
+    ...prev,
+    currentVal: {...prev.currentVal, description: e.target.value}
+  }))
   e.target.value = e.target.value.replace(',','')
 }
 
@@ -273,6 +283,18 @@ function handleSubmitForm(e: React.SyntheticEvent){
 
 }
 
+function handleAddExperience(){
+  setExperience(prev => ({
+    ...prev,
+    value: [...prev.value, {
+      description: experience.currentVal.description, 
+      years: experience.currentVal.years, 
+      isRequired: experience.currentVal.isRequired}]
+  }))
+
+  console.log(experience.value)
+}
+
   return (
     <div>
         <div className = 'steps'>
@@ -382,6 +404,23 @@ function handleSubmitForm(e: React.SyntheticEvent){
                 handleSetAll = {(newItems: Array<string>) => setSkills(prev => {return {...prev,value: newItems}})}
                 />
 
+                <label htmlFor = 'experience'><h3>Experience required (Optional):</h3></label>
+
+                <label><h4>Description:</h4></label>
+                <textarea id = 'experienceDescription' onChange = {handleSetExperience} value = {experience.currentVal.description} className = {experience.alreadyExists || experience.isEmpty ? 'inputError' : ''}  placeholder = 'E.g Developing mobile apps...' autoComplete = 'on'/>
+
+                <label><h4>Number of years:</h4></label>
+                <input type = 'number' style = {{width: '65px'}} value = {experience.currentVal.years} onChange = {(e: React.ChangeEvent<HTMLInputElement>) => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: Number(e.target.value)}}))} id = 'experienceYears' min = {0} autoComplete = 'on'/>
+                
+                <label><h4>Required:</h4></label>
+                <select id = 'experienceRequired' style = {{width: '80px'}}  onChange = {e => setExperience(prev => ({...prev,currentVal: {...prev.currentVal, isRequired: e.target.value === 'Yes' ? true : false}}))}>
+                  <option value = 'Yes'>Yes</option>
+                  <option value = 'No'>No</option>
+                </select>
+
+                <button type = 'button' style = {{marginTop:'20px', display: 'block'}} onClick = {handleAddExperience}>Add</button>
+
+
                 <label><h3>Working days:</h3></label>
 
                   <select id = 'workingDay1' value = {workingDay1.value} onChange  = {e => setWorkingDay1(prev => {return{...prev, value: e.target.value}})} style = {{width:'auto'}}>
@@ -441,7 +480,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
 
             </div>
 
-            {currentTab === maxTabs ? <button type = 'button' id = 'submit' onClick = {handleSubmitForm}>Submit</button> : <button type = 'button' className = 'toggleTabBtn' onClick = {validateForm} style = {{float:'right'}}>Next</button>}
+            {currentTab === maxTabs ? <button type = 'button' id = 'submit' onClick = {handleSubmitForm}>Submit</button> : <button type = 'button' className = 'toggleTabBtn' onClick = {() => setCurrentTab(currentTab + 1)} style = {{float:'right'}}>Next</button>}
             <button type = 'button' className = {currentTab > 1 ? 'toggleTabBtn' : 'hide'} onClick = {handleToPrevTab}>Previous</button>
         </form>
 
