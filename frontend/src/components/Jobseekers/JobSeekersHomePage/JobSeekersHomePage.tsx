@@ -54,16 +54,18 @@ export default function JobSeekersHomePage() {
               {matching.job?.salary2 ? <p>{matching.job?.currency}{matching.job?.salary1} - {matching.job?.currency}{matching.job?.salary2} a year </p> : <p>{matching.job?.currency}{matching.job?.salary1} a year</p>} 
               <p>{matching.job?.type}</p>
               <hr className = 'mt-0-mb-4'/>
+              
+              <label><h3>Description:</h3></label>
               <p className = 'containerText'>{matching.job?.description}</p>
           
               <label><h3>Roles:</h3></label>
-                <section className = 'listContainer' style = {{marginBottom: '20px'}}>
+                <section className = 'listContainer'>
                     {matching.job?.roles.map((role,index) => {
                         return (<li key = {index}>{role.name}</li>)
                     })}
                 </section>
              
-              <section style = {{textAlign:'center'}}>
+              <section style = {{textAlign:'center', marginTop: '20px'}}>
                   {matching.job?.applyOnOwnWebsite ? 
                    <a href = {matching.job?.link} target = 'blank'><button>Apply Externally</button></a>
                   : <Link to = {`/apply/${matching.job?.id}`}><button>Apply</button></Link>}
