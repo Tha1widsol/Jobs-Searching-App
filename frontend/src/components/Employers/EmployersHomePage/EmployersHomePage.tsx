@@ -32,6 +32,8 @@ export default function EmployersHomePage() {
                          <p><i className = 'fa fa-phone icon'></i>000011111</p>
                          <p><i className = 'icon'>&#9993;</i>{profile.user.email}</p>
                          <hr className = 'mt-0-mb-4'/>
+                         <label><h3>Experience:</h3></label>
+                         <p className = 'containerText'>{profile.experience}</p>
 
                          <label><h3>Skills:</h3></label>
                          <section className = 'listContainer'>
@@ -40,9 +42,7 @@ export default function EmployersHomePage() {
                              })}
                          </section>
 
-                         <hr className = 'mt-0-mb-4'/>
-                         <p className = 'containerText'>{profile.experience}</p>
-                         <section style = {{textAlign:'center'}}>
+                         <section style = {{textAlign:'center', marginTop: '20px'}}>
                              <button>Shortlist</button>
                              <button>Message</button>
                          </section>   
