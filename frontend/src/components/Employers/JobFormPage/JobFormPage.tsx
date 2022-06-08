@@ -26,11 +26,11 @@ export default function JobFormPage({edit = false}) {
   const [roles,setRoles] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid role', alreadyExists: false, alreadyExistsMsg: 'Role already exists',AddedMsg:'Role added',RemovedMsg: 'Role removed'})
   const [industry,setIndustry] = useState({value: 'Any'})
   const [isRemote,setIsRemote] = useState(false)
-  const [isTrainingProvided,setIsTrainingProvided] = useState( false)
+  const [isTrainingProvided,setIsTrainingProvided] = useState(false)
   const [positions,setPositions] = useState({value: '1', isValid: true, errorMsg: 'Positions value is invalid'})
   const [education,setEducation] = useState({value: 'No formal education'})
   const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-  const [experience,setExperience] = useState({value: [{description: '', years: 0, isRequired: false}], currentVal: {description: '', years: 0, isRequired: false}, isEmpty: false, emptyErrorMsg: '', alreadyExists: false, alreadyExistsMsg: 'Experience already exists', AddedMsg:'Experience added', RemovedMsg: 'Experience removed'})
+  const [experience,setExperience] = useState({value: [{description: '', years: '0', isRequired: false}], currentVal: {description: '', years: '0', isRequired: false}, isValid: true, emptyErrorMsg: 'Experience is invalid',alreadyExistsMsg: 'Experience already exists', AddedMsg:'Experience added', RemovedMsg: 'Experience removed'})
   const [startDate,setStartDate] = useState({value: '',isValid: true, errorMsg: 'Start date is invalid'})
   const [benefits,setBenefits] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Benefit already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
   const [workingDay1,setWorkingDay1] = useState({value: 'Monday'})
@@ -194,7 +194,7 @@ const validateForm = () => {
         setLink(prev => {return {...prev,isValid: false}})
         errors.push(link.errorMsg)
         isValid = false
-    }
+       }
 
       else setLink(prev => {return {...prev,isValid: true}})
 
@@ -284,16 +284,36 @@ function handleSubmitForm(e: React.SyntheticEvent){
 }
 
 function handleAddExperience(){
+  if (experience.value.find(exp => exp.description === experience.currentVal.description && exp.description)) {
+    setErrors(prev => {return [...prev, experience.alreadyExistsMsg]})
+    setExperience(prev => {return{...prev, isValid: false}})
+    return
+  }
+
+  if (!experience.currentVal.description) {
+    setErrors(prev => {return[...prev, experience.emptyErrorMsg]})
+    setExperience(prev => {return{...prev, isValid: false}})
+    return
+  }
+
   setExperience(prev => ({
     ...prev,
     value: [...prev.value, {
       description: experience.currentVal.description, 
-      years: experience.currentVal.years, 
+      years: experience.currentVal.years || '0', 
       isRequired: experience.currentVal.isRequired}]
   }))
 
-  console.log(experience.value)
+  setExperience(prev => {return{...prev, isValid: true}})
+  setExperience(prev => {return{...prev, currentVal: {description: '', years: '0', isRequired: false}}})
+  setErrors([])
 }
+
+function handleRemoveExperience(idx: number){
+  const newExperience = [...experience.value]
+  newExperience.splice(idx, 1)
+  setExperience(prev => {return{...prev, value: newExperience}})
+} 
 
   return (
     <div>
@@ -391,7 +411,7 @@ function handleAddExperience(){
             <div className = {`tab ${currentTab === 2 ? 'show' : 'hide'}`}>
                 <h1 className = 'title'>Requirements</h1> 
                 <hr className = 'mt-0-mb-4'/>
-
+                <Errors errors = {errors}/>
                 <label htmlFor = 'skills'><h3>Skills required (Optional):</h3></label>
                 <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on'/>
 
@@ -403,23 +423,58 @@ function handleAddExperience(){
                 handleSetAlreadyExists = {(exists = true) => setSkills(prev => {return {...prev,alreadyExists: exists}})}
                 handleSetAll = {(newItems: Array<string>) => setSkills(prev => {return {...prev,value: newItems}})}
                 />
-
+                <hr className = 'mt-0-mb-4'/>
                 <label htmlFor = 'experience'><h3>Experience required (Optional):</h3></label>
 
                 <label><h4>Description:</h4></label>
-                <textarea id = 'experienceDescription' onChange = {handleSetExperience} value = {experience.currentVal.description} className = {experience.alreadyExists || experience.isEmpty ? 'inputError' : ''}  placeholder = 'E.g Developing mobile apps...' autoComplete = 'on'/>
+                <textarea id = 'experienceDescription' onChange = {handleSetExperience} value = {experience.currentVal.description} className = {!experience.isValid ? 'inputError' : ''}  placeholder = 'E.g Developing mobile apps...' autoComplete = 'on'/>
 
                 <label><h4>Number of years:</h4></label>
-                <input type = 'number' style = {{width: '65px'}} value = {experience.currentVal.years} onChange = {(e: React.ChangeEvent<HTMLInputElement>) => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: Number(e.target.value)}}))} id = 'experienceYears' min = {0} autoComplete = 'on'/>
+                <input type = 'number' style = {{width: '65px'}} value = {experience.currentVal.years} onChange = {(e: React.ChangeEvent<HTMLInputElement>) => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: e.target.value}}))} id = 'experienceYears' min = '0' autoComplete = 'on'/>
                 
                 <label><h4>Required:</h4></label>
-                <select id = 'experienceRequired' style = {{width: '80px'}}  onChange = {e => setExperience(prev => ({...prev,currentVal: {...prev.currentVal, isRequired: e.target.value === 'Yes' ? true : false}}))}>
+                <select id = 'experienceRequired' defaultValue = 'No' style = {{width: '80px'}}  onChange = {e => setExperience(prev => ({...prev,currentVal: {...prev.currentVal, isRequired: e.target.value === 'Yes' ? true : false}}))}>
                   <option value = 'Yes'>Yes</option>
                   <option value = 'No'>No</option>
                 </select>
 
                 <button type = 'button' style = {{marginTop:'20px', display: 'block'}} onClick = {handleAddExperience}>Add</button>
 
+                <div className = 'list longerList'>
+                <ReactScrollableFeed>
+                {experience.value.map((exp, index) => {
+                  return (
+                    <div key = {index}>
+                        {exp.description ? 
+                        <table style = {{marginTop: '20px'}}>
+                        <tbody>
+                          <tr>
+                            <th>No</th>
+                            <th>Experience</th>
+                            <th>Years</th>
+                            <th>Required</th>
+                          </tr>
+
+                          <tr>
+                            <td>{index}</td>
+                            <td>{exp.description}</td>
+                            <td>{exp.years}</td>
+                            <td>{exp.isRequired ? 'Yes' : 'No'}</td>
+                            <td><span>&#9998;</span></td>
+                            <td><span onClick = {() => handleRemoveExperience(index)} className = 'cross'>X</span></td>
+                          </tr>
+                        </tbody>
+                        </table>
+                         
+                        : null}
+                        
+                        </div>
+                  )
+                })}
+                </ReactScrollableFeed>
+                </div>
+                
+                 <hr className = 'mt-0-mb-4'/>
 
                 <label><h3>Working days:</h3></label>
 
