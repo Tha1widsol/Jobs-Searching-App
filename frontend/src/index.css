@@ -73,6 +73,18 @@ input,select,textarea{
   z-index: 1;
 }
 
+table{
+  width: 100%;
+  border-collapse: collapse;
+  border-bottom: 1px solid #ddd;
+}
+
+td, th {
+  text-align: left;
+  padding: 8px;
+}
+
+
   /* ################
 Button styles
 ##################*/
@@ -205,6 +217,19 @@ form{
   margin-bottom: 40px;
 }
 
+.longerList{
+  max-height: 250px;
+}
+
+.cross{
+  cursor: pointer;
+  font-size: 22px;
+  color: red;
+}
+
+.cross:hover{
+  color: darkred;
+}
   /* ################
 Image styles
 ##################*/
