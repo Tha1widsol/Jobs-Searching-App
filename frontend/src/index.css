@@ -183,6 +183,15 @@ form{
   margin-bottom: 45px
 }
 
+input[type = checkbox]{
+  width: auto;
+	zoom: 1.5;
+}
+
+input[type = number]{
+	width: 60px;
+}
+
 .step {
   height: 15px;
   width: 15px;
