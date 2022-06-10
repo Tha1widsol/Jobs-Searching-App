@@ -10,6 +10,7 @@ import List from '../../Global/Forms/List';
 import {token} from '../../Global/features/Auth/user';
 import {fetchJob} from '../../Global/features/Employers/jobs/job';
 import ReactScrollableFeed from 'react-scrollable-feed';
+import Popup from '../../Global/Popup/Popup';
 import axios from 'axios';
 
 export default function JobFormPage({edit = false}) {
@@ -30,7 +31,7 @@ export default function JobFormPage({edit = false}) {
   const [positions,setPositions] = useState({value: '1', isValid: true, errorMsg: 'Positions value is invalid'})
   const [education,setEducation] = useState({value: 'No formal education'})
   const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-  const [experience,setExperience] = useState({value: [{description: '', years: '0', isRequired: false}], currentVal: {description: '', years: '0', isRequired: false}, isValid: true, emptyErrorMsg: 'Experience is invalid',alreadyExistsMsg: 'Experience already exists', AddedMsg:'Experience added', RemovedMsg: 'Experience removed'})
+  const [experience,setExperience] = useState({value: [{description: '', years: '0', isRequired: false}], popup: false, currentVal: {description: '', years: '0', isRequired: false}, isValid: true, currentErrorMsg: '', emptyErrorMsg: 'Experience is invalid', alreadyExistsMsg: 'Experience already exists'})
   const [startDate,setStartDate] = useState({value: '',isValid: true, errorMsg: 'Start date is invalid'})
   const [benefits,setBenefits] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Benefit already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
   const [workingDay1,setWorkingDay1] = useState({value: 'Monday'})
@@ -285,14 +286,12 @@ function handleSubmitForm(e: React.SyntheticEvent){
 
 function handleAddExperience(){
   if (experience.value.find(exp => exp.description === experience.currentVal.description && exp.description)) {
-    setErrors(prev => {return [...prev, experience.alreadyExistsMsg]})
-    setExperience(prev => {return{...prev, isValid: false}})
+    setExperience(prev => {return{...prev, isValid: false, currentErrorMsg: experience.alreadyExistsMsg}})
     return
   }
 
   if (!experience.currentVal.description) {
-    setErrors(prev => {return[...prev, experience.emptyErrorMsg]})
-    setExperience(prev => {return{...prev, isValid: false}})
+    setExperience(prev => {return{...prev, isValid: false, currentErrorMsg: experience.emptyErrorMsg}})
     return
   }
 
@@ -306,6 +305,7 @@ function handleAddExperience(){
 
   setExperience(prev => {return{...prev, isValid: true}})
   setExperience(prev => {return{...prev, currentVal: {description: '', years: '0', isRequired: false}}})
+  setExperience(prev => {return{...prev, popup: false}})
   setErrors([])
 }
 
@@ -321,8 +321,7 @@ function handleRemoveExperience(idx: number){
             <span className = {`step ${currentTab === 1 ? 'active' : currentTab > 1 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(1) : null}><p className = 'step-label'>About</p></span>
             <span className = {`step ${currentTab === 2 ? 'active' : currentTab > 2 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(2) : null}><p className = 'step-label'>Requirements</p></span>
         </div>
-
-        <form>
+        <form noValidate>
             <div className = {`tab ${currentTab === 1 ? 'show' : 'hide'}`}>
               <h1 className = 'title'>About</h1> 
               <hr className = 'mt-0-mb-4'/>
@@ -381,7 +380,7 @@ function handleRemoveExperience(idx: number){
               <br/>
               <hr className = 'mt-0-mb-4'/>
               <label htmlFor = 'jobPositions'><h3>Number of positions:</h3></label>
-              <input type = 'number' className = {!positions.isValid ? 'inputError' : ''} id = 'jobPositions'  onChange = {e => setPositions(prev => {return {...prev, value: e.target.value}})} min = '1' value = {positions.value} required style = {{width: '65px'}}/>
+              <input type = 'number' className = {!positions.isValid ? 'inputError' : ''} id = 'jobPositions'  onChange = {e => setPositions(prev => {return {...prev, value: e.target.value}})} min = '1' value = {positions.value} required/>
 
               <label><h3>Benefits (Optional):</h3></label>
               <input className = {benefits.alreadyExists || benefits.isEmpty ? 'inputError' : ''} onChange = {handleSetBenefit} value = {benefits.currentVal} placeholder = 'E.g Free parking...' autoComplete = 'on' required/>
@@ -395,17 +394,10 @@ function handleRemoveExperience(idx: number){
               />
 
               <label htmlFor = 'jobRemote'><h3>Remote:</h3></label>
-              <select id = 'jobRemote' value = {isRemote ? 'Yes' : 'No'} style = {{width:'80px'}} onChange = {e => e.target.value === 'Yes' ? setIsRemote(true) : setIsRemote(false)}>
-                  <option value = 'Yes'>Yes</option>
-                  <option value = 'No'>No</option>
-              </select>
-
+              <input type = 'checkbox' id = 'jobRemote' checked = {isRemote} onChange = {e => setIsRemote(e.target.checked)}/>
+          
               <label htmlFor = 'jobTraining'><h3>Training Provided:</h3></label>
-              <select id = 'jobTraining' value = {isTrainingProvided ? 'Yes' : 'No'} style = {{width:'80px'}} onChange = {e => e.target.value === 'Yes' ? setIsTrainingProvided(true) : setIsTrainingProvided(false)}>
-                  <option value = 'Yes'>Yes</option>
-                  <option value = 'No'>No</option>
-              </select>
-
+              <input type = 'checkbox' id = 'jobTraining' checked = {isTrainingProvided} onChange = {e => setIsTrainingProvided(e.target.checked)}/>
             </div>
 
             <div className = {`tab ${currentTab === 2 ? 'show' : 'hide'}`}>
@@ -425,20 +417,24 @@ function handleRemoveExperience(idx: number){
                 />
                 <hr className = 'mt-0-mb-4'/>
                 <label htmlFor = 'experience'><h3>Experience required (Optional):</h3></label>
+                <button type = 'button' style = {{marginTop:'20px', display: 'block'}} onClick = {() => setExperience(prev => {return{...prev, popup: true}})}>Add</button>
 
-                <label><h4>Description:</h4></label>
-                <textarea id = 'experienceDescription' onChange = {handleSetExperience} value = {experience.currentVal.description} className = {!experience.isValid ? 'inputError' : ''}  placeholder = 'E.g Developing mobile apps...' autoComplete = 'on'/>
+                <Popup trigger = {experience.popup} switchOff = {() => setExperience(prev => {return{...prev, popup: false}})} modalOn = {false}>
+                  <p className = 'error'>{!experience.isValid ? <li>{experience.currentErrorMsg}</li> : null}</p>
 
-                <label><h4>Number of years:</h4></label>
-                <input type = 'number' style = {{width: '65px'}} value = {experience.currentVal.years} onChange = {(e: React.ChangeEvent<HTMLInputElement>) => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: e.target.value}}))} id = 'experienceYears' min = '0' autoComplete = 'on'/>
-                
-                <label><h4>Required:</h4></label>
-                <select id = 'experienceRequired' defaultValue = 'No' style = {{width: '80px'}}  onChange = {e => setExperience(prev => ({...prev,currentVal: {...prev.currentVal, isRequired: e.target.value === 'Yes' ? true : false}}))}>
-                  <option value = 'Yes'>Yes</option>
-                  <option value = 'No'>No</option>
-                </select>
+                  <label><h4>Description:</h4></label>
+                  <textarea id = 'experienceDescription' onChange = {handleSetExperience} value = {experience.currentVal.description} className = {!experience.isValid ? 'inputError' : ''}  placeholder = 'E.g Developing mobile apps...' autoComplete = 'on'/>
 
-                <button type = 'button' style = {{marginTop:'20px', display: 'block'}} onClick = {handleAddExperience}>Add</button>
+                  <label><h4>Number of years:</h4></label>
+                  <input type = 'number' value = {experience.currentVal.years} onChange = {(e: React.ChangeEvent<HTMLInputElement>) => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: e.target.value}}))} id = 'experienceYears' min = '0' max = '10' autoComplete = 'on'/>
+                 
+                  <div style = {{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <label><h4>Required:</h4></label>
+                    <input type = 'checkbox' id = 'experienceRequired' defaultValue = 'No'  onChange = {e => setExperience(prev => ({...prev,currentVal: {...prev.currentVal, isRequired: e.target.checked}}))}/>
+                  </div>
+                   
+                  <button type = 'button' onClick = {handleAddExperience}>Submit</button>
+                </Popup>
 
                 <div className = 'list longerList'>
                 <ReactScrollableFeed>
@@ -502,7 +498,7 @@ function handleRemoveExperience(idx: number){
                   </select>
 
                 <label htmlFor = 'workingHours'><h3>Working hours:</h3></label>
-                <input type = 'number' className = {!workingHours.isValid ? 'inputError' : ''} value = {workingHours.value} id = 'jobPositions'  onChange = {e => setWorkingHours(prev => {return {...prev, value: e.target.value}})} min = '1' max = '12'  required style = {{width: '65px'}}/>
+                <input type = 'number' className = {!workingHours.isValid ? 'inputError' : ''} value = {workingHours.value} id = 'jobPositions'  onChange = {e => setWorkingHours(prev => {return {...prev, value: e.target.value}})} min = '1' max = '12'  required/>
 
                 <label htmlFor = 'startDate'><h3>Expected start date:</h3></label>
                 <input type = 'date' className = {!startDate.isValid ? 'inputError' : ''} value = {startDate.value} id = 'startDate' min = {getcurrentDate()} onChange = {e => setStartDate(prev => {return {...prev, value: e.target.value}})} required/>
@@ -521,11 +517,7 @@ function handleRemoveExperience(idx: number){
                     </select>
                   
                 <label htmlFor = 'applicationPreference'><h3>Apply on here:</h3></label>
-                <select id = 'applicationPreference' value = {applyOnOwnWebsite ? 'No' : 'Yes'} style = {{width: '80px'}} onChange = {e => e.target.value === 'No' ? setApplyOnOwnWebsite(true) : setApplyOnOwnWebsite(false)}>
-                  <option value = 'Yes'>Yes</option>
-                  <option value = 'No'>No</option>
-                </select>
-
+                <input type = 'checkbox' id = 'applicationPreference' checked = {applyOnOwnWebsite} onChange = {e => setApplyOnOwnWebsite(e.target.checked)}/>
                 {applyOnOwnWebsite ? 
                   <div>
                     <label htmlFor = 'jobLink'><h3>Job link:</h3></label>
