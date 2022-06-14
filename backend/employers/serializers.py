@@ -53,3 +53,11 @@ class MatchingJobsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
         fields = '__all__'
+
+class ExperienceSerializer(serializers.ModelSerializer):
+    job = JobSerializer(read_only = True)
+
+    class Meta:
+        model = Experience
+        fields = '__all__'
+    
