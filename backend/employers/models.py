@@ -53,7 +53,6 @@ class Job(models.Model):
       industry = models.TextField(default = 'Any')
       remote = models.BooleanField(default = False)
       type = models.CharField(max_length = 9, default = 'Full-time')
-      experience = models.TextField(blank = True)
       training = models.BooleanField(default = True)
       positions = models.TextField(default = "1")
       education = models.CharField(max_length = 50)
@@ -71,6 +70,14 @@ class Job(models.Model):
       def __str__(self):
         return self.title
 
+class Experience(models.Model):
+      job = models.ForeignKey(Job, on_delete = models.CASCADE, null = True, blank = True)
+      experience = models.TextField()
+      years = models.IntegerField()
+      required = models.BooleanField(default = False)
+
+      def __str__(self):
+         return self.experience
 
 class Application(models.Model):
       profile = models.ForeignKey(Profile, on_delete = models.CASCADE, null = True, blank = True)
