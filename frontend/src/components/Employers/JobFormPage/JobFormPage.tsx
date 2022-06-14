@@ -245,6 +245,14 @@ function handleSubmitForm(e: React.SyntheticEvent){
   form.append('training',isTrainingProvided.toString())
   form.append('positions',positions.value)
   form.append('education',education.value)
+ 
+    const newExp: Array<string> = []
+    experience.value.map(exp => {
+      if (exp.description)
+      newExp.push(`${exp.description}, ${exp.isRequired}, ${exp.years}`)
+    })
+
+  form.append('experience', newExp.toString())
   form.append('skills',skills.value.toString())
   form.append('startDate',startDate.value)
   form.append('benefits',benefits.value.toString())
