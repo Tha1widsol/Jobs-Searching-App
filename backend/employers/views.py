@@ -78,6 +78,7 @@ class JobAPI(APIView):
             skills = request.data.get('skills')
             remote = request.data.get('remote')
             training = request.data.get('training')
+            experience = request.data.get('experience')
             applyOnOwnWebsite = request.data.get('applyOnOwnWebsite')
 
             if remote == 'true':
@@ -128,8 +129,10 @@ class JobAPI(APIView):
             skills = request.data.get('skills')
             remote = request.data.get('remote')
             training = request.data.get('training')
+            experience = request.data.get('experience')
             applyOnOwnWebsite = request.data.get('applyOnOwnWebsite')
-
+            for exp in experience.split(','):
+                print(exp)
             
             if remote == 'true':
                 job.remote = True
