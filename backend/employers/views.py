@@ -6,6 +6,7 @@ from jobseekers.models import Profile
 from jobseekers.serializers import ProfileSerializer
 from .models import *
 from .serializers import *
+import json
 
 # Create your views here.
 
@@ -78,7 +79,7 @@ class JobAPI(APIView):
             skills = request.data.get('skills')
             remote = request.data.get('remote')
             training = request.data.get('training')
-            experience = request.data.get('experience')
+            experience = json.loads(request.data.get('experience'))
             applyOnOwnWebsite = request.data.get('applyOnOwnWebsite')
 
             if remote == 'true':
@@ -108,6 +109,11 @@ class JobAPI(APIView):
             
             job.employer = request.user
             job.save()
+
+            for exp in experience:
+                newExp = Experience(job = job, experience = exp['description'], years = exp['years'], required = exp['isRequired'])
+                newExp.save()
+                
             return Response(status = status.HTTP_201_CREATED)
 
         return Response(status = status.HTTP_400_BAD_REQUEST)
@@ -129,10 +135,8 @@ class JobAPI(APIView):
             skills = request.data.get('skills')
             remote = request.data.get('remote')
             training = request.data.get('training')
-            experience = request.data.get('experience')
+            experience = json.loads(request.data.get('experience'))
             applyOnOwnWebsite = request.data.get('applyOnOwnWebsite')
-            for exp in experience.split(','):
-                print(exp)
             
             if remote == 'true':
                 job.remote = True
@@ -164,6 +168,11 @@ class JobAPI(APIView):
             
             job.user = request.user
             job.save()
+
+            for exp in experience:
+                newExp = Experience(job = job, experience = exp['description'], years = exp['years'], required = exp['isRequired'])
+                newExp.save()
+           
             return Response(status = status.HTTP_200_OK)
 
         return Response(status = status.HTTP_400_BAD_REQUEST)
