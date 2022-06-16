@@ -20,7 +20,7 @@ export default function Popup({
           <div className = 'popup'>
               <div className = 'close' onClick = {switchOff}>&times;</div>
               {children}
-              <button onClick = {switchOff}>Cancel</button>
+            
           </div>
       </div>
   ): null
