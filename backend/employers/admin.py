@@ -9,4 +9,5 @@ admin.site.register(Job)
 admin.site.register(Role)
 admin.site.register(Benefit)
 admin.site.register(Application)
+admin.site.register(Experience)
 
