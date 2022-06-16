@@ -245,14 +245,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
   form.append('training',isTrainingProvided.toString())
   form.append('positions',positions.value)
   form.append('education',education.value)
- 
-    const newExp: Array<string> = []
-    experience.value.map(exp => {
-      if (exp.description)
-      newExp.push(`${exp.description}, ${exp.isRequired}, ${exp.years}`)
-    })
-
-  form.append('experience', newExp.toString())
+  form.append('experience', JSON.stringify(experience.value))
   form.append('skills',skills.value.toString())
   form.append('startDate',startDate.value)
   form.append('benefits',benefits.value.toString())
@@ -428,6 +421,8 @@ function handleRemoveExperience(idx: number){
                 <button type = 'button' style = {{marginTop:'20px', display: 'block'}} onClick = {() => setExperience(prev => {return{...prev, popup: true}})}>Add</button>
 
                 <Popup trigger = {experience.popup} switchOff = {() => setExperience(prev => {return{...prev, popup: false}})} modalOn = {false}>
+                  <h2>Add Experience:</h2>
+
                   <p className = 'error'>{!experience.isValid ? <li>{experience.currentErrorMsg}</li> : null}</p>
 
                   <label><h4>Description:</h4></label>
@@ -436,20 +431,20 @@ function handleRemoveExperience(idx: number){
                   <label><h4>Number of years:</h4></label>
                   <input type = 'number' value = {experience.currentVal.years} onChange = {(e: React.ChangeEvent<HTMLInputElement>) => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: e.target.value}}))} id = 'experienceYears' min = '0' max = '10' autoComplete = 'on'/>
                  
-                  <div style = {{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                  <div style = {{display: 'flex', alignItems: 'center'}}>
                     <label><h4>Required:</h4></label>
                     <input type = 'checkbox' id = 'experienceRequired' defaultValue = 'No'  onChange = {e => setExperience(prev => ({...prev,currentVal: {...prev.currentVal, isRequired: e.target.checked}}))}/>
                   </div>
                    
                   <button type = 'button' onClick = {handleAddExperience}>Submit</button>
+                  <button onClick = {() => setExperience(prev => {return{...prev, popup: false}})}>Cancel</button>
                 </Popup>
 
                 <div className = 'list longerList'>
                 <ReactScrollableFeed>
-                {experience.value.map((exp, index) => {
+                {experience.value.slice(1).map((exp, index) => {
                   return (
                     <div key = {index}>
-                        {exp.description ? 
                         <table style = {{marginTop: '20px'}}>
                         <tbody>
                           <tr>
@@ -460,7 +455,7 @@ function handleRemoveExperience(idx: number){
                           </tr>
 
                           <tr>
-                            <td>{index}</td>
+                            <td>{index + 1}</td>
                             <td>{exp.description}</td>
                             <td>{exp.years}</td>
                             <td>{exp.isRequired ? 'Yes' : 'No'}</td>
@@ -469,8 +464,6 @@ function handleRemoveExperience(idx: number){
                           </tr>
                         </tbody>
                         </table>
-                         
-                        : null}
                         
                         </div>
                   )
