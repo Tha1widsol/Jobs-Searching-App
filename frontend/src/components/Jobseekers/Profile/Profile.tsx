@@ -43,9 +43,12 @@ export default function Profile({profile} : {profile: ProfileProps}) {
   return (
     <div id = 'profileContainer'>
         <Popup trigger = {popup} switchOff = {() => setPopup(false)}>
-         <p>Are you sure you want to remove your profile?</p>
-         <p style = {{fontSize: 'small'}}>(This action cannot be undone)</p>
-         <button onClick = {handleDeleteProfile}>Confirm</button>
+            <div style = {{textAlign: 'center'}}>
+                <p>Are you sure you want to remove your profile?</p>
+                <p style = {{fontSize: 'small'}}>(This action cannot be undone)</p>
+                <button onClick = {handleDeleteProfile}>Confirm</button>
+                <button onClick = {() => setPopup(false)}>Cancel</button>
+            </div>
         </Popup>
 
         {!user?.isAnEmployer ? 

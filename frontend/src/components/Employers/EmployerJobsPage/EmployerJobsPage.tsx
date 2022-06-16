@@ -43,9 +43,12 @@ export default function EmployerJobsPage() {
   return (
     <div>
       <Popup trigger = {popup} switchOff = {() => setPopup(false)}>
+        <div style = {{textAlign: 'center'}}>
           <p>Are you sure you want to remove {chosenJob.title}?</p>
           <p style = {{fontSize: 'small'}}>(This action cannot be undone)</p>
           <button onClick = {handleDeleteJob}>Confirm</button>
+          <button onClick = {() => setPopup(false)}>Cancel</button>
+        </div>
       </Popup>
 
       <h1 className = 'title'>Jobs</h1>

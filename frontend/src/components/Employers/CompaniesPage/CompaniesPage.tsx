@@ -44,9 +44,12 @@ export default function CompaniesPage() {
   return (
     <div>
       <Popup trigger = {popup} switchOff = {() => setPopup(false)}>
+          <div style = {{textAlign: 'center'}}>
           <p>Are you sure you want to remove {chosenCompany.name}?</p>
           <p style = {{fontSize: 'small'}}>(This action cannot be undone)</p>
-          <button onClick = {handleDeleteCompany}>Confirm</button>
+            <button onClick = {handleDeleteCompany}>Confirm</button>
+            <button onClick = {() => setPopup(false)}>Cancel</button>
+          </div>
       </Popup>
 
         <h1 className = 'title'>Companies</h1>
