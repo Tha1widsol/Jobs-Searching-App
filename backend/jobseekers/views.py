@@ -43,13 +43,6 @@ def calculateScore(profile, job):
     if any(c in job.title.lower().split(' ') for c in profile.experience.lower().split(' ')):
         totalScore += 0.5
 
-    if job.experience:
-        for r in job.roles.all():
-            role = r.name.lower().split(' ')
-            for line in job.experience.lower().split(' '):
-                if role in line:
-                    totalScore += 0.02
-    
     if len(job.benefits.all()) < 10:
            totalScore += len(job.benefits.all()) * 0.005
 
