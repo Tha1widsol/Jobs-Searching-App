@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import {useParams,useNavigate} from 'react-router-dom';
+import {useParams, useNavigate, Link} from 'react-router-dom';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {fetchCompany} from '../../Global/features/Employers/companies/company';
 import './css/CompanyPage.css'
@@ -28,8 +28,8 @@ export default function CompanyPage() {
               <div className = 'containerDropdown'>
                 {dropdown ? 
                   <div className = 'containerDropdownContent'>
-                      <a href = {`/edit-company/${company.values?.id}`}><button className = 'dropdownBtn'>Edit</button></a>
-                      <button className = 'deleteNavBtn'>Delete</button>
+                      <Link to = {`/edit-company/${company.values?.id}`}><button className = 'dropdownBtn'>Edit</button></Link>
+                      <button className = 'dropdownBtn redNavBtn'>Delete</button>
                   </div>
               : null}
               </div>
