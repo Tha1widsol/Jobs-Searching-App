@@ -195,6 +195,15 @@ class JobAPI(APIView):
         job.delete()
         return Response(status = status.HTTP_200_OK)
 
+class ExperienceAPI(generics.ListAPIView):
+    serializer_class = ExperienceSerializer
+
+    def get_queryset(self):
+        lookup_url_kwarg = 'id'
+        id = self.request.GET.get(lookup_url_kwarg)
+        experience = Experience.objects.defer('job').filter(job__id = id)
+        return experience
+
 class JobsListAPI(generics.ListAPIView):
     serializer_class = JobSerializer
 
