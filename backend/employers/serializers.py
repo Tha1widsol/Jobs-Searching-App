@@ -55,9 +55,8 @@ class MatchingJobsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ExperienceSerializer(serializers.ModelSerializer):
-    job = JobSerializer(read_only = True)
 
     class Meta:
         model = Experience
-        fields = '__all__'
+        fields = ['id', 'experience', 'years', 'required']
     
