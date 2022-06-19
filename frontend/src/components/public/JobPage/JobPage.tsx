@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react'
 import {useParams, useNavigate, Link} from 'react-router-dom'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import {fetchJob,setDeleteJob} from '../../Global/features/Employers/jobs/job'
+import {fetchJobExperience} from '../../Global/features/Employers/jobs/jobExperience'
 import {fetchApplications} from '../../Global/features/Jobseekers/applications/applications'
 import {fetchSavedJobs} from '../../Global/features/Jobseekers/savedJobs/savedJobs'
 import {token} from '../../Global/features/Auth/user'
@@ -20,9 +21,12 @@ export default function JobPage() {
     const [dropdown,setDropdown] = useState(false)
     const savedJobs = useAppSelector(state => state.savedJobs)
     const applications = useAppSelector(state => state.applications)
+    const experience = useAppSelector(state => state.jobExperience)
 
     useEffect(() => {
       dispatch(fetchApplications('jobseeker'))
+      dispatch(fetchJobExperience(Number(jobID)))
+
       dispatch(fetchJob(Number(jobID)))
       .unwrap()
 
@@ -139,7 +143,24 @@ export default function JobPage() {
             </div>
           </div> 
           : null}
-          
+          {experience.values?.length ? 
+          <div>
+              <label><h3>Work Experience</h3></label>
+              <hr className = 'mt-0-mb-4'/>
+              <div className = 'listContainer'>
+                {experience.values?.map((exp, index) => {
+                  return (
+                      <div style = {{display: 'flex', alignItems: 'center', gap: '5px'}} key = {index}>
+                          <li style = {{maxWidth: '400px', overflow: 'auto'}}>{exp.experience}</li>
+                          {exp.years > 0 ? <b>- {exp.years} years</b> : null}
+                          {exp.required ? <b> required</b> : <b style = {{color: 'gray'}}>- preferred</b>}
+                      </div>
+                  )
+                })}
+              </div>
+            </div>
+          : null}
+        
             {job.values?.benefits?.filter(benefit => benefit.name).length ? 
             <div>
               <label><h3>Benefits:</h3></label>
