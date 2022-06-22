@@ -22,3 +22,17 @@ class Profile(models.Model):
    def __str__(self):
       return self.firstName
 
+class ProfileExperience(models.Model):
+      profile = models.ForeignKey(Profile, on_delete = models.CASCADE)
+      title = models.CharField(max_length = 200)
+      companyName = models.CharField(max_length = 200)
+      description = models.TextField()
+      years = models.IntegerField()
+      reference = models.TextField()
+      location = models.TextField()
+      ongoing = models.BooleanField(default = False)
+
+      def __str__(self):
+         return self.description
+
+
