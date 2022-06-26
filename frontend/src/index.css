@@ -192,6 +192,10 @@ input[type = number]{
 	width: 60px;
 }
 
+textarea {
+  width: 100%;
+}
+
 .step {
   height: 15px;
   width: 15px;
