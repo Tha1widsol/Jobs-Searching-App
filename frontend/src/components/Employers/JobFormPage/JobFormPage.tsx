@@ -429,7 +429,7 @@ function handleRemoveExperience(idx: number){
                   <textarea id = 'experienceDescription' onChange = {handleSetExperience} value = {experience.currentVal.description} className = {!experience.isValid ? 'inputError' : ''}  placeholder = 'E.g Developing mobile apps...' autoComplete = 'on'/>
 
                   <label><h4>Number of years:</h4></label>
-                  <input type = 'number' value = {experience.currentVal.years} onChange = {(e: React.ChangeEvent<HTMLInputElement>) => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: e.target.value}}))} id = 'experienceYears' min = '0' max = '10' autoComplete = 'on'/>
+                  <input type = 'number' value = {experience.currentVal.years} onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: e.target.value}}))} id = 'experienceYears' min = '0' max = '10' autoComplete = 'on'/>
                  
                   <div style = {{display: 'flex', alignItems: 'center'}}>
                     <label><h4>Required:</h4></label>
