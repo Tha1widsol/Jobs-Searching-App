@@ -9,6 +9,7 @@ import List from '../../Global/Forms/List';
 import axios from 'axios';
 import {token} from '../../Global/features/Auth/user';
 import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile';
+import Popup from '../../Global/Popup/Popup';
 
 export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
     const navigate = useNavigate()
@@ -23,7 +24,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
     const [phone,setPhone] = useState({value: '', isValid: true, errorMsg: 'Phone number is invalid'})
     const [about,setAbout] = useState({value: '', isValid: true, currentLength: Number(profile?.values?.about?.length), maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
     const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-    const [experience,setExperience] = useState({value: '', isValid: true, errorMsg: 'Experience section is invalid',currentLength: Number(profile?.values?.experience?.length), maxLength: 450})
+    const [experience,setExperience] = useState({value: [{title: '', companyName: '', companyEmail: '', companyPhone: '', description: '', years: '1', isOnGoing: false}], popup: false, currentVal: {title: '', companyName: '', companyEmail: '', companyPhone: '', description: '', years: '1', isOnGoing: false}, isValid: true, currentErrorMsg: '', emptyErrorMsg: 'Experience is invalid', alreadyExistsMsg: 'Experience already exists'})
     const [education,setEducation] = useState({value: 'No formal education'})
     const [industry,setIndustry] = useState({value: ''})
     const [distance,setDistance] = useState({value: ''})
@@ -50,7 +51,6 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
             setPhone(prev => {return{...prev, value: profile.values?.phone}})
             setAbout(prev => {return{...prev, value: profile.values?.about}})
             setSkills(prev => {return{...prev, value: profile.values?.skills.map(skill => skill.name)}})
-            setExperience(prev => {return{...prev, value: profile.values?.experience || ''}})
             setEducation(prev => {return{...prev, value: profile.values?.education}})
             setIndustry(prev => {return{...prev, value: profile.values?.industry}})
             setDistance(prev => {return{...prev, value: profile.values?.distance}})
@@ -133,9 +133,9 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
               break
 
           case 3:
-              if (experience.value?.length && experience.value.length < 100){
+              if (!experience.value?.length){
                     setExperience(prev => {return {...prev, isValid: false}})
-                    errors.push(experience.errorMsg)
+                    errors.push(experience.emptyErrorMsg)
                     isValid = false
               }
 
@@ -187,7 +187,6 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
            form.append('logo',logo.value,logo.name)
         
         form.append('skills',skills.value.toString())
-        if (experience.value) form.append('experience',experience.value)
         form.append('education',education.value)
         form.append('industry',industry.value)
         form.append('distance',distance.value)
@@ -220,9 +219,15 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                 if (error.response.status === 400) setErrors(['Something went wrong'])
             })
         }
-
-        
     }
+
+    function handleSetExperience(e: React.ChangeEvent<HTMLTextAreaElement>){
+        setExperience(prev => ({
+          ...prev,
+          currentVal: {...prev.currentVal, description: e.target.value}
+        }))
+        e.target.value = e.target.value.replace(',','')
+      }
 
     return (
         <div>
@@ -280,8 +285,43 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                 <div className = {`tab ${currentTab === 3 ? 'show' : 'hide'}`}>
                     <h1 className = 'title'>Work Experience</h1> 
                     <Errors errors = {errors}/>
-                    <label htmlFor = 'experience'><h3>Work Experience (Optional) Characters remaining: {experience.maxLength - experience.currentLength}</h3></label>
-                    <textarea id = 'experience' value = {experience.value} className = {!experience.isValid ? 'inputError' : ''}   style = {{height: '200px'}} onChange = {e => setExperience(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Work experience...' autoComplete = 'on' maxLength = {experience.maxLength}/>
+                    <label htmlFor = 'experience'><h3>Work Experience (Optional):</h3></label>
+                    <button type = 'button' style = {{marginTop:'20px', display: 'block'}} onClick = {() => setExperience(prev => {return{...prev, popup: true}})}>Add</button>
+                    <Popup trigger = {experience.popup} switchOff = {() => setExperience(prev => {return{...prev, popup: false}})} modalOn = {false}>
+                        <h2>Add Experience:</h2>
+                        <p className = 'error'>{!experience.isValid ? <li>{experience.currentErrorMsg}</li> : null}</p>
+
+                        <label htmlFor = 'experienceTitle'><h4>Job title:</h4></label>
+                        <input id = 'experienceTitle' onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, title: e.target.value}}))} value = {experience.currentVal.title} placeholder = 'E.g Software Engineer...' maxLength = {200} autoComplete = 'on'/>
+
+                        <label htmlFor = 'profileExperience'><h4>Description:</h4></label>
+                        <textarea id = 'profileExperience' value = {experience.currentVal.description} className = {!experience.isValid ? 'inputError' : ''}  onChange = {handleSetExperience} placeholder = 'E.g Developing mobile apps...' autoComplete = 'on'/>
+
+                        <label htmlFor = 'profileExperienceYears'><h4>Number of years:</h4></label>
+                        <input type = 'number' id = 'profileExperienceYears' value = {experience.currentVal.years} onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: e.target.value}}))} min = '0' max = '10' autoComplete = 'on'/>
+
+                        <div style = {{display: 'flex', alignItems: 'center'}}>
+                            <label htmlFor = 'profileOnGoingExperience'><h4>Still doing this job:</h4></label>
+                            <input type = 'checkbox' id = 'profileOnGoingExperience' checked = {experience.currentVal.isOnGoing} onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, isOnGoing: e.target.checked}}))} autoComplete = 'on'/>
+                        </div>
+                        
+                        <label><h3>Reference</h3></label>
+                        <hr className = 'mt-0-mb-4'/>
+                        <label htmlFor = 'experienceCompanyName'><h4>Company name:</h4></label>
+                        <input id = 'experienceCompanyName' placeholder = 'Company name...' onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, companyName: e.target.value}}))} value = {experience.currentVal.companyName} maxLength = {200} autoComplete = 'on'/>
+                        
+                        <label htmlFor = 'experienceCompanyEmail'><h4>Company email (Optional):</h4></label>
+                        <input id = 'experienceCompanyEmail' placeholder = 'company email...' onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, companyEmail: e.target.value}}))}  value = {experience.currentVal.companyEmail} autoComplete = 'on'/>
+
+                        <label htmlFor = 'experienceCompanyPhone'><h4>Company phone (Optional):</h4></label>
+                        <input type = 'tel' id = 'experienceCompanyPhone' placeholder = 'company phone...' onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, companyPhone: e.target.value}}))}  value = {experience.currentVal.companyPhone} maxLength = {15} autoComplete = 'on'/>
+
+                        <div style = {{marginTop: '15px'}}>
+                            <button type = 'button'>Submit</button>
+                            <button onClick = {() => setExperience(prev => {return{...prev, popup: false}})}>Cancel</button>
+                        </div>
+
+                    </Popup>
                 </div>
 
                 <div className = {`tab ${currentTab === 4 ? 'show' : 'hide'}`}>
