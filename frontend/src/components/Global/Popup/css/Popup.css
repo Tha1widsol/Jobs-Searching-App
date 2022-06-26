@@ -4,6 +4,7 @@
     background: white;
     padding: 20px;
     border-radius: 5px;
+    max-height: 70%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -11,6 +12,8 @@
     z-index: 1;
     border-style: solid;
     border-width: 0.5px;
+    resize: horizontal;
+    
   }
   
 .close{
