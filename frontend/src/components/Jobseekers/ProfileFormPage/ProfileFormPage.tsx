@@ -25,7 +25,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
     const [phone,setPhone] = useState({value: '', isValid: true, errorMsg: 'Phone number is invalid'})
     const [about,setAbout] = useState({value: '', isValid: true, currentLength: Number(profile?.values?.about?.length), maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
     const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-    const [experience,setExperience] = useState({value: [{title: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: '1', isOnGoing: false}], popup: false, currentVal: {title: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: '1', isOnGoing: false}, isValid: true, currentErrorMsg: '', emptyErrorMsg: 'Experience is invalid', alreadyExistsMsg: 'Experience already exists'})
+    const [experience,setExperience] = useState({value: [{title: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: '1', isOnGoing: false}], popup: false, currentVal: {title: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: '1', isOnGoing: false}, isValid: true, currentErrorMsg: '', alreadyExistsMsg: 'Experience already exists'})
     const [education,setEducation] = useState({value: 'No formal education'})
     const [industry,setIndustry] = useState({value: ''})
     const [distance,setDistance] = useState({value: ''})
@@ -132,15 +132,6 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
               else setSkills(prev => {return {...prev, isEmpty: false}})
             
               break
-
-          case 3:
-              if (!experience.value?.length){
-                    setExperience(prev => {return {...prev, isValid: false}})
-                    errors.push(experience.emptyErrorMsg)
-                    isValid = false
-              }
-
-              else setExperience(prev => {return {...prev, isValid: true}})
         }
 
         if (!isValid){
@@ -379,8 +370,8 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                                         <div>
                                             <label><h3>Reference</h3></label>
                                             <ul>
-                                                <li>Employer's Email - {exp.EmployerEmail}</li>
-                                                <li>Employer's Phone - {exp.EmployerPhone}</li>
+                                                {exp.EmployerEmail ? <li>Employer's Email - {exp.EmployerEmail}</li> : null}
+                                                {exp.EmployerPhone ? <li>Employer's Phone - {exp.EmployerPhone}</li> : null}
                                             </ul>
                                         </div>
                                         : null}
