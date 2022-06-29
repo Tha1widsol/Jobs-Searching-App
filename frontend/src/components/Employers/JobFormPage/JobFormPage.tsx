@@ -304,9 +304,7 @@ function handleAddExperience(){
       isRequired: experience.currentVal.isRequired}]
   }))
 
-  setExperience(prev => {return{...prev, isValid: true}})
-  setExperience(prev => {return{...prev, currentVal: {description: '', years: '0', isRequired: false}}})
-  setExperience(prev => {return{...prev, popup: false}})
+  setExperience(prev => {return{...prev, isValid: true, popup: false, currentVal: {description: '', years: '0', isRequired: false}}})
   setErrors([])
 }
 
