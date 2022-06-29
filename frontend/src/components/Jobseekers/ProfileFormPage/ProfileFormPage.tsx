@@ -10,6 +10,7 @@ import axios from 'axios';
 import {token} from '../../Global/features/Auth/user';
 import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile';
 import Popup from '../../Global/Popup/Popup';
+import ReactScrollableFeed from 'react-scrollable-feed';
 
 export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
     const navigate = useNavigate()
@@ -24,7 +25,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
     const [phone,setPhone] = useState({value: '', isValid: true, errorMsg: 'Phone number is invalid'})
     const [about,setAbout] = useState({value: '', isValid: true, currentLength: Number(profile?.values?.about?.length), maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
     const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-    const [experience,setExperience] = useState({value: [{title: '', companyName: '', companyEmail: '', companyPhone: '', description: '', years: '1', isOnGoing: false}], popup: false, currentVal: {title: '', companyName: '', companyEmail: '', companyPhone: '', description: '', years: '1', isOnGoing: false}, isValid: true, currentErrorMsg: '', emptyErrorMsg: 'Experience is invalid', alreadyExistsMsg: 'Experience already exists'})
+    const [experience,setExperience] = useState({value: [{title: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: '1', isOnGoing: false}], popup: false, currentVal: {title: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: '1', isOnGoing: false}, isValid: true, currentErrorMsg: '', emptyErrorMsg: 'Experience is invalid', alreadyExistsMsg: 'Experience already exists'})
     const [education,setEducation] = useState({value: 'No formal education'})
     const [industry,setIndustry] = useState({value: ''})
     const [distance,setDistance] = useState({value: ''})
@@ -229,6 +230,38 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
         e.target.value = e.target.value.replace(',','')
       }
 
+    function handleAddExperience(){
+        if (!experience.currentVal.description || !experience.currentVal.title || !experience.currentVal.EmployerName) {
+            setExperience(prev => {return{...prev, isValid: false, currentErrorMsg: 'Fields are required'}})
+            return
+        }
+        
+        if (experience.value.find(exp => exp.description === experience.currentVal.description && exp.title === experience.currentVal.title && exp.EmployerName === experience.currentVal.EmployerName)) {
+            setExperience(prev => {return{...prev, isValid: false, currentErrorMsg: experience.alreadyExistsMsg}})
+            return
+        }
+        setExperience(prev => ({
+            ...prev,
+            value: [...prev.value, {
+                title: experience.currentVal.title,
+                EmployerName: experience.currentVal.EmployerName,
+                EmployerEmail: experience.currentVal.EmployerEmail,
+                EmployerPhone: experience.currentVal.EmployerPhone,
+                description: experience.currentVal.description, 
+                years: experience.currentVal.years || '1', 
+                isOnGoing: experience.currentVal.isOnGoing}]
+          }))
+        
+          setExperience(prev => {return{...prev, isValid: true, popup: false, currentVal: {title: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: '1', isOnGoing: false}}})
+          setErrors([])
+    }
+
+    function handleRemoveExperience(idx: number){
+        const newExperience = [...experience.value]
+        newExperience.splice(idx, 1)
+        setExperience(prev => {return{...prev, value: newExperience}})
+      } 
+
     return (
         <div>
             <div className = 'steps'>
@@ -292,13 +325,13 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                         <p className = 'error'>{!experience.isValid ? <li>{experience.currentErrorMsg}</li> : null}</p>
 
                         <label htmlFor = 'experienceTitle'><h4>Job title:</h4></label>
-                        <input id = 'experienceTitle' onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, title: e.target.value}}))} value = {experience.currentVal.title} placeholder = 'E.g Software Engineer...' maxLength = {200} autoComplete = 'on'/>
+                        <input id = 'experienceTitle' className = {!experience.isValid ? 'inputError' : ''} onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, title: e.target.value}}))} value = {experience.currentVal.title} placeholder = 'E.g Software Engineer...' maxLength = {200} autoComplete = 'on'/>
 
                         <label htmlFor = 'profileExperience'><h4>Description:</h4></label>
                         <textarea id = 'profileExperience' value = {experience.currentVal.description} className = {!experience.isValid ? 'inputError' : ''}  onChange = {handleSetExperience} placeholder = 'E.g Developing mobile apps...' autoComplete = 'on'/>
 
                         <label htmlFor = 'profileExperienceYears'><h4>Number of years:</h4></label>
-                        <input type = 'number' id = 'profileExperienceYears' value = {experience.currentVal.years} onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: e.target.value}}))} min = '0' max = '10' autoComplete = 'on'/>
+                        <input type = 'number' id = 'profileExperienceYears' value = {experience.currentVal.years} onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: e.target.value}}))}  min = '0' max = '10' autoComplete = 'on'/>
 
                         <div style = {{display: 'flex', alignItems: 'center'}}>
                             <label htmlFor = 'profileOnGoingExperience'><h4>Still doing this job:</h4></label>
@@ -307,21 +340,58 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                         
                         <label><h3>Reference</h3></label>
                         <hr className = 'mt-0-mb-4'/>
-                        <label htmlFor = 'experienceCompanyName'><h4>Company name:</h4></label>
-                        <input id = 'experienceCompanyName' placeholder = 'Company name...' onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, companyName: e.target.value}}))} value = {experience.currentVal.companyName} maxLength = {200} autoComplete = 'on'/>
+                        <label htmlFor = 'experienceCompanyName'><h4>Employer's name:</h4></label>
+                        <input id = 'experienceCompanyName' className = {!experience.isValid ? 'inputError' : ''} placeholder = 'Employer name...' onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, EmployerName: e.target.value}}))} value = {experience.currentVal.EmployerName} maxLength = {200} autoComplete = 'on'/>
                         
-                        <label htmlFor = 'experienceCompanyEmail'><h4>Company email (Optional):</h4></label>
-                        <input id = 'experienceCompanyEmail' placeholder = 'company email...' onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, companyEmail: e.target.value}}))}  value = {experience.currentVal.companyEmail} autoComplete = 'on'/>
+                        <label htmlFor = 'experienceCompanyEmail'><h4>Employer's email (Optional):</h4></label>
+                        <input id = 'experienceCompanyEmail' placeholder = 'Employer email...' onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, EmployerEmail: e.target.value}}))}  value = {experience.currentVal.EmployerEmail} autoComplete = 'on'/>
 
-                        <label htmlFor = 'experienceCompanyPhone'><h4>Company phone (Optional):</h4></label>
-                        <input type = 'tel' id = 'experienceCompanyPhone' placeholder = 'company phone...' onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, companyPhone: e.target.value}}))}  value = {experience.currentVal.companyPhone} maxLength = {15} autoComplete = 'on'/>
+                        <label htmlFor = 'experienceCompanyPhone'><h4>Employer's phone (Optional):</h4></label>
+                        <input type = 'tel' id = 'experienceCompanyPhone' placeholder = 'Employer phone...' onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, EmployerPhone: e.target.value}}))}  value = {experience.currentVal.EmployerPhone} maxLength = {15} autoComplete = 'on'/>
 
                         <div style = {{marginTop: '15px'}}>
-                            <button type = 'button'>Submit</button>
+                            <button type = 'button' onClick = {handleAddExperience}>Submit</button>
                             <button onClick = {() => setExperience(prev => {return{...prev, popup: false}})}>Cancel</button>
                         </div>
 
                     </Popup>
+                    
+                    {experience.value.slice(1).length ? <label><h2>Experience: ({experience.value.slice(1).length})</h2></label>: null}
+
+                    <div className = 'list longerList'>
+                        <ReactScrollableFeed>
+                           {experience.value.slice(1).map((exp, index) => {
+                                return (
+                                    <div key = {index}>
+                                        <div style = {{display: 'flex', alignItems: 'center', gap: '20px'}}>
+                                          <h2>{exp.title}</h2>
+                                          <span>&#9998;</span>
+                                          <div onClick = {() => handleRemoveExperience(index + 1)} className = 'cross'>X</div>
+
+                                        </div>
+                                        <p>{exp.EmployerName}</p>
+                                        <p style = {{fontSize: 'small', color: 'gray'}}>Years worked - {exp.years}</p>
+
+                                        <p>{exp.description}</p>
+                                        <p>Still working this job - {exp.isOnGoing ? 'Yes' : 'No'}</p>
+                                        
+                                        {exp.EmployerEmail || exp.EmployerPhone ? 
+                                        <div>
+                                            <label><h3>Reference</h3></label>
+                                            <ul>
+                                                <li>Employer's Email - {exp.EmployerEmail}</li>
+                                                <li>Employer's Phone - {exp.EmployerPhone}</li>
+                                            </ul>
+                                        </div>
+                                        : null}
+                                        
+                                        <hr className = 'mt-0-mb-4'/>
+
+                                    </div>
+                                )
+                           })}
+                        </ReactScrollableFeed>
+                    </div>
                 </div>
 
                 <div className = {`tab ${currentTab === 4 ? 'show' : 'hide'}`}>
