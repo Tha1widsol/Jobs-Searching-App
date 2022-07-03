@@ -9,6 +9,7 @@ from employers.models import Job,Application
 from employers.serializers import MatchingJobsSerializer, ApplicationSerializer
 from accounts.serializers import SavedJobSerializer
 from .serializers import *
+import json
 
 # Create your views here.
 
@@ -73,6 +74,7 @@ class ProfileAPI(APIView):
         if serializer.is_valid():
             profile = serializer.save()
             skills = request.data.get('skills')
+            experience = json.loads(request.data.get('experience'))
 
             profile.skills.clear()
             
@@ -83,6 +85,10 @@ class ProfileAPI(APIView):
 
             profile.user = request.user
             profile.save()
+
+            for exp in experience:
+                newExp = ProfileExperience(profile = profile, title = exp['title'], EmployerName = exp['EmployerName'], EmployerEmail = exp['EmployerEmail'], EmployerPhone = exp['EmployerPhone'], description = exp['description'], years = exp['years'], ongoing = exp['isOnGoing'])
+                newExp.save()
             
             return Response(status = status.HTTP_201_CREATED) 
 
@@ -95,6 +101,7 @@ class ProfileAPI(APIView):
         if serializer.is_valid():
             profile = serializer.save()
             skills = request.data.get('skills')
+            experience = json.loads(request.data.get('experience'))
 
             profile.skills.clear()
             
@@ -106,6 +113,10 @@ class ProfileAPI(APIView):
 
             profile.user = request.user
             profile.save()
+
+            for exp in experience:
+                newExp = ProfileExperience(profile = profile, title = exp['title'], EmployerName = exp['EmployerName'], EmployerEmail = exp['EmployerEmail'], EmployerPhone = exp['EmployerPhone'], description = exp['description'], years = exp['years'], ongoing = exp['isOnGoing'])
+                newExp.save()
 
             return Response(status = status.HTTP_200_OK) 
 
