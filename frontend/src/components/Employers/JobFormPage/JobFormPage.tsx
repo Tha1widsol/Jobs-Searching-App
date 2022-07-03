@@ -245,7 +245,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
   form.append('training',isTrainingProvided.toString())
   form.append('positions',positions.value)
   form.append('education',education.value)
-  form.append('experience', JSON.stringify(experience.value))
+  form.append('experience', JSON.stringify(experience.value.slice(1)))
   form.append('skills',skills.value.toString())
   form.append('startDate',startDate.value)
   form.append('benefits',benefits.value.toString())
