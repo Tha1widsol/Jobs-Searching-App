@@ -178,6 +178,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
         if (logo.value)
            form.append('logo',logo.value,logo.name)
         
+        form.append('experience', JSON.stringify(experience.value.slice(1)))
         form.append('skills',skills.value.toString())
         form.append('education',education.value)
         form.append('industry',industry.value)
