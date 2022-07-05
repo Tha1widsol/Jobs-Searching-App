@@ -14,6 +14,7 @@ import checkApplicationExistsReducer from './Jobseekers/applications/checkApplic
 import savedJobsReducer from './Jobseekers/savedJobs/savedJobs'
 import matchingJobsReducer from './Jobseekers/matchingJobs/matchingJobs'
 import jobExperienceReducer from './Employers/jobs/jobExperience'
+import profileExperienceReducer from './Jobseekers/profiles/profileExperience'
 import storage from 'redux-persist/lib/storage'
 
 import {
@@ -32,6 +33,7 @@ const reducers = combineReducers({
   successMsg: successMsgReducer,
   profile: ProfileReducer,
   profiles: ProfilesReducer,
+  profileExperience: profileExperienceReducer,
   company: CompanyReducer,
   companies: CompaniesReducer, 
   jobs: JobsReducer,

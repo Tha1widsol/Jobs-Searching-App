@@ -4,17 +4,17 @@ import axios from 'axios'
 
 const initialState = {
     status: '',
-    values: {
+    values: [{
         id: 0,
         title: '',
-        companyName: '',
+        EmployerName: '',
+        EmployerEmail: '',
+        EmployerPhone: '',
         description: '',
         years: 0,
         reference: '',
-        location: '',
         ongoing: false
-    }
-
+    }]
 }
   
 export const fetchProfileExperience = createAsyncThunk(
