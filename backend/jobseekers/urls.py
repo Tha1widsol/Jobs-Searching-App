@@ -9,6 +9,7 @@ urlpatterns = [
     path('saved-jobs',views.SavedJobsListAPI.as_view(), name = 'save-jobs'),
     path('application',views.ApplicationAPI.as_view(), name = 'application'),
     path('applications/jobseeker',views.ApplicationsListAPI.as_view(), name = 'applications'),
+    path('profileExperience', views.ProfileExperienceAPI.as_view(), name = 'profileExperience'),
     path('checkApplication',views.checkApplicationExists, name = 'checkApplication'),
     path('getMatchingScores', views.getMatchingScores, name = 'getMatchingScores')
 ]

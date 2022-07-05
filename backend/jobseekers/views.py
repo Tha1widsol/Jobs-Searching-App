@@ -139,6 +139,16 @@ class ProfileAPI(APIView):
         profile.delete()
         return Response(status = status.HTTP_200_OK)
 
+class ProfileExperienceAPI(generics.ListAPIView):
+      serializer_class = ProfileExperienceSerializer
+
+      def get_queryset(self):
+          lookup_url_kwarg = 'id'
+          id = self.request.GET.get(lookup_url_kwarg)
+          profile = Profile.objects.get(user__id = id)
+          experience = ProfileExperience.objects.filter(profile = profile)
+          return experience
+
 class ApplicationAPI(APIView):
      parser_classes = (MultiPartParser, FormParser)
      serializer_class = ApplicationSerializer

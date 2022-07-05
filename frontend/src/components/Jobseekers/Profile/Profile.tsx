@@ -12,6 +12,7 @@ import axios from 'axios'
 export default function Profile({profile} : {profile: ProfileProps}) {
     const navigate = useNavigate()
     const user = useAppSelector(state => state.user.values)
+    const experience = useAppSelector(state => state.profileExperience)
     const [popup,setPopup] = useState(false)
     const [dropdown,setDropdown] = useState(false)
     const dispatch = useAppDispatch()
@@ -89,7 +90,11 @@ export default function Profile({profile} : {profile: ProfileProps}) {
             <section className = 'profileSubContainer'>
                 <label><h2>Experience</h2></label>
                 <hr className = 'mt-0-mb-4'/>
-                <p>{profile.values.experience}</p>
+                {experience.values?.map((exp, index) => {
+                    <div className = 'longer list' key = {index}>
+                        <h2>{exp.companyName}</h2>
+                    </div>
+                })}
             </section>
 
             <section className = 'profileSubContainer'>
