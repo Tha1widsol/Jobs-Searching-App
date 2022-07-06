@@ -16,7 +16,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
     const [popup,setPopup] = useState(false)
     const [dropdown,setDropdown] = useState(false)
     const dispatch = useAppDispatch()
-
+    
     function handleToggleStatus(){
         axios.put('/api/toggleProfileStatus',null,{headers: {Authorization: `Token ${token}`}})
         .then(response => {
@@ -87,41 +87,40 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                 </section>
             </div>
 
-            <section className = 'profileSubContainer'>
+            {experience.values.length ? 
+            <div>
+                <section className = 'profileSubContainer'>
                 <label><h2>Experience</h2></label>
                 <hr className = 'mt-0-mb-4'/>
-                {experience.values?.map((exp, index) => {
-                    <div className = 'longer list' key = {index}>
-                        <h2>{exp.companyName}</h2>
-                    </div>
+                {experience.values.map((exp, index) => {
+                    return (
+                    <div style = {{maxHeight: '1000px'}} key = {index}>
+                            <div style = {{marginBottom: '50px'}}>
+                                <h3>{exp.title}</h3>
+                                <p>{exp.companyName}</p>
+                                <p style = {{color: 'gray', fontSize: 'small'}}>{exp.years > 0 ? `Years worked - ${exp.years}` : null}</p>
+                                <p style = {{ maxHeight: '120px'}}>{exp.description}</p>
+
+                                <div style = {{marginTop: '40px'}}>
+                                    <p><b>Reference:</b></p>
+                                    <p>{exp.EmployerName}</p>
+                                    <p>{exp.EmployerEmail}</p>
+                                    <p>{exp.EmployerPhone}</p>
+                                </div>
+
+                            </div>
+  
+                        </div>
+                      
+                    
+                    )
                 })}
-            </section>
+               </section>
+            </div>
+               : null}
+      
 
-            <section className = 'profileSubContainer'>
-                <label><h2>Education</h2></label>
-                <hr className = 'mt-0-mb-4'/>
-                <p>{profile.values.education}</p>
-            </section>
-
-            {profile.values.cv ? 
-                <div className = 'profileSection'>
-                    <section className = 'cv'>
-                    <label><h2>CV / Resume</h2></label>
-                    <hr className = 'mt-0-mb-4'/>
-                    <a href = {`http://localhost:8000${profile.values.cv}`} target = '_blank' rel = 'noopener noreferrer'><button>Preview</button></a> 
-                    </section>
-
-                    <section className = 'preferences'>
-                        <label><h2>Preferences</h2></label>
-                        <hr className = 'mt-0-mb-4'/>
-                        <section style = {{width: '300px'}}>
-                            <li>Prefered industry: Any</li>
-                            <li>Prefered distance from workplace: {profile.values.distance}</li>
-                        </section>
-                    </section>
-                </div>
-            : null}
-
+         
     
     </div>
   )
