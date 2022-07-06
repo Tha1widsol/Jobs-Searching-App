@@ -7,13 +7,14 @@ const initialState = {
     values: [{
         id: 0,
         title: '',
+        companyName: '',
         EmployerName: '',
         EmployerEmail: '',
         EmployerPhone: '',
         description: '',
         years: 0,
         reference: '',
-        ongoing: false
+        isOnGoing: false
     }]
 }
   

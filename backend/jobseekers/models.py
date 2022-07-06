@@ -25,12 +25,13 @@ class Profile(models.Model):
 class ProfileExperience(models.Model):
       profile = models.ForeignKey(Profile, on_delete = models.CASCADE)
       title = models.CharField(max_length = 200)
+      companyName = models.CharField(max_length = 200)
       EmployerName = models.CharField(max_length = 200)
       EmployerEmail = models.EmailField(blank = True)
       EmployerPhone = models.CharField(max_length = 15, blank = True)
       description = models.TextField()
       years = models.IntegerField()
-      ongoing = models.BooleanField(default = False)
+      isOnGoing = models.BooleanField(default = False)
 
       def __str__(self):
          return self.description
