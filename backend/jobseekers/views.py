@@ -87,7 +87,7 @@ class ProfileAPI(APIView):
             profile.save()
 
             for exp in experience:
-                newExp = ProfileExperience(profile = profile, title = exp['title'], EmployerName = exp['EmployerName'], EmployerEmail = exp['EmployerEmail'], EmployerPhone = exp['EmployerPhone'], description = exp['description'], years = exp['years'], ongoing = exp['isOnGoing'])
+                newExp = ProfileExperience(profile = profile, title = exp['title'], companyName = exp['companyName'], EmployerName = exp['EmployerName'], EmployerEmail = exp['EmployerEmail'], EmployerPhone = exp['EmployerPhone'], description = exp['description'], years = exp['years'], isOnGoing = exp['isOnGoing'])
                 newExp.save()
             
             return Response(status = status.HTTP_201_CREATED) 
@@ -104,6 +104,7 @@ class ProfileAPI(APIView):
             experience = json.loads(request.data.get('experience'))
 
             profile.skills.clear()
+            ProfileExperience.objects.filter(profile = profile).delete()
             
             for s in skills.split(','):
                 skill, created = Skill.objects.get_or_create(name = s)
@@ -115,7 +116,7 @@ class ProfileAPI(APIView):
             profile.save()
 
             for exp in experience:
-                newExp = ProfileExperience(profile = profile, title = exp['title'], EmployerName = exp['EmployerName'], EmployerEmail = exp['EmployerEmail'], EmployerPhone = exp['EmployerPhone'], description = exp['description'], years = exp['years'], ongoing = exp['isOnGoing'])
+                newExp = ProfileExperience(profile = profile, title = exp['title'], companyName = exp['companyName'], EmployerName = exp['EmployerName'], EmployerEmail = exp['EmployerEmail'], EmployerPhone = exp['EmployerPhone'], description = exp['description'], years = exp['years'], isOnGoing = exp['isOnGoing'])
                 newExp.save()
 
             return Response(status = status.HTTP_200_OK) 
