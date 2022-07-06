@@ -5,6 +5,7 @@ import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
 import {handleFixName} from '../../Global/formFunctions';
 import {ListProps,FileProps} from '../../Global/types/forms';
+import {fetchProfileExperience} from '../../Global/features/Jobseekers/profiles/profileExperience';
 import List from '../../Global/Forms/List';
 import axios from 'axios';
 import {token} from '../../Global/features/Auth/user';
@@ -25,16 +26,19 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
     const [phone,setPhone] = useState({value: '', isValid: true, errorMsg: 'Phone number is invalid'})
     const [about,setAbout] = useState({value: '', isValid: true, currentLength: Number(profile?.values?.about?.length), maxLength: 250, errorMsg: 'About section needs to have atleast 100 characters'})
     const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-    const [experience,setExperience] = useState({value: [{title: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: '1', isOnGoing: false}], popup: false, currentVal: {title: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: '1', isOnGoing: false}, isValid: true, currentErrorMsg: '', alreadyExistsMsg: 'Experience already exists'})
+    const [experience,setExperience] = useState({value: [{title: '', companyName: '',  EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: 1, isOnGoing: false}], popup: false, currentVal: {title: '', companyName: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: 1, isOnGoing: false}, isValid: true, currentErrorMsg: '', alreadyExistsMsg: 'Experience already exists'})
     const [education,setEducation] = useState({value: 'No formal education'})
     const [industry,setIndustry] = useState({value: ''})
     const [distance,setDistance] = useState({value: ''})
     const [logo,setLogo] = useState<FileProps>({value: '', name:''})
     const [cv,setCV] = useState<FileProps>({value: '' , name:''})
+    
  
     const maxTabs = document.querySelectorAll('.tab').length
+    const currentExperience = useAppSelector(state => state.profileExperience.values)
 
     useEffect(() => {
+        dispatch(fetchProfileExperience(user.id))
         dispatch(fetchProfile(user.id))
         .unwrap()
         .then(response => {
@@ -52,6 +56,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
             setPhone(prev => {return{...prev, value: profile.values?.phone}})
             setAbout(prev => {return{...prev, value: profile.values?.about}})
             setSkills(prev => {return{...prev, value: profile.values?.skills.map(skill => skill.name)}})
+            setExperience(prev => {return{...prev, value: currentExperience}})
             setEducation(prev => {return{...prev, value: profile.values?.education}})
             setIndustry(prev => {return{...prev, value: profile.values?.industry}})
             setDistance(prev => {return{...prev, value: profile.values?.distance}})
@@ -236,15 +241,16 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
             ...prev,
             value: [...prev.value, {
                 title: experience.currentVal.title,
+                companyName: experience.currentVal.companyName,
                 EmployerName: experience.currentVal.EmployerName,
                 EmployerEmail: experience.currentVal.EmployerEmail,
                 EmployerPhone: experience.currentVal.EmployerPhone,
                 description: experience.currentVal.description, 
-                years: experience.currentVal.years || '1', 
+                years: experience.currentVal.years || 1, 
                 isOnGoing: experience.currentVal.isOnGoing}]
           }))
         
-          setExperience(prev => {return{...prev, isValid: true, popup: false, currentVal: {title: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: '1', isOnGoing: false}}})
+          setExperience(prev => {return{...prev, isValid: true, popup: false, currentVal: {title: '', companyName: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: 1, isOnGoing: false}}})
           setErrors([])
     }
 
@@ -323,7 +329,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                         <textarea id = 'profileExperience' value = {experience.currentVal.description} className = {!experience.isValid ? 'inputError' : ''}  onChange = {handleSetExperience} placeholder = 'E.g Developing mobile apps...' autoComplete = 'on'/>
 
                         <label htmlFor = 'profileExperienceYears'><h4>Number of years:</h4></label>
-                        <input type = 'number' id = 'profileExperienceYears' value = {experience.currentVal.years} onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: e.target.value}}))}  min = '0' max = '10' autoComplete = 'on'/>
+                        <input type = 'number' id = 'profileExperienceYears' value = {experience.currentVal.years} onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: Number(e.target.value)}}))}  min = '0' max = '10' autoComplete = 'on'/>
 
                         <div style = {{display: 'flex', alignItems: 'center'}}>
                             <label htmlFor = 'profileOnGoingExperience'><h4>Still doing this job:</h4></label>
@@ -348,11 +354,11 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
 
                     </Popup>
                     
-                    {experience.value.slice(1).length ? <label><h2>Experience: ({experience.value.slice(1).length})</h2></label>: null}
+                    {experience.value.length ? <label><h2>Experience: ({experience.value.length})</h2></label>: null}
 
                     <div className = 'list longerList'>
                         <ReactScrollableFeed>
-                           {experience.value.slice(1).map((exp, index) => {
+                           {experience.value.map((exp, index) => {
                                 return (
                                     <div key = {index}>
                                         <div style = {{display: 'flex', alignItems: 'center', gap: '20px'}}>
