@@ -64,6 +64,8 @@ def getMatchingScores(request):
         
     return Response(status = status.HTTP_200_OK)
 
+
+
 class ProfileAPI(APIView):
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = CreateProfileSerializer
@@ -104,7 +106,6 @@ class ProfileAPI(APIView):
             experience = json.loads(request.data.get('experience'))
 
             profile.skills.clear()
-            ProfileExperience.objects.filter(profile = profile).delete()
             
             for s in skills.split(','):
                 skill, created = Skill.objects.get_or_create(name = s)
