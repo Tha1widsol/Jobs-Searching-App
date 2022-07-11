@@ -364,7 +364,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                                         <div style = {{display: 'flex', alignItems: 'center', gap: '20px'}}>
                                           <h2>{exp.title}</h2>
                                           <span>&#9998;</span>
-                                          <div onClick = {() => handleRemoveExperience(index + 1)} className = 'cross'>X</div>
+                                          <div onClick = {() => handleRemoveExperience(index)} className = 'cross'>X</div>
 
                                         </div>
                                         <p>{exp.EmployerName}</p>
