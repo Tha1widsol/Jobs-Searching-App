@@ -9,7 +9,7 @@ import { handleAddSuccessMsg } from '../../../Global/messages/SuccessAlert'
 import { token } from '../../../Global/features/Auth/user'
 import axios from 'axios'
 
-export default function ProfileDetailsForm({edit = false}) {
+export default function ProfileDetailsForm({edit = false, popupOff}: {edit: boolean, popupOff: () => void}) {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const user = useAppSelector(state => state.user.values)
@@ -34,7 +34,7 @@ export default function ProfileDetailsForm({edit = false}) {
 
     const validateForm = () => {
         let isValid = true
-        let errors : Array<string> = []
+        let errors: Array<string> = []
         const letters = /^[A-Za-z]+$/
         const numbers = /[0-9]/g
 
@@ -114,6 +114,8 @@ export default function ProfileDetailsForm({edit = false}) {
                  if (response.status === 200){
                     handleAddSuccessMsg('Profile is successfully saved', dispatch)
                     navigate(`/profile/${user.id}`)
+                    popupOff()
+                    dispatch(fetchProfile(user.id))
                 }
             })
 

@@ -41,7 +41,6 @@ export default function PagesRoutes() {
 
                     <Route element = {<CheckAccount/>}>
                         <Route path = '/create-profile' element = {<ProfileFormPage/>}/>
-                        <Route path = '/edit-profile' element = {<ProfileFormPage edit = {true}/>}/>
                         <Route path = '/apply/:jobID' element = {<ApplicationPage/>}/>
                         <Route path = '/my-jobs' element = {<JobSeekerApplicationsPage/>}/>
                     </Route>
