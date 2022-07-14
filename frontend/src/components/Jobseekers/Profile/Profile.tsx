@@ -55,20 +55,22 @@ export default function Profile({profile} : {profile: ProfileProps}) {
         </Popup>
 
         <Popup trigger = {popup.details} switchOff = {() => setPopup(prev => {return{...prev, details: false}})} modalOn = {false}>
-            <ProfileDetailsForm edit = {true}/>
+            <ProfileDetailsForm edit = {true} popupOff = {() => setPopup(prev => {return{...prev, details: false}})}/>
         </Popup>
 
         {!user?.isAnEmployer ? 
         <KebabMenu current = {dropdown} switchOn = {() => setDropdown(true)} switchOff = {() => setDropdown(false)}>
             {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn normalNavBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
-            <button className = 'dropdownBtn' onClick = {() => navigate('/edit-profile')} >Edit</button>
+            <button className = 'dropdownBtn' onClick = {() => setPopup(prev => {return{...prev, details: true}})} >Edit</button>
             <button className = 'dropdownBtn redNavBtn' onClick = {() => setPopup(prev => {return{...prev, delete: true}})}>Delete</button>
         </KebabMenu>
         : null}
 
             <div style = {{display: 'flex', alignItems: 'center', gap: '20px'}}>
-                <p className = 'fullName editable' onMouseEnter = {() => setEditName(true)} onMouseLeave = {() => setEditName(false)}>{profile.values.firstName} {profile.values.middleName} {profile.values.lastName}</p>
-                <span className = 'pen' onClick = {() => setPopup(prev => {return{...prev, details: true}})}>&#9998;</span>
+                <p className = 'fullName' onMouseEnter = {() => setEditName(true)} onMouseLeave = {() => setEditName(false)}>{profile.values.firstName} {profile.values.middleName} {profile.values.lastName}</p>
+                {!user.isAnEmployer ? 
+                  <span className = 'pen' onClick = {() => setPopup(prev => {return{...prev, details: true}})}>&#9998;</span>
+                : null}
             </div> 
         
             <section style = {{display:'flex'}}>

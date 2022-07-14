@@ -5,15 +5,13 @@ import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
 import {handleFixName} from '../../Global/formFunctions';
 import {ListProps,FileProps} from '../../Global/types/forms';
-import {fetchProfileExperience} from '../../Global/features/Jobseekers/profiles/profileExperience';
 import List from '../../Global/Forms/List';
 import axios from 'axios';
 import {token} from '../../Global/features/Auth/user';
-import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile';
 import Popup from '../../Global/Popup/Popup';
 import ReactScrollableFeed from 'react-scrollable-feed';
 
-export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
+export default function ProfileFormPage() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const user = useAppSelector(state => state.user.values)
@@ -33,49 +31,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
     const [logo,setLogo] = useState<FileProps>({value: '', name:''})
     const [cv,setCV] = useState<FileProps>({value: '' , name:''})
     
- 
     const maxTabs = document.querySelectorAll('.tab').length
-    const currentExperience = useAppSelector(state => state.profileExperience.values)
-
-    useEffect(() => {
-        dispatch(fetchProfileExperience(user.id))
-        dispatch(fetchProfile(user.id))
-        .unwrap()
-        .then(response => {
-            if (response.status === 200) navigate(`/profile/${user.id}`)
-        })
-
-        .catch(() => {
-            return
-        })
-
-        if (edit){
-            setFirstName(prev => {return{...prev, value: profile.values?.firstName}})
-            setMiddleName(prev => {return{...prev, value: profile.values?.middleName || ''}})
-            setLastName(prev => {return{...prev, value: profile.values?.lastName}})
-            setPhone(prev => {return{...prev, value: profile.values?.phone}})
-            setAbout(prev => {return{...prev, value: profile.values?.about}})
-            setSkills(prev => {return{...prev, value: profile.values?.skills.map(skill => skill.name)}})
-            setExperience(prev => {return{...prev, value: currentExperience}})
-            setEducation(prev => {return{...prev, value: profile.values?.education}})
-            setIndustry(prev => {return{...prev, value: profile.values?.industry}})
-            setDistance(prev => {return{...prev, value: profile.values?.distance}})
-        }
-
-     },[dispatch, 
-        navigate,
-        user.id, 
-        edit,
-        profile.values.firstName,
-        profile.values.middleName,
-        profile.values.lastName,
-        profile.values.phone,
-        profile.values.about,
-        profile.values.experience,
-        profile.values.education,
-        profile.values.industry,
-        profile.values.distance
-    ])
 
     const validateForm = () => {
         let isValid = true
@@ -189,21 +145,6 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
         form.append('industry',industry.value)
         form.append('distance',distance.value)
 
-        if (edit){
-            axios.put('/api/profile',form,requestOptions)
-            .then(response => {
-                 if (response.status === 200){
-                    handleAddSuccessMsg('Profile is successfully saved', dispatch)
-                    navigate(`/profile/${user.id}`)
-                }
-            })
-
-            .catch(error => {
-                if (error.response.status === 400) setErrors(['Something went wrong'])
-            })
-        }
-        
-        else{
             axios.post('/api/profile',form,requestOptions)
             .then(response => {
                 if (response.status === 201){
@@ -216,7 +157,6 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
             .catch(error => {
                 if (error.response.status === 400) setErrors(['Something went wrong'])
             })
-        }
     }
 
     function handleSetExperience(e: React.ChangeEvent<HTMLTextAreaElement>){
@@ -291,8 +231,7 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                     <textarea id = 'about' value = {about.value} className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
 
                     <label htmlFor = 'logo'><h3>Profile logo (Optional):</h3></label>
-                    <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setLogo({value: e.target.files[0], name: e.target.files[0].name})}}/>
-                    {edit && profile.values.logo ? <p>Current logo: {profile.values.logo}</p> : null} 
+                    <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setLogo({value: e.target.files[0], name: e.target.files[0].name})}}/> 
 
                 </div>
 
@@ -422,7 +361,6 @@ export default function ProfileFormPage({edit = false}: {edit?: boolean}) {
                     
                     <label htmlFor = 'cv'><h3>Resume / CV (Optional) (Please submit only .pdf, .doc or .docx files):</h3></label>
                     <input type = 'file' id = 'cv' accept = '.pdf,.doc,.docx' onChange = {e => {if (!e.target.files) return; setCV({value: e.target.files[0],name: e.target.files[0].name})}} autoComplete = 'on'/>
-                    {edit && profile.values.cv ? <p>Current CV: {profile.values.cv}</p> : null} 
 
                     <label htmlFor = 'distance'><h3>Job within:</h3></label>
                     <select id = 'distance' onChange = {e => setDistance({value: e.target.value})} value = {distance.value} autoComplete = 'on'>
