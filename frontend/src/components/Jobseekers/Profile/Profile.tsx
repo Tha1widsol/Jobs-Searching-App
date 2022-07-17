@@ -8,15 +8,15 @@ import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
 import {token} from '../../Global/features/Auth/user';
 import Popup from '../../Global/Popup/Popup';
 import ProfileDetailsForm from '../ProfileFormPage/ProfileDetailsForm/ProfileDetailsForm';
+import ProfileSkills from '../ProfileFormPage/ProfileSkills/ProfileSkills';
 import axios from 'axios'
 
 export default function Profile({profile} : {profile: ProfileProps}) {
     const navigate = useNavigate()
     const user = useAppSelector(state => state.user.values)
     const experience = useAppSelector(state => state.profileExperience)
-    const [popup,setPopup] = useState({delete: false, details: false})
-    const [editName, setEditName] = useState(false)
-    const [dropdown,setDropdown] = useState(false)
+    const [popup, setPopup] = useState({delete: false, details: false, skills: false})
+    const [dropdown, setDropdown] = useState(false)
     const dispatch = useAppDispatch()
     
     function handleToggleStatus(){
@@ -56,8 +56,16 @@ export default function Profile({profile} : {profile: ProfileProps}) {
 
         <Popup trigger = {popup.details} switchOff = {() => setPopup(prev => {return{...prev, details: false}})} modalOn = {false}>
             <ProfileDetailsForm edit = {true} popupOff = {() => setPopup(prev => {return{...prev, details: false}})}/>
+            <button type = 'button' style = {{float: 'right'}} onClick = {() => setPopup(prev => {return{...prev, details: false}})}>Cancel</button>
         </Popup>
 
+        <Popup trigger = {popup.skills} switchOff = {() => setPopup(prev => {return{...prev, skills: false}})} modalOn = {false}>
+            <div style = {{minWidth: '300px'}}>
+              <ProfileSkills edit = {true}/>
+              <button type = 'button' style = {{float: 'right'}} onClick = {() => setPopup(prev => {return{...prev, skills: false}})}>Cancel</button>
+            </div>
+        </Popup>
+ 
         {!user?.isAnEmployer ? 
         <KebabMenu current = {dropdown} switchOn = {() => setDropdown(true)} switchOff = {() => setDropdown(false)}>
             {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn normalNavBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
@@ -66,8 +74,8 @@ export default function Profile({profile} : {profile: ProfileProps}) {
         </KebabMenu>
         : null}
 
-            <div style = {{display: 'flex', alignItems: 'center', gap: '20px'}}>
-                <p className = 'fullName' onMouseEnter = {() => setEditName(true)} onMouseLeave = {() => setEditName(false)}>{profile.values.firstName} {profile.values.middleName} {profile.values.lastName}</p>
+            <div className = 'penContainer'>
+                <p className = 'fullName'>{profile.values.firstName} {profile.values.middleName} {profile.values.lastName}</p>
                 {!user.isAnEmployer ? 
                   <span className = 'pen' onClick = {() => setPopup(prev => {return{...prev, details: true}})}>&#9998;</span>
                 : null}
@@ -83,7 +91,13 @@ export default function Profile({profile} : {profile: ProfileProps}) {
         
             <div className = 'profileSection'>
                 <section>
-                    <label><h2>Skills</h2></label>
+                    <div className = 'penContainer'>
+                        <label><h2>Skills</h2></label>
+                        {!user.isAnEmployer ? 
+                        <span className = 'pen' onClick = {() => setPopup(prev => {return{...prev, skills: true}})}>&#9998;</span>
+                        : null}
+                    </div>
+
                     <hr className = 'mt-0-mb-4'/>
                     <div className = 'listContainer'>
                         {profile.values?.skills?.map((skill,index) => {
