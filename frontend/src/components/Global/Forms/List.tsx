@@ -75,9 +75,9 @@ export default function List({
                     <ReactScrollableFeed>
                         {state.value.map((item,index) => {
                             return (
-                                <div key = {index} style = {{display:'flex',justifyContent:'space-between'}}>
+                                <div className = 'rowSections' key = {index}>
                                     <li>{item}</li>
-                                    <button type = 'button' onClick = {() => handleRemoveItem(item)} style = {{padding:'10px'}}>Remove</button>
+                                    <span className = 'cross' onClick = {() => handleRemoveItem(item)} style = {{padding:'10px'}}>X</span>
                                 </div>
                             )
                         })}
