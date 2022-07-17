@@ -237,7 +237,6 @@ export default function ProfileFormPage() {
 
                 <div className = {`tab ${currentTab === 2 ? 'show' : 'hide'}`}>
                     <h1 className = 'title'>Skills</h1> 
-                    <Errors errors = {errors}/>
 
                     <label htmlFor = 'skills'><h3>Specific Key skills:</h3></label>
                     <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
