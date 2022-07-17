@@ -89,6 +89,16 @@ td, th {
   font-size: 20px;
 }
 
+.pen:hover{
+  color: gray
+}
+
+.penContainer{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
   /* ################
 Button styles
 ##################*/
@@ -236,6 +246,12 @@ textarea {
 
 .longerList{
   max-height: 250px;
+}
+
+.rowSections{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .cross{
