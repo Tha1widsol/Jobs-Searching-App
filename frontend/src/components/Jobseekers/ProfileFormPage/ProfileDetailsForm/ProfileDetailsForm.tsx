@@ -1,4 +1,4 @@
-import React,{useState, useEffect, SyntheticEvent} from 'react'
+import React,{useState, useEffect} from 'react'
 import {useAppSelector, useAppDispatch} from '../../../Global/features/hooks'
 import { useNavigate } from 'react-router-dom'
 import {fetchProfile} from '../../../Global/features/Jobseekers/profiles/profile'
@@ -23,14 +23,19 @@ export default function ProfileDetailsForm({edit = false, popupOff}: {edit: bool
     const [logo,setLogo] = useState<FileProps>({value: '', name:''})
 
     useEffect(() => {
-        dispatch(fetchProfile(user.id))
         setFirstName(prev => {return{...prev, value: profile.values?.firstName}})
         setMiddleName(prev => {return{...prev, value: profile.values?.middleName || ''}})
         setLastName(prev => {return{...prev, value: profile.values?.lastName}})
         setPhone(prev => {return{...prev, value: profile.values?.phone}})
         setAbout(prev => {return{...prev, value: profile.values?.about}})
-    },[dispatch])
-
+    },[dispatch,
+        profile.values?.about,
+        profile.values?.firstName,
+        profile.values?.lastName,
+        profile.values?.middleName,
+        profile.values?.phone,
+        user.id
+        ])
 
     const validateForm = () => {
         let isValid = true
