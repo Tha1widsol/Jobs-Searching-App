@@ -99,7 +99,7 @@ export default function ProfileDetailsForm({edit = false, popupOff}: {edit: bool
         let form = new FormData();
 
         form.append('firstName',firstName.value)
-        if (middleName.value) form.append('middleName',middleName?.value)
+        form.append('middleName',middleName.value)
         form.append('lastName',lastName.value)
         form.append('phone',phone.value)
         form.append('about',about.value)
