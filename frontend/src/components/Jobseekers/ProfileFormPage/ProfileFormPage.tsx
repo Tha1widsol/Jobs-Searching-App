@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React,{useEffect, useState} from 'react'
+=======
+import React,{useState} from 'react'
+>>>>>>> e3a2429566706e3aa4b5e92da1becce9ccedb1dd
 import {useNavigate} from 'react-router-dom';
 import Errors from '../../Global/messages/Errors'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
@@ -10,7 +14,10 @@ import axios from 'axios';
 import {token} from '../../Global/features/Auth/user';
 import Popup from '../../Global/Popup/Popup';
 import ReactScrollableFeed from 'react-scrollable-feed';
+<<<<<<< HEAD
 import { fetchProfile } from '../../Global/features/Jobseekers/profiles/profile';
+=======
+>>>>>>> e3a2429566706e3aa4b5e92da1becce9ccedb1dd
 
 export default function ProfileFormPage() {
     const navigate = useNavigate()
@@ -33,13 +40,6 @@ export default function ProfileFormPage() {
     const [cv,setCV] = useState<FileProps>({value: '' , name:''})
     
     const maxTabs = document.querySelectorAll('.tab').length
-
-    useEffect(() => {
-        dispatch(fetchProfile(user.id))
-        .then(response => {
-            if (response.meta.requestStatus === 'fulfilled') navigate(`/profile/${user.id}`)
-        })
-    },[dispatch])
 
     const validateForm = () => {
         let isValid = true
