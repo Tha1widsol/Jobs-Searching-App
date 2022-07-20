@@ -52,7 +52,7 @@ def calculateScore(profile, job):
 
     return totalScore * 100
 
-@api_view()
+@api_view(['GET'])
 def getMatchingScores(request):
     profile = Profile.objects.get(user = request.user)
     jobs = Job.objects.filter(industry = profile.industry)
@@ -96,6 +96,7 @@ class ProfileAPI(APIView):
 
         return Response(status = status.HTTP_400_BAD_REQUEST)
 
+
     def put(self,request):
         profile = Profile.objects.get(user = request.user)
         serializer = self.serializer_class(data = request.data, instance = profile)
@@ -124,6 +125,22 @@ class ProfileAPI(APIView):
         profile = Profile.objects.get(user = request.user)
         profile.delete()
         return Response(status = status.HTTP_200_OK)
+
+class ProfileSkillsAPI(APIView):
+    def post(self, request):
+        newSkills = []
+        profile = Profile.objects.get(user = self.request.user)
+        skills = json.loads(request.data.get('skills'))
+
+        for skillName in skills:
+            skill, created = Skill.objects.get_or_create(name = skillName)
+            skill.save()
+            newSkills.append(skill)
+
+        profile.skills.set(newSkills, clear = True)
+        profile.save()
+        return Response(status = status.HTTP_200_OK)
+        
 
 class ProfileExperienceAPI(generics.ListAPIView):
       serializer_class = ProfileExperienceSerializer
