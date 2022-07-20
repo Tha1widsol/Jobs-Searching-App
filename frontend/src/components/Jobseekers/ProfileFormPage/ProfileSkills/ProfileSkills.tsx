@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from 'react'
-import {useAppSelector} from '../../../Global/features/hooks'
+import {useAppDispatch, useAppSelector} from '../../../Global/features/hooks'
+import {fetchProfile} from '../../../Global/features/Jobseekers/profiles/profile'
 import {ListProps} from '../../../Global/types/forms'
 import List from '../../../Global/Forms/List'
 import {token} from '../../../Global/features/Auth/user'
@@ -8,6 +9,7 @@ import axios from 'axios'
 export default function ProfileSkills({edit = false, popupOff}: {edit: boolean, popupOff: () => void}) {
     const [skills, setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
     const profile = useAppSelector(state => state.profile.values)
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         if (!edit) return
@@ -32,6 +34,7 @@ export default function ProfileSkills({edit = false, popupOff}: {edit: boolean, 
       axios.post('/api/profile/skills',form, requestOptions)
       .then(response => {
         if (response.status === 200){
+            dispatch(fetchProfile(profile.user.id))
             popupOff()
         }
       })
