@@ -2,8 +2,10 @@ import React,{useState, useEffect} from 'react'
 import {useAppSelector} from '../../../Global/features/hooks'
 import {ListProps} from '../../../Global/types/forms'
 import List from '../../../Global/Forms/List'
+import {token} from '../../../Global/features/Auth/user'
+import axios from 'axios'
 
-export default function ProfileSkills({edit = false}) {
+export default function ProfileSkills({edit = false, popupOff}: {edit: boolean, popupOff: () => void}) {
     const [skills, setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
     const profile = useAppSelector(state => state.profile.values)
 
@@ -15,6 +17,25 @@ export default function ProfileSkills({edit = false}) {
     function handleSetSkills(e: React.ChangeEvent<HTMLInputElement>){
         setSkills(prev => {return {...prev, currentVal: e.target.value}})
         e.target.value = e.target.value.replace(',','')
+    }
+
+    function handleSubmit(e: React.SyntheticEvent){
+      e.preventDefault()
+
+      const requestOptions = {
+        headers: {'Content-Type': 'multipart/form-data', Authorization:`Token ${token}`}
+      }
+
+      let form = new FormData()
+      form.append('skills', JSON.stringify(skills.value))
+
+      axios.post('/api/profile/skills',form, requestOptions)
+      .then(response => {
+        if (response.status === 200){
+            popupOff()
+        }
+      })
+
     }
 
   return (
@@ -32,7 +53,7 @@ export default function ProfileSkills({edit = false}) {
         handleSetAll = {(newItems: Array<string>) => setSkills(prev => {return {...prev,value: newItems}})}
         />
 
-        {skills.value.length ? <button type = 'submit'>Submit</button> : null}
+        {skills.value.length ? <button type = 'submit' onClick = {handleSubmit}>Submit</button> : null}
     </div>
   )
 }
