@@ -9,13 +9,14 @@ import {token} from '../../Global/features/Auth/user';
 import Popup from '../../Global/Popup/Popup';
 import ProfileDetailsForm from '../ProfileFormPage/ProfileDetailsForm/ProfileDetailsForm';
 import ProfileSkills from '../ProfileFormPage/ProfileSkills/ProfileSkills';
+import ProfileExperienceForm from '../ProfileFormPage/ProfileExperienceForm.tsx/ProfileExperienceForm';
 import axios from 'axios'
 
 export default function Profile({profile} : {profile: ProfileProps}) {
     const navigate = useNavigate()
     const user = useAppSelector(state => state.user.values)
     const experience = useAppSelector(state => state.profileExperience)
-    const [popup, setPopup] = useState({delete: false, details: false, skills: false})
+    const [popup, setPopup] = useState({delete: false, details: false, skills: false, experience: false})
     const [dropdown, setDropdown] = useState(false)
     const dispatch = useAppDispatch()
     
@@ -64,6 +65,10 @@ export default function Profile({profile} : {profile: ProfileProps}) {
               <ProfileSkills edit = {true} popupOff = {() => setPopup(prev => {return{...prev, skills: false}})}/>
               <button type = 'button' style = {{float: 'right'}} onClick = {() => setPopup(prev => {return{...prev, skills: false}})}>Cancel</button>
             </div>
+        </Popup>
+
+        <Popup trigger = {popup.experience} switchOff = {() => setPopup(prev => {return{...prev, experience: false}})} modalOn = {false}>
+            <ProfileExperienceForm edit = {true} popupOff = {() => setPopup(prev => {return{...prev, experience: false}})}/>
         </Popup>
  
         {!user?.isAnEmployer ? 
@@ -116,13 +121,26 @@ export default function Profile({profile} : {profile: ProfileProps}) {
             {experience.values.length ? 
             <div>
                 <section className = 'profileSubContainer'>
-                <label><h2>Experience</h2></label>
+                <div className = 'penContainer'>
+                    <label><h2>Experience</h2></label>
+                    {!user.isAnEmployer ? 
+                        <span className = 'pen' onClick = {() => setPopup(prev => {return{...prev, experience: true}})}>&#9998;</span>
+                    : null}
+                </div>
                 <hr className = 'mt-0-mb-4'/>
                 {experience.values.map((exp, index) => {
                     return (
                     <div style = {{maxHeight: '1000px'}} key = {index}>
                             <div style = {{marginBottom: '50px'}}>
-                                <h3>{exp.title}</h3>
+                                <div style = {{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                     <h3>{exp.title}</h3>
+                                     {!user.isAnEmployer ? 
+                                     <div style = {{display: 'flex', gap: '20px'}}>
+                                         <span className = 'pen'>&#9998;</span>
+                                        <div className = 'cross'>X</div>
+                                     </div>
+                                     : null}
+                                </div>
                                 <p>{exp.companyName}</p>
                                 <p style = {{color: 'gray', fontSize: 'small'}}>{exp.years > 0 ? `Years worked - ${exp.years}` : null}</p>
                                 <p style = {{ maxHeight: '120px'}}>{exp.description}</p>
