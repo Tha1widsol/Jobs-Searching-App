@@ -23,10 +23,10 @@ class Profile(models.Model):
       return self.firstName
 
 class ProfileExperience(models.Model):
-      profile = models.ForeignKey(Profile, on_delete = models.CASCADE)
+      profile = models.ForeignKey(Profile, on_delete = models.CASCADE, null = True)
       title = models.CharField(max_length = 200)
       companyName = models.CharField(max_length = 200)
-      EmployerName = models.CharField(max_length = 200)
+      EmployerName = models.CharField(max_length = 200, blank = True)
       EmployerEmail = models.EmailField(blank = True)
       EmployerPhone = models.CharField(max_length = 15, blank = True)
       description = models.TextField()
