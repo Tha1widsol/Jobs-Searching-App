@@ -145,6 +145,13 @@ class ProfileSkillsAPI(APIView):
 class ProfileExperienceAPI(generics.ListAPIView):
       serializer_class = ProfileExperienceSerializer
 
+      def post(self):
+          serializer = self.serializer_class(data = self.request.data)
+          if serializer.is_valid():
+             experience = serializer.save()
+             experience.user = self.request.user
+             experience.save()
+        
       def get_queryset(self):
           lookup_url_kwarg = 'id'
           id = self.request.GET.get(lookup_url_kwarg)
