@@ -10,6 +10,7 @@ import Popup from '../../Global/Popup/Popup';
 import ProfileDetailsForm from '../ProfileFormPage/ProfileDetailsForm/ProfileDetailsForm';
 import ProfileSkills from '../ProfileFormPage/ProfileSkills/ProfileSkills';
 import ProfileExperienceForm from '../ProfileFormPage/ProfileExperienceForm.tsx/ProfileExperienceForm';
+import ReactScrollableFeed from 'react-scrollable-feed';
 import axios from 'axios'
 
 export default function Profile({profile} : {profile: ProfileProps}) {
@@ -121,13 +122,10 @@ export default function Profile({profile} : {profile: ProfileProps}) {
             {experience.values.length ? 
             <div>
                 <section className = 'profileSubContainer'>
-                <div className = 'penContainer'>
-                    <label><h2>Experience</h2></label>
-                    {!user.isAnEmployer ? 
-                        <span className = 'pen' onClick = {() => setPopup(prev => {return{...prev, experience: true}})}>&#9998;</span>
-                    : null}
-                </div>
+                <label><h2>Experience</h2></label>
+            
                 <hr className = 'mt-0-mb-4'/>
+                <ReactScrollableFeed>
                 {experience.values.map((exp, index) => {
                     return (
                     <div style = {{maxHeight: '1000px'}} key = {index}>
@@ -159,6 +157,13 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                     
                     )
                 })}
+
+                </ReactScrollableFeed>
+
+                {!user.isAnEmployer ? 
+                        <span className = 'pen' onClick = {() => setPopup(prev => {return{...prev, experience: true}})}>&#9998;</span>
+                : null}
+
                </section>
             </div>
                : null}
