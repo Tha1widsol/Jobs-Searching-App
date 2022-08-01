@@ -13,7 +13,6 @@ const initialState = {
         EmployerPhone: '',
         description: '',
         years: 0,
-        reference: '',
         isOnGoing: false
     }]
 }
@@ -35,8 +34,8 @@ export const ProfileExperienceSlice = createSlice({
     name : 'profileExperience',
     initialState,
     reducers: {
-        setProfile: (state,action) => {
-          state.values = action.payload
+        AddProfileExperience: (state,action) => {
+          state.values.push(action.payload)
         },
 
         setDeleteProfileExperience: (state) => {
@@ -61,6 +60,6 @@ export const ProfileExperienceSlice = createSlice({
 
 })
 
-export const {setProfile,setDeleteProfileExperience} = ProfileExperienceSlice.actions
+export const {AddProfileExperience,setDeleteProfileExperience} = ProfileExperienceSlice.actions
 
 export default ProfileExperienceSlice.reducer

@@ -28,7 +28,7 @@ export default function ProfilePage() {
     
     dispatch(fetchProfileExperience(Number(userID)))
     
- },[dispatch, navigate, profile.values?.user.id, user.id, userID])
+ },[dispatch, navigate, userID])
 
   return (
   <div> 
