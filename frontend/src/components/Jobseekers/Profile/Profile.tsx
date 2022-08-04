@@ -2,9 +2,11 @@ import React,{useState} from 'react'
 import './css/Profile.css'
 import {useAppDispatch, useAppSelector} from '../../Global/features/hooks';
 import {ProfileProps,setToggleStatus,setDeleteProfile} from '../../Global/features/Jobseekers/profiles/profile'
+import {initialExperience} from '../ProfileFormPage/ProfileExperienceForm.tsx/ProfileExperienceForm';
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import {useNavigate} from 'react-router-dom';
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
+import { ProfileExperienceProps } from '../ProfileFormPage/ProfileExperienceForm.tsx/types/ProfileExperienceProps';
 import {token} from '../../Global/features/Auth/user';
 import Popup from '../../Global/Popup/Popup';
 import ProfileDetailsForm from '../ProfileFormPage/ProfileDetailsForm/ProfileDetailsForm';
@@ -17,7 +19,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
     const navigate = useNavigate()
     const user = useAppSelector(state => state.user.values)
     const experience = useAppSelector(state => state.profileExperience)
-    const [popup, setPopup] = useState({delete: false, details: false, skills: false, experience: false})
+    const [popup, setPopup] = useState({delete: false, details: false, skills: false, experience: {trigger: false, values: initialExperience}})
     const [dropdown, setDropdown] = useState(false)
     const dispatch = useAppDispatch()
     
@@ -45,6 +47,10 @@ export default function Profile({profile} : {profile: ProfileProps}) {
       })
     }
 
+    function editChosenExperience(experience: ProfileExperienceProps){
+        setPopup(prev => ({...prev, experience: {...prev.experience, trigger: true, values: experience}}))
+    }
+
   return (
     <div id = 'profileContainer'>
         <Popup trigger = {popup.delete} switchOff = {() => setPopup(prev => {return{...prev, delete: false}})}>
@@ -68,8 +74,8 @@ export default function Profile({profile} : {profile: ProfileProps}) {
             </div>
         </Popup>
 
-        <Popup trigger = {popup.experience} switchOff = {() => setPopup(prev => {return{...prev, experience: false}})} modalOn = {false}>
-            <ProfileExperienceForm edit = {true} popupOff = {() => setPopup(prev => {return{...prev, experience: false}})}/>
+        <Popup trigger = {popup.experience.trigger} switchOff = {() => setPopup(prev => ({...prev, experience: {...prev.experience, trigger: false}}))} modalOn = {false}>
+            <ProfileExperienceForm edit = {true} popupOff = {() => setPopup(prev => ({...prev, experience: {...prev.experience, trigger: false}}))} chosenExperience = {popup.experience.values}/>
         </Popup>
  
         {!user?.isAnEmployer ? 
@@ -134,7 +140,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                                      <h3>{exp.title}</h3>
                                      {!user.isAnEmployer ? 
                                      <div style = {{display: 'flex', gap: '20px'}}>
-                                         <span className = 'pen'>&#9998;</span>
+                                         <span className = 'pen' onClick = {() => editChosenExperience(exp)}>&#9998;</span>
                                         <div className = 'cross'>X</div>
                                      </div>
                                      : null}
@@ -161,7 +167,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                 </ReactScrollableFeed>
 
                 {!user.isAnEmployer ? 
-                        <span className = 'pen' onClick = {() => setPopup(prev => {return{...prev, experience: true}})}>&#9998;</span>
+                        <span className = 'pen' onClick = {() => setPopup(prev => ({...prev, experience: {...prev.experience, trigger: true, values: initialExperience}}))}>&#9998;</span>
                 : null}
 
                </section>

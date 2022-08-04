@@ -1,17 +1,18 @@
 import axios from 'axios';
-import React, {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom';
+import React, {useState} from 'react'
 import Errors from '../../../Global/messages/Errors'
 import {useAppSelector, useAppDispatch} from '../../../Global/features/hooks';
 import {token} from '../../../Global/features/Auth/user';
-import { fetchProfileExperience, AddProfileExperience } from '../../../Global/features/Jobseekers/profiles/profileExperience';
+import {ProfileExperienceProps} from './types/ProfileExperienceProps';
+import {AddProfileExperience } from '../../../Global/features/Jobseekers/profiles/profileExperience';
 
-export default function ProfileExperienceForm({edit = true, popupOff}: {edit: boolean, popupOff: () => void}) {
-    const initialExperience = {
-      title: '', companyName: '',  EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: 1, isOnGoing: false
-    }
+export const initialExperience = {
+ id: 0, title: '', companyName: '',  EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: 1, isOnGoing: false
+}
+
+export default function ProfileExperienceForm({edit = true, popupOff, chosenExperience}: {edit: boolean, popupOff: () => void, chosenExperience?: ProfileExperienceProps}) {
     const dispatch = useAppDispatch()
-    const [experience,setExperience] = useState({value: initialExperience, popup: false, isValid: true, invalidMsg: 'Fields are required', alreadyExistsMsg: 'Experience already exists'})
+    const [experience,setExperience] = useState({value: chosenExperience || initialExperience, popup: false, isValid: true, invalidMsg: 'Fields are required', alreadyExistsMsg: 'Experience already exists'})
     const currentExperience = useAppSelector(state => state.profileExperience.values)
     const [errors,setErrors] = useState<Array<string>>([])
 
@@ -47,30 +48,51 @@ export default function ProfileExperienceForm({edit = true, popupOff}: {edit: bo
       if (experience.value.EmployerEmail) form.append('EmployerEmail', experience.value.EmployerEmail)
       if (experience.value.EmployerPhone) form.append('EmployerPhone', experience.value.EmployerPhone)
       form.append('description', experience.value.description)
-      form.append('years', experience.value.years.toString())
-      form.append('isOnGoing', experience.value.isOnGoing.toString())
+      form.append('years', experience.value.years.toString() || '0')
+      form.append('isOnGoing', experience.value.isOnGoing?.toString() || 'False')
+
+      if (chosenExperience?.title){
+        axios.put('/api/profileExperience',form, requestOptions)
+        .then(response => {
+          if (response.status === 201){
+              popupOff()
+              dispatch(AddProfileExperience({
+              title: experience.value.title,
+              companyName: experience.value.companyName,
+              EmployerName: experience.value.EmployerName,
+              EmployerEmail: experience.value.EmployerEmail,
+              EmployerPhone: experience.value.EmployerPhone,
+              description: experience.value.description,
+              years: experience.value.years,
+              isOnGoing: experience.value.isOnGoing
+        }))
+            setExperience(prev => {return{...prev, isValid: true, popup: false, value: initialExperience}})
+            setErrors([])
+          }
+        })
+       }
       
-      axios.post('/api/profileExperience',form, requestOptions)
-      .then(response => {
-        if (response.status === 201){
-          popupOff()
-            dispatch(AddProfileExperience({
-            title: experience.value.title,
-            companyName: experience.value.companyName,
-            EmployerName: experience.value.EmployerName,
-            EmployerEmail: experience.value.EmployerEmail,
-            EmployerPhone: experience.value.EmployerPhone,
-            description: experience.value.description,
-            years: experience.value.years,
-            isOnGoing: experience.value.isOnGoing
+      else {
+        axios.post('/api/profileExperience',form, requestOptions)
+        .then(response => {
+          if (response.status === 201){
+              popupOff()
+              dispatch(AddProfileExperience({
+              title: experience.value.title,
+              companyName: experience.value.companyName,
+              EmployerName: experience.value.EmployerName,
+              EmployerEmail: experience.value.EmployerEmail,
+              EmployerPhone: experience.value.EmployerPhone,
+              description: experience.value.description,
+              years: experience.value.years,
+              isOnGoing: experience.value.isOnGoing
 
-      }))
-          setExperience(prev => {return{...prev, isValid: true, popup: false, value: {title: '', companyName: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: 1, isOnGoing: false}}})
-          setErrors([])
-        }
-      })
-
-        
+        }))
+            setExperience(prev => {return{...prev, isValid: true, popup: false, value: initialExperience}})
+            setErrors([])
+          }
+        })
+      }
     }
 
     function handleRemoveExperience(idx: number){
