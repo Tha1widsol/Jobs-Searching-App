@@ -77,7 +77,7 @@ export default function List({
                             return (
                                 <div className = 'rowSections' key = {index}>
                                     <li>{item}</li>
-                                    <span className = 'cross' onClick = {() => handleRemoveItem(item)} style = {{padding:'10px'}}>X</span>
+                                    <i className = 'fa fa-trash-o' onClick = {() => handleRemoveItem(item)} style = {{padding:'10px'}}/>
                                 </div>
                             )
                         })}

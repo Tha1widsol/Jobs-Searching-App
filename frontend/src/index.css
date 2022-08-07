@@ -254,13 +254,13 @@ textarea {
   align-items: center;
 }
 
-.cross{
+.fa-trash-o{
   cursor: pointer;
   font-size: 22px;
   color: red;
 }
 
-.cross:hover{
+.fa-trash-o:hover{
   color: darkred;
 }
   /* ################
