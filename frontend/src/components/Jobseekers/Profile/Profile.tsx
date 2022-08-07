@@ -14,12 +14,13 @@ import ProfileSkills from '../ProfileFormPage/ProfileSkills/ProfileSkills';
 import ProfileExperienceForm from '../ProfileFormPage/ProfileExperienceForm.tsx/ProfileExperienceForm';
 import ReactScrollableFeed from 'react-scrollable-feed';
 import axios from 'axios'
+import { fetchProfileExperience } from '../../Global/features/Jobseekers/profiles/profileExperience';
 
 export default function Profile({profile} : {profile: ProfileProps}) {
     const navigate = useNavigate()
     const user = useAppSelector(state => state.user.values)
     const experience = useAppSelector(state => state.profileExperience)
-    const [popup, setPopup] = useState({delete: false, details: false, skills: false, experience: {trigger: false, values: initialExperience}})
+    const [popup, setPopup] = useState({deleteExperience: {trigger: false, id: 0, title: '', company: ''}, deleteProfile: false, details: false, skills: false, experience: {trigger: false, values: initialExperience}})
     const [dropdown, setDropdown] = useState(false)
     const dispatch = useAppDispatch()
     
@@ -50,15 +51,30 @@ export default function Profile({profile} : {profile: ProfileProps}) {
     function editChosenExperience(experience: ProfileExperienceProps){
         setPopup(prev => ({...prev, experience: {...prev.experience, trigger: true, values: experience}}))
     }
+    
+    function toggleDeleteExperiencePopup(id: number, titleName: string, companyName: string){
+        setPopup(prev => ({...prev, deleteExperience: {...prev.deleteExperience, trigger: true, id: id, title: titleName, company: companyName}}))
+    }
+
+    function handleDeleteExperience(){
+        axios.delete(`/api/profileExperience?id=${popup.deleteExperience.id}`,{headers: {Authorization: `Token ${token}`}})
+        .then(response => {
+            if (response.status === 200){
+                dispatch(fetchProfileExperience(user.id))
+                setPopup(prev => ({...prev, deleteExperience: {...prev.deleteExperience, trigger: false}}))
+                handleAddSuccessMsg('Experience is successfully removed', dispatch)
+            }
+        })
+    }
 
   return (
     <div id = 'profileContainer'>
-        <Popup trigger = {popup.delete} switchOff = {() => setPopup(prev => {return{...prev, delete: false}})}>
+        <Popup trigger = {popup.deleteProfile} switchOff = {() => setPopup(prev => {return{...prev, deleteProfile: false}})}>
             <div style = {{textAlign: 'center'}}>
                 <p>Are you sure you want to remove your profile?</p>
                 <p style = {{fontSize: 'small'}}>(This action cannot be undone)</p>
                 <button onClick = {handleDeleteProfile}>Confirm</button>
-                <button onClick = {() => setPopup(prev => {return{...prev, delete: false}})}>Cancel</button>
+                <button onClick = {() => setPopup(prev => {return{...prev, deleteProfile: false}})}>Cancel</button>
             </div>
         </Popup>
 
@@ -77,12 +93,21 @@ export default function Profile({profile} : {profile: ProfileProps}) {
         <Popup trigger = {popup.experience.trigger} switchOff = {() => setPopup(prev => ({...prev, experience: {...prev.experience, trigger: false}}))} modalOn = {false}>
             <ProfileExperienceForm edit = {true} popupOff = {() => setPopup(prev => ({...prev, experience: {...prev.experience, trigger: false}}))} chosenExperience = {popup.experience.values}/>
         </Popup>
+
+        <Popup trigger = {popup.deleteExperience.trigger} switchOff = {() => setPopup(prev => ({...prev, deleteExperience: {...prev.deleteExperience, trigger: false}}))}>
+            <div style = {{textAlign: 'center'}}>
+                <p>Are you sure you want to delete work experience - {popup.deleteExperience.title} at {popup.deleteExperience.company}?</p>
+                <p style = {{fontSize: 'small', color: 'gray'}}>(This action cannot be undone)</p>
+                <button onClick = {handleDeleteExperience}>Confirm</button>
+                <button type = 'button' onClick = {() => setPopup(prev => ({...prev, deleteExperience: {...prev.deleteExperience, trigger: false}}))}>Cancel</button>
+            </div>
+        </Popup>    
  
         {!user?.isAnEmployer ? 
         <KebabMenu current = {dropdown} switchOn = {() => setDropdown(true)} switchOff = {() => setDropdown(false)}>
             {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn normalNavBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
             <button className = 'dropdownBtn' onClick = {() => setPopup(prev => {return{...prev, details: true}})} >Edit</button>
-            <button className = 'dropdownBtn redNavBtn' onClick = {() => setPopup(prev => {return{...prev, delete: true}})}>Delete</button>
+            <button className = 'dropdownBtn redNavBtn' onClick = {() => setPopup(prev => {return{...prev, deleteProfile: true}})}>Delete</button>
         </KebabMenu>
         : null}
 
@@ -141,7 +166,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                                      {!user.isAnEmployer ? 
                                      <div style = {{display: 'flex', gap: '20px'}}>
                                          <span className = 'pen' onClick = {() => editChosenExperience(exp)}>&#9998;</span>
-                                        <div className = 'cross'>X</div>
+                                        <i className = 'fa fa-trash-o' onClick = {() => toggleDeleteExperiencePopup(exp.id, exp.title, exp.companyName)}/>
                                      </div>
                                      : null}
                                 </div>
