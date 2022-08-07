@@ -163,6 +163,13 @@ class ProfileExperienceAPI(generics.ListAPIView):
     
           return Response(status = status.HTTP_400_BAD_REQUEST)
 
+      def delete(self, request):
+          lookup_url_kwarg = 'id'
+          id = request.GET.get(lookup_url_kwarg)
+          experience = ProfileExperience.objects.get(id = id)
+          experience.delete()
+          return Response(status = status.HTTP_200_OK)
+
       def get_queryset(self):
           lookup_url_kwarg = 'id'
           id = self.request.GET.get(lookup_url_kwarg)
