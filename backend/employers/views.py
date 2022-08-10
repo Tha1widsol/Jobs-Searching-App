@@ -4,11 +4,19 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser,FormParser
 from jobseekers.models import Profile
 from jobseekers.serializers import ProfileSerializer
+from rest_framework.decorators import api_view
 from .models import *
 from .serializers import *
 import json
 
 # Create your views here.
+
+def switchCurrentCompany(user, company):
+    oldCompany = Company.objects.get(user = user, isActive = True)
+    oldCompany.isActive = False
+    oldCompany.save()
+    company.isActive = True
+    company.save()
 
 class CompanyAPI(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -18,9 +26,10 @@ class CompanyAPI(APIView):
         serializer = self.serializer_class(data = request.data)
 
         if serializer.is_valid():
-            employer = serializer.save()
-            employer.user = request.user
-            employer.save()
+            company = serializer.save()
+            company.user = request.user
+            company.save()
+            switchCurrentCompany(request.user, company)
             return Response(status = status.HTTP_201_CREATED)
 
         return Response(status = status.HTTP_400_BAD_REQUEST)
@@ -58,11 +67,26 @@ class CompanyAPI(APIView):
         company.delete()
         return Response(status = status.HTTP_200_OK)
 
+class CurrentCompanyAPI(APIView):
+    serializer_class = CompanySerializer
+
+    def get(self, request):
+        company = Company.objects.get(user = request.user, isActive = True)
+        serializer = self.serializer_class(company)
+        return Response(serializer.data, status = status.HTTP_200_OK)
+
+    def put(self, request):
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        company = Company.objects.get(id = id)
+        switchCurrentCompany(request.user, company)
+        return Response(status = status.HTTP_200_OK)
+
 class CompaniesListAPI(generics.ListAPIView):
     serializer_class = CompanySerializer
 
     def get_queryset(self):
-        companies = Company.objects.filter(user = self.request.user)
+        companies = Company.objects.filter(user = self.request.user, isActive = False)
         return companies
 
 class JobAPI(APIView):
