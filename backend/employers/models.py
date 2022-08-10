@@ -25,6 +25,7 @@ class Company(models.Model):
     banner = models.ImageField(upload_to = 'CompanyBannerFiles', blank = True)
     industry = models.TextField(default = 'Any')
     website = models.URLField(max_length = 200, blank = True)
+    isActive = models.BooleanField(default = False)
     
     def __str__(self):
       return self.name
