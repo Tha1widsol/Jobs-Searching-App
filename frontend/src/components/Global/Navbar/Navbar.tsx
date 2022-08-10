@@ -77,7 +77,7 @@ export default function Navbar() {
               </div>: 
 
               <NavLink to = '/login' onClick = {() => setDropdown(false)} >Login</NavLink>}
-              {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, example@gmail.com</p> : null}
+              {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, {user.values?.email}</p> : null}
         </div>
     )
 }
