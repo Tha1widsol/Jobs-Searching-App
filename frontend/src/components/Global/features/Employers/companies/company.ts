@@ -3,7 +3,7 @@ import {user,UserProps,token} from '../../Auth/user'
 import {StatusProps} from '../../../types/status'
 import axios from 'axios'
 
-interface CompanyProps extends StatusProps{
+export interface CompanyProps extends StatusProps{
     values: {
         user: UserProps
         id: number
@@ -15,6 +15,7 @@ interface CompanyProps extends StatusProps{
         banner?: string 
         industry: string
         website?: string
+        isActive: boolean
     }
 }
 
@@ -30,7 +31,8 @@ values: {
     logo: '',
     banner: '',
     industry: '',
-    website: ''
+    website: '',
+    isActive: false
   }
    
 }

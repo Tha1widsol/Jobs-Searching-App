@@ -15,6 +15,7 @@ export interface CompaniesProps extends StatusProps{
             banner?: string 
             industry: string
             website?: string
+            isActive: boolean
     }]
   
 }
@@ -28,7 +29,8 @@ export const company = {
     logo: '',
     banner: '',
     industry: '',
-    website: ''
+    website: '',
+    isActive: false
 }
 
 const initialState: CompaniesProps = {
@@ -43,7 +45,8 @@ status: '',
     logo: '',
     banner: '',
     industry: '',
-    website: ''
+    website: '',
+    isActive: false
   }],
 
 }
@@ -65,12 +68,12 @@ export const CompaniesSlice = createSlice({
     name: 'companies',
     initialState,
     reducers: {
-        setCompanies: (state,action) => {
+        setCompanies: (state, action) => {
             state.values = action.payload
         },
 
         deleteCompany: (state, action) => {
-            state.values.splice(state.values.findIndex(company => company.id === action.payload))
+            state.values.slice(state.values.findIndex(company => company.id === action.payload))
         }
     },
 
@@ -93,5 +96,4 @@ export const CompaniesSlice = createSlice({
 
 
 export const {setCompanies,deleteCompany} = CompaniesSlice.actions
-
 export default CompaniesSlice.reducer
