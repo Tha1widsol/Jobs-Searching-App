@@ -1,6 +1,8 @@
 import React,{useState, useEffect} from 'react'
 import {useAppSelector, useAppDispatch} from '../features/hooks'
 import {fetchCompanies} from '../features/Employers/companies/companies'
+import { fetchApplications } from '../features/Jobseekers/applications/applications'
+import {fetchJobs} from '../features/Employers/jobs/jobs'
 import {CompanyProps} from '../features/Employers/companies/company'
 import {fetchCurrentCompany} from '../features/Employers/companies/currentCompany'
 import {NavLink} from 'react-router-dom'
@@ -12,14 +14,18 @@ import { handleAddSuccessMsg } from '../messages/SuccessAlert'
 export default function Navbar() {
     const user = useAppSelector(state => state.user)
     const [dropdown,setDropdown] = useState({menu: false, companies: false})
+    const [toggleChannelClicked, setToggleChannelClicked] = useState(false)
     const companies = useAppSelector(state => state.companies)
     const currentCompany = useAppSelector(state => state.currentCompany)
     const dispatch = useAppDispatch()
     
     useEffect(() => {
         dispatch(fetchCompanies())
+        dispatch(fetchApplications('employers'))
+        dispatch(fetchApplications('jobseekers'))
         dispatch(fetchCurrentCompany())
-    },[dispatch])
+        dispatch(fetchJobs('employer'))
+    },[dispatch, toggleChannelClicked])
 
     function handleLogout(){
         const requestOptions = { 
@@ -46,8 +52,7 @@ export default function Navbar() {
         .then(response => {
             if (response.status === 200){
                 handleAddSuccessMsg('Company is successfully changed', dispatch)
-                dispatch(fetchCurrentCompany())
-                dispatch(fetchCompanies())
+                setToggleChannelClicked(!toggleChannelClicked)
                 setDropdown({menu: false, companies: false})
             }
         })
