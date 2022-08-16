@@ -20,8 +20,9 @@ export default function EmployerApplicantsPage() {
             <h2>No applicants yet...</h2>
             <Link to = '/home'><button>Find profiles</button></Link>
         </div>
-         : null}
+         : 
 
+         <div>
          <p><b>Screen applicants now (Go to my jobs):</b></p>
          <Link to = '/jobs'><button>My Jobs</button></Link>
          <hr className = 'mt-0-mb-4' style = {{marginBottom: '20px', marginTop: '20px'}}/>
@@ -54,6 +55,9 @@ export default function EmployerApplicantsPage() {
                 </div>
             )
         })}
+        </div>
+         }
+
     </div>
   )
 }
