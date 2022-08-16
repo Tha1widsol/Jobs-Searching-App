@@ -45,6 +45,7 @@ export default function JobFormPage({edit = false}) {
   const maxTabs = document.querySelectorAll('.tab').length
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     if (!edit) return
     dispatch(fetchJob(Number(jobID)))
     .then(response => {

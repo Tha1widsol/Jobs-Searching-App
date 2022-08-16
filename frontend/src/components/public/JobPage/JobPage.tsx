@@ -24,12 +24,11 @@ export default function JobPage() {
     const experience = useAppSelector(state => state.jobExperience)
 
     useEffect(() => {
+      window.scrollTo(0, 0)
       dispatch(fetchApplications('jobseeker'))
       dispatch(fetchJobExperience(Number(jobID)))
-
       dispatch(fetchJob(Number(jobID)))
       .unwrap()
-
       .catch(() => {
         navigate('/')
       })
@@ -65,9 +64,12 @@ export default function JobPage() {
     <div>
       <section className = 'Container'>
       <Popup trigger = {popup} switchOff = {() => setPopup(false)}>
-         <p>Are you sure you want to remove this job?</p>
-         <p style = {{fontSize: 'small'}}>(This action cannot be undone)</p>
-         <button onClick = {handleDeleteJob}>Confirm</button>
+        <div style = {{textAlign: 'center'}}>
+          <p>Are you sure you want to remove this job?</p>
+          <p style = {{fontSize: 'small'}}>(This action cannot be undone)</p>
+          <button onClick = {handleDeleteJob}>Confirm</button>
+          <button type = 'button' onClick = {() => setPopup(false)}>Cancel</button>
+        </div>
       </Popup>
 
       <KebabMenu current = {dropdown} switchOn = {() => setDropdown(true)} switchOff = {() => setDropdown(false)}>
