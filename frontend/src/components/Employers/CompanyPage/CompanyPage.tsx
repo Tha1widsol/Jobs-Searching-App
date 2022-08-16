@@ -2,22 +2,26 @@ import React,{useState,useEffect} from 'react'
 import {useParams, useNavigate, Link} from 'react-router-dom';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {fetchCompany} from '../../Global/features/Employers/companies/company';
+import {fetchJobs} from '../../Global/features/Employers/jobs/jobs';
 import './css/CompanyPage.css'
 
 export default function CompanyPage() {
   const navigate = useNavigate()
   const company = useAppSelector(state => state.company)
+  const jobs = useAppSelector(state => state.jobs.values)
   const [dropdown,setDropdown] = useState(false)
   const dispatch = useAppDispatch()
   const {companyID} = useParams()
 
   useEffect(() => {
+    dispatch(fetchJobs('employer'))
     dispatch(fetchCompany(Number(companyID)))
     .then(response => {
       if (response.meta.requestStatus === 'rejected') navigate('/companies')
     })
 
-  },[companyID, dispatch])
+    dispatch(fetchJobs('employer'))
+  },[companyID, dispatch, navigate])
 
   return (
     <div>
@@ -58,6 +62,34 @@ export default function CompanyPage() {
         <label><h3>Information:</h3></label>
           <p>{company.values?.industry}</p>
          {company.values?.website ? <p>{company.values?.website}</p> : null}
+        </section>
+
+        <section className = 'companySection' style = {{overflowX: 'auto'}}>
+          <div style = {{display: 'flex', gap: '20px'}}>
+            <label><h3>Jobs:</h3></label>
+            <Link to = {`/post-job/${companyID}`}><button type = 'button'>Post job</button></Link>
+          </div>
+          <hr className = 'mt-0-mb-4' style = {{marginTop: '10px', marginBottom: '20px'}}/>
+          {jobs.length ? 
+          <>
+           <div style = {{display: 'flex', gap: '20px'}}>
+           {jobs.map((job, index) => {
+             return (
+                 <div className = 'Container' key = {index}>
+                     <Link to = {`/job/${job.id}`}><h3>{job.title}</h3></Link>
+                     <p>Applicants - {job.applicantsCount}</p>
+                     <p style = {{fontSize: 'small', color: 'gray'}}>Created on {job.datePosted.slice(0, 10)}</p>
+                 </div>
+             )
+           })}
+
+         </div>
+          <Link to = '/jobs'><button>See all</button></Link>
+          </>
+          : 
+            <p>No jobs posted</p>
+        }
+  
         </section>
 
   
