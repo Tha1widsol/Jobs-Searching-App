@@ -232,7 +232,7 @@ class JobsListAPI(generics.ListAPIView):
     serializer_class = JobSerializer
 
     def get_queryset(self):
-        jobs = Job.objects.filter(employer = self.request.user)
+        jobs = Job.objects.filter(employer = self.request.user, company__isActive = True)
         return jobs
 
 class ProfilesListAPI(generics.ListAPIView):
@@ -247,7 +247,7 @@ class ApplicantsListAPI(generics.ListAPIView):
     serializer_class = ApplicationSerializer
 
     def get_queryset(self):
-        applicants = Application.objects.filter(job__employer = self.request.user)
+        applicants = Application.objects.filter(job__employer = self.request.user, job__company__isActive = True)
         return applicants
 
 class JobApplicantsListAPI(generics.ListAPIView):
@@ -257,9 +257,5 @@ class JobApplicantsListAPI(generics.ListAPIView):
           applicants = None
           lookup_url_kwarg = 'jobID'
           id = self.request.GET.get(lookup_url_kwarg)
-          job = Job.objects.filter(id = id)
-
-          if job.exists():
-              applicants = Application.objects.filter(job = job.first())
-    
+          applicants = Application.objects.filter(job__id = id, job__company__isActive = True)
           return applicants
