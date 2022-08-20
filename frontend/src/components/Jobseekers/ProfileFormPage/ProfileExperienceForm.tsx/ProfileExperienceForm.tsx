@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, {useState} from 'react'
+import { useParams } from 'react-router-dom';
 import Errors from '../../../Global/messages/Errors'
 import {useAppSelector, useAppDispatch} from '../../../Global/features/hooks';
 import {token} from '../../../Global/features/Auth/user';
 import {ProfileExperienceProps} from './types/ProfileExperienceProps';
-import {AddProfileExperience } from '../../../Global/features/Jobseekers/profiles/profileExperience';
+import {AddProfileExperience, fetchProfileExperience} from '../../../Global/features/Jobseekers/profiles/profileExperience';
 
 export const initialExperience = {
  id: 0, title: '', companyName: '',  EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: 1, isOnGoing: false
@@ -12,6 +13,7 @@ export const initialExperience = {
 
 export default function ProfileExperienceForm({edit = true, popupOff, chosenExperience}: {edit: boolean, popupOff: () => void, chosenExperience?: ProfileExperienceProps}) {
     const dispatch = useAppDispatch()
+    const {userID} = useParams()
     const [experience,setExperience] = useState({value: chosenExperience || initialExperience, popup: false, isValid: true, invalidMsg: 'Fields are required', alreadyExistsMsg: 'Experience already exists'})
     const currentExperience = useAppSelector(state => state.profileExperience.values)
     const [errors,setErrors] = useState<Array<string>>([])
@@ -19,15 +21,17 @@ export default function ProfileExperienceForm({edit = true, popupOff, chosenExpe
     const validateForm = () => {
       let isValid = true
 
-      if (!experience.value.description || !experience.value.title || !experience.value.EmployerName) {
-        setExperience(prev => {return{...prev, isValid: false}})
-        setErrors(prev => {return[...prev, experience.invalidMsg]})
-        isValid = false
-      }
-    
-      if (currentExperience.find(exp => exp.description === experience.value.description && exp.title === experience.value.title && exp.EmployerName === experience.value.EmployerName)) {
-        setErrors(prev => {return[...prev, experience.alreadyExistsMsg]})
-        isValid = false
+      if (!edit){
+        if (!experience.value.description || !experience.value.title || !experience.value.EmployerName) {
+          setExperience(prev => {return{...prev, isValid: false}})
+          setErrors(prev => {return[...prev, experience.invalidMsg]})
+          isValid = false
+        }
+      
+        if (currentExperience.find(exp => exp.description === experience.value.description && exp.title === experience.value.title && exp.EmployerName === experience.value.EmployerName)) {
+          setErrors(prev => {return[...prev, experience.alreadyExistsMsg]})
+          isValid = false
+        }
       }
 
       return isValid
@@ -52,22 +56,13 @@ export default function ProfileExperienceForm({edit = true, popupOff, chosenExpe
       form.append('isOnGoing', experience.value.isOnGoing?.toString() || 'False')
 
       if (chosenExperience?.title){
-        axios.put('/api/profileExperience',form, requestOptions)
+        axios.put(`/api/profileExperience?id=${chosenExperience.id}`,form, requestOptions)
         .then(response => {
-          if (response.status === 201){
+          if (response.status === 200){
               popupOff()
-              dispatch(AddProfileExperience({
-              title: experience.value.title,
-              companyName: experience.value.companyName,
-              EmployerName: experience.value.EmployerName,
-              EmployerEmail: experience.value.EmployerEmail,
-              EmployerPhone: experience.value.EmployerPhone,
-              description: experience.value.description,
-              years: experience.value.years,
-              isOnGoing: experience.value.isOnGoing
-        }))
-            setExperience(prev => {return{...prev, isValid: true, popup: false, value: initialExperience}})
-            setErrors([])
+              dispatch(fetchProfileExperience(Number(userID)))
+              setExperience(prev => {return{...prev, isValid: true, popup: false, value: initialExperience}})
+              setErrors([])
           }
         })
        }
@@ -78,6 +73,7 @@ export default function ProfileExperienceForm({edit = true, popupOff, chosenExpe
           if (response.status === 201){
               popupOff()
               dispatch(AddProfileExperience({
+              id: experience.value.id,
               title: experience.value.title,
               companyName: experience.value.companyName,
               EmployerName: experience.value.EmployerName,
@@ -86,7 +82,6 @@ export default function ProfileExperienceForm({edit = true, popupOff, chosenExpe
               description: experience.value.description,
               years: experience.value.years,
               isOnGoing: experience.value.isOnGoing
-
         }))
             setExperience(prev => {return{...prev, isValid: true, popup: false, value: initialExperience}})
             setErrors([])
