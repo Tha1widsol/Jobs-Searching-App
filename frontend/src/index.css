@@ -8,6 +8,10 @@ body{margin-top: 90px;}
   font-size: 25px; 
 }
 
+p, li{
+  font-size: small;
+}
+
 .loader {
   width: 48px;
   height: 48px;
@@ -118,6 +122,7 @@ button {
   margin: 4px 2px;
   }
 
+
   #submit,.toggleTabBtn{margin-top: 10px;}
 
   #submit{float: right;}
@@ -162,6 +167,7 @@ button {
 
   .dropdownBtn{
     color: black;
+    font-size: small;
     background-color: unset;
     border:unset;
     padding: 14px 16px;
@@ -295,7 +301,7 @@ Icons styles
   float: right;
   cursor:pointer;
   content: '\2807';
-  font-size: 35px;
+  font-size: 25px;
   color:grey;
   }
 
@@ -324,7 +330,7 @@ Container styles
 }
 
 .featuredContainer{
-  width: 350px;
+  width: 300px;
   margin-right: 25px;
   box-shadow: 0 0 8px 0  rgba(0,0,0,0.5);
 }
