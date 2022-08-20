@@ -141,9 +141,6 @@ class ProfileSkillsAPI(APIView):
         profile.save()
         return Response(status = status.HTTP_200_OK)
 
-
-        
-
 class ProfileExperienceAPI(generics.ListAPIView):
       serializer_class = ProfileExperienceSerializer
 
@@ -169,6 +166,19 @@ class ProfileExperienceAPI(generics.ListAPIView):
           experience = ProfileExperience.objects.get(id = id)
           experience.delete()
           return Response(status = status.HTTP_200_OK)
+
+      def put(self, request):
+          lookup_url_kwarg = 'id'
+          id = request.GET.get(lookup_url_kwarg)
+          experience = ProfileExperience.objects.get(id = id)
+          serializer = self.serializer_class(data = request.data, instance = experience)
+
+          if serializer.is_valid():
+             experience = serializer.save()
+             experience.save()
+             return Response(status = status.HTTP_200_OK) 
+
+          return Response(status = status.HTTP_400_BAD_REQUEST) 
 
       def get_queryset(self):
           lookup_url_kwarg = 'id'
