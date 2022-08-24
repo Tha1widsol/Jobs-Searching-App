@@ -193,7 +193,7 @@ button {
 Form styles
 ##################*/
 
-form{
+.Form{
   margin: 0px auto;
   width: 60%;
 }

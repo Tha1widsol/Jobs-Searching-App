@@ -67,7 +67,7 @@ export default function LoginPage() {
             <h1 className = 'title'>Login</h1>
             <Errors errors = {errors}/>
 
-            <form onSubmit = {handleSubmitForm} noValidate>
+            <form className = 'Form' onSubmit = {handleSubmitForm} noValidate>
                 <hr className = "mt-0-mb-4" />
                 <label htmlFor = 'email'><h3>Email address:</h3></label>
                 <input type = 'email' className = {!email.isValid ? 'inputError' : ''} onChange = {e => setEmail(prev => {return {...prev, value: e.target.value}})} id = 'email' placeholder = 'E.g 123@example.com' autoComplete = 'on' required />

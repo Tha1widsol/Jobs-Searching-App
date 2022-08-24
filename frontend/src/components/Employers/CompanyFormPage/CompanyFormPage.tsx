@@ -162,7 +162,7 @@ export default function CompanyFormPage({edit = false}) {
   return (
     <div>
         <h1 className = 'title'>{edit ? 'Edit Company' : 'Create Company'}</h1>
-        <form onSubmit = {handleSubmitForm} noValidate>  
+        <form className = 'Form' onSubmit = {handleSubmitForm} noValidate>  
             <Errors errors = {errors}/>
             <hr className = 'mt-0-mb-4'/>
             <label htmlFor = 'companyName'><h3>Company Name:</h3></label>

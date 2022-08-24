@@ -6,6 +6,7 @@ import {company} from '../../Employers/companies/companies'
 import axios from 'axios'
 
 interface MatchingJobsProps extends StatusProps{
+    searchVal: string
     values: [{
         employer: UserProps
         company:{
@@ -50,6 +51,7 @@ interface MatchingJobsProps extends StatusProps{
 
 const initialState: MatchingJobsProps = {
     status: '',
+    searchVal: '',
     values: [{
     employer,
     company,
@@ -76,6 +78,10 @@ export const matchingJobsSlice = createSlice({
     reducers:{
         setMatchingJobs: (state,action) => {
             state.values = action.payload
+        },
+
+        setSearchVal: (state, action) => {
+            state.searchVal = action.payload
         }
     },
 
@@ -96,6 +102,6 @@ export const matchingJobsSlice = createSlice({
 
 })
 
-export const {setMatchingJobs} = matchingJobsSlice.actions
+export const {setMatchingJobs, setSearchVal} = matchingJobsSlice.actions
 
 export default matchingJobsSlice.reducer

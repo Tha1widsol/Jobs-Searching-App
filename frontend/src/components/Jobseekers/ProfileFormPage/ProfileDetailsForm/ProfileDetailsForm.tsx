@@ -133,7 +133,7 @@ export default function ProfileDetailsForm({edit = false, popupOff}: {edit: bool
 
   return (
     <div>
-        <form onSubmit = {handleSubmit}>
+        <form className = 'Form' onSubmit = {handleSubmit}>
             <h1 className = 'title'>Details</h1> 
             <Errors errors = {errors}/>
 

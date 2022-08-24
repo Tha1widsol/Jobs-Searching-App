@@ -119,7 +119,7 @@ export default function RegisterPage() {
             <h1 className = 'title'>Register</h1>
             <Errors errors = {errors}/>
 
-            <form onSubmit = {handleSubmitForm} noValidate>
+            <form className = 'Form' onSubmit = {handleSubmitForm} noValidate>
                 <div style = {{textAlign:'center'}}>
                     <b><p style={{fontSize:'20px'}}>Password:</p></b> 
                     <li className = {password.hasValidLength === false ? 'error' : password.hasValidLength ? 'valid': ''}>Must be atleast 9 characters long</li>

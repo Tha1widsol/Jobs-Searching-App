@@ -321,7 +321,7 @@ function handleRemoveExperience(idx: number){
             <span className = {`step ${currentTab === 1 ? 'active' : currentTab > 1 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(1) : null}><p className = 'step-label'>About</p></span>
             <span className = {`step ${currentTab === 2 ? 'active' : currentTab > 2 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(2) : null}><p className = 'step-label'>Requirements</p></span>
         </div>
-        <form noValidate>
+        <form className = 'Form' noValidate>
             <div className = {`tab ${currentTab === 1 ? 'show' : 'hide'}`}>
               <h1 className = 'title'>About</h1> 
               <hr className = 'mt-0-mb-4'/>

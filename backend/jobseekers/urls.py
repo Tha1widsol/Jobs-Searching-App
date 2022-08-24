@@ -12,5 +12,6 @@ urlpatterns = [
     path('applications/jobseeker',views.ApplicationsListAPI.as_view(), name = 'applications'),
     path('profileExperience', views.ProfileExperienceAPI.as_view(), name = 'profileExperience'),
     path('checkApplication',views.checkApplicationExists, name = 'checkApplication'),
-    path('getMatchingScores', views.getMatchingScores, name = 'getMatchingScores')
+    path('getMatchingScores', views.getMatchingScores, name = 'getMatchingScores'),
+    path('searchJobs', views.SearchJobsListAPI.as_view(), name = 'searchJobs')
 ]

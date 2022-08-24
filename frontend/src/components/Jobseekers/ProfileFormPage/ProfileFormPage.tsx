@@ -39,7 +39,7 @@ export default function ProfileFormPage() {
         .then(response => {
             if (response.meta.requestStatus === 'fulfilled') navigate(`/profile/${user.id}`)
         })
-    },[dispatch])
+    },[dispatch, navigate, user.id])
 
     const validateForm = () => {
         let isValid = true
@@ -218,7 +218,7 @@ export default function ProfileFormPage() {
                 <span className = {`step ${currentTab === 5 ? 'active' : currentTab > 5 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(5) : null}><p className = 'step-label'>Preferences</p></span>
             </div>
             
-            <form>
+            <form className = 'Form'>
                 <div className = {`tab ${currentTab === 1 ? 'show' : 'hide'}`}>
                   <h1 className = 'title'>Details</h1> 
                     <Errors errors = {errors}/>

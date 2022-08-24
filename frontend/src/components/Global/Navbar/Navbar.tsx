@@ -20,9 +20,10 @@ export default function Navbar() {
     const dispatch = useAppDispatch()
     
     useEffect(() => {
+        if (!user.values?.isAnEmployer) return
+        dispatch(fetchApplications('jobseekers'))
         dispatch(fetchCompanies())
         dispatch(fetchApplications('employers'))
-        dispatch(fetchApplications('jobseekers'))
         dispatch(fetchCurrentCompany())
         dispatch(fetchJobs('employer'))
     },[dispatch, toggleChannelClicked])
