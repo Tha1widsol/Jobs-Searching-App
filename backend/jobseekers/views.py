@@ -256,6 +256,7 @@ class JobsListAPI(generics.ListAPIView):
 
     def get_queryset(self):
         profile = Profile.objects.filter(user = self.request.user)
+        query = self.request.GET.get('q' ,'')
 
         if profile.exists():
             allJobs = Job.objects.all()
@@ -263,27 +264,15 @@ class JobsListAPI(generics.ListAPIView):
                 match, created = Match.objects.update_or_create(profile = profile.first(), job = job)
                 match.score = calculateScore(profile.first(), job)
                 match.save()
-                
+
             applications = Application.objects.filter(profile = profile.first()).values_list('job')
-            jobs = Match.objects.exclude(job__id__in = applications).order_by('-score')
-                
-        return jobs
 
-class SearchJobsListAPI(generics.ListAPIView):
-    serializer_class = MatchingJobsSerializer
-
-    def get_queryset(self):
-        jobs = None
-        profile = Profile.objects.filter(user = self.request.user)
-        applications = Application.objects.filter(profile = profile.first()).values_list('job')
-
-        query = self.request.GET.get('q')
-        if query:
+            
             jobs = Match.objects.filter(
-                Q(job__title__icontains = query)|
-                Q(job__description__icontains = query)|
-                Q(job__company__name__icontains = query)         
-                ).exclude(job__id__in = applications).order_by('-score')
+            Q(job__title__icontains = query)|
+            Q(job__description__icontains = query)|
+            Q(job__company__name__icontains = query)         
+            ).exclude(job__id__in = applications).order_by('-score')
 
         return jobs
 

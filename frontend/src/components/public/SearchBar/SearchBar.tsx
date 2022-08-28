@@ -1,30 +1,13 @@
-import axios from 'axios'
-import {token} from '../../Global/features/Auth/user'
-import React,{useState, useEffect} from 'react'
-import { useAppSelector, useAppDispatch } from '../../Global/features/hooks'
-import { fetchMatchingJobs, setMatchingJobs } from '../../Global/features/Jobseekers/matchingJobs/matchingJobs'
+import React,{useState} from 'react'
 import './css/SearchBar.css'
 
-export default function SearchBar({isAnEmployer = false}) {
+export default function SearchBar({placeholder = ''}) {
   const [searchVal, setSearchVal] = useState('')
-  const dispatch = useAppDispatch()
-
-  function handleSubmitForm(e: React.SyntheticEvent){
-    e.preventDefault()
-    axios.get(`/api/searchJobs?q=${searchVal}`,{
-        headers: {
-            Authorization: `Token ${token}`
-        }
-    })
-    .then(response => {
-        if (response.status === 200) dispatch(setMatchingJobs(response.data))
-    })
-  }
-
   return (
-    <form onSubmit = {handleSubmitForm}>
+    <form>
         <input id = 'searchBar'
-        placeholder = {isAnEmployer ? 'Search candidates...' : 'Search jobs...'}
+        type = 'search'
+        placeholder = {placeholder}
         name = 'q'
         formMethod = 'get'
         onChange = {e => setSearchVal(e.target.value)}

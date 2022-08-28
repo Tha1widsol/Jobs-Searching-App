@@ -62,8 +62,8 @@ const initialState: MatchingJobsProps = {
 
 export const fetchMatchingJobs = createAsyncThunk(
     'user/fetchMatchingJobs',
-    async () => {
-        const response = await axios.get(`/api/jobseeker/jobs`,{
+    async (searchVal: string) => {
+        const response = await axios.get(`/api/jobseeker/jobs?q=${searchVal}`,{
             headers: {
                 Authorization: `Token ${token}`
             }

@@ -46,8 +46,8 @@ const initialState: ProfilesProps = {
   
 export const fetchProfiles = createAsyncThunk(
     'user/fetchProfiles',
-    async () => {
-        const response = await axios.get(`/api/profiles`,{
+    async (searchVal: string) => {
+        const response = await axios.get(`/api/profiles?q=${searchVal}`,{
             headers: {
                 Authorization:`Token ${token}`
             }

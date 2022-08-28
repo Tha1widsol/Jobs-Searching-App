@@ -1,20 +1,26 @@
 import React,{useState,useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
+import {useAppSelector,useAppDispatch, useQuery} from '../../Global/features/hooks'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import {fetchProfiles} from '../../Global/features/Jobseekers/profiles/profiles';
+import SearchBar from '../../public/SearchBar/SearchBar';
 
 export default function EmployersHomePage() {
   const dispatch = useAppDispatch()
+  const query = useQuery()
   const profiles = useAppSelector(state => state.profiles)
   const [dropdown,setDropdown] = useState<number | null>(null)
+  const searchVal = query.get('q')
 
   useEffect(() => {
-    dispatch(fetchProfiles())
-  },[dispatch])
+    dispatch(fetchProfiles(searchVal || ''))
+  },[dispatch, searchVal])
 
   return (
         <div>
+            <SearchBar 
+            placeholder = 'Search Profiles...'
+            />
             <label><h2>{profiles.values?.length ? 'Potential candidate matches based on your jobs...' : 'No potential candidates'}</h2></label>
             {profiles.status !== 'rejected' ? 
              <section style = {{display: 'flex', marginRight: '15px'}}>

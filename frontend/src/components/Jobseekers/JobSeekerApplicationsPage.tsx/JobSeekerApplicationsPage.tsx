@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
-import {Link,useLocation} from 'react-router-dom'
-import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
+import {Link} from 'react-router-dom'
+import {useAppSelector,useAppDispatch,useQuery} from '../../Global/features/hooks'
 import {fetchApplications} from '../../Global/features/Jobseekers/applications/applications'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import {setDeleteSavedJob,fetchSavedJobs} from '../../Global/features/Jobseekers/savedJobs/savedJobs'
@@ -8,9 +8,6 @@ import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
 import './css/JobSeekerApplicationsPage.css'
 import axios from 'axios'
 
-function useQuery(){
-    return new URLSearchParams(useLocation().search)
-}
 
 export default function JobSeekerApplicationsPage() {
   let query = useQuery()

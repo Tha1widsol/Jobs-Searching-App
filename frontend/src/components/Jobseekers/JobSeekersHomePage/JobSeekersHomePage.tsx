@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import {Link} from 'react-router-dom';
+import {useQuery} from '../../Global/features/hooks';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import {fetchMatchingJobs} from '../../Global/features/Jobseekers/matchingJobs/matchingJobs';
@@ -11,15 +12,16 @@ import axios from 'axios'
 
 export default function JobSeekersHomePage() {
   const dispatch = useAppDispatch()
+  const query = useQuery()
   const matchingJobs = useAppSelector(state => state.matchingJobs)
   const savedJobs = useAppSelector(state => state.savedJobs)
   const [dropdown,setDropdown] = useState<number | null>(null)
-
+  const searchVal = query.get('q')
 
   useEffect(() => {
-    dispatch(fetchMatchingJobs())
+    dispatch(fetchMatchingJobs(searchVal || ''))
     dispatch(fetchSavedJobs())
-  },[dispatch])
+  },[dispatch, searchVal])
   
   function handleSaveJob(id: number){
     axios.post(`/api/save-job?id=${id}`,null,{
@@ -36,7 +38,10 @@ export default function JobSeekersHomePage() {
   
   return (
     <div>
-      <SearchBar/>
+      <SearchBar 
+      placeholder = 'Search jobs...'
+      />
+
       {matchingJobs.values.length ? 
       <div>
        <label><h2>Potential job matches based on your profile...</h2></label>

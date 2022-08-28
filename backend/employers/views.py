@@ -6,6 +6,7 @@ from jobseekers.models import Profile
 from jobseekers.serializers import ProfileSerializer
 from rest_framework.decorators import api_view
 from .models import *
+from django.db.models import Q
 from .serializers import *
 import json
 
@@ -239,10 +240,20 @@ class ProfilesListAPI(generics.ListAPIView):
     serializer_class = ProfileSerializer
         
     def get_queryset(self):
-        profiles = Profile.objects.all()
+        profiles = None
+        company = Company.objects.get(user = self.request.user, isActive = True)
+        applications = Application.objects.filter(job__company = company)
+      
+        query = self.request.GET.get('q', '')
+        profiles = Profile.objects.filter(
+            Q(user__email__icontains = query)|
+            Q(firstName__icontains = query)|
+            Q(middleName__icontains = query)|
+            Q(lastName__icontains = query)         
+            )
+
         return profiles
-        
-        
+
 class ApplicantsListAPI(generics.ListAPIView):
     serializer_class = ApplicationSerializer
 
