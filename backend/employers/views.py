@@ -243,6 +243,8 @@ class ProfilesListAPI(generics.ListAPIView):
         profiles = None
         company = Company.objects.get(user = self.request.user, isActive = True)
         applications = Application.objects.filter(job__company = company)
+
+        applied = [applicant.profile.id for applicant in applications]
       
         query = self.request.GET.get('q', '')
         profiles = Profile.objects.filter(
