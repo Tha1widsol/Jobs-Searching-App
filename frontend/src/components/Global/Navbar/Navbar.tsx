@@ -26,7 +26,7 @@ export default function Navbar() {
         dispatch(fetchApplications('employers'))
         dispatch(fetchCurrentCompany())
         dispatch(fetchJobs('employer'))
-    },[dispatch, toggleChannelClicked])
+    },[dispatch, toggleChannelClicked, user.values?.isAnEmployer])
 
     function handleLogout(){
         const requestOptions = { 
@@ -77,8 +77,6 @@ export default function Navbar() {
                   <NavLink to = '/salaries'>Find salaries</NavLink> 
                 </>
              }
-            
-                   
             </div>
             : 
             <>
