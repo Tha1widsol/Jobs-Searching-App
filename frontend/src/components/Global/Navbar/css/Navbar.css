@@ -26,11 +26,13 @@
   .nav a.active, .nav a:hover,.dropdown-content a:hover,#navDropBtn:hover{
     border-bottom: 0.5px solid white;
     }
-
+    
   #loggedinMessage{
-    color:white; 
-    padding-left:14px
+    margin-left: 10px;
+    color: white;
+    font-size: 16px;
   }
+
 
   .dropdown #navDropBtn {
     font-size: 16px;  
