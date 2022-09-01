@@ -4,6 +4,7 @@ import {useAppSelector,useAppDispatch, useQuery} from '../../Global/features/hoo
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import {fetchProfiles} from '../../Global/features/Jobseekers/profiles/profiles';
 import SearchBar from '../../public/SearchBar/SearchBar';
+import { profile } from 'console';
 
 export default function EmployersHomePage() {
   const dispatch = useAppDispatch()
@@ -21,8 +22,8 @@ export default function EmployersHomePage() {
             <SearchBar 
             placeholder = 'Search Profiles...'
             />
-            <label><h2>{profiles.values?.length ? 'Potential candidate matches based on your jobs...' : 'No potential candidates'}</h2></label>
-            {profiles.status !== 'rejected' ? 
+            <label><h2>{profiles.values?.length ? 'Potential candidate matches based on your jobs...' : 'No candidates found...'}</h2></label>
+            {profiles.status === 'success' ? 
              <section style = {{display: 'flex', marginRight: '15px'}}>
              {profiles.values?.map((profile,index) => {
                  return(
@@ -53,7 +54,7 @@ export default function EmployersHomePage() {
                      </div>
                  )
              })}
-         </section> : <p>No potential candidates</p>}
+         </section> : profiles.status === 'loading' ? <p>Loading...</p> : null}
 
         </div>
     )
