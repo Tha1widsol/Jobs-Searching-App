@@ -330,7 +330,6 @@ Container styles
 }
 
 .featuredContainer{
-  width: 300px;
   margin-right: 25px;
   box-shadow: 0 0 8px 0  rgba(0,0,0,0.5);
 }
@@ -348,5 +347,31 @@ Container styles
 .editable:hover{
   border-style: groove;
   border-width: 1px;
+}
+
+/* ################
+Skeleton styles
+##################*/
+
+.skeleton{
+  z-index: -1;
+  opacity: .7;
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+
+.skeleton-text{
+  margin-bottom: .25rem;
+  border-radius: .125rem;
+}
+
+
+@keyframes skeleton-loading{
+  0% {
+    background-color: hsl(200, 20%, 70%);
+  }
+
+  100%{
+    background-color: hsl(200, 20%, 95%);
+  }
 }
 
