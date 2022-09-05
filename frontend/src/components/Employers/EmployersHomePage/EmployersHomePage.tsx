@@ -4,7 +4,6 @@ import {useAppSelector,useAppDispatch, useQuery} from '../../Global/features/hoo
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import {fetchProfiles} from '../../Global/features/Jobseekers/profiles/profiles';
 import SearchBar from '../../public/SearchBar/SearchBar';
-import { profile } from 'console';
 
 export default function EmployersHomePage() {
   const dispatch = useAppDispatch()
@@ -16,7 +15,7 @@ export default function EmployersHomePage() {
   useEffect(() => {
     dispatch(fetchProfiles(searchVal || ''))
   },[dispatch, searchVal])
-
+  
   return (
         <div>
             <SearchBar 
