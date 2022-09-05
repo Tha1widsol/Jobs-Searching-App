@@ -4,7 +4,7 @@ import {StatusProps} from '../../../types/status'
 import {company} from '../companies/companies'
 import axios from 'axios'
 
-interface JobsProps extends StatusProps{
+export interface JobsProps extends StatusProps{
     values: [{
         employer: UserProps
         company:{
