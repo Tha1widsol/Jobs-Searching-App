@@ -7,6 +7,7 @@ import successMsgReducer from './successMsg'
 import CompaniesReducer from './Employers/companies/companies'
 import CompanyReducer from './Employers/companies/company'
 import JobsReducer from './Employers/jobs/jobs'
+import homePageJobsReducer from './Public/homePageJobs'
 import JobReducer from './Employers/jobs/job'
 import ApplicationsReducer from './Jobseekers/applications/applications'
 import ApplicationReducer from './Jobseekers/applications/application'
@@ -39,6 +40,7 @@ const reducers = combineReducers({
   companies: CompaniesReducer, 
   currentCompany: currentCompanyReducer,
   jobs: JobsReducer,
+  homePageJobs: homePageJobsReducer,
   job: JobReducer,
   jobExperience: jobExperienceReducer,
   applications: ApplicationsReducer,
