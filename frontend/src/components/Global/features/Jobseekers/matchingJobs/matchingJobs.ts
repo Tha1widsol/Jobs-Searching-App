@@ -1,12 +1,12 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import {job} from '../../Employers/jobs/job'
 import {StatusProps} from '../../../types/status'
+import { CompanyProps } from '../../Employers/companies/company'
 import {user as employer,UserProps,token} from '../../Auth/user'
 import {company} from '../../Employers/companies/companies'
 import axios from 'axios'
 
-interface MatchingJobsProps extends StatusProps{
-    searchVal: string
+export interface MatchingJobsProps extends StatusProps{
     values: [{
         employer: UserProps
         company:{
@@ -49,9 +49,8 @@ interface MatchingJobsProps extends StatusProps{
     }]
 }
 
-const initialState: MatchingJobsProps = {
+export const initialState: MatchingJobsProps = {
     status: '',
-    searchVal: '',
     values: [{
     employer,
     company,
@@ -69,7 +68,7 @@ export const fetchMatchingJobs = createAsyncThunk(
             }
         })
         return response.data
-    }
+        }
 )
 
 export const matchingJobsSlice = createSlice({
@@ -80,9 +79,6 @@ export const matchingJobsSlice = createSlice({
             state.values = action.payload
         },
 
-        setSearchVal: (state, action) => {
-            state.searchVal = action.payload
-        }
     },
 
     extraReducers: {
@@ -102,6 +98,6 @@ export const matchingJobsSlice = createSlice({
 
 })
 
-export const {setMatchingJobs, setSearchVal} = matchingJobsSlice.actions
+export const {setMatchingJobs} = matchingJobsSlice.actions
 
 export default matchingJobsSlice.reducer
