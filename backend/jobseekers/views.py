@@ -6,8 +6,7 @@ from main.models import Match
 from .models import *
 from rest_framework.decorators import api_view
 from employers.models import Job,Application
-from employers.serializers import MatchingJobsSerializer, ApplicationSerializer
-from accounts.serializers import SavedJobSerializer
+from employers.serializers import MatchingJobsSerializer, ApplicationSerializer, SavedJobSerializer
 from .serializers import *
 from django.db.models import Q
 import json
@@ -273,6 +272,9 @@ class JobsListAPI(generics.ListAPIView):
             Q(job__description__icontains = query)|
             Q(job__company__name__icontains = query)         
             ).exclude(job__id__in = applications).order_by('-score')
+
+        else:
+            jobs = Match.objects.all()
 
         return jobs
 
