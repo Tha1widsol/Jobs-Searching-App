@@ -36,4 +36,6 @@ class ProfileExperience(models.Model):
       def __str__(self):
          return self.description
 
-
+class SavedJob(models.Model):
+      job = models.ForeignKey('employers.Job', on_delete = models.CASCADE, null = True, blank = True)
+      savedDate = models.DateTimeField('savedDate',auto_now_add = True)

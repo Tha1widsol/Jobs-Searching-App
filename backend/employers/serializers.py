@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from jobseekers.serializers import ProfileSerializer, SkillSerializer
+from jobseekers.models import SavedJob
 from main.serializers import UserSerializer
 from main.models import Match
 from .models import *
@@ -60,3 +61,10 @@ class ExperienceSerializer(serializers.ModelSerializer):
         model = Experience
         fields = ['id', 'experience', 'years', 'required']
     
+
+class SavedJobSerializer(serializers.ModelSerializer):
+    job = JobSerializer(read_only = True)
+
+    class Meta:
+        model = SavedJob
+        fields = '__all__'

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from jobseekers.models import SavedJob
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.base_user import BaseUserManager
 
@@ -25,11 +26,6 @@ class UserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError(_('Superuser must have is_superuser=True.'))
         return self.create_user(email, password, **extra_fields)
-
-class SavedJob(models.Model):
-      job = models.ForeignKey('employers.Job', on_delete = models.CASCADE, null = True, blank = True)
-      savedDate = models.DateTimeField('savedDate',auto_now_add = True)
-
 
 class User(AbstractUser):
     username = None
