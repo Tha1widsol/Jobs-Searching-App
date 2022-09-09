@@ -2,8 +2,8 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from employers.serializers import JobSerializer
 from rest_framework.response import Response
-from .models import *
 from employers.models import Job
+from .models import *
 from django.db.models import Q
 from .serializers import *
 
@@ -18,10 +18,10 @@ class getCurrentUser(APIView):
 class HomePageJobsAPI(generics.ListAPIView):
      serializer_class = JobSerializer
 
-     def get_queryet(self):
+     def get_queryset(self):
         query = self.request.GET.get('q' ,'')
-        jobs = Match.objects.filter(
-        Q(job__title__icontains = query)|
-        Q(job__description__icontains = query)|
-        Q(job__company__name__icontains = query))        
+        jobs = Job.objects.filter(
+        Q(title__icontains = query)|
+        Q(description__icontains = query)|
+        Q(company__name__icontains = query))        
         return jobs
