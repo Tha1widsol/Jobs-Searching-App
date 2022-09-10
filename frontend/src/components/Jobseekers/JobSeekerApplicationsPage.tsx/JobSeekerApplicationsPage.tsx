@@ -52,20 +52,20 @@ function handleRemoveSavedJob(id: number){
                     return (
                         <div className = 'Container' key = {index}>
                             <KebabMenu current = {dropdown} many = {true} index = {index} switchOn = {() => setDropdown(index)} switchOff = {() => setDropdown(null)}>
-                                <Link to = {`/job/${savedJobs.job.id}`}><button className = 'dropdownBtn'>View</button></Link> 
+                                <Link to = {`/job/${savedJobs.job?.id}`}><button className = 'dropdownBtn'>View</button></Link> 
                                 <button className = 'dropdownBtn redNavBtn'>Report</button>
                                 <button className = 'dropdownBtn redNavBtn' onClick = {() => handleRemoveSavedJob(savedJobs.id)}>Remove</button>
                            </KebabMenu>
 
-                            <Link to = {`/job/${savedJobs.job.id}`}><h2>{savedJobs.job.title}</h2></Link>
-                            <Link to = {`/company/${savedJobs.job.company?.id}`}><p>{savedJobs.job.company.name}</p></Link>
+                            <Link to = {`/job/${savedJobs.job?.id}`}><h2>{savedJobs.job?.title}</h2></Link>
+                            <Link to = {`/company/${savedJobs.job?.company?.id}`}><p>{savedJobs.job?.company.name}</p></Link>
                             <hr className = 'mt-0-mb-4'/>
                             <section style = {{fontSize: 'small', color: 'gray'}}>
                             <p>Saved on: {savedJobs.savedDate.substring(0,10)}</p>
                            </section>
-                           {savedJobs.job.applyOnOwnWebsite ? 
+                           {savedJobs.job?.applyOnOwnWebsite ? 
                             <a href = {savedJobs.job.link} target = 'blank'><button>Apply Externally</button></a>
-                            : <Link to = {`/apply/${savedJobs.job.id}`}><button>Apply</button></Link>}
+                            : <Link to = {`/apply/${savedJobs.job?.id}`}><button>Apply</button></Link>}
                         </div>
                     )
                   })}

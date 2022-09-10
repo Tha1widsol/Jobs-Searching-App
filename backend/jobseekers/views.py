@@ -280,17 +280,13 @@ class JobsListAPI(generics.ListAPIView):
 
 class SaveJobAPI(APIView):
     def post(self, request):
-        try:
-            lookup_url_kwarg = 'id'
-            jobID = request.GET.get(lookup_url_kwarg)
-            job = Job.objects.filter(id = jobID).first()
-            savedJob = SavedJob(job = job)
-            savedJob.save()
-            self.request.user.savedJobs.add(savedJob)
-            return Response(status = status.HTTP_201_CREATED)
-
-        except:
-            return Response(status = status.HTTP_400_BAD_REQUEST)
+        lookup_url_kwarg = 'id'
+        jobID = request.GET.get(lookup_url_kwarg)
+        job = Job.objects.filter(id = jobID).first()
+        savedJob = SavedJob(job = job)
+        savedJob.save()
+        self.request.user.savedJobs.add(savedJob)
+        return Response(status = status.HTTP_201_CREATED)
 
     def get(self, request):
           lookup_url_kwarg = 'id'

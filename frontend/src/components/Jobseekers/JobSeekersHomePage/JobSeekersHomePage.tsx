@@ -75,7 +75,7 @@ export default function JobSeekersHomePage() {
                    {matching.job?.applyOnOwnWebsite ? 
                     <a href = {matching.job?.link} target = 'blank'><button>Apply Externally</button></a>
                    : <Link to = {`/apply/${matching.job?.id}`}><button>Apply</button></Link>}
-                   {!savedJobs.values?.find(savedJob => savedJob.job.id === matching.job?.id) ? <button onClick = {() => handleSaveJob(matching.job?.id)}>Save</button> : null}
+                   {!savedJobs.values?.find(savedJob => savedJob.job?.id === matching.job?.id) ? <button onClick = {() => handleSaveJob(matching.job?.id)}>Save</button> : null}
                </section>   
  
              </div>
