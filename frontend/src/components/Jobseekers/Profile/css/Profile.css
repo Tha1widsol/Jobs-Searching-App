@@ -13,13 +13,11 @@
   }
 
   .profileSection{
-    display: flex;
-    justify-content: space-between;
+    row-gap: 10px;
   }
   
   .sectionText{
-    height: 150px; 
-    width: 300px;
+    max-height: 100px;
     overflow: auto;
   }
 
@@ -33,4 +31,8 @@
 
   .profileSubContainer{
     margin-bottom: auto;
+  }
+
+  #profileContainer section{
+    margin-bottom: 25px;
   }
