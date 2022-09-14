@@ -29,6 +29,7 @@ export default function PagesRoutes() {
                 <Route path = '/' element = {user.isLoggedIn && user.values?.isAnEmployer ? <EmployersHomePage/> : user.isLoggedIn && user.values?.isAnEmployer === false ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
                 <Route path = '/home' element = {user.isLoggedIn && user.values?.isAnEmployer ? <EmployersHomePage/> : user.isLoggedIn && user.values?.isAnEmployer === false ? <JobSeekersHomePage/> : <PublicHomePage/>}/>
                 <Route path = '/job/:jobID' element = {<JobPage/>}/>
+                <Route path = '/company/:companyID' element = {<CompanyPage/>}/>
             
                 <Route element = {<CheckLoggedIn checkLoggedIn = {false}/>}>
                     <Route path = '/register' element = {<RegisterPage/>}/>
@@ -36,7 +37,6 @@ export default function PagesRoutes() {
                 </Route>
 
                 <Route element = {<CheckLoggedIn/>}>
-                    <Route path = '/company/:companyID' element = {<CompanyPage/>}/>
                     <Route path = '/profile/:userID' element = {<ProfilePage/>}/>
 
                     <Route element = {<CheckAccount/>}>
