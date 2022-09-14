@@ -43,7 +43,7 @@ export default function JobSeekersHomePage() {
       {matchingJobs.values.length ? 
       <div>
        <label><h2>Potential job matches based on your profile...</h2></label>
-       <section style = {{display: 'flex', marginRight: '15px'}}>
+       <section className = 'row' style = {{marginRight: '15px'}}>
          {matchingJobs.values?.map((matching, index) => {
            return(
              <div className = 'featuredContainer' key = {index}>

@@ -16,7 +16,7 @@ export default function PublicHomePage() {
 
     useEffect(() => {
         dispatch(fetchHomePageJobs(searchVal || ''))
-    },[dispatch])
+    },[dispatch, searchVal])
 
     return (
         <div>
@@ -24,7 +24,7 @@ export default function PublicHomePage() {
             {jobs.values.length ? 
                 <div>
                 <label><h2>Potential job matches...</h2></label>
-                <section style = {{display: 'flex', marginRight: '15px'}}>
+                <section className = 'row' style = {{marginRight: '15px'}}>
                     {jobs.values?.map((job, index) => {
                     return (
                         <div className = 'featuredContainer' key = {index}>

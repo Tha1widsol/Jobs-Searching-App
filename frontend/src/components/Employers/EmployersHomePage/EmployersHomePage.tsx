@@ -23,7 +23,7 @@ export default function EmployersHomePage() {
             />
             <label><h2>{profiles.values?.length ? 'Potential candidate matches based on your jobs...' : 'No candidates found...'}</h2></label>
             {profiles.status === 'success' ? 
-             <section style = {{display: 'flex', marginRight: '15px'}}>
+             <section className = 'row' style = {{marginRight: '15px'}}>
              {profiles.values?.map((profile,index) => {
                  return(
                      <div className = 'featuredContainer' key = {index}>
