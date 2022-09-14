@@ -126,12 +126,7 @@ export const initialState: JobProps = {
 export const fetchJob = createAsyncThunk(
     'user/fetchJob',
     async (id: number) => {
-        const response = await axios.get(`/api/job?id=${id}`,{
-            headers: {
-                Authorization: `Token ${token}`
-            }
-        })
-
+        const response = await axios.get(`/api/job?id=${id}`)
         return response.data
     }
 )

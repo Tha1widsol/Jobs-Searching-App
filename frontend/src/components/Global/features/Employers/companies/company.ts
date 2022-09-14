@@ -40,11 +40,7 @@ values: {
 export const fetchCompany = createAsyncThunk(
     'user/fetchCompany',
      async (id: number) => {
-        const response = await axios.get(`/api/company?id=${id}`,{
-            headers: {
-                Authorization:`Token ${token}`
-            }
-        })
+        const response = await axios.get(`/api/company?id=${id}`)
         return response.data
     }
 )
