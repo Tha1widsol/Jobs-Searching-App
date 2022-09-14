@@ -111,24 +111,30 @@ export default function Profile({profile} : {profile: ProfileProps}) {
         </KebabMenu>
         : null}
 
-            <div className = 'penContainer'>
+            <div className = 'penContainer row'>
                 <p className = 'fullName'>{profile.values.firstName} {profile.values.middleName} {profile.values.lastName}</p>
                 {!user.isAnEmployer ? 
                   <span className = 'pen' onClick = {() => setPopup(prev => {return{...prev, details: true}})}>&#9998;</span>
                 : null}
             </div> 
         
-            <section style = {{display:'flex'}}>
+            <section className = 'row'>
                 {profile.values.logo ? <img className = 'logo' src = {profile.values.logo} alt = ''/> : null}
                 <div className = {profile.values.logo ? 'contact' : ''}> 
                     <p><i className = 'fa fa-phone icon'></i>000011111</p>
                     <p><i className = 'icon'>&#9993;</i>example@gmail.com</p>
                 </div>
             </section>
-        
-            <div className = 'profileSection'>
+    
+            <section>
+                <label><h2>About</h2></label>
+                <hr className = 'mt-0-mb-4'/>
+                <p className = 'sectionText'>{profile.values.about}</p>
+            </section>
+
+            <div className = 'profileSection col'>
                 <section>
-                    <div className = 'penContainer'>
+                    <div className = 'penContainer row'>
                         <label><h2>Skills</h2></label>
                         {!user.isAnEmployer ? 
                         <span className = 'pen' onClick = {() => setPopup(prev => {return{...prev, skills: true}})}>&#9998;</span>
@@ -141,12 +147,6 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                             return (<li key = {index}>{skill.name}</li>)
                         })}
                     </div>
-                </section>
-                
-                <section>
-                    <label><h2>About</h2></label>
-                    <hr className = 'mt-0-mb-4'/>
-                    <p className = 'sectionText'>{profile.values.about}</p>
                 </section>
             </div>
 
