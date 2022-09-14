@@ -14,7 +14,7 @@ import axios from 'axios'
 export default function JobPage() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const user = useAppSelector(state => state.user.values)
+    const user = useAppSelector(state => state.user)
     const {jobID} = useParams()
     const job = useAppSelector(state => state.job)
     const [popup,setPopup] = useState(false)
@@ -25,16 +25,17 @@ export default function JobPage() {
 
     useEffect(() => {
       window.scrollTo(0, 0)
+      dispatch(fetchJob(Number(jobID)))
+      if (!user.isLoggedIn) return
       dispatch(fetchApplications('jobseeker'))
       dispatch(fetchJobExperience(Number(jobID)))
-      dispatch(fetchJob(Number(jobID)))
       .unwrap()
       .catch(() => {
         navigate('/')
       })
       dispatch(fetchSavedJobs())
 
-    },[dispatch, jobID, navigate])
+    },[dispatch, jobID, navigate, user.isLoggedIn])
 
     function handleDeleteJob(){
       axios.delete(`/api/job?id=${jobID}`,{headers: {Authorization: `Token ${token}`}})
@@ -73,7 +74,7 @@ export default function JobPage() {
       </Popup>
 
       <KebabMenu current = {dropdown} switchOn = {() => setDropdown(true)} switchOff = {() => setDropdown(false)}>
-        {user?.isAnEmployer ? 
+        {user.values?.isAnEmployer ? 
         <div>
            <button className = 'dropdownBtn' onClick = {() => navigate(`/edit-job/${jobID}`)} >Edit</button>
            <button className = 'dropdownBtn redNavBtn' onClick = {() => setPopup(true)}>Delete</button>
@@ -94,7 +95,7 @@ export default function JobPage() {
 
       <p>{job.values?.description}</p> 
       <hr className = 'mt-0-mb-4'/>
-      {user.isAnEmployer ? 
+      {user.values?.isAnEmployer ? 
          <div>
           {job.values?.applicantsCount > 0 ? 
               <div> 
@@ -107,17 +108,17 @@ export default function JobPage() {
       : null}
 
       {!applications.values?.find(application => application.job.id === Number(jobID)) ? 
-        !user?.isAnEmployer ?
+        !user.values?.isAnEmployer ?
         <div>
           {job.values?.applyOnOwnWebsite ? 
                   <a href = {job.values?.link} target = 'blank'><button>Apply Externally</button></a>
                   : <Link to = {`/apply/${job.values?.id}`}><button>Apply</button></Link>}
 
-           {!savedJobs.values?.find(savedJob => savedJob.job.id === Number(jobID)) ? <button onClick = {() => handleSaveJob(Number(jobID))}>Save</button> : null}
+           {!savedJobs.values?.find(savedJob => savedJob.job.id === Number(jobID)) && user.isLoggedIn ? <button onClick = {() => handleSaveJob(Number(jobID))}>Save</button> : null}
           </div>
           : null
           
-          : !user.isAnEmployer ? <p><b>Already applied</b></p> : null}
+          : !user.values?.isAnEmployer ? <p><b>Already applied</b></p> : null}
        </section>
 
        <section className = 'Container'>
