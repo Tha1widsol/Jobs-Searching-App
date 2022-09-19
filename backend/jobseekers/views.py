@@ -9,48 +9,11 @@ from employers.models import Job,Application
 from employers.serializers import MatchingJobsSerializer, ApplicationSerializer, SavedJobSerializer
 from .serializers import *
 from django.db.models import Q
+from .calculateScore import calculateScore
 import json
 
 # Create your views here.
 
-def calculateScore(profile, job):
-    totalScore = SkillsScore = 0
-    educationRank = {
-        'No formal education': 1,
-        'Secondary education': 2,
-        'GED': 3,
-        'A-Levels': 4,
-        "Bachelor's degree": 5,
-        "Master's degree": 6,
-        'Doctorate or higher': 7,
-        'Vocational qualification': 8
-    }
-
-    currentSkills = [skill.name.lower() for skill in profile.skills.all()]
-
-    for skill in job.skills.all():
-        if skill.name.lower() in currentSkills:
-            SkillsScore += 1
-
-    if len(job.skills.all()):
-       totalScore += (SkillsScore / len(job.skills.all())) * 0.2
-
-    else:
-        totalScore = 0.2
-    
-    if educationRank[profile.education] >= educationRank[job.education]:
-        totalScore += 0.2
-
-    if any(c in job.title.lower().split(' ') for c in profile.experience.lower().split(' ')):
-        totalScore += 0.5
-
-    if len(job.benefits.all()) < 10:
-           totalScore += len(job.benefits.all()) * 0.005
-
-    else:
-        totalScore = 0.005
-
-    return totalScore * 100
 
 @api_view(['GET'])
 def getMatchingScores(request):
@@ -64,7 +27,14 @@ def getMatchingScores(request):
         
     return Response(status = status.HTTP_200_OK)
 
-
+@api_view(['GET'])
+def getMatchScore(request):
+     lookup_url_kwarg = 'id'
+     jobID = request.GET.get(lookup_url_kwarg)
+     job = Job.objects.get(id = jobID)
+     profile = Profile.objects.get(user = request.user)
+     matchScore = calculateScore(profile, job)
+     return Response({'score': matchScore})
 
 class ProfileAPI(APIView):
     parser_classes = (MultiPartParser, FormParser)
