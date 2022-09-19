@@ -54,7 +54,7 @@ export default function JobSeekersHomePage() {
                </KebabMenu>
  
                <Link to = {`/job/${matching.job?.id}`}><h2>{matching.job?.title}</h2></Link>
-               <p style = {{color: 'gray'}}> {matching.score || '??'}% - matching score</p>
+               <p style = {{color: 'gray'}}> {matching.score}% - matching score</p>
              
                <Link to = {`/company/${matching.company?.id}`}><p>{matching.company?.name}</p></Link>
                {matching.job?.salary2 ? <p>{matching.job?.currency}{matching.job?.salary1} - {matching.job?.currency}{matching.job?.salary2} a year </p> : <p>{matching.job?.currency}{matching.job?.salary1} a year</p>} 
