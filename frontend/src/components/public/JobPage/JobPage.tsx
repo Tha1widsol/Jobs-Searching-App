@@ -22,18 +22,25 @@ export default function JobPage() {
     const savedJobs = useAppSelector(state => state.savedJobs)
     const applications = useAppSelector(state => state.applications)
     const experience = useAppSelector(state => state.jobExperience)
+    const [matchingScore, setMatchingScore] = useState(0)
 
     useEffect(() => {
       window.scrollTo(0, 0)
       dispatch(fetchJob(Number(jobID)))
       if (!user.isLoggedIn) return
-      dispatch(fetchApplications('jobseeker'))
+      dispatch(fetchApplications('jobseekers'))
       dispatch(fetchJobExperience(Number(jobID)))
       .unwrap()
       .catch(() => {
         navigate('/')
       })
       dispatch(fetchSavedJobs())
+      
+      axios.get(`/api/getMatchScore?id=${jobID}`,{headers: {Authorization: `Token ${token}`}})
+      .then(response => {
+        const score = response.data.score
+        if (response.status === 200) setMatchingScore(score)
+      })
 
     },[dispatch, jobID, navigate, user.isLoggedIn])
 
@@ -87,10 +94,11 @@ export default function JobPage() {
         
       </KebabMenu>
                       
-      <div style = {{display: 'flex'}}>
-      <h2>{job.values?.title}</h2>
+      <div className = 'row'>
+        <h2>{job.values?.title}</h2>
         {job.values?.company?.logo ? <img src = {`/media/${job.values?.company?.logo}`} className = 'logo' alt = ''/> : null}
       </div>
+        <span style = {{color: 'gray', fontSize: 'small'}}> {matchingScore}% - matching score</span>
       <a href = {`/company/${job.values?.company?.id}`}><p>{job.values?.company?.name}</p></a>
 
       <p>{job.values?.description}</p> 
