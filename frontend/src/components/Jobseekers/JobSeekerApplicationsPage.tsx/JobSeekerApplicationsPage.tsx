@@ -1,13 +1,13 @@
 import React,{useState,useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import {useAppSelector,useAppDispatch,useQuery} from '../../Global/features/hooks'
-import {fetchApplications} from '../../Global/features/Jobseekers/applications/applications'
+import {fetchApplications, deleteApplication} from '../../Global/features/Jobseekers/applications/applications'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
+import Popup from '../../Global/Popup/Popup';
 import {setDeleteSavedJob,fetchSavedJobs} from '../../Global/features/Jobseekers/savedJobs/savedJobs'
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
 import './css/JobSeekerApplicationsPage.css'
 import axios from 'axios'
-
 
 export default function JobSeekerApplicationsPage() {
   let query = useQuery()
@@ -16,6 +16,7 @@ export default function JobSeekerApplicationsPage() {
   const dispatch = useAppDispatch();
   const applications = useAppSelector(state => state.applications)
   const savedJobs = useAppSelector(state => state.savedJobs)
+  const [popup, setPopup] = useState({trigger: false, application: {id: 0, title: ''}})
 
   useEffect(() => {
       dispatch(fetchApplications('jobseekers'))
@@ -32,12 +33,32 @@ function handleRemoveSavedJob(id: number){
     })
 }
 
+function handleRemoveApplication(id: number){
+    axios.delete(`/api/application?id=${id}`)
+    .then(response => {
+        if (response.status === 200){
+            dispatch(deleteApplication(id))
+            handleAddSuccessMsg('Application is removed', dispatch)
+            setPopup(prev => {return{...prev, trigger: false}})
+        }
+    })
+}
+
   return (
     <div>
         <div className = 'applicationsNav'>
             <Link to = '/my-jobs?tab=applications' className = {tab !== 'saved' ? 'active' : ''}>Applied</Link>
             <Link to = '/my-jobs?tab=saved' className = {tab === 'saved' ? 'active' : ''}>Saved</Link>
         </div>
+
+        <Popup trigger = {popup.trigger} switchOff = {() => setPopup(prev => {return{...prev, trigger: false}})}>
+            <div style = {{textAlign: 'center'}}>
+                <p>Are you sure you want to remove your application for {popup.application.title}?</p>
+                <p style = {{fontSize: 'small'}}>(This action cannot be undone)</p>
+                <button onClick = {() => handleRemoveApplication(popup.application.id)}>Confirm</button>
+                <button onClick = {() => setPopup(prev => {return{...prev, trigger: false}})}>Cancel</button>
+            </div>
+        </Popup>
         
         <div style = {{marginTop: '50px'}}>
             {tab === 'saved' ? 
@@ -82,7 +103,7 @@ function handleRemoveSavedJob(id: number){
                         <KebabMenu current = {dropdown} many = {true} index = {index} switchOn = {() => setDropdown(index)} switchOff = {() => setDropdown(null)}>
                             <Link to = {`/job/${application.job.id}`}><button className = 'dropdownBtn'>View</button></Link> 
                             <button className = 'dropdownBtn'>Hide</button>
-                            <button className = 'dropdownBtn redNavBtn'>Delete</button>
+                            <button className = 'dropdownBtn redNavBtn' onClick = {() => setPopup(prev => ({...prev, trigger: true, application: {...prev.application, id: application.id, title: application.job.title}}))}>Delete</button>
                        </KebabMenu>
 
                        <Link to = {`/job/${application.job.id}`}><h2>{application.job.title}</h2></Link>
