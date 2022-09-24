@@ -13,5 +13,5 @@ urlpatterns = [
     path('profileExperience', views.ProfileExperienceAPI.as_view(), name = 'profileExperience'),
     path('checkApplication',views.checkApplicationExists, name = 'checkApplication'),
     path('getMatchingScores', views.getMatchingScores, name = 'getMatchingScores'),
-    path('getMatchScore', views.getMatchScore, name = 'getMatchScore')
+     path('getMatchScore', views.getMatchScore, name = 'getMatchScore')
 ]

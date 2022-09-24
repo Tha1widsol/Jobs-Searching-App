@@ -7,6 +7,7 @@ import axios from 'axios'
 const initialState = {
     status: '',
     values: [{
+        id: 0,
         profile,
         job,
         coverLetter: '',
@@ -38,6 +39,10 @@ export const ApplicationsSlice = createSlice({
 
         setDeleteApplications: (state) => {
             state.values = initialState.values
+        },
+        
+        deleteApplication: (state, action) => {
+            state.values.splice(state.values.findIndex(application => application.id === action.payload))
         }
     },
 
@@ -58,6 +63,6 @@ export const ApplicationsSlice = createSlice({
 
 })
 
-export const {setApplications,setDeleteApplications} = ApplicationsSlice.actions
+export const {setApplications, setDeleteApplications, deleteApplication} = ApplicationsSlice.actions
 
 export default ApplicationsSlice.reducer
