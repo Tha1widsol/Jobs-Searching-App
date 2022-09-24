@@ -22,7 +22,9 @@ def getMatchingScores(request):
     
     for job in jobs:
         match, created = Match.objects.update_or_create(profile = profile, job = job)
-        match.score = calculateScore(profile, job)
+        score = calculateScore(profile, job)
+        score.calculateTotalScore()
+        match.score = score.getTotalScore()
         match.save()
         
     return Response(status = status.HTTP_200_OK)
@@ -33,9 +35,10 @@ def getMatchScore(request):
      jobID = request.GET.get(lookup_url_kwarg)
      job = Job.objects.get(id = jobID)
      profile = Profile.objects.get(user = request.user)
-     matchScore = calculateScore(profile, job)
-     return Response({'score': matchScore})
-
+     score = calculateScore(profile, job)
+     score.calculateTotalScore()
+     return Response({'score': score.getTotalScore()})
+     
 class ProfileAPI(APIView):
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = CreateProfileSerializer
@@ -190,6 +193,13 @@ class ApplicationAPI(APIView):
 
         return Response(status = status.HTTP_404_NOT_FOUND)
 
+     def delete(self, request):
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        application = Application.objects.get(id = id)
+        application.delete()
+        return Response(status = status.HTTP_200_OK)
+
 @api_view()
 def checkApplicationExists(request):
     lookup_url_kwarg = 'id'
@@ -213,6 +223,7 @@ class ApplicationsListAPI(generics.ListAPIView):
            applications = Application.objects.filter(profile = profile.first())
         return applications
 
+
 class ToggleProfileStatus(APIView):
     def put(self,request):
         profile = Profile.objects.get(user = request.user)
@@ -231,7 +242,9 @@ class JobsListAPI(generics.ListAPIView):
             allJobs = Job.objects.all()
             for job in allJobs:
                 match, created = Match.objects.update_or_create(profile = profile.first(), job = job)
-                match.score = calculateScore(profile.first(), job)
+                score = calculateScore(profile.first(), job)
+                score.calculateTotalScore()
+                match.score = score.getTotalScore()
                 match.save()
 
             applications = Application.objects.filter(profile = profile.first()).values_list('job')
