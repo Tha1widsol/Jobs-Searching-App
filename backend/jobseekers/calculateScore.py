@@ -10,8 +10,6 @@ class calculateScore:
         self.EducationSection = 0.1
         self.BenefitsSection = 0.05
 
-        self.totalScore = self.SkillsScore = self.experienceScore = 0
-
         self.educationRank = {
             'No formal education': 1,
             'Secondary education': 2,
@@ -22,12 +20,7 @@ class calculateScore:
             'Doctorate or higher': 7,
             'Vocational qualification': 8
         }
-
-        self.currentSkills = [skill.name.lower() for skill in self.profile.skills.all()]
-        self.jobSkills = [skill.name.lower() for skill in self.job.skills.all()]
-        self.currentExperience = [experience.description.lower() for experience in ProfileExperience.objects.filter(profile = self.profile)]
-        self.jobExperience = [experience.experience.lower() for experience in Experience.objects.filter(job = self.job)]
-
+       
     def getTotalScore(self):
         return self.totalScore
 
@@ -35,30 +28,55 @@ class calculateScore:
         self.totalScore = score
 
     def calculateSkillsScore(self):
-        for skill in self.currentSkills:
-            if skill in str(self.jobSkills):
-                self.SkillsScore += 1
+        score = 0
+        currentSkills = [skill.name.lower() for skill in self.profile.skills.all()]
+        jobSkills = [skill.name.lower() for skill in self.job.skills.all()]
+
+        for skill in currentSkills:
+            if skill in str(jobSkills):
+                score += 1
             
             else:
-                self.SkillsScore += 0.4
+                score += 0.4
+        
+        if len(jobSkills):
+            return (score / len(jobSkills) * self.skillsSection) * 100
                 
-        return self.SkillsScore
+        return 0
 
     def calculateExperienceScore(self):
-        for experience in self.currentExperience:
-            if experience in str(self.jobExperience):
-                self.experienceScore += 1
+        score = 0
+        currentExperience = [experience.description.lower() for experience in ProfileExperience.objects.filter(profile = self.profile)]
+        jobExperience = [experience.experience.lower() for experience in Experience.objects.filter(job = self.job)]
+        
+        for experience in currentExperience:
+            if experience in str(jobExperience):
+                score += 1
             
             else:
-                self.experienceScore += 0.4
+                score += 0.4
         
-        return self.experienceScore
+        if len(jobExperience):
+           return (score / len(jobExperience) * self.ExperienceSection) * 100
+
+        return 0
+
+    def calculateBenefitsScore(self):
+        score = 0
+        maxBenefitsLength = 20
         
+        if not len(self.job.benefits.all()):
+            return 0
+
+        if len(self.job.benefits.all()) < maxBenefitsLength:
+            score = len(self.job.benefits.all()) * 0.4
+            return score
+
+        return (score / maxBenefitsLength * self.BenefitsSection) * 100
+
     def calculateTotalScore(self):
-        if len(self.jobSkills):
-          self.SkillsScore = (self.calculateSkillsScore() / len(self.job.skills.all()) * self.skillsSection) * 100
+        skillsScore = self.calculateSkillsScore()
+        experienceScore = self.calculateExperienceScore()
+        benefitsScore = self.calculateBenefitsScore()
 
-        if len(self.jobExperience):
-          self.experienceScore = (self.calculateExperienceScore() / len(self.jobExperience) * self.ExperienceSection) * 100
-
-        self.setTotalScore(self.SkillsScore + self.experienceScore)
+        self.setTotalScore(skillsScore + experienceScore + benefitsScore)
