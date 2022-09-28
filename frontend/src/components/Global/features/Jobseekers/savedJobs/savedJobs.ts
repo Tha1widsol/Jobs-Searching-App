@@ -38,20 +38,21 @@ export const SavedJobsSlice = createSlice({
         }
     },
 
-    extraReducers: {
-        [fetchSavedJobs.pending.toString()]: (state) => {
-            state.status = 'loading'
-        },
-        
-        [fetchSavedJobs.fulfilled.toString()]: (state,action) => {
-            state.values = action.payload
-            state.status = 'success'
-        },
+    extraReducers(builder){
+        builder
+            .addCase(fetchSavedJobs.pending, (state) => {
+                state.status = 'loading'
+            })
 
-        [fetchSavedJobs.rejected.toString()]: (state) => {
-            state.status = 'rejected'
+            .addCase(fetchSavedJobs.fulfilled, (state, action) => {
+                state.status = 'success'
+                state.values = action.payload
+            })
+
+            .addCase(fetchSavedJobs.rejected, (state) => {
+                state.status = 'rejected'
+            })
     }
-  }
 
 })
 

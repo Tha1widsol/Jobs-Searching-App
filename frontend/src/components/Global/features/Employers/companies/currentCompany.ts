@@ -43,19 +43,20 @@ export const currentCompanySlice = createSlice({
         }
     },
 
-    extraReducers: {
-        [fetchCurrentCompany.pending.toString()]: (state) => {
-            state.status = 'loading'
-        },
-        
-        [fetchCurrentCompany.fulfilled.toString()]: (state,action) => {
-            state.values = action.payload
-            state.status = 'success'
-        },
+    extraReducers(builder){
+        builder
+            .addCase(fetchCurrentCompany.pending, (state) => {
+                state.status = 'loading'
+            })
 
-        [fetchCurrentCompany.rejected.toString()]: (state) => {
-            state.status = 'rejected'
-        }
+            .addCase(fetchCurrentCompany.fulfilled, (state, action) => {
+                state.status = 'success'
+                state.values = action.payload
+            })
+
+            .addCase(fetchCurrentCompany.rejected, (state) => {
+                state.status = 'rejected'
+            })
     }
 
 })

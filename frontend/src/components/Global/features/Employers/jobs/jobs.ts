@@ -97,19 +97,20 @@ export const JobsSlice = createSlice({
         }
     },
 
-    extraReducers: {
-        [fetchJobs.pending.toString()]: (state) => {
-            state.status = 'loading'
-        },
+    extraReducers(builder){
+        builder
+            .addCase(fetchJobs.pending, (state) => {
+                state.status = 'loading'
+            })
 
-        [fetchJobs.fulfilled.toString()]: (state,action) => {
-            state.values = action.payload
-            state.status = 'success'
-        },
+            .addCase(fetchJobs.fulfilled, (state, action) => {
+                state.status = 'success'
+                state.values = action.payload
+            })
 
-        [fetchJobs.rejected.toString()]: (state) => {
-            state.status = 'rejected'
-        }
+            .addCase(fetchJobs.rejected, (state) => {
+                state.status = 'rejected'
+            })
     }
 
 })

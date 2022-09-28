@@ -41,20 +41,21 @@ export const ApplicationSlice = createSlice({
         }
     },
 
-    extraReducers: {
-        [fetchApplication.pending.toString()]: (state) => {
-            state.status = 'loading'
-        },
-        
-        [fetchApplication.fulfilled.toString()]: (state,action) => {
-            state.values = action.payload
-            state.status = 'success'
-        },
+    extraReducers(builder){
+        builder
+            .addCase(fetchApplication.pending, (state) => {
+                state.status = 'loading'
+            })
 
-        [fetchApplication.rejected.toString()]: (state) => {
-            state.status = 'rejected'
+            .addCase(fetchApplication.fulfilled, (state, action) => {
+                state.status = 'success'
+                state.values = action.payload
+            })
+
+            .addCase(fetchApplication.rejected, (state) => {
+                state.status = 'rejected'
+            })
     }
-  }
 
 })
 

@@ -38,19 +38,20 @@ export const JobExperienceSlice = createSlice({
     
     },
 
-    extraReducers: {
-        [fetchJobExperience.pending.toString()]: (state) => {
-            state.status = 'loading'
-        },
+    extraReducers(builder){
+        builder
+            .addCase(fetchJobExperience.pending, (state) => {
+                state.status = 'loading'
+            })
 
-        [fetchJobExperience.fulfilled.toString()]: (state,action) => {
-            state.values = action.payload
-            state.status = 'success'
-        },
+            .addCase(fetchJobExperience.fulfilled, (state, action) => {
+                state.status = 'success'
+                state.values = action.payload
+            })
 
-        [fetchJobExperience.rejected.toString()]: (state) => {
-            state.status = 'rejected'
-        }
+            .addCase(fetchJobExperience.rejected, (state) => {
+                state.status = 'rejected'
+            })
     }
 
 })

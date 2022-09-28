@@ -66,20 +66,21 @@ export const ProfilesSlice = createSlice({
         },
     },
 
-    extraReducers: {
-        [fetchProfiles.pending.toString()]: (state) => {
-            state.status = 'loading'
-        },
-        
-        [fetchProfiles.fulfilled.toString()]: (state,action) => {
-            state.values = action.payload
-            state.status = 'success'
-        },
+    extraReducers(builder){
+        builder
+            .addCase(fetchProfiles.pending, (state) => {
+                state.status = 'loading'
+            })
 
-        [fetchProfiles.rejected.toString()]: (state) => {
-            state.status = 'rejected'
+            .addCase(fetchProfiles.fulfilled, (state, action) => {
+                state.status = 'success'
+                state.values = action.payload
+            })
+
+            .addCase(fetchProfiles.rejected, (state) => {
+                state.status = 'rejected'
+            })
     }
-  }
 
 })
 

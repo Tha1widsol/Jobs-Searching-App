@@ -65,20 +65,22 @@ export const userSlice = createSlice({
         }
     },
 
-    extraReducers: {
-        [fetchUser.pending.toString()]: (state) => {
-            state.status = 'loading'
-        },
-        
-        [fetchUser.fulfilled.toString()]: (state,action) => {
-            state.values = action.payload
-            state.status = 'success'
-        },
+    extraReducers(builder){
+        builder
+            .addCase(fetchUser.pending, (state) => {
+                state.status = 'loading'
+            })
 
-        [fetchUser.rejected.toString()]: (state) => {
-            state.status = 'rejected'
-        }
+            .addCase(fetchUser.fulfilled, (state, action) => {
+                state.status = 'success'
+                state.values = action.payload
+            })
+
+            .addCase(fetchUser.rejected, (state) => {
+                state.status = 'rejected'
+            })
     }
+
 
 })
 

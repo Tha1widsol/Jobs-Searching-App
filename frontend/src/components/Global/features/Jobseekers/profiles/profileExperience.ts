@@ -43,20 +43,22 @@ export const ProfileExperienceSlice = createSlice({
         }
     },
 
-    extraReducers: {
-        [fetchProfileExperience.pending.toString()]: (state) => {
-            state.status = 'loading'
-        },
-        
-        [fetchProfileExperience.fulfilled.toString()]: (state,action) => {
-            state.values = action.payload
-            state.status = 'success'
-        },
+    extraReducers(builder){
+        builder
+            .addCase(fetchProfileExperience.pending, (state) => {
+                state.status = 'loading'
+            })
 
-        [fetchProfileExperience.rejected.toString()]: (state) => {
-            state.status = 'rejected'
+            .addCase(fetchProfileExperience.fulfilled, (state, action) => {
+                state.status = 'success'
+                state.values = action.payload
+            })
+
+            .addCase(fetchProfileExperience.rejected, (state) => {
+                state.status = 'rejected'
+            })
     }
-  }
+
 
 })
 

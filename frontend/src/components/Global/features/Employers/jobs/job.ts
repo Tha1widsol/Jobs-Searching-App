@@ -2,6 +2,7 @@ import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import {user,UserProps,token} from '../../Auth/user'
 import {StatusProps} from '../../../types/status'
 import axios from 'axios'
+import { fetchCurrentCompany } from '../companies/currentCompany'
 
 export interface JobProps extends StatusProps{
     values: {
@@ -145,19 +146,20 @@ export const JobSlice = createSlice({
     
     },
 
-    extraReducers: {
-        [fetchJob.pending.toString()]: (state) => {
-            state.status = 'loading'
-        },
+    extraReducers(builder){
+        builder
+            .addCase(fetchJob.pending, (state) => {
+                state.status = 'loading'
+            })
 
-        [fetchJob.fulfilled.toString()]: (state,action) => {
-            state.values = action.payload
-            state.status = 'success'
-        },
+            .addCase(fetchJob.fulfilled, (state, action) => {
+                state.status = 'success'
+                state.values = action.payload
+            })
 
-        [fetchJob.rejected.toString()]: (state) => {
-            state.status = 'rejected'
-        }
+            .addCase(fetchJob.rejected, (state) => {
+                state.status = 'rejected'
+            })
     }
 
 })

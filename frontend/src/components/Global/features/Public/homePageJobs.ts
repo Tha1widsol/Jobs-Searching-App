@@ -52,20 +52,22 @@ export const HomePageJobsSlice = createSlice({
         }
     },
 
-    extraReducers: {
-        [fetchHomePageJobs.pending.toString()]: (state) => {
-            state.status = 'loading'
-        },
+    extraReducers(builder){
+        builder
+            .addCase(fetchHomePageJobs.pending, (state) => {
+                state.status = 'loading'
+            })
 
-        [fetchHomePageJobs.fulfilled.toString()]: (state,action) => {
-            state.values = action.payload
-            state.status = 'success'
-        },
+            .addCase(fetchHomePageJobs.fulfilled, (state, action) => {
+                state.status = 'success'
+                state.values = action.payload
+            })
 
-        [fetchHomePageJobs.rejected.toString()]: (state) => {
-            state.status = 'rejected'
-        }
+            .addCase(fetchHomePageJobs.rejected, (state) => {
+                state.status = 'rejected'
+            })
     }
+
 
 })
 
