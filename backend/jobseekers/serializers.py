@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from main.serializers import UserSerializer
-from .models import Profile, ProfileExperience
+from .models import *
 from main.models import Skill
 from accounts.serializers import *
 
@@ -26,3 +26,9 @@ class ProfileExperienceSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileExperience
         exclude = ['profile', 'isOnGoing']
+
+
+class ProfileEducationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfileEducation
+        exclude = ['profile']

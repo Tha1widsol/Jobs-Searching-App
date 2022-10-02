@@ -39,3 +39,18 @@ class ProfileExperience(models.Model):
 class SavedJob(models.Model):
       job = models.ForeignKey('employers.Job', on_delete = models.CASCADE, null = True, blank = True)
       savedDate = models.DateTimeField('savedDate',auto_now_add = True)
+
+class ProfileEducation(models.Model):
+      profile = models.ForeignKey(Profile, on_delete = models.CASCADE, null = True)
+      level = models.CharField(max_length = 200)
+      field = models.TextField(blank = True)
+      school = models.TextField(blank = True)
+      location = models.TextField(blank = True)
+      currentlyEnrolled = models.BooleanField(default = False)
+      fromDate = models.CharField(max_length = 200, blank = True)
+      toDate = models.CharField(max_length = 200, blank = True)
+
+      def __str__(self):
+         return self.field
+
+
