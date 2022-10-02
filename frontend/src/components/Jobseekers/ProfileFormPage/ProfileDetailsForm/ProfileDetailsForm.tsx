@@ -9,7 +9,7 @@ import { handleAddSuccessMsg } from '../../../Global/messages/SuccessAlert'
 import { token } from '../../../Global/features/Auth/user'
 import axios from 'axios'
 
-export default function ProfileDetailsForm({edit = false, popupOff}: {edit: boolean, popupOff: () => void}) {
+export default function ProfileDetailsForm({isIsolated = true, toggleTab, popupOff}: {edit?: boolean, isIsolated?: boolean, toggleTab: () => void, popupOff: () => void}) {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const user = useAppSelector(state => state.user.values)
@@ -113,10 +113,14 @@ export default function ProfileDetailsForm({edit = false, popupOff}: {edit: bool
         if (logo.value)
            form.append('logo',logo.value,logo.name)
 
-           if (edit){
             axios.put('/api/profile',form,requestOptions)
             .then(response => {
                  if (response.status === 200){
+                    if (!isIsolated) {
+                        toggleTab()
+                        return
+                    }
+
                     handleAddSuccessMsg('Profile is successfully saved', dispatch)
                     navigate(`/profile/${user.id}`)
                     popupOff()
@@ -127,13 +131,12 @@ export default function ProfileDetailsForm({edit = false, popupOff}: {edit: bool
             .catch(error => {
                 if (error.response.status === 400) setErrors(['Something went wrong'])
             })
-        }
+        
         
     }
 
   return (
-    <div>
-        <form className = 'Form' onSubmit = {handleSubmit}>
+    <form>
             <h1 className = 'title'>Details</h1> 
             <Errors errors = {errors}/>
 
@@ -154,10 +157,11 @@ export default function ProfileDetailsForm({edit = false, popupOff}: {edit: bool
 
             <label htmlFor = 'logo'><h3>Profile logo (Optional):</h3></label>
             <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setLogo({value: e.target.files[0], name: e.target.files[0].name})}}/>
-            {edit && profile.values.logo ? <p>Current logo: {profile.values.logo}</p> : null} 
+            {profile.values?.logo ? <p>Current logo: {profile.values.logo}</p> : null} 
 
-            <button>Submit</button>
-        </form>
-    </div>
+            <div style = {{float: 'right', marginTop: '5px'}} onClick = {handleSubmit}>
+                 {isIsolated ? <button type = 'submit'>Submit</button> : <button>Next</button>}
+            </div>
+    </form>
   )
 }
