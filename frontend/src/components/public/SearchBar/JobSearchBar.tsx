@@ -1,10 +1,11 @@
 import React,{useState} from 'react'
+import './css/SearchBar.css'
 
 export default function JobSearchBar() {
-    const [searchValue, setSearchVal] = useState({jobs: '', location: ''})
+  const [searchValue, setSearchVal] = useState({jobs: '', location: ''})
 
   return (
-    <form>
+    <form className = 'searchForm'>
         <input id = 'searchBar'
         type = 'search'
         placeholder = 'Search jobs...'

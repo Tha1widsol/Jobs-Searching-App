@@ -3,8 +3,9 @@ import './css/SearchBar.css'
 
 export default function SearchBar({placeholder = ''}) {
   const [searchVal, setSearchVal] = useState('')
+  
   return (
-    <form>
+    <form className = 'searchForm'>
         <input id = 'searchBar'
         type = 'search'
         placeholder = {placeholder}
