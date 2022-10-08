@@ -44,44 +44,22 @@ class ProfileAPI(APIView):
     serializer_class = CreateProfileSerializer
 
     def post(self,request):
-        serializer = self.serializer_class(data = request.data)
+        profile = Profile.objects.filter(user = request.user)
+
+        if profile.exists():
+            serializer = self.serializer_class(data = request.data, instance = profile.first())
+        
+        else:
+             serializer = self.serializer_class(data = request.data)
         
         if serializer.is_valid():
             profile = serializer.save()
-            skills = request.data.get('skills')
-            experience = json.loads(request.data.get('experience'))
-
-            profile.skills.clear()
-            
-            for s in skills.split(','):
-                skill, created = Skill.objects.get_or_create(name = s)
-                skill.save()
-                profile.skills.add(skill)
-
             profile.user = request.user
             profile.save()
-
-            for exp in experience:
-                newExp = ProfileExperience(profile = profile, title = exp['title'], companyName = exp['companyName'], EmployerName = exp['EmployerName'], EmployerEmail = exp['EmployerEmail'], EmployerPhone = exp['EmployerPhone'], description = exp['description'], years = exp['years'], isOnGoing = exp['isOnGoing'])
-                newExp.save()
-            
             return Response(status = status.HTTP_201_CREATED) 
 
         return Response(status = status.HTTP_400_BAD_REQUEST)
 
-
-    def put(self,request):
-        profile = Profile.objects.get(user = request.user)
-        serializer = self.serializer_class(data = request.data, instance = profile)
-
-        if serializer.is_valid():
-            profile = serializer.save()
-            profile.user = request.user
-            profile.save()
-            return Response(status = status.HTTP_200_OK) 
-
-        return Response(status = status.HTTP_400_BAD_REQUEST) 
-        
     def get(self,request):
         lookup_url_kwarg = 'id'
         id = request.GET.get(lookup_url_kwarg)
@@ -253,7 +231,9 @@ class JobsListAPI(generics.ListAPIView):
             jobs = Match.objects.filter(
             Q(job__title__icontains = query)|
             Q(job__description__icontains = query)|
-            Q(job__company__name__icontains = query)         
+            Q(job__company__name__icontains = query),
+            profile = profile.first()
+         
             ).exclude(job__id__in = applications).order_by('-score')
 
         else:
