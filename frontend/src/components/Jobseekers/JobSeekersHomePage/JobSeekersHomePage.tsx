@@ -15,6 +15,7 @@ export default function JobSeekersHomePage() {
   const query = useQuery()
   const matchingJobs = useAppSelector(state => state.matchingJobs)
   const savedJobs = useAppSelector(state => state.savedJobs)
+  const profile = useAppSelector(state => state.profile)
   const [dropdown,setDropdown] = useState<number | null>(null)
   const searchVal = query.get('q')
 
@@ -43,7 +44,7 @@ export default function JobSeekersHomePage() {
       {matchingJobs.values.length ? 
       <div>
        <label><h2>Potential job matches based on your profile...</h2></label>
-       <section className = 'row' style = {{marginRight: '15px'}}>
+       <section className = 'row' style = {{overflow: 'auto', flexWrap: 'wrap'}}>
          {matchingJobs.values?.map((matching, index) => {
            return(
              <div className = 'featuredContainer' key = {index}>
