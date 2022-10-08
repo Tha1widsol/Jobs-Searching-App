@@ -206,7 +206,6 @@ form{
   width: 60%;
 }
 
-
 .popupForm{
   margin: 0px auto;
   width: 50%;
@@ -341,10 +340,12 @@ Container styles
     border-style: groove;
     border-radius: 5px;
     margin-bottom: 20px;
+  
 }
 
 .featuredContainer{
-  width: 300px;
+  overflow-x: auto;
+  width: 25%;
   margin-right: 25px;
   box-shadow: 0 0 8px 0  rgba(0,0,0,0.5);
 }
