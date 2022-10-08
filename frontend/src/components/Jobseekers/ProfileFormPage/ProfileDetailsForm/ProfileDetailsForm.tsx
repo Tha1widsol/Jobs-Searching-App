@@ -9,7 +9,7 @@ import { handleAddSuccessMsg } from '../../../Global/messages/SuccessAlert'
 import { token } from '../../../Global/features/Auth/user'
 import axios from 'axios'
 
-export default function ProfileDetailsForm({isIsolated = true, toggleTab, popupOff}: {edit?: boolean, isIsolated?: boolean, toggleTab: () => void, popupOff: () => void}) {
+export default function ProfileDetailsForm({isIsolated = true, toggleTab, popupOff}: {isIsolated?: boolean, toggleTab: () => void, popupOff: () => void}) {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const user = useAppSelector(state => state.user.values)
@@ -95,12 +95,7 @@ export default function ProfileDetailsForm({isIsolated = true, toggleTab, popupO
 
     function handleSubmit(e: React.SyntheticEvent){
         e.preventDefault()
-        
         if (!validateForm()) return
-        const requestOptions = {
-            headers: {'Content-Type': 'multipart/form-data', Authorization:`Token ${token}`}
-        }
-
         let form = new FormData();
 
         form.append('firstName',firstName.value)
@@ -113,26 +108,31 @@ export default function ProfileDetailsForm({isIsolated = true, toggleTab, popupO
         if (logo.value)
            form.append('logo',logo.value,logo.name)
 
-            axios.put('/api/profile',form,requestOptions)
-            .then(response => {
-                 if (response.status === 200){
-                    if (!isIsolated) {
-                        toggleTab()
-                        return
-                    }
+          axios({
+            method: 'post',
+            url: '/api/profile',
+            data: form,
+            headers: {'Content-Type': 'multipart/form-data', Authorization:`Token ${token}`}
+          })
 
-                    handleAddSuccessMsg('Profile is successfully saved', dispatch)
-                    navigate(`/profile/${user.id}`)
-                    popupOff()
-                    dispatch(fetchProfile(user.id))
-                }
-            })
+          .then(response => {
+            if (response.status === 201){
+               if (!isIsolated) {
+                   toggleTab()
+                   return
+               }
 
-            .catch(error => {
-                if (error.response.status === 400) setErrors(['Something went wrong'])
-            })
-        
-        
+               handleAddSuccessMsg('Profile is successfully saved', dispatch)
+               navigate(`/profile/${user.id}`)
+               popupOff()
+               dispatch(fetchProfile(user.id))
+           }
+       })
+
+       .catch(error => {
+           if (error.response.status === 400) setErrors(['Something went wrong'])
+       })
+
     }
 
   return (
