@@ -159,8 +159,8 @@ export default function ProfileDetailsForm({isIsolated = true, toggleTab, popupO
             <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setLogo({value: e.target.files[0], name: e.target.files[0].name})}}/>
             {profile.values?.logo ? <p>Current logo: {profile.values.logo}</p> : null} 
 
-            <div style = {{float: 'right', marginTop: '5px'}} onClick = {handleSubmit}>
-                 {isIsolated ? <button type = 'submit'>Submit</button> : <button>Next</button>}
+            <div style = {{float: 'right', marginTop: '10px'}} onClick = {handleSubmit}>
+                 {isIsolated ? <button type = 'submit'>Submit</button> : <button onClick = {() => toggleTab()}>Next</button>}
             </div>
     </form>
   )
