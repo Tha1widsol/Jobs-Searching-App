@@ -10,7 +10,7 @@ import { ProfileExperienceProps } from '../ProfileFormPage/ProfileExperienceForm
 import {token} from '../../Global/features/Auth/user';
 import Popup from '../../Global/Popup/Popup';
 import ProfileDetailsForm from '../ProfileFormPage/ProfileDetailsForm/ProfileDetailsForm';
-import ProfileSkills from '../ProfileFormPage/ProfileSkills/ProfileSkills';
+import ProfileSkillsForm from '../ProfileFormPage/ProfileSkillsForm/ProfileSkillsForm';
 import ProfileExperienceForm from '../ProfileFormPage/ProfileExperienceForm.tsx/ProfileExperienceForm';
 import ReactScrollableFeed from 'react-scrollable-feed';
 import axios from 'axios'
@@ -79,13 +79,13 @@ export default function Profile({profile} : {profile: ProfileProps}) {
         </Popup>
 
         <Popup trigger = {popup.details} switchOff = {() => setPopup(prev => {return{...prev, details: false}})} modalOn = {false}>
-            <ProfileDetailsForm popupOff = {() => setPopup(prev => {return{...prev, details: false}})} toggleTab = {() => {}}/>
+            <ProfileDetailsForm popupOff = {() => setPopup(prev => {return{...prev, details: false}})} toggleTab = {() => null}/>
             <button type = 'button' style = {{float: 'left'}} onClick = {() => setPopup(prev => {return{...prev, details: false}})}>Cancel</button>
         </Popup>
 
         <Popup trigger = {popup.skills} switchOff = {() => setPopup(prev => {return{...prev, skills: false}})} modalOn = {false}>
             <div style = {{minWidth: '300px'}}>
-              <ProfileSkills edit = {true} popupOff = {() => setPopup(prev => {return{...prev, skills: false}})}/>
+              <ProfileSkillsForm edit = {true} popupOff = {() => setPopup(prev => {return{...prev, skills: false}})} toggleTab = {() => null}/>
               <button type = 'button' style = {{float: 'left'}} onClick = {() => setPopup(prev => {return{...prev, skills: false}})}>Cancel</button>
             </div>
         </Popup>

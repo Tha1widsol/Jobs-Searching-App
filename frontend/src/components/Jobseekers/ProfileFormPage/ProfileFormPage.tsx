@@ -4,14 +4,13 @@ import Errors from '../../Global/messages/Errors'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile';
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
-import {handleFixName} from '../../Global/formFunctions';
-import {ListProps,FileProps} from '../../Global/types/forms';
-import List from '../../Global/Forms/List';
+import {FileProps} from '../../Global/types/forms';
 import axios from 'axios';
 import {token} from '../../Global/features/Auth/user';
 import Popup from '../../Global/Popup/Popup';
 import ProfileDetailsForm from './ProfileDetailsForm/ProfileDetailsForm';
 import ReactScrollableFeed from 'react-scrollable-feed';
+import ProfileSkillsForm from './ProfileSkillsForm/ProfileSkillsForm';
 
 export default function ProfileFormPage() {
     const navigate = useNavigate()
@@ -20,12 +19,11 @@ export default function ProfileFormPage() {
     const profile = useAppSelector(state => state.profile)
     const [currentTab,setCurrentTab] = useState(1)
     const [errors,setErrors] = useState<Array<string>>([])
-    const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
+
     const [experience,setExperience] = useState({value: [{title: '', companyName: '',  EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: 1, isOnGoing: false}], popup: false, currentVal: {title: '', companyName: '', EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: 1, isOnGoing: false}, isValid: true, currentErrorMsg: '', alreadyExistsMsg: 'Experience already exists'})
     const [education,setEducation] = useState({value: 'No formal education'})
     const [industry,setIndustry] = useState({value: ''})
     const [distance,setDistance] = useState({value: ''})
-    const [logo,setLogo] = useState<FileProps>({value: '', name:''})
     const [cv,setCV] = useState<FileProps>({value: '' , name:''})
     
     const maxTabs = document.querySelectorAll('.tab').length
@@ -41,19 +39,6 @@ export default function ProfileFormPage() {
         let isValid = true
         let errors : Array<string> = []
 
-        switch(currentTab){
-          case 2:
-              if (!skills.value.length){
-                  setSkills(prev => {return {...prev, isEmpty: true}})
-                  errors.push(skills.emptyErrorMsg)
-                  isValid = false
-              }
-
-              else setSkills(prev => {return {...prev, isEmpty: false}})
-            
-              break
-        }
-
         if (!isValid){
             setErrors(errors)
             window.scrollTo(0, 0)
@@ -64,16 +49,6 @@ export default function ProfileFormPage() {
         setCurrentTab(currentTab + 1)
 
         return isValid
-    }
-
-    function handleToPrevTab(){
-        setErrors([])
-        setCurrentTab(currentTab - 1)
-    }
-
-    function handleSetSkills(e: React.ChangeEvent<HTMLInputElement>){
-        setSkills(prev => {return {...prev, currentVal: e.target.value}})
-        e.target.value = e.target.value.replace(',','')
     }
 
     function handleSubmitForm(e: React.SyntheticEvent){
@@ -92,7 +67,6 @@ export default function ProfileFormPage() {
         
         
         form.append('experience', JSON.stringify(experience.value.slice(1)))
-        form.append('skills',skills.value.toString())
         form.append('education',education.value)
         form.append('industry',industry.value)
         form.append('distance',distance.value)
@@ -153,7 +127,7 @@ export default function ProfileFormPage() {
       } 
 
     return (
-        <div>
+        <form style = {{width: '60%'}}>
             <div className = 'steps'>
                 <span className = {`step ${currentTab === 1 ? 'active' : currentTab > 1 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(1) : null}><p className = 'step-label'>Personal Details</p></span>
                 <span className = {`step ${currentTab === 2 ? 'active' : currentTab > 2 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(2) : null}><p className = 'step-label'>Skills</p></span>
@@ -163,23 +137,11 @@ export default function ProfileFormPage() {
             </div>
             
                 <div className = {`tab ${currentTab === 1 ? 'show' : 'hide'}`}>
-                      <ProfileDetailsForm popupOff = {() => {}} toggleTab = {() => setCurrentTab(currentTab + 1)} isIsolated = {false}/>
+                      <ProfileDetailsForm popupOff = {() => {}} isIsolated = {false} toggleTab = {() => setCurrentTab(currentTab + 1)}/>
                 </div>
 
                 <div className = {`tab ${currentTab === 2 ? 'show' : 'hide'}`}>
-                    <h1 className = 'title'>Skills</h1> 
-
-                    <label htmlFor = 'skills'><h3>Specific Key skills:</h3></label>
-                    <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
-                    
-                    <List name = 'Skills' 
-                    state = {skills}
-                    handleAdd = {() => setSkills(prev => ({...prev, value: [...prev.value, skills.currentVal]}))}
-                    handleClearInput = {() => setSkills(prev => {return {...prev,currentVal: ''}})}
-                    handleSetIsEmpty = {(empty = true) => setSkills(prev => {return{...prev,isEmpty: empty}})}
-                    handleSetAlreadyExists = {(exists = true) => setSkills(prev => {return {...prev,alreadyExists: exists}})}
-                    handleSetAll = {(newItems: Array<string>) => setSkills(prev => {return {...prev,value: newItems}})}
-                    />
+                    <ProfileSkillsForm popupOff = {() => null} isIsolated = {false} toggleTab = {() => setCurrentTab(currentTab + 1)}/>
                 </div>
 
                 <div className = {`tab ${currentTab === 3 ? 'show' : 'hide'}`}>
@@ -305,9 +267,10 @@ export default function ProfileFormPage() {
 
                 </div>
                 
-                {currentTab === maxTabs ? <button type = 'button' id = 'submit' onClick = {handleSubmitForm} >Submit</button> : null}
-                <button type = 'button' className = {currentTab > 1 ? 'toggleTabBtn' : 'hide'} onClick = {handleToPrevTab}>Previous</button>
-
-        </div>
+                <div style = {{marginTop: '10px'}}>
+                    {currentTab === maxTabs ? <button type = 'button' id = 'submit' onClick = {handleSubmitForm}>Submit</button> : null}
+                    {currentTab < maxTabs && currentTab > 1 ? <button onClick = {() => setCurrentTab(currentTab - 1)}>Previous</button> : null}
+                </div>
+        </form>
     )
 }

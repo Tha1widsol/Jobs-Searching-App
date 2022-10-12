@@ -6,7 +6,7 @@ import List from '../../../Global/Forms/List'
 import {token} from '../../../Global/features/Auth/user'
 import axios from 'axios'
 
-export default function ProfileSkills({edit = false, popupOff}: {edit: boolean, popupOff: () => void}) {
+export default function ProfileSkillsForm({isIsolated = true, edit = false, popupOff, toggleTab}: {isIsolated?:boolean, edit?: boolean, popupOff: () => void, toggleTab: () => void}) {
     const [skills, setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
     const profile = useAppSelector(state => state.profile.values)
     const dispatch = useAppDispatch()
@@ -56,7 +56,9 @@ export default function ProfileSkills({edit = false, popupOff}: {edit: boolean, 
         handleSetAll = {(newItems: Array<string>) => setSkills(prev => {return {...prev,value: newItems}})}
         />
 
-        {skills.value.length ? <button type = 'submit' onClick = {handleSubmit}>Submit</button> : null}
+        <div style = {{float: 'right', marginTop: '5px'}} onClick = {handleSubmit}>
+              {isIsolated ? <button type = 'submit'>Submit</button> : <button onClick = {() => toggleTab()}>Next</button>}
+        </div>
     </div>
   )
 }
