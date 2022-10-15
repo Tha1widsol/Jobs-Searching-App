@@ -330,6 +330,17 @@ Icons styles
 .green{background-color:green}
 .red{background-color:red;}
 
+.cross{
+  cursor: pointer;
+  color: red;
+}
+
+.cross:hover{
+  color: darkred;
+}
+
+
+
 /* ################
 Container styles
 ##################*/

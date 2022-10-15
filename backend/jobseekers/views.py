@@ -96,7 +96,16 @@ class ProfileExperienceAPI(generics.ListAPIView):
       serializer_class = ProfileExperienceSerializer
 
       def post(self, request):
-          serializer = self.serializer_class(data = self.request.data)
+          lookup_url_kwarg = 'id'
+          id = request.GET.get(lookup_url_kwarg)
+          experience = ProfileExperience.objects.filter(id = id)
+          
+          if experience.exists():
+            serializer = self.serializer_class(data = self.request.data, instance = experience.first())
+        
+          else:
+              serializer = self.serializer_class(data = self.request.data)
+         
           isOnGoing = request.data.get('isOnGoing')
           profile = Profile.objects.get(user = request.user)
           

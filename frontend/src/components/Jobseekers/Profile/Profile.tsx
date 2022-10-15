@@ -150,54 +150,64 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                 </section>
             </div>
 
-            {experience.values.length ? 
+
             <div>
                 <section className = 'profileSubContainer'>
-                <label><h2>Experience</h2></label>
-            
-                <hr className = 'mt-0-mb-4'/>
-                <ReactScrollableFeed>
-                {experience.values.map((exp, index) => {
-                    return (
-                    <div style = {{maxHeight: '1000px'}} key = {index}>
-                            <div style = {{marginBottom: '50px'}}>
-                                <div style = {{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                                     <h3>{exp.title}</h3>
-                                     {!user.isAnEmployer ? 
-                                     <div style = {{display: 'flex', gap: '20px'}}>
-                                         <span className = 'pen' onClick = {() => editChosenExperience(exp)}>&#9998;</span>
-                                        <i className = 'fa fa-trash-o' onClick = {() => toggleDeleteExperiencePopup(exp.id, exp.title, exp.companyName)}/>
-                                     </div>
-                                     : null}
-                                </div>
-                                <p>{exp.companyName}</p>
-                                <p style = {{color: 'gray', fontSize: 'small'}}>{exp.years > 0 ? `Years worked - ${exp.years}` : null}</p>
-                                <p style = {{ maxHeight: '120px'}}>{exp.description}</p>
-
-                                <div style = {{marginTop: '40px'}}>
-                                    <p><b>Reference:</b></p>
-                                    <p>{exp.EmployerName}</p>
-                                    <p>{exp.EmployerEmail}</p>
-                                    <p>{exp.EmployerPhone}</p>
-                                </div>
-
-                            </div>
-  
-                        </div>
-                      
-                    
-                    )
-                })}
-
-                </ReactScrollableFeed>
-
-                {!user.isAnEmployer ? 
+                <div className = 'penContainer row'>
+                    <label><h2>Experience</h2></label>
+                    {!user.isAnEmployer ? 
                         <span className = 'pen' onClick = {() => setPopup(prev => ({...prev, experience: {...prev.experience, trigger: true, values: initialExperience}}))}>&#9998;</span>
-                : null}
+                    : null}
+                </div>
+
+                {experience.values?.length ? 
+                    <>
+                    <hr className = 'mt-0-mb-4'/>
+                    <ReactScrollableFeed>
+                    {experience.values.map((exp, index) => {
+                        return (
+                        <div style = {{maxHeight: '1000px'}} key = {index}>
+                                <div style = {{marginBottom: '50px'}}>
+                                    <div style = {{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                        <h3>{exp.title}</h3>
+                                        {!user.isAnEmployer ? 
+                                        <div style = {{display: 'flex', gap: '20px'}}>
+                                            <span className = 'pen' onClick = {() => editChosenExperience(exp)}>&#9998;</span>
+                                            <i className = 'fa fa-trash-o' onClick = {() => toggleDeleteExperiencePopup(exp.id, exp.title, exp.companyName)}/>
+                                        </div>
+                                        : null}
+                                    </div>
+                                    <p>{exp.companyName}</p>
+                                    <p style = {{color: 'gray', fontSize: 'small'}}>{exp.years > 0 ? `Years worked - ${exp.years}` : null}</p>
+                                    <p style = {{ maxHeight: '120px'}}>{exp.description}</p>
+
+                                    <div style = {{marginTop: '40px'}}>
+                                        <p><b>Reference:</b></p>
+                                        <p>{exp.EmployerName}</p>
+                                        <p>{exp.EmployerEmail}</p>
+                                        <p>{exp.EmployerPhone}</p>
+                                    </div>
+
+                                </div>
+    
+                            </div>
+                        
+                        
+                        )
+                    })}
+
+                    </ReactScrollableFeed>
+                </>
+                :
+                  null
+                }
+               
+
+               
 
                </section>
             </div>
-               : null}
+           
       
 
          
