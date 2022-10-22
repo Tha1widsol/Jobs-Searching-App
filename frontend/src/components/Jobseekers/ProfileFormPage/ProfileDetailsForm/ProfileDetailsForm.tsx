@@ -160,7 +160,7 @@ export default function ProfileDetailsForm({isIsolated = true, toggleTab, popupO
             {profile.values?.logo ? <p>Current logo: {profile.values.logo}</p> : null} 
 
             <div style = {{float: 'right', marginTop: '10px'}} onClick = {handleSubmit}>
-                 {isIsolated ? <button type = 'submit'>Submit</button> : <button onClick = {() => toggleTab()}>Next</button>}
+                 {isIsolated ? <button type = 'submit'>Submit</button> : <button>Next</button>}
             </div>
     </form>
   )
