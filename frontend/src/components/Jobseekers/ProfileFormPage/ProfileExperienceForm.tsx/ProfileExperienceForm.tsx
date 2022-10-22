@@ -55,8 +55,7 @@ export default function ProfileExperienceForm({edit = true, isIsolated = true, p
       form.append('years', experience.value.years.toString() || '0')
       form.append('isOnGoing', experience.value.isOnGoing?.toString() || 'False')
 
-
-        axios.post(`/api/profileExperience?id=${chosenExperience?.id}`,form, requestOptions)
+        axios.post(`/api/profileExperience`,form, requestOptions)
         .then(response => {
           if (response.status === 201){
               popupOff()
@@ -79,8 +78,6 @@ export default function ProfileExperienceForm({edit = true, isIsolated = true, p
        
 
     }
-
-
 
   return (
     <div>
