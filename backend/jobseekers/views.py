@@ -39,6 +39,17 @@ def getMatchScore(request):
      score.calculateTotalScore()
      return Response({'score': score.getTotalScore()})
      
+    
+@api_view(['GET'])
+def checkProfileExists(request):
+    lookup_url_kwarg = 'id'
+    userID = request.GET.get(lookup_url_kwarg)
+    profile = Profile.objects.filter(user__id = userID)
+    if profile.exists():
+        return Response({'exists': True})
+
+    return Response({'exists': False})
+
 class ProfileAPI(APIView):
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = CreateProfileSerializer

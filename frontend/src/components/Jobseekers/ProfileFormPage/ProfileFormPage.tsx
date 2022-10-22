@@ -29,9 +29,15 @@ export default function ProfileFormPage() {
     const maxTabs = document.querySelectorAll('.tab').length
 
     useEffect(() => {
-        dispatch(fetchProfile(user.id))
+        axios.get(`/api/checkProfileExists?id=${user.id}`)
         .then(response => {
-            if (response.meta.requestStatus === 'fulfilled') navigate(`/profile/${user.id}`)
+            const data = response.data
+            if (data.exists){
+                dispatch(fetchProfile(user.id))
+                .then(response => {
+                    if (response.meta.requestStatus === 'fulfilled') navigate(`/profile/${user.id}`)
+                })
+            }
         })
     },[dispatch, navigate, user.id])
 

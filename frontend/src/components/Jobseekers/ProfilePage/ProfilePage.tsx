@@ -6,6 +6,7 @@ import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile';
 import {fetchProfileExperience} from '../../Global/features/Jobseekers/profiles/profileExperience';
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {useNavigate} from 'react-router-dom';
+import axios from 'axios'
 
 export default function ProfilePage() {
   const navigate = useNavigate()
@@ -15,19 +16,20 @@ export default function ProfilePage() {
   const {userID} = useParams()
 
   useEffect(() => {
-    dispatch(fetchProfile(Number(userID)))
-    .unwrap()
-    .then(() => {
-       if (profile.values.user.id === user.id)
-          navigate(`/profile/${user.id}`)
-    })
+    axios.get(`/api/checkProfileExists?id=${userID}`)
+    .then(response => {
+      const data = response.data
+      if (data.exists){
+          dispatch(fetchProfile(Number(userID)))
+          .then(() => {
+            if (profile.values.user.id === user.id)
+                navigate(`/profile/${user.id}`)
+          })
+          dispatch(fetchProfileExperience(Number(userID)))
+      }
 
-    .catch(() => {
-      navigate('/create-profile')
+      else navigate('/create-profile')
     })
-    
-    dispatch(fetchProfileExperience(Number(userID)))
-    
  },[dispatch, navigate, userID])
 
   return (

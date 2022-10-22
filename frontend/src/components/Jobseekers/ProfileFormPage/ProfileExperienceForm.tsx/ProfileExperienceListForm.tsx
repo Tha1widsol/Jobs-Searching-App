@@ -4,6 +4,7 @@ import { fetchProfileExperience } from '../../../Global/features/Jobseekers/prof
 import { fetchProfile } from '../../../Global/features/Jobseekers/profiles/profile';
 import { DeleteProfileExperience } from '../../../Global/features/Jobseekers/profiles/profileExperience';
 import ReactScrollableFeed from 'react-scrollable-feed';
+import axios from 'axios';
 
 export default function ProfileExperienceListForm() {
     const dispatch = useAppDispatch()
@@ -12,8 +13,14 @@ export default function ProfileExperienceListForm() {
     const experience = useAppSelector(state => state.profileExperience)
 
     useEffect(() => {
-        dispatch(fetchProfile(user.values?.id))
-        dispatch(fetchProfileExperience(profile.values?.id))
+        axios.get(`/api/checkProfileExists?id=${user.values?.id}`)
+        .then(response => {
+            const data = response.data
+            if (data.exists){
+                dispatch(fetchProfile(user.values?.id))
+                 dispatch(fetchProfileExperience(profile.values?.id))
+            }
+        })
     },[dispatch, user.values?.id, profile.values?.id])
 
     function handleRemoveExperience(idx: number){
@@ -22,12 +29,12 @@ export default function ProfileExperienceListForm() {
         dispatch(DeleteProfileExperience(idx))
     } 
     
-  return (
+  return experience.values?.filter(exp => exp).length ? (
     <>
-        {experience.values.length ? <label><h2>Experience: ({experience.values.length})</h2></label>: null}
+        <label><h2>Experience: ({experience.values.length - 1})</h2></label>
         <div className = 'list longerList'>
             <ReactScrollableFeed>
-            {experience.values?.map((exp, index) => {
+            {experience.values.map((exp, index) => {
                     return (
                         <div key = {index}>
                             <div style = {{display: 'flex', alignItems: 'center', gap: '20px'}}>
@@ -60,5 +67,5 @@ export default function ProfileExperienceListForm() {
             </ReactScrollableFeed>
         </div>
     </>
-  )
+  ): null
 }
