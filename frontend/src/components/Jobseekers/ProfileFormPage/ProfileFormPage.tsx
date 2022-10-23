@@ -11,12 +11,12 @@ import Popup from '../../Global/Popup/Popup';
 import ProfileDetailsForm from './ProfileDetailsForm/ProfileDetailsForm';
 import ProfileSkillsForm from './ProfileSkillsForm/ProfileSkillsForm';
 import ProfileExperienceForm from './ProfileExperienceForm.tsx/ProfileExperienceForm';
-import ProfileExperienceListForm from './ProfileExperienceForm.tsx/ProfileExperienceListForm';
+import ProfileExperienceList from './ProfileExperienceForm.tsx/ProfileExperienceList';
 
 export default function ProfileFormPage() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const user = useAppSelector(state => state.user.values)
+    const user = useAppSelector(state => state.user)
     const profile = useAppSelector(state => state.profile)
     const [currentTab,setCurrentTab] = useState(1)
     const [errors,setErrors] = useState<Array<string>>([])
@@ -25,21 +25,23 @@ export default function ProfileFormPage() {
     const [industry,setIndustry] = useState({value: ''})
     const [distance,setDistance] = useState({value: ''})
     const [cv,setCV] = useState<FileProps>({value: '' , name:''})
+    const experience = useAppSelector(state => state.profileExperience)
     
     const maxTabs = document.querySelectorAll('.tab').length
 
     useEffect(() => {
-        axios.get(`/api/checkProfileExists?id=${user.id}`)
+        axios.get(`/api/checkProfileExists?id=${user.values?.id}`)
         .then(response => {
             const data = response.data
             if (data.exists){
-                dispatch(fetchProfile(user.id))
+                dispatch(fetchProfile(user.values?.id))
                 .then(response => {
-                    if (response.meta.requestStatus === 'fulfilled') navigate(`/profile/${user.id}`)
+                    if (response.meta.requestStatus === 'fulfilled') navigate(`/profile/${user.values?.id}`)
                 })
+
             }
         })
-    },[dispatch, navigate, user.id])
+    },[dispatch, navigate, user.values?.id])
 
     const validateForm = () => {
         let isValid = true
@@ -67,10 +69,8 @@ export default function ProfileFormPage() {
 
         let form = new FormData();
 
-      
         if (cv.value)
            form.append('cv',cv.value,cv.name)
-        
 
         form.append('education',education.value)
         form.append('industry',industry.value)
@@ -80,7 +80,7 @@ export default function ProfileFormPage() {
             .then(response => {
                 if (response.status === 201){
                     handleAddSuccessMsg('Profile is successfully saved', dispatch)
-                    navigate(`/profile/${user.id}`)
+                    navigate(`/profile/${user.values?.id}`)
                 }
                 
             })
@@ -111,10 +111,10 @@ export default function ProfileFormPage() {
                 <div className = {`tab ${currentTab === 3 ? 'show' : 'hide'}`}>
                     <h1 style = {{textAlign: 'center'}}><u>Work Experience:</u></h1>
                     <Popup trigger = {popup.experience} switchOff = {() => setPopup(prev => {return{...prev, experience: false}})}> 
-                          <ProfileExperienceForm edit = {false} popupOff = {() => setPopup(prev => {return{...prev, experience: false}})}/>
+                          <ProfileExperienceForm edit = {true} popupOff = {() => setPopup(prev => {return{...prev, experience: false}})}/>
                     </Popup>
                     <button onClick = {() => setPopup(prev => {return{...prev, experience: true}})}>Add</button>
-                    <ProfileExperienceListForm/>
+                    <ProfileExperienceList experience = {experience.values}/>
                 </div>
 
                 <div className = {`tab ${currentTab === 4 ? 'show' : 'hide'}`}>

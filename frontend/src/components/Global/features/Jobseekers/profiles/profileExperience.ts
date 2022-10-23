@@ -2,6 +2,21 @@ import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import {token} from '../../Auth/user'
 import axios from 'axios'
 
+export interface ProfileExperienceListProps{
+    status: 'success' | 'loading' | 'rejected' | ''
+    values: [{
+        id: number
+        title: string,
+        companyName: string,
+        EmployerName: string,
+        EmployerEmail: string,
+        EmployerPhone: string,
+        description: string,
+        years: number,
+        isOnGoing: boolean
+    }]
+}
+
 const initialState = {
     status: '',
     values: [{
@@ -15,7 +30,7 @@ const initialState = {
         years: 0,
         isOnGoing: false
     }]
-}
+} as ProfileExperienceListProps
   
 export const fetchProfileExperience = createAsyncThunk(
     'user/fetchProfileExperience',

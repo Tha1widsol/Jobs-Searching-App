@@ -12,7 +12,7 @@ import axios from 'axios'
 export default function ProfileDetailsForm({isIsolated = true, toggleTab, popupOff}: {isIsolated?: boolean, toggleTab: () => void, popupOff: () => void}) {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const user = useAppSelector(state => state.user.values)
+    const user = useAppSelector(state => state.user)
     const [errors,setErrors] = useState<Array<string>>([])
     const profile = useAppSelector(state => state.profile)
     const [firstName,setFirstName] = useState({value: '', isValid: true, errorMsg: 'First name is invalid'})
@@ -34,7 +34,7 @@ export default function ProfileDetailsForm({isIsolated = true, toggleTab, popupO
         profile.values?.lastName,
         profile.values?.middleName,
         profile.values?.phone,
-        user.id
+        user.values?.id
         ])
 
     const validateForm = () => {
@@ -123,9 +123,9 @@ export default function ProfileDetailsForm({isIsolated = true, toggleTab, popupO
                }
 
                handleAddSuccessMsg('Profile is successfully saved', dispatch)
-               navigate(`/profile/${user.id}`)
+               navigate(`/profile/${user.values?.id}`)
                popupOff()
-               dispatch(fetchProfile(user.id))
+               dispatch(fetchProfile(user.values?.id))
            }
        })
 
