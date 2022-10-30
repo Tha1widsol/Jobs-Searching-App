@@ -1,11 +1,10 @@
 import axios from 'axios';
-import React, {useState} from 'react'
-import { useParams } from 'react-router-dom';
+import React,{useState, useEffect} from 'react'
 import Errors from '../../../Global/messages/Errors'
 import {useAppSelector, useAppDispatch} from '../../../Global/features/hooks';
 import {token} from '../../../Global/features/Auth/user';
 import {ProfileExperienceProps} from './types/ProfileExperienceProps';
-import {fetchProfileExperience} from '../../../Global/features/Jobseekers/profiles/profileExperience';
+import {fetchProfileExperience, AddProfileExperience} from '../../../Global/features/Jobseekers/profiles/profileExperience';
 
 export const initialExperience = {
  id: 0, title: '', companyName: '',  EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: 1, isOnGoing: false
@@ -13,10 +12,14 @@ export const initialExperience = {
 
 export default function ProfileExperienceForm({edit = true, isIsolated = true, popupOff, chosenExperience}: {edit?: boolean, isIsolated?: boolean, popupOff: () => void, chosenExperience?: ProfileExperienceProps}) {
     const dispatch = useAppDispatch()
-    const {userID} = useParams()
+    const user = useAppSelector(state => state.user)
     const [experience,setExperience] = useState({value: chosenExperience || initialExperience, popup: false, isValid: true, invalidMsg: 'Fields are required', alreadyExistsMsg: 'Experience already exists'})
     const currentExperience = useAppSelector(state => state.profileExperience.values)
     const [errors,setErrors] = useState<Array<string>>([])
+    
+    useEffect(() => {
+      dispatch(fetchProfileExperience(user.values?.id))
+    },[dispatch, user.values?.id])
 
     const validateForm = () => {
       let isValid = true
@@ -55,11 +58,12 @@ export default function ProfileExperienceForm({edit = true, isIsolated = true, p
       form.append('years', experience.value.years.toString() || '0')
       form.append('isOnGoing', experience.value.isOnGoing?.toString() || 'False')
 
-        axios.post(`/api/profileExperience?id=${chosenExperience?.id}`,form, requestOptions)
+        axios.post(`/api/profileExperience?id=${chosenExperience?.id || 0} `,form, requestOptions)
         .then(response => {
           if (response.status === 201){
               popupOff()
-              dispatch(fetchProfileExperience(Number(userID)))
+              if (!edit) dispatch(AddProfileExperience(experience.value))
+              else dispatch(fetchProfileExperience(user.values?.id))
               setExperience(prev => {return{...prev, isValid: true, popup: false, value: initialExperience}})
               setErrors([])
           }
