@@ -48,7 +48,7 @@ export default function ProfileExperienceList({experience, allowEdit = true}: {e
     <>
     <Popup trigger = {popup.deleteExperience.trigger} switchOff = {() => setPopup(prev => ({...prev, deleteExperience: {...prev.deleteExperience, trigger: false}}))}>
             <div style = {{textAlign: 'center'}}>
-                <p>Are you sure you want to delete work experience - {popup.deleteExperience.title} {popup.deleteExperience.id} at {popup.deleteExperience.company}?</p>
+                <p>Are you sure you want to delete work experience - {popup.deleteExperience.title} at {popup.deleteExperience.company}?</p>
                 <p style = {{fontSize: 'small', color: 'gray'}}>(This action cannot be undone)</p>
                 <button onClick = {handleDeleteExperience}>Confirm</button>
                 <button type = 'button' onClick = {() => setPopup(prev => ({...prev, deleteExperience: {...prev.deleteExperience, trigger: false}}))}>Cancel</button>
@@ -56,8 +56,8 @@ export default function ProfileExperienceList({experience, allowEdit = true}: {e
     </Popup>    
 
     <Popup trigger = {popup.experience.trigger} switchOff = {() => setPopup(prev => ({...prev, experience: {...prev.experience, trigger: false}}))} modalOn = {false}>
-            <ProfileExperienceForm edit = {true} popupOff = {() => setPopup(prev => ({...prev, experience: {...prev.experience, trigger: false}}))} chosenExperience = {popup.experience.values}/>
-        </Popup>
+        <ProfileExperienceForm edit = {true} popupOff = {() => setPopup(prev => ({...prev, experience: {...prev.experience, trigger: false}}))} chosenExperience = {popup.experience.values}/>
+    </Popup>
 
 
     <ReactScrollableFeed>
