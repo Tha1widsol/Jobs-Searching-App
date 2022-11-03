@@ -12,6 +12,7 @@ import ProfileDetailsForm from './ProfileDetailsForm/ProfileDetailsForm';
 import ProfileSkillsForm from './ProfileSkillsForm/ProfileSkillsForm';
 import ProfileExperienceForm from './ProfileExperienceForm.tsx/ProfileExperienceForm';
 import ProfileExperienceList from './ProfileExperienceForm.tsx/ProfileExperienceList';
+import ProfileEducationForm from './ProfileEducationForm/ProfileEducationForm';
 
 export default function ProfileFormPage() {
     const navigate = useNavigate()
@@ -115,23 +116,11 @@ export default function ProfileFormPage() {
                     </Popup>
                     <button onClick = {() => setPopup(prev => {return{...prev, experience: true}})}>Add</button>
                     <ProfileExperienceList experience = {experience.values}/>
+                    <button style = {{float: 'right'}} onClick = {() => setCurrentTab(currentTab + 1)}>Next</button>
                 </div>
 
                 <div className = {`tab ${currentTab === 4 ? 'show' : 'hide'}`}>
-                    <h1 className = 'title'>Education</h1> 
-                    <Errors errors = {errors}/>
-
-                    <label htmlFor = 'education'><h3>Highest level of education:</h3></label>
-                    <select id = 'education' onChange = {e => setEducation({value: e.target.value})} value = {education.value} required>
-                        <option value = 'No formal education'>No formal education</option>
-                        <option value = 'Secondary education'>Secondary education or high school</option>
-                        <option value = 'GED'>GED</option>
-                        <option value = 'Vocational qualification'>Vocational qualification</option>
-                        <option value = 'A-Levels'>A-Levels</option>
-                        <option value = "Bachelor's degree">Bachelor's degree</option>
-                        <option value = "Master's degree">Master's degree</option>
-                        <option value = 'Doctorate or higher'>Doctorate or higher</option>
-                    </select>
+                    <ProfileEducationForm isIsolated = {false} toggleTab = {() => setCurrentTab(currentTab + 1)}/>
                 </div>
 
                 <div className = {`tab ${currentTab === 5 ? 'show' : 'hide'}`}>
