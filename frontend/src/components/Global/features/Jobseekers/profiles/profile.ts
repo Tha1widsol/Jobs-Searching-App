@@ -1,28 +1,8 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
-import {UserProps,user,token} from '../../Auth/user'
-import {StatusProps} from '../../../types/status'
+import {user,token} from '../../Auth/user'
+import { ProfileProps } from './types/profileProps'
 import axios from 'axios'
 
-export interface ProfileProps extends StatusProps{
-    values: {
-        id: number
-        user: UserProps
-        firstName: string
-        lastName: string
-        middleName?: string
-        skills: [{name: string}]
-        phone: string
-        logo?: string
-        cv: string
-        education: string
-        industry: string
-        distance: string
-        experience?: string
-        about: string
-        isActive: boolean
-    }
-  
-}
 
 export const profile = {
     id: 0,
@@ -30,7 +10,7 @@ export const profile = {
     firstName: '',
     middleName: '',
     lastName: '',
-    skills: [{name: ''}],
+    skills: [{id: 0, name: ''}],
     phone: '',
     logo: '',
     cv: '',
@@ -50,7 +30,7 @@ const initialState: ProfileProps = {
     firstName: '',
     middleName: '',
     lastName: '',
-    skills: [{name: ''}],
+    skills: [{id: 0 ,name: ''}],
     phone: '',
     logo: '',
     cv: '',
