@@ -1,7 +1,8 @@
 import React,{useState, useEffect} from 'react'
 import './css/Profile.css'
 import {useAppDispatch, useAppSelector} from '../../Global/features/hooks';
-import {ProfileProps,setToggleStatus,setDeleteProfile} from '../../Global/features/Jobseekers/profiles/profile'
+import {setToggleStatus,setDeleteProfile} from '../../Global/features/Jobseekers/profiles/profile'
+import { ProfileProps } from '../../Global/features/Jobseekers/profiles/types/profileProps';
 import {initialExperience} from '../ProfileFormPage/ProfileExperienceForm.tsx/ProfileExperienceForm';
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import {useNavigate} from 'react-router-dom';
@@ -9,11 +10,12 @@ import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
 import {token} from '../../Global/features/Auth/user';
 import Popup from '../../Global/Popup/Popup';
 import ProfileDetailsForm from '../ProfileFormPage/ProfileDetailsForm/ProfileDetailsForm';
-import ProfileSkillsForm from '../ProfileFormPage/ProfileSkillsForm/ProfileSkillsForm';
 import ProfileExperienceForm from '../ProfileFormPage/ProfileExperienceForm.tsx/ProfileExperienceForm';
 import axios from 'axios'
 import { fetchProfileExperience } from '../../Global/features/Jobseekers/profiles/profileExperience';
 import ProfileExperienceList from '../ProfileFormPage/ProfileExperienceForm.tsx/ProfileExperienceList';
+import ProfileSkillsList from '../ProfileFormPage/ProfileSkillsForm/ProfileSkillsList';
+import ProfileSkillsForm from '../ProfileFormPage/ProfileSkillsForm/ProfileSkillsForm';
 
 export default function Profile({profile} : {profile: ProfileProps}) {
     const navigate = useNavigate()
@@ -79,7 +81,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
             </div>
         </Popup>
 
-
+  
         {!user?.isAnEmployer ? 
         <KebabMenu current = {dropdown} switchOn = {() => setDropdown(true)} switchOff = {() => setDropdown(false)}>
             {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn normalNavBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
@@ -119,11 +121,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                     </div>
 
                     <hr className = 'mt-0-mb-4'/>
-                    <div className = 'listContainer'>
-                        {profile.values?.skills?.map((skill,index) => {
-                            return (<li key = {index}>{skill.name}</li>)
-                        })}
-                    </div>
+                    <ProfileSkillsList skills = {profile.values?.skills}/>
                 </section>
             </div>
 
