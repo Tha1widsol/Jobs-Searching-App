@@ -102,6 +102,14 @@ class ProfileSkillsAPI(APIView):
         profile.skills.set(newSkills, clear = True)
         profile.save()
         return Response(status = status.HTTP_200_OK)
+    
+    def delete(self, request):
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        skill = Skill.objects.get(id = id)
+        skill.delete()
+        return Response(status = status.HTTP_200_OK)
+
 
 class ProfileExperienceAPI(generics.ListAPIView):
       serializer_class = ProfileExperienceSerializer
