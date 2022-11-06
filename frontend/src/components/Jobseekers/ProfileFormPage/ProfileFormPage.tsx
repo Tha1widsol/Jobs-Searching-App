@@ -22,7 +22,6 @@ export default function ProfileFormPage() {
     const [currentTab,setCurrentTab] = useState(1)
     const [errors,setErrors] = useState<Array<string>>([])
     const [popup, setPopup] = useState({experience: false})
-    const [education,setEducation] = useState({value: 'No formal education'})
     const [industry,setIndustry] = useState({value: ''})
     const [distance,setDistance] = useState({value: ''})
     const [cv,setCV] = useState<FileProps>({value: '' , name:''})
@@ -73,7 +72,6 @@ export default function ProfileFormPage() {
         if (cv.value)
            form.append('cv',cv.value,cv.name)
 
-        form.append('education',education.value)
         form.append('industry',industry.value)
         form.append('distance',distance.value)
 
