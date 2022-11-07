@@ -88,20 +88,22 @@ class ProfileAPI(APIView):
         profile.delete()
         return Response(status = status.HTTP_200_OK)
 
-class ProfileSkillsAPI(APIView):
+class ProfileSkillsAPI(generics.ListAPIView):
+    serializer_class = SkillSerializer
+
     def post(self, request):
-        newSkills = []
-        profile = Profile.objects.get(user = self.request.user)
-        skills = json.loads(request.data.get('skills'))
-
-        for skillName in skills:
-            skill, created = Skill.objects.get_or_create(name = skillName)
-            skill.save()
-            newSkills.append(skill)
-
-        profile.skills.set(newSkills, clear = True)
+        lookup_url_kwarg = 'name'
+        skillName = request.GET.get(lookup_url_kwarg)
+        profile = Profile.objects.get(user = request.user)
+        skill, created = Skill.objects.get_or_create(name = skillName)
+        profile.skills.add(skill)
         profile.save()
         return Response(status = status.HTTP_200_OK)
+
+    def get_queryset(self):
+          profile = Profile.objects.get(user = self.request.user)
+          skills = profile.skills.all()
+          return skills
     
     def delete(self, request):
         lookup_url_kwarg = 'id'
