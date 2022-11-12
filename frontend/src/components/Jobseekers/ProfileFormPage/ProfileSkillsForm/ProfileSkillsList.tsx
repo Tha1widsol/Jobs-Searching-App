@@ -27,7 +27,7 @@ export default function ProfileSkillsList({skills, edit = true}: {skills: Profil
 
   return (
     <>
-    <Popup trigger = {popup.deleteSkills.trigger} switchOff = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: true}}))}>
+    <Popup trigger = {popup.deleteSkills.trigger} switchOff = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: false}}))}>
         <div style = {{textAlign: 'center'}}>
             <p>Are you sure you want to remove your skill: '{popup.deleteSkills.skill.name}'?</p>
             <button type = 'button' onClick = {() => handleRemoveSkill(popup.deleteSkills.skill.id)}>Confirm</button>
