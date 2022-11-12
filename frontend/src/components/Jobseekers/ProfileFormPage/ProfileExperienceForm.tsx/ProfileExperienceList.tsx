@@ -75,7 +75,7 @@ export default function ProfileExperienceList({experience, allowEdit = true}: {e
                         : null}
                     </div>
                     <p>{exp.companyName}</p>
-                    <p style = {{color: 'gray', fontSize: 'small'}}>{exp.years > 0 ? `Years worked - ${exp.years}` : null}</p>
+                    <p className = 'smallGrey'>{exp.years > 0 ? `Years worked - ${exp.years}` : null}</p>
                     <p style = {{ maxHeight: '120px'}}>{exp.description}</p>
 
                     <div style = {{marginTop: '40px'}}>

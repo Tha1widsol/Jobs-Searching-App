@@ -13,6 +13,7 @@ import ProfileSkillsForm from './ProfileSkillsForm/ProfileSkillsForm';
 import ProfileExperienceForm from './ProfileExperienceForm.tsx/ProfileExperienceForm';
 import ProfileExperienceList from './ProfileExperienceForm.tsx/ProfileExperienceList';
 import ProfileEducationForm from './ProfileEducationForm/ProfileEducationForm';
+import ProfileSkillsList from './ProfileSkillsForm/ProfileSkillsList';
 
 export default function ProfileFormPage() {
     const navigate = useNavigate()
@@ -28,20 +29,6 @@ export default function ProfileFormPage() {
     const experience = useAppSelector(state => state.profileExperience)
     
     const maxTabs = document.querySelectorAll('.tab').length
-
-    useEffect(() => {
-        axios.get(`/api/checkProfileExists?id=${user.values?.id}`)
-        .then(response => {
-            const data = response.data
-            if (data.exists){
-                dispatch(fetchProfile(user.values?.id))
-                .then(response => {
-                    if (response.meta.requestStatus === 'fulfilled') navigate(`/profile/${user.values?.id}`)
-                })
-
-            }
-        })
-    },[dispatch, navigate, user.values?.id])
 
     const validateForm = () => {
         let isValid = true
@@ -105,6 +92,8 @@ export default function ProfileFormPage() {
 
                 <div className = {`tab ${currentTab === 2 ? 'show' : 'hide'}`}>
                     <ProfileSkillsForm popupOff = {() => null} isIsolated = {false} toggleTab = {() => setCurrentTab(currentTab + 1)}/>
+                    <h4>Skills ({profile.values?.skills.length}):</h4>
+                    <ProfileSkillsList skills = {profile.values?.skills}/>
                 </div>
 
                 <div className = {`tab ${currentTab === 3 ? 'show' : 'hide'}`}>

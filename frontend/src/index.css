@@ -38,7 +38,7 @@ p, b, li{
   }
   100% {
       transform: rotate(360deg);
-  }
+    }
   } 
 
 .title{
@@ -59,6 +59,11 @@ input,select,textarea{
   font-size: 17px;
   border: 1.5px solid #aaaaaa;
   box-sizing: border-box;
+}
+
+.smallGrey{
+  color: gray;
+  font-size: small;
 }
 
 .error,.success{text-align: center}
@@ -362,7 +367,7 @@ Container styles
 }
 
 .listContainer{
-  max-height: 120px;
+  max-height: 200px;
   overflow: auto;
 }
 
@@ -384,6 +389,10 @@ Skeleton styles
   z-index: -1;
   opacity: .7;
   animation: skeleton-loading 1s linear infinite alternate;
+}
+
+#skills{
+  width: 85%
 }
 
 .skeleton-text{
