@@ -10,7 +10,7 @@ export const profile = {
     firstName: '',
     middleName: '',
     lastName: '',
-    skills: [{id: 0, name: '', generic: true}],
+    skills: [{id: 0, name: '', specific: false}],
     phone: '',
     logo: '',
     cv: '',
@@ -30,7 +30,7 @@ const initialState: ProfileProps = {
     firstName: '',
     middleName: '',
     lastName: '',
-    skills: [{id: 0 ,name: '', generic: true}],
+    skills: [{id: 0 , name: '', specific: false}],
     phone: '',
     logo: '',
     cv: '',
@@ -69,9 +69,14 @@ export const ProfileSlice = createSlice({
             state.values.isActive = !state.values.isActive
         },
 
+        addSkill: (state, action) => {
+            state.values.skills.push(action.payload)
+        },
+        
         setDeleteProfile: (state) => {
             state.values = initialState.values
-        }
+        },
+
     },
 
     extraReducers(builder){
@@ -93,6 +98,6 @@ export const ProfileSlice = createSlice({
 
 })
 
-export const {setProfile,setToggleStatus,setDeleteProfile} = ProfileSlice.actions
+export const {setProfile,setToggleStatus,setDeleteProfile,addSkill} = ProfileSlice.actions
 
 export default ProfileSlice.reducer

@@ -1,11 +1,12 @@
 import React,{useState, useEffect} from 'react'
 import {useAppDispatch, useAppSelector} from '../../../Global/features/hooks'
+import { addSkill } from '../../../Global/features/Jobseekers/profiles/profile'
 import Errors from '../../../Global/messages/Errors'
 import {token} from '../../../Global/features/Auth/user'
 import axios from 'axios'
 
 export default function ProfileSkillsForm({isIsolated = true, edit = false, popupOff, toggleTab}: {isIsolated?: boolean, edit?: boolean, popupOff: () => void, toggleTab: () => void}) {
-    const [skills, setSkills] = useState({value: [{id: 0, name: ''}], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
+    const [skills, setSkills] = useState({value: [{id: 0, name: ''}], currentSkill: {id: 0, name: '', specific: false}, isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
     const profile = useAppSelector(state => state.profile.values)
     const [errors, setErrors] = useState<Array<string>>([])
     const dispatch = useAppDispatch()
@@ -17,12 +18,12 @@ export default function ProfileSkillsForm({isIsolated = true, edit = false, popu
     },[profile.skills, edit])
 
     function handleSetSkills(e: React.ChangeEvent<HTMLInputElement>){
-        setSkills(prev => {return {...prev, currentVal: e.target.value}})
+        setSkills(prev => ({...prev, currentSkill: {...prev.currentSkill, name: e.target.value}}))
         e.target.value = e.target.value.replace(',','')
     }
 
     function handleAddSkill(){
-      const currentSkill = skills.currentVal.trim()
+      const currentSkill = skills.currentSkill.name.trim()
       let errors: Array<string> = []
       
       if (currentSkill.match(/^ *$/)) {
@@ -52,6 +53,7 @@ export default function ProfileSkillsForm({isIsolated = true, edit = false, popu
 
       .then(response => {
         if (response.status === 200) {
+          dispatch(addSkill({name: currentSkill, specific: skills.currentSkill.specific}))
           popupOff()
         }
       })
@@ -60,17 +62,17 @@ export default function ProfileSkillsForm({isIsolated = true, edit = false, popu
       setErrors([]) 
   }
 
-
   return (
     <>
         <h1 className = 'title'>Skills</h1> 
         <Errors errors = {errors}/>
         <label htmlFor = 'skills'><h3>Specific Key skills:</h3></label>
-        <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
+        <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentSkill.name} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
         <button type = 'button' style = {{padding: '10px', width: 'auto'}} onClick = {handleAddSkill}>Add</button>
-  
-
-       
+        <span className = 'row'>
+          <label><p>Specific:</p></label>
+          <input id = 'skillType' type = 'checkbox' onChange = {e => setSkills(prev => ({...prev, currentSkill: {...prev.currentSkill, specific: e.target.checked}}))}/>
+        </span>
     </>
   )
 }
