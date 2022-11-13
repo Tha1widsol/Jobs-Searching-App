@@ -34,10 +34,10 @@ class calculateScore:
 
         for skill in currentSkills:
             if skill in str(jobSkills):
-                score += 1
+                score += 0.4
             
             else:
-                score += 0.4
+                score += 0.15
         
         if len(jobSkills):
             return (score / len(jobSkills) * self.skillsSection) * 100
