@@ -40,7 +40,7 @@ export default function ProfileSkillsList({skills, edit = true}: {skills: Profil
                 {skills.map((skill, index) => {
                     return skill.name !== '' ? (
                         <div className = 'rowSections' key = {index} >
-                            <li>{skill.name} <span className = 'smallGrey'>- {skill.generic ? 'Generic' : 'Specific'}</span></li>
+                            <li>{skill.name} <span className = 'smallGrey'>- {skill.specific ? 'Specific' : 'Generic'}</span></li>
                           
                             {edit ? <i className = 'fa fa-trash-o' onClick = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: true, skill: {id: skill.id, name: skill.name}}}))} style = {{padding:'10px'}}/> : null}
                         </div>

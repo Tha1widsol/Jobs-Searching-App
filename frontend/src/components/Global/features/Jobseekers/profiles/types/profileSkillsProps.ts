@@ -4,11 +4,11 @@ export interface ProfileSkillsProps extends StatusProps{
     values: [{
         id: number,
         name: string
-        generic: boolean
+        specific: boolean
     }]
 }
 export interface ProfileSkillProps{
         id: number,
         name: string
-        generic: boolean
+        specific: boolean
 }

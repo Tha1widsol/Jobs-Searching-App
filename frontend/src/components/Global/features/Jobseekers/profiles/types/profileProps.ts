@@ -8,7 +8,7 @@ export interface ProfileProps extends StatusProps{
         firstName: string
         lastName: string
         middleName?: string
-        skills: [{id: 0, name: string, generic: boolean}]
+        skills: [{id: 0, name: string, specific: boolean}]
         phone: string
         logo?: string
         cv: string
