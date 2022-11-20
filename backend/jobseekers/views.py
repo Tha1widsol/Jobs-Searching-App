@@ -92,13 +92,19 @@ class ProfileSkillsAPI(generics.ListAPIView):
     serializer_class = SkillSerializer
 
     def post(self, request):
-        lookup_url_kwarg = 'name'
-        skillName = request.GET.get(lookup_url_kwarg)
-        profile = Profile.objects.get(user = request.user)
-        skill, created = Skill.objects.get_or_create(name = skillName)
-        profile.skills.add(skill)
-        profile.save()
-        return Response(status = status.HTTP_200_OK)
+        serializer = self.serializer_class(data = request.data)
+        
+        if serializer.is_valid():
+            skillName = serializer.data.get('name')
+            isSpecific = serializer.data.get('specific')
+            profile = Profile.objects.get(user = request.user)
+            skill, created = Skill.objects.get_or_create(name = skillName, specific = isSpecific)
+            profile.skills.add(skill)
+            profile.save()
+            serializer = self.serializer_class(skill)
+            return Response({'skill': serializer.data}, status = status.HTTP_200_OK)
+
+        return Response(status = status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
           profile = Profile.objects.get(user = self.request.user)
