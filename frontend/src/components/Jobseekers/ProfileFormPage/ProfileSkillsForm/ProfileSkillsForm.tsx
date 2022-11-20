@@ -45,15 +45,19 @@ export default function ProfileSkillsForm({isIsolated = true, edit = false, popu
           return
       }
 
-      axios.post(`/api/profile/skills?name=${currentSkill}`,null, {
-          headers: {
-            Authorization: `Token ${token}`
-          }
-      })
+      const requestOptions = {
+        headers: {'Content-Type': 'multipart/form-data', Authorization:`Token ${token}`}
+     }
 
+      let form = new FormData();
+      form.append('name', currentSkill)
+      form.append('specific', String(skills.currentSkill.specific))
+
+      axios.post(`/api/profile/skills`,form, requestOptions)
       .then(response => {
         if (response.status === 200) {
-          dispatch(addSkill({name: currentSkill, specific: skills.currentSkill.specific}))
+          const skill = response.data.skill
+          dispatch(addSkill(skill))
           popupOff()
         }
       })
