@@ -65,7 +65,7 @@ export default function ProfileExperienceList({experience, allowEdit = true}: {e
         return (
         <div style = {{maxHeight: '1000px'}} key = {index}>
                 <div style = {{marginBottom: '50px'}}>
-                    <div style = {{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <div className = 'rowSections'>
                         <h3>{exp.title}</h3>
                         {allowEdit ? 
                         <div style = {{display: 'flex', gap: '20px'}}>
