@@ -9,7 +9,7 @@ import ReactScrollableFeed from 'react-scrollable-feed';
 export default function ProfileSkillsList({skills, edit = true}: {skills: ProfileSkillsProps['values'], edit?: boolean}) {
   const dispatch = useAppDispatch()
   const user = useAppSelector(state => state.user)
-  const [popup, setPopup] = useState({skills: false, deleteSkills: {trigger: false, skill: {id: 0, name: ''}}})
+  const [popup, setPopup] = useState({skills: false, editSkill: {trigger: false, skill: {id: 0, name: '', specific: false}, value: ''}, deleteSkills: {trigger: false, skill: {id: 0, name: ''}}})
 
   useEffect(() => {
     dispatch(fetchProfile(user.values?.id))
@@ -25,8 +25,22 @@ export default function ProfileSkillsList({skills, edit = true}: {skills: Profil
     })
   }
 
+  function handleEditSkill(e: React.SyntheticEvent){
+    e.preventDefault()
+    axios.put(`'/api/profile/skills?id=${popup.editSkill.skill}`)
+  }
+
   return (
     <>
+    <Popup trigger = {popup.editSkill.trigger} switchOff = {() => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, trigger: false}}))}>
+        <div style = {{textAlign: 'center'}}>
+            <h2>Edit Skill</h2>
+            <input type = 'text' value = {popup.editSkill.value} onChange = {e => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, value: e.target.value}}))}/>
+            <button type = 'button'>Confirm</button>
+            <button type = 'button' onClick = {() => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, trigger: false}}))}>Cancel</button>
+        </div>
+    </Popup>
+
     <Popup trigger = {popup.deleteSkills.trigger} switchOff = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: false}}))}>
         <div style = {{textAlign: 'center'}}>
             <p>Are you sure you want to remove your skill: '{popup.deleteSkills.skill.name}'?</p>
@@ -39,10 +53,14 @@ export default function ProfileSkillsList({skills, edit = true}: {skills: Profil
             <ReactScrollableFeed>
                 {skills.map((skill, index) => {
                     return skill.name !== '' ? (
-                        <div className = 'rowSections' key = {index} >
-                            <li>{skill.name} <span className = 'smallGrey'>- {skill.specific ? 'Specific' : 'Generic'}</span></li>
-                          
-                            {edit ? <i className = 'fa fa-trash-o' onClick = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: true, skill: {id: skill.id, name: skill.name}}}))} style = {{padding:'10px'}}/> : null}
+                        <div className = 'rowSections' key = {index}>
+                                <li>{skill.name} <span className = 'smallGrey'>- {skill.specific ? 'Specific' : 'Generic'}</span></li>
+                                {edit ? 
+                                    <div className = 'rowSections editTrash'>
+                                        <span className = 'pen' onClick = {() => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, trigger: true, skill: skill, value: skill.name}}))}>&#9998;</span>
+                                        <i className = 'fa fa-trash-o' onClick = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: true, skill: {id: skill.id, name: skill.name}}}))}/> 
+                                    </div>
+                                : null}
                         </div>
                     ): null
                 })}
