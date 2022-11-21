@@ -284,6 +284,11 @@ textarea {
   color: red;
 }
 
+.editTrash{
+  padding: 10px;
+  gap: 20px;
+}
+
 .fa-trash-o:hover{
   color: darkred;
 }
