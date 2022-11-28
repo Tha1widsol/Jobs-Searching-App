@@ -106,6 +106,19 @@ class ProfileSkillsAPI(generics.ListAPIView):
 
         return Response(status = status.HTTP_400_BAD_REQUEST)
 
+    
+    def put(self, request):
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        skill = Skill.objects.get(id = id)
+        serializer = self.serializer_class(data = request.data, instance = skill)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'skill': serializer.data}, status = status.HTTP_200_OK)
+        
+        return Response(status = status.HTTP_400_BAD_REQUEST)
+
+
     def get_queryset(self):
           profile = Profile.objects.get(user = self.request.user)
           skills = profile.skills.all()
