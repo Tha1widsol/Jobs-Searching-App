@@ -77,6 +77,11 @@ export const ProfileSlice = createSlice({
             state.values = initialState.values
         },
 
+        editSkill: (state, action) => {
+            const index = state.values.skills.findIndex(skill => skill.id === action.payload.id)
+            state.values.skills[index] = action.payload
+        }
+
     },
 
     extraReducers(builder){
@@ -98,6 +103,6 @@ export const ProfileSlice = createSlice({
 
 })
 
-export const {setProfile,setToggleStatus,setDeleteProfile,addSkill} = ProfileSlice.actions
+export const {setProfile, setToggleStatus, setDeleteProfile, addSkill, editSkill} = ProfileSlice.actions
 
 export default ProfileSlice.reducer
