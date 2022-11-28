@@ -59,6 +59,11 @@ export const ProfileExperienceSlice = createSlice({
 
         setDeleteProfileExperience: (state) => {
             state.values = initialState.values
+        },
+
+        editProfileExperience: (state, action) => {
+            const index = state.values.findIndex(experience => experience.id === action.payload.id)
+            state.values[index] = action.payload
         }
     },
 
@@ -81,6 +86,6 @@ export const ProfileExperienceSlice = createSlice({
 
 })
 
-export const {AddProfileExperience, setDeleteProfileExperience, DeleteProfileExperience} = ProfileExperienceSlice.actions
+export const {AddProfileExperience, setDeleteProfileExperience, DeleteProfileExperience, editProfileExperience} = ProfileExperienceSlice.actions
 
 export default ProfileExperienceSlice.reducer
