@@ -4,7 +4,7 @@ import Errors from '../../../Global/messages/Errors'
 import {useAppSelector, useAppDispatch} from '../../../Global/features/hooks';
 import {token} from '../../../Global/features/Auth/user';
 import {ProfileExperienceProps} from './types/ProfileExperienceProps';
-import {fetchProfileExperience, AddProfileExperience} from '../../../Global/features/Jobseekers/profiles/profileExperience';
+import {fetchProfileExperience, AddProfileExperience, editProfileExperience} from '../../../Global/features/Jobseekers/profiles/profileExperience';
 
 export const initialExperience = {
  id: 0, title: '', companyName: '',  EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: 1, isOnGoing: false
@@ -63,7 +63,7 @@ export default function ProfileExperienceForm({edit = true, isIsolated = true, p
           if (response.status === 201){
               popupOff()
               if (!edit) dispatch(AddProfileExperience(experience.value))
-              else dispatch(fetchProfileExperience(user.values?.id))
+              else dispatch(editProfileExperience(experience.value))
               setExperience(prev => {return{...prev, isValid: true, popup: false, value: initialExperience}})
               setErrors([])
           }
