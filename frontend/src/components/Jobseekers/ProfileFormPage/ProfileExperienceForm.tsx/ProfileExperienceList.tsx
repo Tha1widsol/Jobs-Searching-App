@@ -84,9 +84,9 @@ export default function ProfileExperienceList({experience, allowEdit = true}: {e
                         <p>{exp.EmployerEmail}</p>
                         <p>{exp.EmployerPhone}</p>
                     </div>
-
+                    <hr className = 'mt-0-mb-4'/>
                 </div>
-
+            
             </div>
         
         
