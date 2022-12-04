@@ -33,8 +33,8 @@ export default function ProfileSkillsForm({isIsolated = true, edit = false, popu
 
       else setSkills(prev => {return{...prev,isEmpty: false}})
   
-      if (skills.value.filter(item => item.name === currentSkill).length > 0){
-        setSkills(prev => {return {...prev,alreadyExists: true}})
+      if (profile.skills?.filter(item => item.name === currentSkill).length > 0){
+          setSkills(prev => {return {...prev,alreadyExists: true}})
           errors.push(skills.alreadyExistsMsg)
       }
 
@@ -58,6 +58,7 @@ export default function ProfileSkillsForm({isIsolated = true, edit = false, popu
         if (response.status === 200) {
           const skill = response.data.skill
           dispatch(addSkill(skill))
+          setSkills(prev => {return{...prev, currentSkill: {id: 0, name: '', specific: false}}})
           popupOff()
         }
       })
