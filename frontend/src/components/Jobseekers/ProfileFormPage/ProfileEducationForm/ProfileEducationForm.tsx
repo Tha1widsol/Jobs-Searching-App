@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 
-export default function ProfileEducationForm({isIsolated = true, toggleTab}: {isIsolated?: boolean, toggleTab: () => void}) {
+export default function ProfileEducationForm({isIsolated = true}: {isIsolated?: boolean}) {
     const [education, setEducation] = useState({value: 'No formal education'})
 
     function handleSubmit(e: React.SyntheticEvent){
@@ -24,7 +24,7 @@ export default function ProfileEducationForm({isIsolated = true, toggleTab}: {is
         </select>
 
         <div style = {{float: 'right', marginTop: '5px'}} onSubmit = {handleSubmit}>
-              {isIsolated ? <button type = 'submit'>Submit</button> : <button>Next</button>}
+              {isIsolated ? <button type = 'submit'>Submit</button> : null}
         </div>
     </div>
   )

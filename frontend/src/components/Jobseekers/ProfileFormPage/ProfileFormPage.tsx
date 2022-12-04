@@ -94,20 +94,22 @@ export default function ProfileFormPage() {
                     <ProfileSkillsForm popupOff = {() => null} isIsolated = {false} toggleTab = {() => setCurrentTab(currentTab + 1)}/>
                     <h4>Skills ({profile.values?.skills.length}):</h4>
                     <ProfileSkillsList skills = {profile.values?.skills}/>
+
                 </div>
 
                 <div className = {`tab ${currentTab === 3 ? 'show' : 'hide'}`}>
                     <h1 style = {{textAlign: 'center'}}><u>Work Experience:</u></h1>
                     <Popup trigger = {popup.experience} switchOff = {() => setPopup(prev => {return{...prev, experience: false}})}> 
-                          <ProfileExperienceForm edit = {true} popupOff = {() => setPopup(prev => {return{...prev, experience: false}})}/>
+                          <ProfileExperienceForm edit = {false} popupOff = {() => setPopup(prev => {return{...prev, experience: false}})}/>
                     </Popup>
                     <button onClick = {() => setPopup(prev => {return{...prev, experience: true}})}>Add</button>
+                    <hr className = 'mt-0-mb-4'/>
                     <ProfileExperienceList experience = {experience.values}/>
-                    <button style = {{float: 'right'}} onClick = {() => setCurrentTab(currentTab + 1)}>Next</button>
+
                 </div>
 
                 <div className = {`tab ${currentTab === 4 ? 'show' : 'hide'}`}>
-                    <ProfileEducationForm isIsolated = {false} toggleTab = {() => setCurrentTab(currentTab + 1)}/>
+                    <ProfileEducationForm isIsolated = {false}/>
                 </div>
 
                 <div className = {`tab ${currentTab === 5 ? 'show' : 'hide'}`}>
@@ -137,9 +139,9 @@ export default function ProfileFormPage() {
 
                 </div>
                 
-                <div style = {{marginTop: '10px'}}>
-                    {currentTab === maxTabs ? <button type = 'button' id = 'submit' onClick = {handleSubmitForm}>Submit</button> : null}
-                    {currentTab < maxTabs && currentTab > 1 ? <button onClick = {() => setCurrentTab(currentTab - 1)}>Previous</button> : null}
+                <div className = 'row' style = {{marginTop: '10px', justifyContent: 'space-between', alignItems: 'center'}}>
+                    {currentTab > 1 && currentTab <= maxTabs ? <button onClick = {() => setCurrentTab(currentTab - 1)}>Previous</button> : null}
+                    {currentTab === maxTabs ? <button type = 'button' onClick = {handleSubmitForm}>Submit</button> : currentTab > 1 && currentTab < maxTabs ? <button onClick = {() => setCurrentTab(currentTab + 1)}>Next</button>: null}
                 </div>
         </div>
     )
