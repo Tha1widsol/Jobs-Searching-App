@@ -14,6 +14,7 @@ import ProfileExperienceForm from './ProfileExperienceForm.tsx/ProfileExperience
 import ProfileExperienceList from './ProfileExperienceForm.tsx/ProfileExperienceList';
 import ProfileEducationForm from './ProfileEducationForm/ProfileEducationForm';
 import ProfileSkillsList from './ProfileSkillsForm/ProfileSkillsList';
+import ProfilePreferencesForm from './ProfilePreferencesForm/ProfilePreferencesForm';
 
 export default function ProfileFormPage() {
     const navigate = useNavigate()
@@ -29,52 +30,6 @@ export default function ProfileFormPage() {
     const experience = useAppSelector(state => state.profileExperience)
     
     const maxTabs = document.querySelectorAll('.tab').length
-
-    const validateForm = () => {
-        let isValid = true
-        let errors : Array<string> = []
-
-        if (!isValid){
-            setErrors(errors)
-            window.scrollTo(0, 0)
-            return
-        }
-
-        setErrors([])
-        setCurrentTab(currentTab + 1)
-
-        return isValid
-    }
-
-    function handleSubmitForm(e: React.SyntheticEvent){
-        e.preventDefault()
-
-        if (!validateForm()) return
-        const requestOptions = {
-            headers: {'Content-Type': 'multipart/form-data', Authorization:`Token ${token}`}
-        }
-
-        let form = new FormData();
-
-        if (cv.value)
-           form.append('cv',cv.value,cv.name)
-
-        form.append('industry',industry.value)
-        form.append('distance',distance.value)
-
-            axios.post('/api/profile',form,requestOptions)
-            .then(response => {
-                if (response.status === 201){
-                    handleAddSuccessMsg('Profile is successfully saved', dispatch)
-                    navigate(`/profile/${user.values?.id}`)
-                }
-                
-            })
-
-            .catch(error => {
-                if (error.response.status === 400) setErrors(['Something went wrong'])
-            })
-    }
 
     return (
         <div style = {{width: '60%', margin: '0 auto'}}>
@@ -113,35 +68,13 @@ export default function ProfileFormPage() {
                 </div>
 
                 <div className = {`tab ${currentTab === 5 ? 'show' : 'hide'}`}>
-                    <h1 className = 'title'>Preferences</h1> 
-                    <Errors errors = {errors}/>
-                    <label htmlFor = 'industry'><h3>Industry: (What job industry are you looking to work in ?)</h3></label>
-                    <select id = 'industry' onChange = {e => setIndustry({value: e.target.value})} defaultValue = {profile.values?.industry} autoComplete = 'on'>
-                        <option value = 'Any'>Any</option>
-                        <option value = 'Beauty'>Beauty</option>
-                        <option value = 'Construction'>Construction</option>
-                        <option value = 'Information Technology'>Information Technology</option>
-                    </select>
-                    
-                    <label htmlFor = 'cv'><h3>Resume / CV (Optional) (Please submit only .pdf, .doc or .docx files):</h3></label>
-                    <input type = 'file' id = 'cv' accept = '.pdf,.doc,.docx' onChange = {e => {if (!e.target.files) return; setCV({value: e.target.files[0],name: e.target.files[0].name})}} autoComplete = 'on'/>
-
-                    <label htmlFor = 'distance'><h3>Job within:</h3></label>
-                    <select id = 'distance' onChange = {e => setDistance({value: e.target.value})} value = {distance.value} autoComplete = 'on'>
-                        <option value = 'Any'>Any</option>
-                        <option value = '10'>10 miles</option>
-                        <option value = '20'>20 miles</option>
-                        <option value = '30'>30 miles</option>
-                        <option value = '40'>40 miles</option>
-                        <option value = '50+'>50 miles</option>
-                    </select>
-
+                    <ProfilePreferencesForm profile = {profile.values}/>
 
                 </div>
                 
                 <div className = 'row' style = {{marginTop: '10px', justifyContent: 'space-between', alignItems: 'center'}}>
                     {currentTab > 1 && currentTab <= maxTabs ? <button onClick = {() => setCurrentTab(currentTab - 1)}>Previous</button> : null}
-                    {currentTab === maxTabs ? <button type = 'button' onClick = {handleSubmitForm}>Submit</button> : currentTab > 1 && currentTab < maxTabs ? <button onClick = {() => setCurrentTab(currentTab + 1)}>Next</button>: null}
+                    {currentTab > 1 && currentTab < maxTabs ? <button onClick = {() => setCurrentTab(currentTab + 1)}>Next</button>: null}
                 </div>
         </div>
     )
