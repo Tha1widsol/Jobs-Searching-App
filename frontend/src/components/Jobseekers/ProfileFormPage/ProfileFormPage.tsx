@@ -22,14 +22,14 @@ export default function ProfileFormPage() {
     const user = useAppSelector(state => state.user)
     const profile = useAppSelector(state => state.profile)
     const [currentTab,setCurrentTab] = useState(1)
-    const [errors,setErrors] = useState<Array<string>>([])
     const [popup, setPopup] = useState({experience: false})
-    const [industry,setIndustry] = useState({value: ''})
-    const [distance,setDistance] = useState({value: ''})
-    const [cv,setCV] = useState<FileProps>({value: '' , name:''})
     const experience = useAppSelector(state => state.profileExperience)
     
     const maxTabs = document.querySelectorAll('.tab').length
+
+    useEffect(() => {
+        dispatch(fetchProfile(user.values?.id))
+    },[user.values?.id, dispatch])
 
     return (
         <div style = {{width: '60%', margin: '0 auto'}}>
