@@ -152,7 +152,8 @@ class ProfileExperienceAPI(generics.ListAPIView):
           if serializer.is_valid():
              experience = serializer.save()
              experience.profile = profile
-             if isOnGoing == 'True':
+    
+             if isOnGoing == 'true':
                     experience.isOnGoing = True
                   
              experience.save()
@@ -186,6 +187,15 @@ class ProfileExperienceAPI(generics.ListAPIView):
           profile = Profile.objects.get(user__id = id)
           experience = ProfileExperience.objects.filter(profile = profile)
           return experience
+
+@api_view(['PUT'])
+def EditProfilePreferences(request):
+    profile = Profile.objects.get(user = request.user)
+    profile.cv = request.data.get('cv')
+    profile.industry = request.data.get('industry')
+    profile.distance = request.data.get('distance')
+    profile.save()
+    return Response(status = status.HTTP_200_OK)
 
 class ApplicationAPI(APIView):
      parser_classes = (MultiPartParser, FormParser)

@@ -14,6 +14,6 @@ urlpatterns = [
     path('checkApplication',views.checkApplicationExists, name = 'checkApplication'),
     path('getMatchingScores', views.getMatchingScores, name = 'getMatchingScores'),
     path('getMatchScore', views.getMatchScore, name = 'getMatchScore'),
-    path('checkProfileExists', views.checkProfileExists, name = 'checkProfileExists')
-
+    path('checkProfileExists', views.checkProfileExists, name = 'checkProfileExists'),
+    path('editPreferences', views.EditProfilePreferences, name = 'editPreferences')
 ]
