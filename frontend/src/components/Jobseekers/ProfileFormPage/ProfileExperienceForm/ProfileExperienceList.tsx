@@ -63,31 +63,29 @@ export default function ProfileExperienceList({experience, allowEdit = true}: {e
     <ReactScrollableFeed>
     {experience.map((exp, index) => {
         return (
-        <div style = {{maxHeight: '1000px'}} key = {index}>
-                <div style = {{marginBottom: '50px'}}>
-                    <div className = 'rowSections'>
-                        <h3>{exp.title}</h3>
-                        {allowEdit ? 
-                        <div style = {{display: 'flex', gap: '20px'}}>
-                            <span className = 'pen' onClick = {() => editChosenExperience(exp)}>&#9998;</span>
-                            <i className = 'fa fa-trash-o' onClick = {() => toggleDeleteExperiencePopup(exp.id, exp.title, exp.companyName)}/>
-                        </div>
-                        : null}
-                    </div>
-                    <p>{exp.companyName}</p>
-                    <p className = 'smallGrey'>{exp.years > 0 ? `Years worked - ${exp.years}` : null}</p>
-                    <p style = {{ maxHeight: '120px'}}>{exp.description}</p>
-
-                    <div style = {{marginTop: '40px'}}>
-                        <p><b>Reference:</b></p>
-                        <p>{exp.EmployerName}</p>
-                        <p>{exp.EmployerEmail}</p>
-                        <p>{exp.EmployerPhone}</p>
-                    </div>
-                    <hr className = 'mt-0-mb-4'/>
+        <div  key = {index}>
+            <section className = 'rowSections'>
+                <h3>{exp.title}</h3>
+                {allowEdit ? 
+                <div style = {{display: 'flex', gap: '20px'}}>
+                    <span className = 'pen' onClick = {() => editChosenExperience(exp)}>&#9998;</span>
+                    <i className = 'fa fa-trash-o' onClick = {() => toggleDeleteExperiencePopup(exp.id, exp.title, exp.companyName)}/>
                 </div>
+                : null}
+            </section>
             
+            <p>{exp.companyName}</p>
+            <p className = 'smallGrey'>{exp.years > 0 ? `Years worked - ${exp.years}` : null}</p>
+            <p style = {{ maxHeight: '120px'}}>{exp.description}</p>
+
+            <div style = {{marginTop: '40px'}}>
+                <p><b>Reference:</b></p>
+                <p>{exp.EmployerName}</p>
+                <p>{exp.EmployerEmail}</p>
+                <p>{exp.EmployerPhone}</p>
             </div>
+            <hr className = 'mt-0-mb-4'/>
+        </div>
         
         
         )

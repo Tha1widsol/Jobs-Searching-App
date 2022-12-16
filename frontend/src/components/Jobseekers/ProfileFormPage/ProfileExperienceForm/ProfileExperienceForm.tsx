@@ -56,7 +56,7 @@ export default function ProfileExperienceForm({edit = true, isIsolated = true, p
       if (experience.value.EmployerPhone) form.append('EmployerPhone', experience.value.EmployerPhone)
       form.append('description', experience.value.description)
       form.append('years', experience.value.years.toString() || '0')
-      form.append('isOnGoing', experience.value.isOnGoing?.toString() || 'False')
+      form.append('isOnGoing', experience.value.isOnGoing?.toString())
 
         axios.post(`/api/profileExperience?id=${chosenExperience?.id || 0} `,form, requestOptions)
         .then(response => {
@@ -75,7 +75,7 @@ export default function ProfileExperienceForm({edit = true, isIsolated = true, p
 
   return (
     <div>
-      <h2>Add Experience:</h2>
+      <h2>{edit ? 'Edit Experience:' : 'Add Experience:'}</h2>
       <Errors errors = {errors}/>
 
       <label htmlFor = 'experienceTitle'><h4>Job title:</h4></label>
