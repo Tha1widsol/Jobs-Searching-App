@@ -25,7 +25,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProfileExperienceSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileExperience
-        exclude = ['profile', 'isOnGoing']
+        exclude = ['profile']
 
 
 class ProfileEducationSerializer(serializers.ModelSerializer):
