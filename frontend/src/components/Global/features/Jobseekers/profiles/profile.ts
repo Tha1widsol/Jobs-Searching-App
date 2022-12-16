@@ -80,6 +80,12 @@ export const ProfileSlice = createSlice({
         editSkill: (state, action) => {
             const index = state.values.skills.findIndex(skill => skill.id === action.payload.id)
             state.values.skills[index] = action.payload
+        },
+
+        editPreferences: (state, action) => {
+            state.values.cv = action.payload.cv
+            state.values.distance = action.payload.distance
+            state.values.industry = action.payload.industry
         }
 
     },
@@ -103,6 +109,6 @@ export const ProfileSlice = createSlice({
 
 })
 
-export const {setProfile, setToggleStatus, setDeleteProfile, addSkill, editSkill} = ProfileSlice.actions
+export const {setProfile, setToggleStatus, setDeleteProfile, addSkill, editSkill, editPreferences} = ProfileSlice.actions
 
 export default ProfileSlice.reducer
