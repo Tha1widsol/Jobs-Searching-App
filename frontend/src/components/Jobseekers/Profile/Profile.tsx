@@ -16,13 +16,15 @@ import { fetchProfileExperience } from '../../Global/features/Jobseekers/profile
 import ProfileExperienceList from '../ProfileFormPage/ProfileExperienceForm.tsx/ProfileExperienceList';
 import ProfileSkillsList from '../ProfileFormPage/ProfileSkillsForm/ProfileSkillsList';
 import ProfileSkillsForm from '../ProfileFormPage/ProfileSkillsForm/ProfileSkillsForm';
+import ProfilePreferencesForm from '../ProfileFormPage/ProfilePreferencesForm/ProfilePreferencesForm';
 
 export default function Profile({profile} : {profile: ProfileProps}) {
     const navigate = useNavigate()
     const user = useAppSelector(state => state.user.values)
     const experience = useAppSelector(state => state.profileExperience)
-    const [popup, setPopup] = useState({deleteExperience: {trigger: false, id: 0, title: '', company: ''}, deleteProfile: false, details: false, skills: false, experience: {trigger: false, values: initialExperience}})
+    const [popup, setPopup] = useState({deleteExperience: {trigger: false, id: 0, title: '', company: ''}, deleteProfile: false, details: false, skills: false, experience: {trigger: false, values: initialExperience}, preferences: false})
     const [dropdown, setDropdown] = useState(false)
+    const currentJob = experience.values?.find(exp => exp.isOnGoing === true)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -81,22 +83,27 @@ export default function Profile({profile} : {profile: ProfileProps}) {
             </div>
         </Popup>
 
+        <Popup trigger = {popup.preferences}  switchOff = {() => setPopup(prev => {return{...prev, preferences: false}})}>
+            <ProfilePreferencesForm profile = {profile.values} isIsolated = {true} popupOff = {() => setPopup(prev => {return{...prev, preferences: false}})}/>
+        </Popup>
+
   
         {!user?.isAnEmployer ? 
         <KebabMenu current = {dropdown} switchOn = {() => setDropdown(true)} switchOff = {() => setDropdown(false)}>
             {profile.values.isActive ? <button className = 'dropdownBtn' onClick = {() => handleToggleStatus()}>Set profile private</button> : <button className = 'dropdownBtn normalNavBtn' onClick = {() => handleToggleStatus()}>Set profile public</button>} 
-            <button className = 'dropdownBtn' onClick = {() => setPopup(prev => {return{...prev, details: true}})} >Edit</button>
+            <button className = 'dropdownBtn' onClick = {() => navigate('/create-profile')} >Edit</button>
             <button className = 'dropdownBtn redNavBtn' onClick = {() => setPopup(prev => {return{...prev, deleteProfile: true}})}>Delete</button>
         </KebabMenu>
         : null}
 
             <div className = 'penContainer row'>
                 <p className = 'fullName'>{profile.values.firstName} {profile.values.middleName} {profile.values.lastName}</p>
+               
                 {!user.isAnEmployer ? 
                   <span className = 'pen' onClick = {() => setPopup(prev => {return{...prev, details: true}})}>&#9998;</span>
                 : null}
             </div> 
-        
+            <p className = 'smallGrey' style = {{fontSize: 'large'}}>{currentJob?.title}</p>
             <section className = 'row'>
                 {profile.values.logo ? <img className = 'logo' src = {profile.values.logo} alt = ''/> : null}
                 <div className = {profile.values.logo ? 'contact' : ''}> 
@@ -108,7 +115,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
             <section>
                 <label><h2>About</h2></label>
                 <hr className = 'mt-0-mb-4'/>
-                <p className = 'sectionText'>{profile.values.about}</p>
+                <p className = 'about'>{profile.values.about}</p>
             </section>
 
             <div className = 'profileSection col'>
@@ -134,23 +141,31 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                         <span className = 'pen' onClick = {() => setPopup(prev => ({...prev, experience: {...prev.experience, trigger: true, values: initialExperience}}))}>&#9998;</span>
                     : null}
                 </div>
-
+                
+                <hr className = 'mt-0-mb-4'/>
                 {experience.values?.length ? 
                     <>
-                    <hr className = 'mt-0-mb-4'/>
                     <ProfileExperienceList experience = {experience.values}/>
                 </>
                 :
                   null
                 }
-               
-
-               
-
                </section>
             </div>
            
-      
+            <section>
+                <div className = 'penContainer row'>
+                    <label><h2>Preferences</h2></label>
+                    {!user.isAnEmployer ? 
+                        <span className = 'pen' onClick = {() => setPopup(prev => {return{...prev, preferences: true}})}>&#9998;</span>
+                    : null}
+                </div>
+
+             
+                <hr className = 'mt-0-mb-4'/>
+                <p>Prefered distance - Within {profile.values?.distance} miles</p>
+                <p>Prefered Industry - {profile.values?.industry}</p>
+            </section>
 
          
     
