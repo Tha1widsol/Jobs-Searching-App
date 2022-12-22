@@ -1,0 +1,7 @@
+#fromInstitutionMonth, #toInstitutionMonth{
+    width: 30%;
+}
+
+#fromInstitutionYear, #toInstitutionYear{
+    width: 20%
+}
