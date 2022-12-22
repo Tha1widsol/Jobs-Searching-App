@@ -1,12 +1,6 @@
 import React,{useState, useEffect} from 'react'
-import {useNavigate} from 'react-router-dom';
-import Errors from '../../Global/messages/Errors'
 import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
 import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile';
-import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
-import {FileProps} from '../../Global/types/forms';
-import axios from 'axios';
-import {token} from '../../Global/features/Auth/user';
 import Popup from '../../Global/Popup/Popup';
 import ProfileDetailsForm from './ProfileDetailsForm/ProfileDetailsForm';
 import ProfileSkillsForm from './ProfileSkillsForm/ProfileSkillsForm';
@@ -17,7 +11,6 @@ import ProfileSkillsList from './ProfileSkillsForm/ProfileSkillsList';
 import ProfilePreferencesForm from './ProfilePreferencesForm/ProfilePreferencesForm';
 
 export default function ProfileFormPage() {
-    const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const user = useAppSelector(state => state.user)
     const profile = useAppSelector(state => state.profile)
