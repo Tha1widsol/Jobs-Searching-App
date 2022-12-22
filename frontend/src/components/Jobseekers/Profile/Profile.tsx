@@ -3,17 +3,17 @@ import './css/Profile.css'
 import {useAppDispatch, useAppSelector} from '../../Global/features/hooks';
 import {setToggleStatus,setDeleteProfile} from '../../Global/features/Jobseekers/profiles/profile'
 import { ProfileProps } from '../../Global/features/Jobseekers/profiles/types/profileProps';
-import {initialExperience} from '../ProfileFormPage/ProfileExperienceForm.tsx/ProfileExperienceForm';
+import {initialExperience} from '../ProfileFormPage/ProfileExperienceForm/ProfileExperienceForm';
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import {useNavigate} from 'react-router-dom';
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
 import {token} from '../../Global/features/Auth/user';
 import Popup from '../../Global/Popup/Popup';
 import ProfileDetailsForm from '../ProfileFormPage/ProfileDetailsForm/ProfileDetailsForm';
-import ProfileExperienceForm from '../ProfileFormPage/ProfileExperienceForm.tsx/ProfileExperienceForm';
+import ProfileExperienceForm from '../ProfileFormPage/ProfileExperienceForm/ProfileExperienceForm';
 import axios from 'axios'
 import { fetchProfileExperience } from '../../Global/features/Jobseekers/profiles/profileExperience';
-import ProfileExperienceList from '../ProfileFormPage/ProfileExperienceForm.tsx/ProfileExperienceList';
+import ProfileExperienceList from '../ProfileFormPage/ProfileExperienceForm/ProfileExperienceList';
 import ProfileSkillsList from '../ProfileFormPage/ProfileSkillsForm/ProfileSkillsList';
 import ProfileSkillsForm from '../ProfileFormPage/ProfileSkillsForm/ProfileSkillsForm';
 import ProfilePreferencesForm from '../ProfileFormPage/ProfilePreferencesForm/ProfilePreferencesForm';
