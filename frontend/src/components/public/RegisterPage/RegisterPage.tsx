@@ -115,38 +115,35 @@ export default function RegisterPage() {
     }
 
     return (
-        <div>
+        <form className = 'normalForm' onSubmit = {handleSubmitForm} noValidate>
             <h1 className = 'title'>Register</h1>
             <Errors errors = {errors}/>
 
-            <form className = 'Form' onSubmit = {handleSubmitForm} noValidate>
-                <div style = {{textAlign:'center'}}>
-                    <b><p style={{fontSize:'20px'}}>Password:</p></b> 
-                    <li className = {password.hasValidLength === false ? 'error' : password.hasValidLength ? 'valid': ''}>Must be atleast 9 characters long</li>
-                    <li className = {password.hasUppercase === false ? 'error' : password.hasUppercase ? 'valid' : ''}>Contains atleast one uppercase character</li>
-                    <li className = {password.hasDigit === false ? 'error' : password.hasDigit ? 'valid' : ''}>Contains atleast one digit</li>
-                    <li className = {password.hasSymbol === false ? 'error' : password.hasSymbol ? 'valid' : ''}>Contains atleast one of these symbols: !,£,$,%,^,&,*,(,)</li>
-                    <hr className = 'mt-0-mb-4' />
-                </div>
-            
-                <label htmlFor = 'email'><h3>Email address:</h3></label>
-                <input type = 'email' className = {!email.isValid ? 'inputError' : ''} onChange = {e => setEmail(prev => {return {...prev, value: e.target.value}})} id = 'email' placeholder = 'E.g 123@example.com' autoComplete = 'on' required/>
+            <div style = {{textAlign:'center'}}>
+                <b><p style={{fontSize:'20px'}}>Password:</p></b> 
+                <li className = {password.hasValidLength === false ? 'error' : password.hasValidLength ? 'valid': ''}>Must be atleast 9 characters long</li>
+                <li className = {password.hasUppercase === false ? 'error' : password.hasUppercase ? 'valid' : ''}>Contains atleast one uppercase character</li>
+                <li className = {password.hasDigit === false ? 'error' : password.hasDigit ? 'valid' : ''}>Contains atleast one digit</li>
+                <li className = {password.hasSymbol === false ? 'error' : password.hasSymbol ? 'valid' : ''}>Contains atleast one of these symbols: !,£,$,%,^,&,*,(,)</li>
+                <hr className = 'mt-0-mb-4' />
+            </div>
+        
+            <label htmlFor = 'email'><h3>Email address:</h3></label>
+            <input type = 'email' className = {!email.isValid ? 'inputError' : ''} onChange = {e => setEmail(prev => {return {...prev, value: e.target.value}})} id = 'email' placeholder = 'E.g 123@example.com' autoComplete = 'on' required/>
 
-                <label htmlFor = 'password'><h3>Password:</h3></label>
-                <input type = 'password' className = {password.hasValidLength === false || password.hasDigit === false || password.hasSymbol === false || password.hasUppercase === false ? 'inputError' : ''} onChange = {e => setPassword(prev => {return {...prev, value: e.target.value}})} placeholder = 'Password...' id = 'password' autoComplete = 'on' required/>
+            <label htmlFor = 'password'><h3>Password:</h3></label>
+            <input type = 'password' className = {password.hasValidLength === false || password.hasDigit === false || password.hasSymbol === false || password.hasUppercase === false ? 'inputError' : ''} onChange = {e => setPassword(prev => {return {...prev, value: e.target.value}})} placeholder = 'Password...' id = 'password' autoComplete = 'on' required/>
 
-                <label htmlFor = 'ConfirmPassword'><h3>Confirm password:</h3></label>
-                <input type = 'password' className = {!confirmPassword.isValid? 'inputError' : ''} onChange = {e => setConfirmPassword(prev => {return {...prev, value: e.target.value}})} id = 'confirmPassword' placeholder = 'Confirm password...' autoComplete = 'on' required/>
+            <label htmlFor = 'ConfirmPassword'><h3>Confirm password:</h3></label>
+            <input type = 'password' className = {!confirmPassword.isValid? 'inputError' : ''} onChange = {e => setConfirmPassword(prev => {return {...prev, value: e.target.value}})} id = 'confirmPassword' placeholder = 'Confirm password...' autoComplete = 'on' required/>
 
-                <button type = 'submit' id = 'submit'>Submit</button>
+            <button type = 'submit' id = 'submit'>Submit</button>
 
-            </form>
-            
             <div style = {{textAlign:'center'}}>
                <p style = {{marginTop:'70px',fontSize:'18px'}}>Have an account already?</p>
-               <a href = '/login' ><button>Login</button></a> 
+               <a href = '/login' ><button type = 'button'>Login</button></a> 
             </div>
             
-        </div>
+        </form>
     )
 }

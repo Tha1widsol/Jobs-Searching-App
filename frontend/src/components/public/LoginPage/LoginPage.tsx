@@ -63,20 +63,17 @@ export default function LoginPage() {
     }
 
     return (
-        <div>
+        <form className = 'normalForm' onSubmit = {handleSubmitForm} noValidate>
             <h1 className = 'title'>Login</h1>
             <Errors errors = {errors}/>
+            <hr className = "mt-0-mb-4" />
+            <label htmlFor = 'email'><h3>Email address:</h3></label>
+            <input type = 'email' className = {!email.isValid ? 'inputError' : ''} onChange = {e => setEmail(prev => {return {...prev, value: e.target.value}})} id = 'email' placeholder = 'E.g 123@example.com' autoComplete = 'on' required />
 
-            <form  onSubmit = {handleSubmitForm} noValidate>
-                <hr className = "mt-0-mb-4" />
-                <label htmlFor = 'email'><h3>Email address:</h3></label>
-                <input type = 'email' className = {!email.isValid ? 'inputError' : ''} onChange = {e => setEmail(prev => {return {...prev, value: e.target.value}})} id = 'email' placeholder = 'E.g 123@example.com' autoComplete = 'on' required />
+            <label htmlFor = 'password'><h3>Password:</h3></label>
+            <input type = 'password' className = {!password.isValid ? 'inputError' : ''} onChange = {e => setPassword(prev => {return {...prev, value: e.target.value}})} value = {password.value} placeholder = "Password..." id = 'password' autoComplete = 'on' required />
 
-                <label htmlFor = 'password'><h3>Password:</h3></label>
-                <input type = 'password' className = {!password.isValid ? 'inputError' : ''} onChange = {e => setPassword(prev => {return {...prev, value: e.target.value}})} value = {password.value} placeholder = "Password..." id = 'password' autoComplete = 'on' required />
-
-                <button id = 'submit'>Submit</button>
-            </form>
-        </div>
+            <button id = 'submit'>Submit</button>
+        </form>
     )
 }

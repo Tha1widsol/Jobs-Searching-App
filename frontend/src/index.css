@@ -206,14 +206,9 @@ button {
 Form styles
 ##################*/
 
-form{
-  width: 70%;
-  margin: 0 auto
-}
-
-.popupForm{
-  margin: 0px auto;
-  width: 50%;
+.normalForm{
+  width: 60%;
+  margin: 0 auto;
 }
 
 .steps{

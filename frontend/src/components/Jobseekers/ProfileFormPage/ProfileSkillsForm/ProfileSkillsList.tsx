@@ -50,45 +50,45 @@ export default function ProfileSkillsList({skills, edit = true}: {skills: Profil
 
   return (
     <>
-    <Popup trigger = {popup.editSkill.trigger} switchOff = {() => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, trigger: false}}))}>
-        <form style = {{textAlign: 'center', width: 'unset'}} onSubmit = {handleEditSkill}>
-            <h2>Edit Skill</h2>
-            <input type = 'text' value = {popup.editSkill.skill.name} onChange = {e => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, skill: {...prev.editSkill.skill, name: e.target.value}}}))}/>
-            <div className = 'row' style = {{alignItems: 'center', marginTop: '20px', marginBottom: '5px'}}>
-                <label>Specific:</label>
-                <input type = 'checkbox' checked = {popup.editSkill.skill.specific} onChange = {e => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, skill: {...prev.editSkill.skill, specific: e.target.checked}}}))}/>
+        <Popup trigger = {popup.editSkill.trigger} switchOff = {() => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, trigger: false}}))}>
+            <form style = {{textAlign: 'center', width: 'unset'}} onSubmit = {handleEditSkill}>
+                <h2>Edit Skill</h2>
+                <input type = 'text' value = {popup.editSkill.skill.name} onChange = {e => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, skill: {...prev.editSkill.skill, name: e.target.value}}}))}/>
+                <div className = 'row' style = {{alignItems: 'center', marginTop: '20px', marginBottom: '5px'}}>
+                    <label>Specific:</label>
+                    <input type = 'checkbox' checked = {popup.editSkill.skill.specific} onChange = {e => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, skill: {...prev.editSkill.skill, specific: e.target.checked}}}))}/>
+                </div>
+            
+                <button>Confirm</button>
+                <button type = 'button' onClick = {() => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, trigger: false}}))}>Cancel</button>
+            </form>
+        </Popup>
+
+        <Popup trigger = {popup.deleteSkills.trigger} switchOff = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: false}}))}>
+            <div style = {{textAlign: 'center'}}>
+                <p>Are you sure you want to remove your skill: '{popup.deleteSkills.skill.name}'?</p>
+                <button type = 'button' onClick = {() => handleRemoveSkill(popup.deleteSkills.skill.id)}>Confirm</button>
+                <button type = 'button' onClick = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: false}}))}>Cancel</button>
             </div>
-           
-            <button>Confirm</button>
-            <button type = 'button' onClick = {() => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, trigger: false}}))}>Cancel</button>
-        </form>
-    </Popup>
+        </Popup>
 
-    <Popup trigger = {popup.deleteSkills.trigger} switchOff = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: false}}))}>
-        <div style = {{textAlign: 'center'}}>
-            <p>Are you sure you want to remove your skill: '{popup.deleteSkills.skill.name}'?</p>
-            <button type = 'button' onClick = {() => handleRemoveSkill(popup.deleteSkills.skill.id)}>Confirm</button>
-            <button type = 'button' onClick = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: false}}))}>Cancel</button>
-        </div>
-    </Popup>
-
-        <div className = 'listContainer'>
-            <ReactScrollableFeed>
-                {skills.map((skill, index) => {
-                    return skill.name !== '' ? (
-                        <div className = 'rowSections' key = {index}>
-                                <li>{skill.name} <span className = 'smallGrey'>- {skill.specific ? 'Specific' : 'Generic'}</span></li>
-                                {edit ? 
-                                    <div className = 'rowSections editTrash'>
-                                        <span className = 'pen' onClick = {() => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, trigger: true, skill: skill}}))}>&#9998;</span>
-                                        <i className = 'fa fa-trash-o' onClick = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: true, skill: {id: skill.id, name: skill.name}}}))}/> 
-                                    </div>
-                                : null}
-                        </div>
-                    ): null
-                })}
-            </ReactScrollableFeed>
-        </div>
+            <div className = 'listContainer'>
+                <ReactScrollableFeed>
+                    {skills.map((skill, index) => {
+                        return skill.name !== '' ? (
+                            <div className = 'rowSections' key = {index}>
+                                    <li>{skill.name} <span className = 'smallGrey'>- {skill.specific ? 'Specific' : 'Generic'}</span></li>
+                                    {edit ? 
+                                        <div className = 'rowSections editTrash'>
+                                            <span className = 'pen' onClick = {() => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, trigger: true, skill: skill}}))}>&#9998;</span>
+                                            <i className = 'fa fa-trash-o' onClick = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: true, skill: {id: skill.id, name: skill.name}}}))}/> 
+                                        </div>
+                                    : null}
+                            </div>
+                        ): null
+                    })}
+                </ReactScrollableFeed>
+            </div>
 
     </>
  

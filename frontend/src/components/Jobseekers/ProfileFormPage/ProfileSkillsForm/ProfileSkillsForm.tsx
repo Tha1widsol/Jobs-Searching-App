@@ -22,7 +22,8 @@ export default function ProfileSkillsForm({isIsolated = true, edit = false, popu
         e.target.value = e.target.value.replace(',','')
     }
 
-    function handleAddSkill(){
+    function handleAddSkill(e: React.SyntheticEvent){
+      e.preventDefault()
       const currentSkill = skills.currentSkill.name.trim()
       let errors: Array<string> = []
       
@@ -68,16 +69,16 @@ export default function ProfileSkillsForm({isIsolated = true, edit = false, popu
   }
 
   return (
-    <>
+    <form onSubmit = {handleAddSkill}>
         <h1 className = 'title'>Skills</h1> 
         <Errors errors = {errors}/>
         <label htmlFor = 'skills'><h3>Specific Key skills:</h3></label>
         <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentSkill.name} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on' required/>
-        <button type = 'button' style = {{padding: '10px', width: 'auto'}} onClick = {handleAddSkill}>Add</button>
+        <button type = 'submit' style = {{padding: '10px', width: 'auto'}}>Add</button>
         <span className = 'row'>
           <label><p>Specific:</p></label>
           <input id = 'skillType' type = 'checkbox' onChange = {e => setSkills(prev => ({...prev, currentSkill: {...prev.currentSkill, specific: e.target.checked}}))}/>
         </span>
-    </>
+    </form>
   )
 }

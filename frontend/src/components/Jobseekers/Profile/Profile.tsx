@@ -77,10 +77,8 @@ export default function Profile({profile} : {profile: ProfileProps}) {
         </Popup>
 
         <Popup trigger = {popup.skills} switchOff = {() => setPopup(prev => {return{...prev, skills: false}})} modalOn = {false}>
-            <div style = {{minWidth: '300px'}}>
               <ProfileSkillsForm edit = {true} popupOff = {() => setPopup(prev => {return{...prev, skills: false}})} toggleTab = {() => null}/>
               <button type = 'button' style = {{float: 'right'}} onClick = {() => setPopup(prev => {return{...prev, skills: false}})}>Cancel</button>
-            </div>
         </Popup>
 
         <Popup trigger = {popup.preferences}  switchOff = {() => setPopup(prev => {return{...prev, preferences: false}})}>

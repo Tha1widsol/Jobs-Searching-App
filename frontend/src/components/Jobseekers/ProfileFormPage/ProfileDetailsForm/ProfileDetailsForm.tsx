@@ -136,32 +136,32 @@ export default function ProfileDetailsForm({isIsolated = true, toggleTab, popupO
     }
 
   return (
-    <form>
-            <h1 className = 'title'>Details</h1> 
-            <Errors errors = {errors}/>
+    <form onSubmit = {handleSubmit}>
+        <h1 className = 'title'>Details</h1> 
+        <Errors errors = {errors}/>
 
-            <label htmlFor = 'firstName'><h3>First name:</h3></label>
-            <input id = 'firstName' value = {firstName.value} className = {!firstName.isValid ? 'inputError' : ''} onChange = {e => setFirstName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {handleFixName} placeholder = 'First name...' autoComplete = 'on' required/>
+        <label htmlFor = 'firstName'><h3>First name:</h3></label>
+        <input id = 'firstName' value = {firstName.value} className = {!firstName.isValid ? 'inputError' : ''} onChange = {e => setFirstName(prev => {return {...prev, value: e.target.value}})} onKeyUp = {handleFixName} placeholder = 'First name...' autoComplete = 'on' required/>
 
-            <label htmlFor = 'middleName'><h3>Middle name (Optional):</h3></label>
-            <input id = 'middleName' value = {middleName.value} className = {!middleName.isValid ? 'inputError' : ''} onChange = {e => setMiddleName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Middle name...' onKeyUp = {handleFixName} autoComplete = 'on'/>
+        <label htmlFor = 'middleName'><h3>Middle name (Optional):</h3></label>
+        <input id = 'middleName' value = {middleName.value} className = {!middleName.isValid ? 'inputError' : ''} onChange = {e => setMiddleName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Middle name...' onKeyUp = {handleFixName} autoComplete = 'on'/>
 
-            <label htmlFor = 'lastName'><h3>Last name:</h3></label>
-            <input id = 'lastName' value = {lastName.value} className = {!lastName.isValid ? 'inputError' : ''}  onChange = {e => setLastName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Last name...' onKeyUp = {handleFixName} autoComplete = 'on' required/>
+        <label htmlFor = 'lastName'><h3>Last name:</h3></label>
+        <input id = 'lastName' value = {lastName.value} className = {!lastName.isValid ? 'inputError' : ''}  onChange = {e => setLastName(prev => {return {...prev, value: e.target.value}})} placeholder = 'Last name...' onKeyUp = {handleFixName} autoComplete = 'on' required/>
 
-            <label htmlFor = 'phone'><h3>Phone number: (Only provided to employers)</h3></label>
-            <input id = 'phone' value = {phone.value} type = 'tel' className = {!phone.isValid ? 'inputError' : ''} onChange = {e => setPhone(prev => {return {...prev, value: e.target.value}})} placeholder = 'Phone number...' autoComplete = 'on' maxLength = {15} required/>
+        <label htmlFor = 'phone'><h3>Phone number: (Only provided to employers)</h3></label>
+        <input id = 'phone' value = {phone.value} type = 'tel' className = {!phone.isValid ? 'inputError' : ''} onChange = {e => setPhone(prev => {return {...prev, value: e.target.value}})} placeholder = 'Phone number...' autoComplete = 'on' maxLength = {15} required/>
 
-            <label htmlFor = 'about' ><h3>About (Characters remaining: {about.maxLength - about.currentLength}):</h3></label>
-            <textarea id = 'about' value = {about.value} className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
+        <label htmlFor = 'about' ><h3>About (Characters remaining: {about.maxLength - about.currentLength}):</h3></label>
+        <textarea id = 'about' value = {about.value} className = {!about.isValid ? 'inputError' : ''} onChange = {e => setAbout(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Tell us about yourself...' maxLength = {about.maxLength} style = {{height:'100px'}} required/>
 
-            <label htmlFor = 'logo'><h3>Profile logo (Optional):</h3></label>
-            <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setLogo({value: e.target.files[0], name: e.target.files[0].name})}}/>
-            {profile.values?.logo ? <p>Current logo: {profile.values.logo}</p> : null} 
+        <label htmlFor = 'logo'><h3>Profile logo (Optional):</h3></label>
+        <input id = 'logo' type = 'file' accept = 'image/*' autoComplete = 'on' onChange = {e => {if (!e.target.files) return; setLogo({value: e.target.files[0], name: e.target.files[0].name})}}/>
+        {profile.values?.logo ? <p>Current logo: {profile.values.logo}</p> : null} 
 
-            <div style = {{float: 'right', marginTop: '10px'}} onClick = {handleSubmit}>
-                 {isIsolated ? <button type = 'submit'>Submit</button> : <button>Next</button>}
-            </div>
+        <div style = {{float: 'right', marginTop: '10px'}} onSubmit = {handleSubmit}>
+                {isIsolated ? <button type = 'submit'>Submit</button> : <button>Next</button>}
+        </div>
     </form>
   )
 }

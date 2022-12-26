@@ -74,7 +74,7 @@ export default function ProfileExperienceForm({edit = true, isIsolated = true, p
     }
 
   return (
-    <div>
+    <form onSubmit = {handleAddExperience}>
       <h2>{edit ? 'Edit Experience:' : 'Add Experience:'}</h2>
       <Errors errors = {errors}/>
 
@@ -107,10 +107,10 @@ export default function ProfileExperienceForm({edit = true, isIsolated = true, p
       <input type = 'tel' id = 'experienceEmployerPhone' placeholder = "Employer's phone..." onChange = {e => setExperience(prev => ({...prev, value: {...prev.value, EmployerPhone: e.target.value}}))}  value = {experience.value.EmployerPhone} maxLength = {15} autoComplete = 'on'/>
 
       <div className = 'row' style = {{justifyContent: 'space-between', marginTop: '15px'}}>
-          <button type = 'button' onClick = {handleAddExperience}>Submit</button>
+          <button type = 'submit'>Submit</button>
           <button onClick = {() => popupOff()}>Cancel</button>
       </div>
 
-    </div>
+    </form>
   )
 }
