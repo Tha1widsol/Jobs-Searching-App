@@ -55,19 +55,15 @@ class ProfileAPI(APIView):
     serializer_class = CreateProfileSerializer
 
     def post(self,request):
-        profile = Profile.objects.filter(user = request.user)
+        profile = Profile.objects.filter(user = request.user).first()
 
-        if profile.exists():
-            serializer = self.serializer_class(data = request.data, instance = profile.first())
-        
-        else:
-             serializer = self.serializer_class(data = request.data)
-        
+        serializer = self.serializer_class(data = request.data, instance = profile or None)
+
         if serializer.is_valid():
             profile = serializer.save()
             profile.user = request.user
             profile.save()
-            return Response(status = status.HTTP_201_CREATED) 
+            return Response({'profile': serializer.data}, status = status.HTTP_201_CREATED) 
 
         return Response(status = status.HTTP_400_BAD_REQUEST)
 
@@ -187,6 +183,22 @@ class ProfileExperienceAPI(generics.ListAPIView):
           profile = Profile.objects.get(user__id = id)
           experience = ProfileExperience.objects.filter(profile = profile)
           return experience
+
+class ProfileEducationAPI(APIView):
+    serializer_class = ProfileEducationSerializer
+
+    def post(self, request):
+        profile = Profile.objects.filter(user = request.user).first()
+        serializer = self.serializer_class(data = request.data, instance = profile or None)
+    
+        if serializer.is_valid():
+            education = serializer.save()
+            education.profile = profile
+            education.save()
+            return Response(status = status.HTTP_201_CREATED) 
+
+        return Response(status = status.HTTP_400_BAD_REQUEST)
+        
 
 @api_view(['PUT'])
 def EditProfilePreferences(request):

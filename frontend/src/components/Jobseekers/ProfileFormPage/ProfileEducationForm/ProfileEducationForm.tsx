@@ -20,7 +20,6 @@ export default function ProfileEducationForm({edit = false, popupOff}: {edit?: b
         let errors: Array<string> = []
      
         if (field.value === ''){
-          console.log('fs')
           document.getElementById('fieldOfStudy')!.className = 'inputError'
           errors.push(field.isEmptyErrMsg)
           isValid = false

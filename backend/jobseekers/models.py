@@ -42,13 +42,13 @@ class SavedJob(models.Model):
 
 class ProfileEducation(models.Model):
       profile = models.ForeignKey(Profile, on_delete = models.CASCADE, null = True)
-      level = models.CharField(max_length = 200)
-      field = models.TextField(blank = True)
-      school = models.TextField(blank = True)
-      location = models.TextField(blank = True)
+      field = models.TextField(blank = False)
+      institution = models.TextField(blank = True)
+      country = models.TextField(blank = True)
+      city = models.TextField(blank = True)
       currentlyEnrolled = models.BooleanField(default = False)
-      fromDate = models.CharField(max_length = 200, blank = True)
-      toDate = models.CharField(max_length = 200, blank = True)
+      fromDate = models.CharField(max_length = 11, blank = True)
+      toDate = models.CharField(max_length = 11, blank = True)
 
       def __str__(self):
          return self.field

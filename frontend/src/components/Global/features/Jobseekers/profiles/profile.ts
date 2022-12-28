@@ -2,6 +2,7 @@ import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import {user,token} from '../../Auth/user'
 import { ProfileProps } from './types/profileProps'
 import axios from 'axios'
+import { stat } from 'fs'
 
 
 export const profile = {
@@ -61,8 +62,17 @@ export const ProfileSlice = createSlice({
     name : 'profile',
     initialState,
     reducers: {
-        setProfile: (state,action) => {
+        setProfile: (state, action) => {
           state.values = action.payload
+        },
+
+        setDetails: (state, action) => {
+            state.values.firstName = action.payload.firstName
+            state.values.middleName = action.payload.middleName
+            state.values.lastName = action.payload.lastName
+            state.values.about = action.payload.about
+            state.values.phone = action.payload.phone
+            state.values.logo = action.payload.logo
         },
 
         setToggleStatus: (state) => {
@@ -83,6 +93,7 @@ export const ProfileSlice = createSlice({
         },
 
         editPreferences: (state, action) => {
+            state.values.user.id = action.payload.id
             state.values.cv = action.payload.cv
             state.values.distance = action.payload.distance
             state.values.industry = action.payload.industry
@@ -109,6 +120,6 @@ export const ProfileSlice = createSlice({
 
 })
 
-export const {setProfile, setToggleStatus, setDeleteProfile, addSkill, editSkill, editPreferences} = ProfileSlice.actions
+export const {setProfile, setDetails, setToggleStatus, setDeleteProfile, addSkill, editSkill, editPreferences} = ProfileSlice.actions
 
 export default ProfileSlice.reducer

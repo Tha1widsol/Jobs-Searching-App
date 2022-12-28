@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React,{ useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../../Global/features/hooks';
+import { useAppDispatch, useAppSelector } from '../../../Global/features/hooks';
 import { ProfileProps } from '../../../Global/features/Jobseekers/profiles/types/profileProps';
 import { FileProps } from '../../../Global/types/forms';
 import { token } from '../../../Global/features/Auth/user';
@@ -15,6 +15,7 @@ export default function ProfilePreferencesForm({profile, isIsolated = false, pop
     const [industry, setIndustry] = useState({value: profile.industry})
     const [distance, setDistance] = useState({value: profile.distance})
     const [cv, setCV] = useState<FileProps>({value: profile.cv, name:''})
+    const user = useAppSelector(state => state.user)
     const [errors, setErrors] = useState<Array<string>>([])
 
     function handleSubmitForm(e: React.SyntheticEvent){
@@ -46,7 +47,7 @@ export default function ProfilePreferencesForm({profile, isIsolated = false, pop
                     return
                 }
                 handleAddSuccessMsg('Profile is successfully saved', dispatch)
-                navigate(`/profile/${profile.user?.id}`)
+                navigate(`/profile/${user.values?.id}`)
 
               }
               

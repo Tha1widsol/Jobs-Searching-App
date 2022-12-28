@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from 'react'
 import {useAppSelector, useAppDispatch} from '../../../Global/features/hooks'
 import { useNavigate } from 'react-router-dom'
-import {fetchProfile} from '../../../Global/features/Jobseekers/profiles/profile'
+import {fetchProfile, setDetails} from '../../../Global/features/Jobseekers/profiles/profile'
 import Errors from '../../../Global/messages/Errors'
 import {handleFixName} from '../../../Global/formFunctions'
 import {FileProps} from '../../../Global/types/forms'
@@ -116,16 +116,17 @@ export default function ProfileDetailsForm({isIsolated = true, toggleTab, popupO
           })
 
           .then(response => {
+            const data = response.data
             if (response.status === 201){
                if (!isIsolated) {
                    toggleTab()
                    return
                }
-
+               dispatch(setDetails(data))
                handleAddSuccessMsg('Profile is successfully saved', dispatch)
                navigate(`/profile/${user.values?.id}`)
                popupOff()
-               dispatch(fetchProfile(user.values?.id))
+
            }
        })
 

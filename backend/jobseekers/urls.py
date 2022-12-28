@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path('profile', views.ProfileAPI.as_view(),name = 'profile'),
     path('profile/skills', views.ProfileSkillsAPI.as_view(), name = 'profileSkills'),
+    path('profile/education', views.ProfileEducationAPI.as_view(), name = 'profileEducation'),
     path('toggleProfileStatus',views.ToggleProfileStatus.as_view(),name = 'toggleProfileStatus'),
     path('jobseeker/jobs',views.JobsListAPI.as_view(), name = 'jobs'),
     path('save-job',views.SaveJobAPI.as_view(), name = 'save-job'),
