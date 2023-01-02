@@ -143,7 +143,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                 <hr className = 'mt-0-mb-4'/>
                 {experience.values?.length ? 
                     <>
-                    <ProfileExperienceList experience = {experience.values}/>
+                    <ProfileExperienceList experience = {experience}/>
                 </>
                 :
                   null

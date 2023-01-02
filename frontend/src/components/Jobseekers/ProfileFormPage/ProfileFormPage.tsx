@@ -8,6 +8,7 @@ import ProfileExperienceForm from './ProfileExperienceForm/ProfileExperienceForm
 import ProfileExperienceList from './ProfileExperienceForm/ProfileExperienceList';
 import ProfileEducationForm from './ProfileEducationForm/ProfileEducationForm';
 import ProfileEducationList from './ProfileEducationForm/ProfileEducationList';
+import { fetchProfileEducation } from '../../Global/features/Jobseekers/profiles/profileEducation';
 import ProfileSkillsList from './ProfileSkillsForm/ProfileSkillsList';
 import ProfilePreferencesForm from './ProfilePreferencesForm/ProfilePreferencesForm';
 
@@ -18,11 +19,13 @@ export default function ProfileFormPage() {
     const [currentTab,setCurrentTab] = useState(1)
     const [popup, setPopup] = useState({experience: false, education: false})
     const experience = useAppSelector(state => state.profileExperience)
+    const education = useAppSelector(state => state.profileEducation)
     
     const maxTabs = document.querySelectorAll('.tab').length
 
     useEffect(() => {
         dispatch(fetchProfile(user.values?.id))
+        dispatch(fetchProfileEducation(user.values?.id))
     },[user.values?.id, dispatch])
 
     return (
@@ -52,24 +55,21 @@ export default function ProfileFormPage() {
                           <ProfileExperienceForm edit = {false} popupOff = {() => setPopup(prev => {return{...prev, experience: false}})}/>
                     </Popup>
                     
-                  
-                     <div>
-                        <h1 style = {{textAlign: 'center'}}><u>Work Experience:</u></h1>
-                        <button onClick = {() => setPopup(prev => {return{...prev, experience: true}})}>Add</button>
-                        <hr className = 'mt-0-mb-4'/>
-                        <ProfileExperienceList experience = {experience.values}/>
-                     </div>
-                     
+                    <h1 style = {{textAlign: 'center'}}><u>Work Experience:</u></h1>
+                    <button onClick = {() => setPopup(prev => {return{...prev, experience: true}})}>Add</button>
+                    <hr className = 'mt-0-mb-4'/>
+                    <ProfileExperienceList experience = {experience}/>
                 </div>
 
                 <div className = {`tab ${currentTab === 4 ? 'show' : 'hide'}`}>
-                <h1 style = {{textAlign: 'center'}}><u>Education:</u></h1>
+                   <h1 style = {{textAlign: 'center'}}><u>Education:</u></h1>
                     <Popup trigger = {popup.education} switchOff = {() => setPopup(prev => {return{...prev, education: false}})}>
                           <ProfileEducationForm popupOff = {() => setPopup(prev => {return{...prev, education: false}})}/>
                     </Popup>
 
                     <button onClick = {() => setPopup(prev => {return{...prev, education: true}})}>Add</button>
                     <hr className = 'mt-0-mb-4'/>
+                    <ProfileEducationList education = {education}/>
                 </div>
 
                 <div className = {`tab ${currentTab === 5 ? 'show' : 'hide'}`}>

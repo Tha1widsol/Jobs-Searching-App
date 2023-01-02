@@ -36,21 +36,24 @@ class ProfileExperience(models.Model):
       def __str__(self):
          return self.description
 
-class SavedJob(models.Model):
-      job = models.ForeignKey('employers.Job', on_delete = models.CASCADE, null = True, blank = True)
-      savedDate = models.DateTimeField('savedDate',auto_now_add = True)
-
 class ProfileEducation(models.Model):
       profile = models.ForeignKey(Profile, on_delete = models.CASCADE, null = True)
+      education = models.TextField(blank = True)
       field = models.TextField(blank = False)
       institution = models.TextField(blank = True)
       country = models.TextField(blank = True)
       city = models.TextField(blank = True)
       currentlyEnrolled = models.BooleanField(default = False)
-      fromDate = models.CharField(max_length = 11, blank = True)
-      toDate = models.CharField(max_length = 11, blank = True)
+      fromDate = models.CharField(max_length = 13, blank = True)
+      toDate = models.CharField(max_length = 13, blank = True)
 
       def __str__(self):
          return self.field
+
+class SavedJob(models.Model):
+      job = models.ForeignKey('employers.Job', on_delete = models.CASCADE, null = True, blank = True)
+      savedDate = models.DateTimeField('savedDate',auto_now_add = True)
+
+
 
 

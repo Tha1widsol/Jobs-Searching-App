@@ -10,7 +10,7 @@ import { token } from '../../../Global/features/Auth/user';
 import Popup from '../../../Global/Popup/Popup';
 import axios from 'axios'
 
-export default function ProfileExperienceList({experience, allowEdit = true}: {experience: ProfileExperienceListProps['values'], allowEdit?: boolean}) {
+export default function ProfileExperienceList({experience, allowEdit = true}: {experience: ProfileExperienceListProps, allowEdit?: boolean}) {
     const dispatch = useAppDispatch()
     const [popup, setPopup] = useState({experience: {trigger: false, values: initialExperience}, deleteExperience: {trigger: false, id: 0, title: '', company: ''}})
     const user = useAppSelector(state => state.user.values)
@@ -59,37 +59,36 @@ export default function ProfileExperienceList({experience, allowEdit = true}: {e
         <ProfileExperienceForm edit = {true} popupOff = {() => setPopup(prev => ({...prev, experience: {...prev.experience, trigger: false}}))} chosenExperience = {popup.experience.values}/>
     </Popup>
 
-
     <ReactScrollableFeed>
-    {experience.map((exp, index) => {
-        return (
-        <div  key = {index}>
-            <section className = 'rowSections'>
-                <h3>{exp.title}</h3>
-                {allowEdit ? 
-                <div style = {{display: 'flex', gap: '20px'}}>
-                    <span className = 'pen' onClick = {() => editChosenExperience(exp)}>&#9998;</span>
-                    <i className = 'fa fa-trash-o' onClick = {() => toggleDeleteExperiencePopup(exp.id, exp.title, exp.companyName)}/>
-                </div>
-                : null}
-            </section>
-            
-            <p>{exp.companyName}</p>
-            <p className = 'smallGrey'>{exp.years > 0 ? `Years worked - ${exp.years}` : null}</p>
-            <p style = {{ maxHeight: '120px'}}>{exp.description}</p>
+        {experience.values?.map((exp, index) => {
+            return exp.title !== '' ? (
+            <div  key = {index}>
+                <section className = 'rowSections'>
+                    <h3>{exp.title}</h3>
+                    {allowEdit ? 
+                    <div style = {{display: 'flex', gap: '20px'}}>
+                        <span className = 'pen' onClick = {() => editChosenExperience(exp)}>&#9998;</span>
+                        <i className = 'fa fa-trash-o' onClick = {() => toggleDeleteExperiencePopup(exp.id, exp.title, exp.companyName)}/>
+                    </div>
+                    : null}
+                </section>
+                
+                <p>{exp.companyName}</p>
+                <p className = 'smallGrey'>{exp.years > 0 ? `Years worked - ${exp.years}` : null}</p>
+                <p style = {{ maxHeight: '120px'}}>{exp.description}</p>
 
-            <div style = {{marginTop: '40px'}}>
-                <p><b>Reference:</b></p>
-                <p>{exp.EmployerName}</p>
-                <p>{exp.EmployerEmail}</p>
-                <p>{exp.EmployerPhone}</p>
+                <div style = {{marginTop: '40px'}}>
+                    <p><b>Reference:</b></p>
+                    <p>{exp.EmployerName}</p>
+                    <p>{exp.EmployerEmail}</p>
+                    <p>{exp.EmployerPhone}</p>
+                </div>
+                <hr className = 'mt-0-mb-4'/>
             </div>
-            <hr className = 'mt-0-mb-4'/>
-        </div>
-        
-        
-        )
-    })}
+            
+            
+            ) : null
+        })}
 
     </ReactScrollableFeed>
     </>

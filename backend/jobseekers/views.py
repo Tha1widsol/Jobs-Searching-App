@@ -10,6 +10,7 @@ from employers.serializers import MatchingJobsSerializer, ApplicationSerializer,
 from .serializers import *
 from django.db.models import Q
 from .calculateScore import calculateScore
+
 import json
 
 # Create your views here.
@@ -137,7 +138,7 @@ class ProfileExperienceAPI(generics.ListAPIView):
           experience = ProfileExperience.objects.filter(id = id)
           
           if experience.exists():
-            serializer = self.serializer_class(data = self.request.data, instance = experience.first())
+             serializer = self.serializer_class(data = self.request.data, instance = experience.first() or None)
         
           else:
               serializer = self.serializer_class(data = self.request.data)
@@ -154,7 +155,8 @@ class ProfileExperienceAPI(generics.ListAPIView):
                   
              experience.save()
              return Response({'experience': serializer.data},status = status.HTTP_201_CREATED)
-    
+
+          print(serializer.errors)
           return Response(status = status.HTTP_400_BAD_REQUEST)
 
       def delete(self, request):
@@ -173,6 +175,7 @@ class ProfileExperienceAPI(generics.ListAPIView):
           if serializer.is_valid():
              experience = serializer.save()
              experience.save()
+         
              return Response(status = status.HTTP_200_OK) 
 
           return Response(status = status.HTTP_400_BAD_REQUEST) 
@@ -184,21 +187,38 @@ class ProfileExperienceAPI(generics.ListAPIView):
           experience = ProfileExperience.objects.filter(profile = profile)
           return experience
 
-class ProfileEducationAPI(APIView):
+class ProfileEducationAPI(generics.ListAPIView):
     serializer_class = ProfileEducationSerializer
 
     def post(self, request):
-        profile = Profile.objects.filter(user = request.user).first()
-        serializer = self.serializer_class(data = request.data, instance = profile or None)
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        education = ProfileEducation.objects.filter(id = id)
+        
+        if education.exists():
+             serializer = self.serializer_class(data = self.request.data, instance = education.first() or None)
     
+        else:
+             serializer = self.serializer_class(data = self.request.data)
+
+        profile = Profile.objects.get(user = request.user)
+
         if serializer.is_valid():
             education = serializer.save()
             education.profile = profile
             education.save()
-            return Response(status = status.HTTP_201_CREATED) 
 
+            return Response({'education': serializer.data},status = status.HTTP_201_CREATED) 
+
+        print(serializer.errors)
         return Response(status = status.HTTP_400_BAD_REQUEST)
-        
+
+    def get_queryset(self):
+        lookup_url_kwarg = 'id'
+        id = self.request.GET.get(lookup_url_kwarg)
+        profile = Profile.objects.get(user__id = id)
+        education = ProfileEducation.objects.filter(profile = profile)
+        return education
 
 @api_view(['PUT'])
 def EditProfilePreferences(request):

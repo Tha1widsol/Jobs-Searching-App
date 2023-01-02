@@ -1,8 +1,13 @@
+import axios from 'axios'
 import React,{useState} from 'react'
+import { useAppDispatch } from '../../../Global/features/hooks'
+import { AddProfileEducation } from '../../../Global/features/Jobseekers/profiles/profileEducation'
+import { token } from '../../../Global/features/Auth/user'
 import Errors from '../../../Global/messages/Errors'
 import './css/ProfileEducationForm.css'
 
 export default function ProfileEducationForm({edit = false, popupOff}: {edit?: boolean, popupOff: () => void}) {
+    const dispatch = useAppDispatch()
     const [education, setEducation] = useState({value: 'No formal education'})
     const [field, setField] = useState({value: '', isEmptyErrMsg: 'Field of study is required'})
     const [institution, setInstitution] = useState({value: ''})
@@ -11,28 +16,59 @@ export default function ProfileEducationForm({edit = false, popupOff}: {edit?: b
     const [currentlyEnrolled, setCurrentlyEnrolled] = useState(false)
     const [date, setDate] = useState({from: {month: '', year: ''}, to: {month: '', year: ''}})
     const [errors, setErrors] = useState<Array<string>>([])
+
+    const validateForm = () => {
+      let isValid = true
+      let errors: Array<string> = []
+
+      if (field.value === ''){
+        document.getElementById('fieldOfStudy')!.className = 'inputError'
+        errors.push(field.isEmptyErrMsg)
+        isValid = false
+      }
+
+      if (!isValid) {
+        setErrors(errors)
+        document.getElementById('educationForm')!.scrollIntoView({behavior: 'smooth'})
+        return
+      }
+
+      setErrors([])
+      return isValid
+    }
     
 
     function handleSubmit(e: React.SyntheticEvent){
         e.preventDefault()
-  
-        let isValid = true
-        let errors: Array<string> = []
-     
-        if (field.value === ''){
-          document.getElementById('fieldOfStudy')!.className = 'inputError'
-          errors.push(field.isEmptyErrMsg)
-          isValid = false
-        }
+        if (!validateForm()) return
 
-        if (!isValid) {
-          setErrors(errors)
-          document.getElementById('educationForm')!.scrollIntoView({behavior: 'smooth'})
-          return
-        }
+        const requestOptions = {
+           headers: {'Content-Type': 'multipart/form-data', Authorization:`Token ${token}`}
+         }
 
-        setErrors([])
-        return isValid
+       let form = new FormData()
+       form.append('education', education.value)
+       form.append('field', field.value)
+       form.append('institution', institution.value)
+       form.append('country', country.value)
+       form.append('city', city.value)
+       form.append('currentlyEnrolled', String(currentlyEnrolled))
+       form.append('fromDate', `${date.from.month} ${date.from.year}`)
+       form.append('toDate', `${date.to.month} ${date.to.year}`)
+
+       axios.post(`/api/profile/education`,form, requestOptions)
+       .then(response => {
+        if (response.status === 201){
+            const data = response.data.education
+            console.log(data)
+            dispatch(AddProfileEducation(data))
+            popupOff()
+         }
+       })
+
+       .catch(err => {
+         console.log(err)
+       })
     }
 
   return (

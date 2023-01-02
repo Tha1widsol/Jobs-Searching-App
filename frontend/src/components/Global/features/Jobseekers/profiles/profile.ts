@@ -2,7 +2,6 @@ import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import {user,token} from '../../Auth/user'
 import { ProfileProps } from './types/profileProps'
 import axios from 'axios'
-import { stat } from 'fs'
 
 
 export const profile = {
@@ -15,7 +14,6 @@ export const profile = {
     phone: '',
     logo: '',
     cv: '',
-    education: '',
     industry: '',
     distance: '',
     experience: '',
@@ -35,10 +33,8 @@ const initialState: ProfileProps = {
     phone: '',
     logo: '',
     cv: '',
-    education: '',
     industry: '',
     distance: '',
-    experience: '',
     about: '',
     isActive: false,
     }
