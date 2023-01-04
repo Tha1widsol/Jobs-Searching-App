@@ -10,6 +10,7 @@ from employers.serializers import MatchingJobsSerializer, ApplicationSerializer,
 from .serializers import *
 from django.db.models import Q
 from .calculateScore import calculateScore
+from itertools import chain
 
 import json
 
@@ -51,14 +52,14 @@ def checkProfileExists(request):
 
     return Response({'exists': False})
 
+
 class ProfileAPI(APIView):
     parser_classes = (MultiPartParser, FormParser)
-    serializer_class = CreateProfileSerializer
+    serializer_class = ProfileSerializer
 
-    def post(self,request):
+    def post(self, request):
         profile = Profile.objects.filter(user = request.user).first()
-
-        serializer = self.serializer_class(data = request.data, instance = profile or None)
+        serializer = CreateProfileSerializer(data = request.data, instance = profile or None)
 
         if serializer.is_valid():
             profile = serializer.save()
@@ -68,14 +69,14 @@ class ProfileAPI(APIView):
 
         return Response(status = status.HTTP_400_BAD_REQUEST)
 
-    def get(self,request):
+    def get(self, request):
         lookup_url_kwarg = 'id'
         id = request.GET.get(lookup_url_kwarg)
         user = User.objects.get(id = id)
         profile = Profile.objects.filter(user = user)
-        
+
         if profile.exists():
-            serializer_class = ProfileSerializer(profile.first())
+            serializer_class = self.serializer_class(profile.first())
             return Response(serializer_class.data, status = status.HTTP_200_OK)
 
         return Response(status = status.HTTP_404_NOT_FOUND)
