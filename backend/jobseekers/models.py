@@ -12,10 +12,8 @@ class Profile(models.Model):
    phone = models.CharField(max_length = 15)
    logo = models.ImageField(upload_to = 'profileLogosFiles', blank = True)
    cv = models.FileField(upload_to = 'cvFiles',blank = True)
-   education = models.CharField(max_length = 50, default = 'No formal education')
    industry = models.TextField(default = 'Any')
    distance = models.TextField(default = 'Any')
-   experience = models.TextField(blank = True)
    about = models.CharField(max_length = 250)
    isActive = models.BooleanField(default = True)
 
