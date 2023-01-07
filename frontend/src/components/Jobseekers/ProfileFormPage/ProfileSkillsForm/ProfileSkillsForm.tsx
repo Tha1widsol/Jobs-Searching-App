@@ -69,7 +69,7 @@ export default function ProfileSkillsForm({isIsolated = true, edit = false, popu
   }
 
   return (
-    <form onSubmit = {handleAddSkill}>
+    <form onSubmit = {handleAddSkill} noValidate>
         <h1 className = 'title'>Skills</h1> 
         <Errors errors = {errors}/>
         <label htmlFor = 'skills'><h3>Specific Key skills:</h3></label>
