@@ -61,10 +61,10 @@ export default function ProfileExperienceForm({edit = true, isIsolated = true, p
         axios.post(`/api/profileExperience?id=${chosenExperience?.id || 0} `,form, requestOptions)
         .then(response => {
           if (response.status === 201){
-              const exp = response.data.experience
+              const data = response.data.experience
               popupOff()
-              if (!edit) dispatch(AddProfileExperience(exp))
-              else dispatch(editProfileExperience(exp))
+              if (!edit) dispatch(AddProfileExperience(data))
+              else dispatch(editProfileExperience(data))
               setExperience(prev => {return{...prev, isValid: true, popup: false, value: initialExperience}})
               setErrors([])
           }
