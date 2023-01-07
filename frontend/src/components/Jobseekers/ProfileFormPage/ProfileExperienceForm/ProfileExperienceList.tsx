@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState} from 'react'
 import ReactScrollableFeed from 'react-scrollable-feed';
 import { ProfileExperienceListProps } from '../../../Global/features/Jobseekers/profiles/profileExperience';
 import { ProfileExperienceProps } from './types/ProfileExperienceProps';
@@ -14,16 +14,6 @@ export default function ProfileExperienceList({experience, allowEdit = true}: {e
     const dispatch = useAppDispatch()
     const [popup, setPopup] = useState({experience: {trigger: false, values: initialExperience}, deleteExperience: {trigger: false, id: 0, title: '', company: ''}})
     const user = useAppSelector(state => state.user.values)
-
-    useEffect(() => {
-        axios.get(`/api/checkProfileExists?id=${user.id}`)
-        .then(response => {
-            const data = response.data
-            if (data.exists){
-                 dispatch(fetchProfileExperience(user.id))
-            }
-        })
-    },[dispatch, user.id])
 
     function editChosenExperience(experience: ProfileExperienceProps){
         setPopup(prev => ({...prev, experience: {...prev.experience, trigger: true, values: experience}}))
@@ -65,12 +55,16 @@ export default function ProfileExperienceList({experience, allowEdit = true}: {e
             <div  key = {index}>
                 <section className = 'rowSections'>
                     <h3>{exp.title}</h3>
-                    {allowEdit ? 
-                    <div style = {{display: 'flex', gap: '20px'}}>
-                        <span className = 'pen' onClick = {() => editChosenExperience(exp)}>&#9998;</span>
-                        <i className = 'fa fa-trash-o' onClick = {() => toggleDeleteExperiencePopup(exp.id, exp.title, exp.companyName)}/>
+                  
+                    <div className = 'rowSections editTrash'>
+                         {allowEdit ? 
+                         <>
+                            <span className = 'pen' onClick = {() => editChosenExperience(exp)}>&#9998;</span>
+                            <i className = 'fa fa-trash-o' onClick = {() => toggleDeleteExperiencePopup(exp.id, exp.title, exp.companyName)}/>
+                         </>
+                        : null}
                     </div>
-                    : null}
+                 
                 </section>
                 
                 <p>{exp.companyName}</p>
