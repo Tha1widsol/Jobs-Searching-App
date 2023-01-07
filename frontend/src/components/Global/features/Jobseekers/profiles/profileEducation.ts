@@ -1,21 +1,7 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
+import { ProfileEducationListProps } from './types/profileEducationProps'
 import {token} from '../../Auth/user'
 import axios from 'axios'
-
-export interface ProfileEducationListProps{
-    status: 'success' | 'loading' | 'rejected' | ''
-    values: [{
-        id: number
-        education: string,
-        field: string,
-        institution: string,
-        country: string,
-        city: string,
-        currentlyEnrolled: boolean,
-        fromDate: string,
-        toDate: string
-    }]
-}
 
 const initialState = {
     status: '',
@@ -49,11 +35,11 @@ export const ProfileEducationSlice = createSlice({
     name : 'profileEducation',
     initialState,
     reducers: {
-        AddProfileEducation: (state,action) => {
+        addProfileEducation: (state,action) => {
           state.values.push(action.payload)
         },
 
-        DeleteProfileEducation: (state, action) => {
+        deleteProfileEducation: (state, action) => {
             state.values.slice(state.values.findIndex(exp => exp.id === action.payload))
         },
 
@@ -64,7 +50,8 @@ export const ProfileEducationSlice = createSlice({
         editProfileEducation: (state, action) => {
             const index = state.values.findIndex(Education => Education.id === action.payload.id)
             state.values[index] = action.payload
-        }
+        },
+        
     },
 
     extraReducers(builder){
@@ -86,5 +73,5 @@ export const ProfileEducationSlice = createSlice({
 
 })
 
-export const {AddProfileEducation, setDeleteProfileEducation, DeleteProfileEducation, editProfileEducation} = ProfileEducationSlice.actions
+export const {addProfileEducation, setDeleteProfileEducation, deleteProfileEducation, editProfileEducation} = ProfileEducationSlice.actions
 export default ProfileEducationSlice.reducer
