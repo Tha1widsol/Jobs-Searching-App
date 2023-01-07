@@ -11,26 +11,24 @@ import {token} from '../../Global/features/Auth/user';
 import Popup from '../../Global/Popup/Popup';
 import ProfileDetailsForm from '../ProfileFormPage/ProfileDetailsForm/ProfileDetailsForm';
 import ProfileExperienceForm from '../ProfileFormPage/ProfileExperienceForm/ProfileExperienceForm';
-import axios from 'axios'
-import { fetchProfileExperience } from '../../Global/features/Jobseekers/profiles/profileExperience';
 import ProfileExperienceList from '../ProfileFormPage/ProfileExperienceForm/ProfileExperienceList';
 import ProfileSkillsList from '../ProfileFormPage/ProfileSkillsForm/ProfileSkillsList';
 import ProfileSkillsForm from '../ProfileFormPage/ProfileSkillsForm/ProfileSkillsForm';
 import ProfilePreferencesForm from '../ProfileFormPage/ProfilePreferencesForm/ProfilePreferencesForm';
+import ProfileEducationList from '../ProfileFormPage/ProfileEducationForm/ProfileEducationList';
+import axios from 'axios'
+import ProfileEducationForm from '../ProfileFormPage/ProfileEducationForm/ProfileEducationForm';
 
 export default function Profile({profile} : {profile: ProfileProps}) {
     const navigate = useNavigate()
     const user = useAppSelector(state => state.user.values)
     const experience = useAppSelector(state => state.profileExperience)
-    const [popup, setPopup] = useState({deleteExperience: {trigger: false, id: 0, title: '', company: ''}, deleteProfile: false, details: false, skills: false, experience: {trigger: false, values: initialExperience}, preferences: false})
+    const education = useAppSelector(state => state.profileEducation)
+    const [popup, setPopup] = useState({deleteExperience: {trigger: false, id: 0, title: '', company: ''}, deleteProfile: false, details: false, skills: false, experience: {trigger: false, values: initialExperience}, education: {trigger: false}, preferences: false})
     const [dropdown, setDropdown] = useState(false)
     const currentJob = experience.values?.find(exp => exp.isOnGoing === true)
     const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        dispatch(fetchProfileExperience(user.id))
-    },[dispatch, user.id])
-    
     function handleToggleStatus(){
         axios.put('/api/toggleProfileStatus',null,{headers: {Authorization: `Token ${token}`}})
         .then(response => {
@@ -85,6 +83,10 @@ export default function Profile({profile} : {profile: ProfileProps}) {
             <ProfilePreferencesForm profile = {profile.values} isIsolated = {true} popupOff = {() => setPopup(prev => {return{...prev, preferences: false}})}/>
         </Popup>
 
+        <Popup trigger = {popup.education.trigger} switchOff = {() => setPopup(prev => ({...prev, education: {...prev.education, trigger: false}}))}>
+                <ProfileEducationForm edit = {false} popupOff = {() => setPopup(prev => ({...prev, education: {...prev.education, trigger: false}}))}/>
+        </Popup>
+
   
         {!user?.isAnEmployer ? 
         <KebabMenu current = {dropdown} switchOn = {() => setDropdown(true)} switchOff = {() => setDropdown(false)}>
@@ -126,7 +128,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                     </div>
 
                     <hr className = 'mt-0-mb-4'/>
-                    <ProfileSkillsList skills = {profile.values?.skills}/>
+                    <ProfileSkillsList allowEdit = {!user.isAnEmployer} skills = {profile.values?.skills}/>
                 </section>
             </div>
 
@@ -143,13 +145,31 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                 <hr className = 'mt-0-mb-4'/>
                 {experience.values?.length ? 
                     <>
-                    <ProfileExperienceList experience = {experience}/>
+                    <ProfileExperienceList allowEdit = {!user.isAnEmployer} experience = {experience}/>
                 </>
                 :
                   null
                 }
                </section>
             </div>
+
+            <section className = 'profileSubContainer'>
+                 <div className = 'penContainer row'>
+                    <label><h2>Education</h2></label>
+                    {!user.isAnEmployer ? 
+                        <span className = 'pen' onClick = {() => setPopup(prev => ({...prev, education: {...prev.education, trigger: true}}))}>&#9998;</span>
+                    : null}
+                </div>
+
+                <hr className = 'mt-0-mb-4'/>
+                {education.values?.length ? 
+                    <>
+                    <ProfileEducationList education = {education}/>
+                </>
+                :
+                  null
+                }
+            </section>
            
             <section>
                 <div className = 'penContainer row'>
