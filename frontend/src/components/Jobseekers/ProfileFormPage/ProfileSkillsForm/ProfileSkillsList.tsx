@@ -8,7 +8,7 @@ import ReactScrollableFeed from 'react-scrollable-feed';
 import { editSkill } from '../../../Global/features/Jobseekers/profiles/profile'
 
 
-export default function ProfileSkillsList({skills, edit = true}: {skills: ProfileSkillsProps['values'], edit?: boolean}) {
+export default function ProfileSkillsList({skills, allowEdit = true}: {skills: ProfileSkillsProps['values'], allowEdit?: boolean}) {
   const dispatch = useAppDispatch()
   const user = useAppSelector(state => state.user)
   const [popup, setPopup] = useState({skills: false, editSkill: {trigger: false, skill: {id: 0, name: '', specific: false}}, deleteSkills: {trigger: false, skill: {id: 0, name: ''}}})
@@ -78,12 +78,16 @@ export default function ProfileSkillsList({skills, edit = true}: {skills: Profil
                         return skill.name !== '' ? (
                             <div className = 'rowSections' key = {index}>
                                     <li>{skill.name} <span className = 'smallGrey'>- {skill.specific ? 'Specific' : 'Generic'}</span></li>
-                                    {edit ? 
+                                 
                                         <div className = 'rowSections editTrash'>
-                                            <span className = 'pen' onClick = {() => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, trigger: true, skill: skill}}))}>&#9998;</span>
-                                            <i className = 'fa fa-trash-o' onClick = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: true, skill: {id: skill.id, name: skill.name}}}))}/> 
+                                            {allowEdit ? 
+                                            <>
+                                                <span className = 'pen' onClick = {() => setPopup(prev => ({...prev, editSkill: {...prev.editSkill, trigger: true, skill: skill}}))}>&#9998;</span>
+                                                <i className = 'fa fa-trash-o' onClick = {() => setPopup(prev => ({...prev, deleteSkills: {...prev.deleteSkills, trigger: true, skill: {id: skill.id, name: skill.name}}}))}/> 
+                                            </>
+                                            : null}
                                         </div>
-                                    : null}
+                                   
                             </div>
                         ): null
                     })}
