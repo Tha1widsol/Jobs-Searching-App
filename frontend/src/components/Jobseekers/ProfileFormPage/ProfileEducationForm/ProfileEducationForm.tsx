@@ -1,21 +1,38 @@
 import axios from 'axios'
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
+import { ProfileEducationProps } from '../../../Global/features/Jobseekers/profiles/types/profileEducationProps'
 import { useAppDispatch } from '../../../Global/features/hooks'
-import { AddProfileEducation } from '../../../Global/features/Jobseekers/profiles/profileEducation'
+import { addProfileEducation, editProfileEducation } from '../../../Global/features/Jobseekers/profiles/profileEducation'
 import { token } from '../../../Global/features/Auth/user'
 import Errors from '../../../Global/messages/Errors'
 import './css/ProfileEducationForm.css'
 
-export default function ProfileEducationForm({edit = false, popupOff}: {edit?: boolean, popupOff: () => void}) {
+export const initialEducation = {
+    id: 0,
+    education: '',
+    field: '',
+    institution: '',
+    country: '',
+    city: '',
+    currentlyEnrolled: false,
+    fromDate: '',
+    toDate: ''
+}
+
+export default function ProfileEducationForm({edit = true, chosenEducation, popupOff}: {edit?: boolean, chosenEducation?: ProfileEducationProps, popupOff: () => void}) {
     const dispatch = useAppDispatch()
-    const [education, setEducation] = useState({value: 'No formal education'})
-    const [field, setField] = useState({value: '', isEmptyErrMsg: 'Field of study is required'})
-    const [institution, setInstitution] = useState({value: ''})
-    const [country, setCountry] = useState({value: ''})
-    const [city, setCity] = useState({value: ''})
-    const [currentlyEnrolled, setCurrentlyEnrolled] = useState(false)
-    const [date, setDate] = useState({from: {month: '', year: ''}, to: {month: '', year: ''}})
+    const [education, setEducation] = useState({value: chosenEducation?.education || 'No formal education'})
+    const [field, setField] = useState({value: chosenEducation?.field || '', isEmptyErrMsg: 'Field of study is required'})
+    const [institution, setInstitution] = useState({value: chosenEducation?.institution || ''})
+    const [country, setCountry] = useState({value: chosenEducation?.country || ''})
+    const [city, setCity] = useState({value: chosenEducation?.city || ''})
+    const [currentlyEnrolled, setCurrentlyEnrolled] = useState(chosenEducation?.currentlyEnrolled || false)
+    const [date, setDate] = useState({from: {month: chosenEducation?.fromDate.split(' ')[0] || '', year: chosenEducation?.fromDate.split(' ')[1] || ''}, to: {month: chosenEducation?.toDate.split(' ')[0] || '', year: chosenEducation?.toDate.split(' ')[1] || ''}, errorMsg: 'Date is invalid'})
     const [errors, setErrors] = useState<Array<string>>([])
+
+    useEffect(() => {
+      if (date.to.month !== '' || date.to.year !== '') setCurrentlyEnrolled(false)
+    },[date.to])
 
     const validateForm = () => {
       let isValid = true
@@ -25,6 +42,15 @@ export default function ProfileEducationForm({edit = false, popupOff}: {edit?: b
         document.getElementById('fieldOfStudy')!.className = 'inputError'
         errors.push(field.isEmptyErrMsg)
         isValid = false
+      }
+
+      if (!currentlyEnrolled){
+        if ((date.from.month !== '' || date.from.year !== '') && (date.to.month === '' || date.to.year === '')){
+          document.getElementById('toInstitutionMonth')!.className = 'inputError'
+          document.getElementById('toInstitutionYear')!.className = 'inputError'
+          errors.push(date.errorMsg)
+          isValid = false
+        }
       }
 
       if (!isValid) {
@@ -56,12 +82,12 @@ export default function ProfileEducationForm({edit = false, popupOff}: {edit?: b
        form.append('fromDate', `${date.from.month} ${date.from.year}`)
        form.append('toDate', `${date.to.month} ${date.to.year}`)
 
-       axios.post(`/api/profile/education`,form, requestOptions)
+       axios.post(`/api/profile/education?id=${chosenEducation?.id || 0}`,form, requestOptions)
        .then(response => {
         if (response.status === 201){
             const data = response.data.education
-            console.log(data)
-            dispatch(AddProfileEducation(data))
+            if (!edit) dispatch(addProfileEducation(data))
+            else dispatch(editProfileEducation(data))
             popupOff()
          }
        })
