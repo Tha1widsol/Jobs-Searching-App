@@ -40,7 +40,7 @@ export const ProfileEducationSlice = createSlice({
         },
 
         deleteProfileEducation: (state, action) => {
-            state.values.slice(state.values.findIndex(exp => exp.id === action.payload))
+           state.values.slice(state.values.findIndex(exp => exp.id === action.payload))
         },
 
         setDeleteProfileEducation: (state) => {
