@@ -52,7 +52,7 @@ export default function ProfileEducationList({education, allowEdit = true} : {ed
         {education.values?.map(education => {
           return (
             <div key = {education.id}>
-            <section className = 'rowSections'>
+              <section className = 'rowSections'>
                     <h3>{education.field}</h3>
                     {allowEdit ? 
                     <div className = 'rowSections editTrash'>
@@ -61,6 +61,7 @@ export default function ProfileEducationList({education, allowEdit = true} : {ed
                     </div>
                     : null}
                 </section>
+                
                 <p>{education.education} {education.institution ? `- ${education.institution}` : null}</p>
                 {education.fromDate && education.toDate ? 
                   <p className = 'smallGrey'>{education.fromDate} - {education.currentlyEnrolled ? 'Present' : education.toDate}</p>
