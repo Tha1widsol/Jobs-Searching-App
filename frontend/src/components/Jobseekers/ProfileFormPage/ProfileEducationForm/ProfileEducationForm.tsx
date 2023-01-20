@@ -6,6 +6,7 @@ import { addProfileEducation, editProfileEducation } from '../../../../features/
 import { token } from '../../../../features/Auth/user'
 import Errors from '../../../Global/messages/Errors'
 import './css/ProfileEducationForm.css'
+import NumberRange from '../../../Global/Forms/NumberRange'
 
 export const initialEducation = {
     id: 0,
@@ -29,6 +30,7 @@ export default function ProfileEducationForm({edit = true, chosenEducation, popu
     const [currentlyEnrolled, setCurrentlyEnrolled] = useState(chosenEducation?.currentlyEnrolled || false)
     const [date, setDate] = useState({from: {month: chosenEducation?.fromDate.split(' ')[0] || '', year: chosenEducation?.fromDate.split(' ')[1] || ''}, to: {month: chosenEducation?.toDate.split(' ')[0] || '', year: chosenEducation?.toDate.split(' ')[1] || ''}, errorMsg: 'Date is invalid'})
     const [errors, setErrors] = useState<Array<string>>([])
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
     useEffect(() => {
       if (date.to.month !== '' || date.to.year !== '') setCurrentlyEnrolled(false)
@@ -41,6 +43,12 @@ export default function ProfileEducationForm({edit = true, chosenEducation, popu
       if (field.value === ''){
         document.getElementById('fieldOfStudy')!.className = 'inputError'
         errors.push(field.isEmptyErrMsg)
+        isValid = false
+      }
+
+      if (date.to.year < date.from.year) {
+        document.getElementById('toInstitutionYear')!.className = 'inputError'
+        errors.push(date.errorMsg)
         isValid = false
       }
 
@@ -130,13 +138,16 @@ export default function ProfileEducationForm({edit = true, chosenEducation, popu
         <section className = 'row' style = {{gap: '10px'}}>
           <select id = 'fromInstitutionMonth' value = {date.from.month} onChange = {e => setDate(prev => ({...prev, from: {...prev.from, month: e.target.value}}))}>
             <option value = ''>Month:</option>
-            <option value = 'January'>January</option>
-            <option value = 'February'>February</option>
+            {months.map(month => {
+              return (
+                <option value = {month} key = {month}>{month}</option>
+                )
+            })}
           </select>
 
           <select id = 'fromInstitutionYear' value = {date.from.year} onChange = {e => setDate(prev => ({...prev, from: {...prev.from, year: e.target.value}}))}>
             <option value = ''>Year:</option>
-            <option value = '1900'>1900</option>
+           <NumberRange start = {1900} end = {new Date().getFullYear()}/>
           </select>
         </section>
 
@@ -145,13 +156,16 @@ export default function ProfileEducationForm({edit = true, chosenEducation, popu
         <section className = 'row' style = {{gap: '10px'}}>
            <select id = 'toInstitutionMonth' value = {date.to.month} onChange = {e => setDate(prev => ({...prev, to: {...prev.to, month: e.target.value}}))}>
               <option value = ''>Month:</option>
-              <option value = 'January'>January</option>
-              <option value = 'February'>February</option>
+              {months.map(month => {
+              return (
+                <option value = {month} key = {month}>{month}</option>
+                )
+            })}
             </select>
 
             <select id = 'toInstitutionYear' value = {date.to.year} onChange = {e => setDate(prev => ({...prev, to: {...prev.to, year: e.target.value}}))}>
               <option value = ''>Year:</option>
-              <option value = '1900'>1900</option>
+              <NumberRange start = {1900} end = {new Date().getFullYear()}/>
             </select>
         </section>
 
