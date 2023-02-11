@@ -101,6 +101,7 @@ export default function RegisterPage() {
         .then(response => {
             const data = response.data
             localStorage.setItem('token',data.token)
+            signup(email.value, password.value)
             dispatch(login())
             choice === 'jobseeker' ? navigate('/create-profile') : navigate('/create-company')
             window.location.reload()
