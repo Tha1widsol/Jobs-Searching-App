@@ -13,6 +13,7 @@ function useQuery(){
 export default function RegisterPage() {
     let query = useQuery()
     const choice = query.get('choice')
+   const {signup} = useAuth()
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const [errors,setErrors] = useState<Array<string>>([])
