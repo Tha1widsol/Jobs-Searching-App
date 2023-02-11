@@ -4,6 +4,7 @@ import Errors from '../../Global/messages/Errors';
 import {PasswordProps} from './types/RegisterInterface'
 import {useAppDispatch} from '../../Global/features/hooks';
 import {login} from '../../Global/features/Auth/user';
+import { useAuth } from '../../../contexts/AuthContext';
 import axios from 'axios'
 
 function useQuery(){
@@ -13,6 +14,7 @@ function useQuery(){
 export default function RegisterPage() {
     let query = useQuery()
     const choice = query.get('choice')
+   const {signup} = useAuth()
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const [errors,setErrors] = useState<Array<string>>([])
@@ -101,6 +103,7 @@ export default function RegisterPage() {
         .then(response => {
             const data = response.data
             localStorage.setItem('token',data.token)
+            signup(email.value, password.value)
             dispatch(login())
             choice === 'jobseeker' ? navigate('/create-profile') : navigate('/create-company')
             window.location.reload()

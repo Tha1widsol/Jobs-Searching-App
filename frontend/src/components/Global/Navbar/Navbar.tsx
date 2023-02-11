@@ -10,14 +10,18 @@ import {token,logout} from '../features/Auth/user'
 import axios from 'axios'
 import './css/Navbar.css'
 import { handleAddSuccessMsg } from '../messages/SuccessAlert'
+import { useAuth } from '../../../contexts/AuthContext'
 
 export default function Navbar() {
     const user = useAppSelector(state => state.user)
+    const {currentUser} = useAuth()
     const [dropdown,setDropdown] = useState({menu: false, companies: false})
     const [toggleChannelClicked, setToggleChannelClicked] = useState(false)
     const companies = useAppSelector(state => state.companies)
     const currentCompany = useAppSelector(state => state.currentCompany)
+    const {signOut } = useAuth()
     const dispatch = useAppDispatch()
+
     
     useEffect(() => {
         if (!user.values?.isAnEmployer) return
@@ -40,6 +44,7 @@ export default function Navbar() {
         })
         
         setDropdown({menu: false, companies: false})
+        signOut()
         dispatch(logout())
     }
 
@@ -131,7 +136,7 @@ export default function Navbar() {
               </div>: 
 
               <NavLink to = '/login' onClick = {() => setDropdown({menu: false, companies: false})} >Login</NavLink>}
-              {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, {user.values?.email}</p> : null}
+              {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, {JSON.stringify(currentUser)}</p> : null}
         </div>
     )
 }

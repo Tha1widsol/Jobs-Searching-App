@@ -4,6 +4,7 @@ import {useAppDispatch} from './components/Global/features/hooks';
 import PagesRoutes from './components/Global/PagesRoutes';
 import {fetchUser,logout,token} from './components/Global/features/Auth/user';
 import SuccessAlert from './components/Global/messages/SuccessAlert';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
   const dispatch = useAppDispatch()
@@ -14,12 +15,14 @@ function App() {
   },[dispatch])
 
   return (
-    <div style = {{width: '95%', margin: '0 auto'}}>
-      <Navbar/>
-      <SuccessAlert/>
-      <PagesRoutes/>
-    </div>
-    
+    <AuthProvider>
+       <div style = {{width: '95%', margin: '0 auto'}}>
+          <Navbar/>
+          <SuccessAlert/>
+          <PagesRoutes/>
+        </div>
+    </AuthProvider>
+  
   );
 }
 
