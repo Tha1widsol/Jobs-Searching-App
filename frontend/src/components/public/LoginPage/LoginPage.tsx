@@ -8,7 +8,7 @@ export default function LoginPage() {
     const [email,setEmail] = useState({value: '', isValid: true, errorMsg: 'Email is required'})
     const [password,setPassword] = useState({value: '', isValid: true, errorMsg: 'Password is required'})
     const dispatch = useAppDispatch()
-    const [errors,setErrors] = useState<Array<string>>([])
+    const [errors, setErrors] = useState<Array<string>>([])
 
     const validateForm = () => {
         let isValid = true
@@ -48,8 +48,9 @@ export default function LoginPage() {
         .then(response => {
                 const data = response.data
                 localStorage.setItem('token',data.token)
+                signIn(email.value, password.value)
                 dispatch(login())
-                window.location.reload()
+               
         })
 
         .catch(error => {
