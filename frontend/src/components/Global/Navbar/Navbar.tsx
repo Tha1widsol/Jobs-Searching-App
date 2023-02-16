@@ -18,10 +18,22 @@ export default function Navbar() {
     const [dropdown,setDropdown] = useState({menu: false, companies: false})
     const [toggleChannelClicked, setToggleChannelClicked] = useState(false)
     const companies = useAppSelector(state => state.companies)
+    const [token, setToken] = useState('')
     const currentCompany = useAppSelector(state => state.currentCompany)
     const {signOut } = useAuth()
     const dispatch = useAppDispatch()
+    
 
+    useEffect(() => {
+        if (!currentUser) return
+        currentUser.getIdToken().then(function (idToken: string){
+            setToken(idToken)
+        })
+    },[currentUser])
+
+   
+
+    
     
     useEffect(() => {
         if (!user.values?.isAnEmployer) return
@@ -136,7 +148,7 @@ export default function Navbar() {
               </div>: 
 
               <NavLink to = '/login' onClick = {() => setDropdown({menu: false, companies: false})} >Login</NavLink>}
-              {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, {JSON.stringify(currentUser)}</p> : null}
+              {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, {currentUser?.email}</p> : null}
         </div>
     )
 }
