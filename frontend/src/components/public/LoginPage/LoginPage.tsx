@@ -3,8 +3,10 @@ import axios from 'axios'
 import {useAppDispatch} from '../../../app/hooks';
 import {login} from '../../../features/Auth/user';
 import Errors from '../../Global/messages/Errors';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export default function LoginPage() {
+    const {signIn} = useAuth()
     const [email,setEmail] = useState({value: '', isValid: true, errorMsg: 'Email is required'})
     const [password,setPassword] = useState({value: '', isValid: true, errorMsg: 'Password is required'})
     const dispatch = useAppDispatch()
