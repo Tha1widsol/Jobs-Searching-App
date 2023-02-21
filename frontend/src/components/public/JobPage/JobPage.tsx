@@ -63,8 +63,11 @@ export default function JobPage() {
       }
       
     })
-    .then(() => {
-      handleAddSuccessMsg('Job is successfully saved', dispatch)
+    .then(response => {
+      if (response.status === 200){
+        dispatch(fetchSavedJobs())
+        handleAddSuccessMsg('Job is successfully saved', dispatch)
+      }
     })
   }
 
