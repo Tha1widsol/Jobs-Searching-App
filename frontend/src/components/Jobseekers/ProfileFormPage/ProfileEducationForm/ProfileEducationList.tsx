@@ -52,7 +52,6 @@ export default function ProfileEducationList({education, allowEdit = true} : {ed
         {education.values?.map(education => {
           return (
             <div key = {education.id}>
-              {education.id}
             <section className = 'rowSections'>
                     <h3>{education.field}</h3>
                     {allowEdit ? 
