@@ -346,7 +346,7 @@ class SaveJobAPI(APIView):
         savedJob = SavedJob(job = job)
         savedJob.save()
         self.request.user.savedJobs.add(savedJob)
-        return Response(status = status.HTTP_201_CREATED)
+        return Response(status = status.HTTP_200_OK)
 
     def get(self, request):
           lookup_url_kwarg = 'id'
