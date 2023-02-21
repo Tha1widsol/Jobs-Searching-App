@@ -81,7 +81,7 @@ export default function ApplicationPage() {
             <span className = {`step ${currentTab === 2 ? 'active' : currentTab > 2 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(2) : null}><p className = 'step-label'>Cover Letter</p></span>
         </div>
 
-        <form>
+        <form className = 'normalForm'>
             <div className = {`tab ${currentTab === 1 ? 'show' : 'hide'}`}>
                 <Profile profile = {profile}/>
             </div>
@@ -90,9 +90,9 @@ export default function ApplicationPage() {
                 <label htmlFor = 'coverLetter' ><h3>Cover Letter (Optional) (Characters remaining: {coverLetter.maxLength - coverLetter.currentLength}):</h3></label>
                 <textarea style = {{height: '150px'}} onChange = {e => setCoverLetter(prev => {return {...prev,currentLength: e.target.value.length, value: e.target.value}})} placeholder = 'Cover letter...' maxLength = {coverLetter.maxLength} ></textarea>
             </div>
-
             {currentTab === maxTabs ? <button type = 'button' id = 'submit' onClick = {handleSubmitForm} >Submit</button> : <button type = 'button' className = 'toggleTabBtn' style = {{float:'right'}} onClick = {() => setCurrentTab(currentTab + 1)}>Next</button>}
             <button type = 'button' className = {currentTab > 1 ? 'toggleTabBtn' : 'hide'} onClick = {() => setCurrentTab(currentTab - 1)}>Previous</button>
+
         </form>
    
     </div>
