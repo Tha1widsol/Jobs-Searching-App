@@ -148,7 +148,7 @@ export default function Navbar() {
               </div>: 
 
               <NavLink to = '/login' onClick = {() => setDropdown({menu: false, companies: false})} >Login</NavLink>}
-              {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, {currentUser?.email}</p> : null}
+              {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, {user.values?.email}</p> : null}
         </div>
     )
 }
