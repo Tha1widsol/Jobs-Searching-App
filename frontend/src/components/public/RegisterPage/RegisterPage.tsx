@@ -4,6 +4,7 @@ import Errors from '../../Global/messages/Errors';
 import {PasswordProps} from './types/RegisterInterface'
 import { useAppDispatch } from '../../../app/hooks'; 
 import {login} from '../../../features/Auth/user';
+import { useAuth } from '../../../contexts/AuthContext';
 import axios from 'axios'
 
 function useQuery(){
