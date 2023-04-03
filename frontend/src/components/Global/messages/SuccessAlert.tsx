@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dispatch} from 'redux';
-import {useAppSelector} from '../features/hooks';
-import {setMessage} from '../../Global/features/successMsg';
+import { useAppSelector } from '../../../app/hooks';
+import {setMessage} from '../../../features/successMsg';
 
 export function handleAddSuccessMsg(msg: string, dispatch: Dispatch, timer = 2000){
     dispatch(setMessage(msg))

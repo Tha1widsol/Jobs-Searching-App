@@ -1,6 +1,6 @@
 import React,{useState, useEffect} from 'react'
-import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
-import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile';
+import {useAppSelector,useAppDispatch} from '../../../app/hooks';
+import {fetchProfile} from '../../../features/Jobseekers/profiles/profile';
 import Popup from '../../Global/Popup/Popup';
 import ProfileDetailsForm from './ProfileDetailsForm/ProfileDetailsForm';
 import ProfileSkillsForm from './ProfileSkillsForm/ProfileSkillsForm';
@@ -8,8 +8,8 @@ import ProfileExperienceForm from './ProfileExperienceForm/ProfileExperienceForm
 import ProfileExperienceList from './ProfileExperienceForm/ProfileExperienceList';
 import ProfileEducationForm from './ProfileEducationForm/ProfileEducationForm';
 import ProfileEducationList from './ProfileEducationForm/ProfileEducationList';
-import { fetchProfileEducation } from '../../Global/features/Jobseekers/profiles/profileEducation';
-import { fetchProfileExperience } from '../../Global/features/Jobseekers/profiles/profileExperience';
+import { fetchProfileEducation } from '../../../features/Jobseekers/profiles/profileEducation';
+import { fetchProfileExperience } from '../../../features/Jobseekers/profiles/profileExperience';
 import ProfileSkillsList from './ProfileSkillsForm/ProfileSkillsList';
 import ProfilePreferencesForm from './ProfilePreferencesForm/ProfilePreferencesForm';
 

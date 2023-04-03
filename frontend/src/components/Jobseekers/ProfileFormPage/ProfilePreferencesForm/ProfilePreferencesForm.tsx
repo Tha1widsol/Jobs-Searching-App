@@ -1,13 +1,13 @@
 import axios from 'axios';
 import React,{ useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../Global/features/hooks';
-import { ProfileProps } from '../../../Global/features/Jobseekers/profiles/types/profileProps';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { ProfileProps } from '../../../../features/Jobseekers/profiles/types/profileProps';
 import { FileProps } from '../../../Global/types/forms';
-import { token } from '../../../Global/features/Auth/user';
+import { token } from '../../../../features/Auth/user';
 import Errors from '../../../Global/messages/Errors';
 import { handleAddSuccessMsg } from '../../../Global/messages/SuccessAlert';
-import { editPreferences } from '../../../Global/features/Jobseekers/profiles/profile';
+import { editPreferences } from '../../../../features/Jobseekers/profiles/profile';
 
 export default function ProfilePreferencesForm({profile, isIsolated = false, popupOff}: {profile: ProfileProps['values'], isIsolated?: boolean, popupOff?: () => void} ) {
     const dispatch = useAppDispatch()

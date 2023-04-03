@@ -1,4 +1,4 @@
-import { StatusProps } from "../../../../types/status"
+import { StatusProps } from "../../../../components/Global/types/status"
 import { UserProps } from "../../../Auth/user"
 
 export interface ProfileProps extends StatusProps{

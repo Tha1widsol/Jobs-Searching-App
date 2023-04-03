@@ -1,8 +1,8 @@
 import React,{useState,useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import {useAppSelector,useAppDispatch, useQuery} from '../../Global/features/hooks'
+import {useAppSelector,useAppDispatch, useQuery} from '../../../app/hooks'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
-import {fetchProfiles} from '../../Global/features/Jobseekers/profiles/profiles';
+import {fetchProfiles} from '../../../features/Jobseekers/profiles/profiles';
 import SearchBar from '../../public/SearchBar/SearchBar';
 
 export default function EmployersHomePage() {

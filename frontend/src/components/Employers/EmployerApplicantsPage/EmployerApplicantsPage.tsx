@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import {Link} from 'react-router-dom'
-import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
-import {fetchApplications} from '../../Global/features/Jobseekers/applications/applications'
+import {useAppSelector,useAppDispatch} from '../../../app/hooks'
+import {fetchApplications} from '../../../features/Jobseekers/applications/applications'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu'
 
 export default function EmployerApplicantsPage() {

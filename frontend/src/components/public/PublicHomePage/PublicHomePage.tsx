@@ -1,10 +1,10 @@
 import React,{useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
-import { useAppSelector, useAppDispatch } from '../../Global/features/hooks'
+import { useAppSelector, useAppDispatch } from '../../../app/hooks'
 import JobSearchBar from '../SearchBar/JobSearchBar'
-import {useQuery} from '../../Global/features/hooks';
+import {useQuery} from '../../../app/hooks';
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
-import { fetchHomePageJobs } from '../../Global/features/Public/homePageJobs';
+import { fetchHomePageJobs } from '../../../features/Public/homePageJobs';
 import './css/HomePage.css'
 
 export default function PublicHomePage() {

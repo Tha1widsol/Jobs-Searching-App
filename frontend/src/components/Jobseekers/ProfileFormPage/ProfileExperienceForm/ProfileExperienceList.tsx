@@ -1,12 +1,12 @@
 import React,{useState} from 'react'
 import ReactScrollableFeed from 'react-scrollable-feed';
-import { ProfileExperienceListProps } from '../../../Global/features/Jobseekers/profiles/profileExperience';
+import { ProfileExperienceListProps } from '../../../../features/Jobseekers/profiles/profileExperience';
 import { ProfileExperienceProps } from './types/ProfileExperienceProps';
 import ProfileExperienceForm, { initialExperience } from './ProfileExperienceForm';
-import { useAppSelector, useAppDispatch } from '../../../Global/features/hooks';
-import { fetchProfileExperience } from '../../../Global/features/Jobseekers/profiles/profileExperience';
+import { useAppSelector, useAppDispatch } from '../../../../app/hooks';
+import { fetchProfileExperience } from '../../../../features/Jobseekers/profiles/profileExperience';
 import { handleAddSuccessMsg } from '../../../Global/messages/SuccessAlert';
-import { token } from '../../../Global/features/Auth/user';
+import { token } from '../../../../features/Auth/user';
 import Popup from '../../../Global/Popup/Popup';
 import axios from 'axios'
 

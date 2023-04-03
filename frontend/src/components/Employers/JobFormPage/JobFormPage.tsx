@@ -2,13 +2,13 @@ import React,{useState,useEffect} from 'react'
 import {useNavigate,useParams} from 'react-router-dom'
 import Errors from '../../Global/messages/Errors'
 import {ListProps} from '../../Global/types/forms';
-import {useAppDispatch, useAppSelector} from '../../Global/features/hooks'
+import {useAppDispatch, useAppSelector} from '../../../app/hooks'
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
 import {getcurrentDate} from '../../Global/formFunctions';
 import {capitalizeFirstCharacter} from '../../Global/formFunctions';
 import List from '../../Global/Forms/List';
-import {token} from '../../Global/features/Auth/user';
-import {fetchJob} from '../../Global/features/Employers/jobs/job';
+import {token} from '../../../features/Auth/user';
+import {fetchJob} from '../../../features/Employers/jobs/job';
 import ReactScrollableFeed from 'react-scrollable-feed';
 import Popup from '../../Global/Popup/Popup';
 import axios from 'axios';

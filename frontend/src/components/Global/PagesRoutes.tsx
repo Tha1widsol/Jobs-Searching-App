@@ -9,7 +9,7 @@ import JobSeekersHomePage from '../Jobseekers/JobSeekersHomePage/JobSeekersHomeP
 import EmployersHomePage from '../Employers/EmployersHomePage/EmployersHomePage';
 import CompanyFormPage from '../Employers/CompanyFormPage/CompanyFormPage'
 import CompaniesPage from '../Employers/CompaniesPage/CompaniesPage'
-import {useAppSelector} from './features/hooks'
+import {useAppSelector} from '../../app/hooks'
 import ProfilePage from '../Jobseekers/ProfilePage/ProfilePage'
 import CompanyPage from '../Employers/CompanyPage/CompanyPage'
 import JobFormPage from '../Employers/JobFormPage/JobFormPage'

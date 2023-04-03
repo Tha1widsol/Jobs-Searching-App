@@ -1,4 +1,4 @@
-import { StatusProps } from "../../../../types/status"
+import { StatusProps } from "../../../../components/Global/types/status"
 
 export interface ProfileSkillsProps extends StatusProps{
     values: [{

@@ -2,8 +2,8 @@ import React,{useState,useEffect} from 'react'
 import {useNavigate,useLocation} from "react-router-dom";
 import Errors from '../../Global/messages/Errors';
 import {PasswordProps} from './types/RegisterInterface'
-import {useAppDispatch} from '../../Global/features/hooks';
-import {login} from '../../Global/features/Auth/user';
+import { useAppDispatch } from '../../../app/hooks'; 
+import {login} from '../../../features/Auth/user';
 import axios from 'axios'
 
 function useQuery(){

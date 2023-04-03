@@ -1,7 +1,6 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import {job} from '../../Employers/jobs/job'
-import {StatusProps} from '../../../types/status'
-import { CompanyProps } from '../../Employers/companies/company'
+import { StatusProps } from '../../../components/Global/types/status'
 import {user as employer,UserProps,token} from '../../Auth/user'
 import {company} from '../../Employers/companies/companies'
 import axios from 'axios'

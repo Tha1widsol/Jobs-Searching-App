@@ -1,6 +1,6 @@
 import React from 'react';
 import {Outlet,Navigate} from 'react-router'
-import {useAppSelector} from './features/hooks';
+import {useAppSelector} from '../../app/hooks';
 import LoginPage from '../public/LoginPage/LoginPage';
 
 const User = () => {

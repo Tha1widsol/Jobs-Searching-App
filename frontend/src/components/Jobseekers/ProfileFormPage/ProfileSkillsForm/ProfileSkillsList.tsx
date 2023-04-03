@@ -1,11 +1,11 @@
 import React,{useState, useEffect} from 'react'
-import { ProfileSkillsProps } from '../../../Global/features/Jobseekers/profiles/types/profileSkillsProps'
-import { useAppSelector, useAppDispatch } from '../../../Global/features/hooks'
+import { ProfileSkillsProps } from '../../../../features/Jobseekers/profiles/types/profileSkillsProps'
+import { useAppSelector, useAppDispatch } from '../../../../app/hooks'
 import axios from 'axios'
-import { fetchProfile } from '../../../Global/features/Jobseekers/profiles/profile'
+import { fetchProfile } from '../../../../features/Jobseekers/profiles/profile'
 import Popup from '../../../Global/Popup/Popup'
 import ReactScrollableFeed from 'react-scrollable-feed';
-import { editSkill } from '../../../Global/features/Jobseekers/profiles/profile'
+import { editSkill } from '../../../../features/Jobseekers/profiles/profile'
 
 
 export default function ProfileSkillsList({skills, allowEdit = true}: {skills: ProfileSkillsProps['values'], allowEdit?: boolean}) {

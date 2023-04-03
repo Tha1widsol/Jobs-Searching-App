@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React,{useState, useEffect} from 'react'
 import Errors from '../../../Global/messages/Errors'
-import {useAppSelector, useAppDispatch} from '../../../Global/features/hooks';
-import {token} from '../../../Global/features/Auth/user';
+import {useAppSelector, useAppDispatch} from '../../../../app/hooks';
+import {token} from '../../../../features/Auth/user';
 import {ProfileExperienceProps} from './types/ProfileExperienceProps';
-import {fetchProfileExperience, AddProfileExperience, editProfileExperience} from '../../../Global/features/Jobseekers/profiles/profileExperience';
+import {fetchProfileExperience, AddProfileExperience, editProfileExperience} from '../../../../features/Jobseekers/profiles/profileExperience';
 
 export const initialExperience = {
  id: 0, title: '', companyName: '',  EmployerName: '', EmployerEmail: '', EmployerPhone: '', description: '', years: 1, isOnGoing: false

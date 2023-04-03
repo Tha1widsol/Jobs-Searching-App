@@ -1,10 +1,10 @@
 import React,{useState,useEffect} from 'react'
 import {Link} from 'react-router-dom'
-import {useAppSelector,useAppDispatch,useQuery} from '../../Global/features/hooks'
-import {fetchApplications, deleteApplication} from '../../Global/features/Jobseekers/applications/applications'
+import {useAppSelector,useAppDispatch,useQuery} from '../../../app/hooks'
+import {fetchApplications, deleteApplication} from '../../../features/Jobseekers/applications/applications'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import Popup from '../../Global/Popup/Popup';
-import {setDeleteSavedJob,fetchSavedJobs} from '../../Global/features/Jobseekers/savedJobs/savedJobs'
+import {setDeleteSavedJob,fetchSavedJobs} from '../../../features/Jobseekers/savedJobs/savedJobs'
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
 import './css/JobSeekerApplicationsPage.css'
 import axios from 'axios'

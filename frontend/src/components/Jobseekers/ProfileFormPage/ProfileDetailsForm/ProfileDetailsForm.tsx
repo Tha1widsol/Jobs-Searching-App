@@ -1,12 +1,12 @@
 import React,{useState, useEffect} from 'react'
-import {useAppSelector, useAppDispatch} from '../../../Global/features/hooks'
+import {useAppSelector, useAppDispatch} from '../../../../app/hooks'
 import { useNavigate } from 'react-router-dom'
-import {fetchProfile, setDetails} from '../../../Global/features/Jobseekers/profiles/profile'
+import {fetchProfile, setDetails} from '../../../../features/Jobseekers/profiles/profile'
 import Errors from '../../../Global/messages/Errors'
 import {handleFixName} from '../../../Global/formFunctions'
 import {FileProps} from '../../../Global/types/forms'
 import { handleAddSuccessMsg } from '../../../Global/messages/SuccessAlert'
-import { token } from '../../../Global/features/Auth/user'
+import { token } from '../../../../features/Auth/user'
 import axios from 'axios'
 
 export default function ProfileDetailsForm({isIsolated = true, toggleTab, popupOff}: {isIsolated?: boolean, toggleTab: () => void, popupOff: () => void}) {

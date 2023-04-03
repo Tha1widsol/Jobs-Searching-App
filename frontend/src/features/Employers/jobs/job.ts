@@ -1,12 +1,12 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
-import {user as employer,UserProps,token} from '../../Auth/user'
-import {StatusProps} from '../../../types/status'
-import {company} from '../companies/companies'
+import {user,UserProps,token} from '../../Auth/user'
+import { StatusProps } from '../../../components/Global/types/status'
 import axios from 'axios'
+import { fetchCurrentCompany } from '../companies/currentCompany'
 
-export interface JobsProps extends StatusProps{
-    values: [{
-        employer: UserProps
+export interface JobProps extends StatusProps{
+    values: {
+        user: UserProps
         company:{
             id: number
             name: string
@@ -42,14 +42,62 @@ export interface JobsProps extends StatusProps{
         link: string,
         datePosted: string
 
-    }]
+    }
 }
 
-const initialState: JobsProps = {
+export const job = {
+    user,
+    company: {
+        id: 0,
+        name: '',
+        email: '',
+        about: '',
+        phone: '',
+        logo: '',
+        banner: '',
+        industry: '',
+        website: ''
+    },
+    id: 0,
+    title: '',
+    description: '',
+    salary1: '',
+    salary2: '',
+    currency: '',
+    roles: [{name: ''}],
+    industry: '',
+    remote: false,
+    type: '',
+    training: false,
+    positions: '',
+    education: '',
+    skills: [{name: ''}],
+    startDate: '',
+    benefits: [{name: ''}],
+    workingDay1: '',
+    workingDay2: '',
+    workingHours: '',
+    applicantsCount: 0,
+    applyOnOwnWebsite: false,
+    link: '',
+    datePosted: ''
+}
+
+export const initialState: JobProps = {
     status: '',
-    values: [{
-        employer,
-        company,
+    values: {
+        user,
+        company: {
+            id: 0,
+            name: '',
+            email: '',
+            about: '',
+            phone: '',
+            logo: '',
+            banner: '',
+            industry: '',
+            website: ''
+        },
         id: 0,
         title: '',
         description: '',
@@ -73,48 +121,49 @@ const initialState: JobsProps = {
         applyOnOwnWebsite: false,
         link: '',
         datePosted: ''
-    }]
+    }
 }
 
-export const fetchJobs = createAsyncThunk(
-    'user/fetchJobs',
-    async (type: 'employer' | 'jobseeker') => {
-        const response = await axios.get(`/api/${type}/jobs`,{
-            headers: {
-                Authorization: `Token ${token}`
-            }
-        })
+export const fetchJob = createAsyncThunk(
+    'user/fetchJob',
+    async (id: number) => {
+        const response = await axios.get(`/api/job?id=${id}`)
         return response.data
     }
 )
 
-export const JobsSlice = createSlice({
-    name: 'jobs',
+export const JobSlice = createSlice({
+    name: 'job',
     initialState,
     reducers:{
-        setJobs: (state,action) => {
+        setJob: (state,action) => {
             state.values = action.payload
+        },
+        
+        setDeleteJob:(state) => {
+            state.values = initialState.values
         }
+    
     },
 
     extraReducers(builder){
         builder
-            .addCase(fetchJobs.pending, (state) => {
+            .addCase(fetchJob.pending, (state) => {
                 state.status = 'loading'
             })
 
-            .addCase(fetchJobs.fulfilled, (state, action) => {
+            .addCase(fetchJob.fulfilled, (state, action) => {
                 state.status = 'success'
                 state.values = action.payload
             })
 
-            .addCase(fetchJobs.rejected, (state) => {
+            .addCase(fetchJob.rejected, (state) => {
                 state.status = 'rejected'
             })
     }
 
 })
 
-export const {setJobs} = JobsSlice.actions
+export const {setJob,setDeleteJob} = JobSlice.actions
 
-export default JobsSlice.reducer
+export default JobSlice.reducer

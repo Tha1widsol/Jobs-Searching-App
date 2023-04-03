@@ -2,10 +2,10 @@ import React,{useEffect} from 'react';
 import './css/ProfilePage.css'
 import Profile from '../Profile/Profile';
 import {useParams} from 'react-router-dom';
-import {fetchProfile} from '../../Global/features/Jobseekers/profiles/profile';
-import {fetchProfileExperience} from '../../Global/features/Jobseekers/profiles/profileExperience';
-import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
-import { fetchProfileEducation } from '../../Global/features/Jobseekers/profiles/profileEducation';
+import {fetchProfile} from '../../../features/Jobseekers/profiles/profile';
+import {fetchProfileExperience} from '../../../features/Jobseekers/profiles/profileExperience';
+import {useAppSelector,useAppDispatch} from '../../../app/hooks';
+import { fetchProfileEducation } from '../../../features/Jobseekers/profiles/profileEducation';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios'
 

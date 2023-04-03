@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import axios from 'axios'
-import {useAppDispatch} from '../../Global/features/hooks';
-import {login} from '../../Global/features/Auth/user';
+import {useAppDispatch} from '../../../app/hooks';
+import {login} from '../../../features/Auth/user';
 import Errors from '../../Global/messages/Errors';
 
 export default function LoginPage() {

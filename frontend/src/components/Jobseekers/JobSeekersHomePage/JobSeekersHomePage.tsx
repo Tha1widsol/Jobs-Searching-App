@@ -1,12 +1,12 @@
 import React,{useState,useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import {useQuery} from '../../Global/features/hooks';
-import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
+import {useQuery} from '../../../app/hooks';
+import {useAppSelector,useAppDispatch} from '../../../app/hooks'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
-import {fetchMatchingJobs} from '../../Global/features/Jobseekers/matchingJobs/matchingJobs';
-import {fetchSavedJobs} from '../../Global/features/Jobseekers/savedJobs/savedJobs';
+import {fetchMatchingJobs} from '../../../features/Jobseekers/matchingJobs/matchingJobs';
+import {fetchSavedJobs} from '../../../features/Jobseekers/savedJobs/savedJobs';
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
-import {token} from '../../Global/features/Auth/user';
+import {token} from '../../../features/Auth/user';
 import JobSearchBar from '../../public/SearchBar/JobSearchBar';
 import axios from 'axios'
 

@@ -1,13 +1,13 @@
 import React,{useState} from 'react'
-import { useAppDispatch, useAppSelector } from '../../../Global/features/hooks'
-import { token } from '../../../Global/features/Auth/user'
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks'
+import { token } from '../../../../features/Auth/user'
 import Popup from '../../../Global/Popup/Popup'
 import ProfileEducationForm from './ProfileEducationForm'
 import ReactScrollableFeed from 'react-scrollable-feed'
 import { initialEducation } from './ProfileEducationForm'
 import { handleAddSuccessMsg } from '../../../Global/messages/SuccessAlert'
-import { ProfileEducationListProps, ProfileEducationProps } from '../../../Global/features/Jobseekers/profiles/types/profileEducationProps'
-import { fetchProfileEducation } from '../../../Global/features/Jobseekers/profiles/profileEducation'
+import { ProfileEducationListProps, ProfileEducationProps } from '../../../../features/Jobseekers/profiles/types/profileEducationProps'
+import { fetchProfileEducation } from '../../../../features/Jobseekers/profiles/profileEducation'
 import axios from 'axios'
 
 export default function ProfileEducationList({education, allowEdit = true} : {education: ProfileEducationListProps, allowEdit?: boolean}) {

@@ -1,6 +1,6 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import {user,UserProps,token} from '../../Auth/user'
-import {StatusProps} from '../../../types/status'
+import { StatusProps } from '../../../components/Global/types/status'
 import axios from 'axios'
 
 export interface CompaniesProps extends StatusProps{

@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {store} from './components/Global/features/store'
+import { store } from './app/store';
 import {Provider} from 'react-redux'
 import {persistStore} from 'redux-persist'
 import {PersistGate} from 'redux-persist/integration/react'
-import {token} from './components/Global/features/Auth/user';
+import { token } from './features/Auth/user';
 import {
   BrowserRouter as Router,
 } from "react-router-dom";

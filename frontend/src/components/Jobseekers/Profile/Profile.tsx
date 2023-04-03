@@ -1,13 +1,13 @@
 import React,{useState, useEffect} from 'react'
 import './css/Profile.css'
-import {useAppDispatch, useAppSelector} from '../../Global/features/hooks';
-import {setToggleStatus,setDeleteProfile} from '../../Global/features/Jobseekers/profiles/profile'
-import { ProfileProps } from '../../Global/features/Jobseekers/profiles/types/profileProps';
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
+import {setToggleStatus,setDeleteProfile} from '../../../features/Jobseekers/profiles/profile'
+import { ProfileProps } from '../../../features/Jobseekers/profiles/types/profileProps';
 import {initialExperience} from '../ProfileFormPage/ProfileExperienceForm/ProfileExperienceForm';
 import KebabMenu from '../../Global/KebabMenu/KebabMenu';
 import {useNavigate} from 'react-router-dom';
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
-import {token} from '../../Global/features/Auth/user';
+import {token} from '../../../features/Auth/user';
 import Popup from '../../Global/Popup/Popup';
 import ProfileDetailsForm from '../ProfileFormPage/ProfileDetailsForm/ProfileDetailsForm';
 import ProfileExperienceForm from '../ProfileFormPage/ProfileExperienceForm/ProfileExperienceForm';

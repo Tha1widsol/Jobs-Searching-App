@@ -1,9 +1,9 @@
 import React,{useState,useEffect} from 'react'
 import {useNavigate,Link} from 'react-router-dom'
-import {useAppSelector,useAppDispatch} from '../../Global/features/hooks'
+import {useAppSelector,useAppDispatch} from '../../../app/hooks'
 import KebabMenu from '../../Global/KebabMenu/KebabMenu'
 import Popup from '../../Global/Popup/Popup'
-import {fetchJobs,setJobs} from '../../Global/features/Employers/jobs/jobs'
+import {fetchJobs,setJobs} from '../../../features/Employers/jobs/jobs'
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert'
 import axios from 'axios'
 

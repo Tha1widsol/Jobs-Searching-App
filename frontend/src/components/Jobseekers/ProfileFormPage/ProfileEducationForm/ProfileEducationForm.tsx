@@ -1,9 +1,9 @@
 import axios from 'axios'
 import React,{useState, useEffect} from 'react'
-import { ProfileEducationProps } from '../../../Global/features/Jobseekers/profiles/types/profileEducationProps'
-import { useAppDispatch } from '../../../Global/features/hooks'
-import { addProfileEducation, editProfileEducation } from '../../../Global/features/Jobseekers/profiles/profileEducation'
-import { token } from '../../../Global/features/Auth/user'
+import { ProfileEducationProps } from '../../../../features/Jobseekers/profiles/types/profileEducationProps'
+import { useAppDispatch } from '../../../../app/hooks'
+import { addProfileEducation, editProfileEducation } from '../../../../features/Jobseekers/profiles/profileEducation'
+import { token } from '../../../../features/Auth/user'
 import Errors from '../../../Global/messages/Errors'
 import './css/ProfileEducationForm.css'
 

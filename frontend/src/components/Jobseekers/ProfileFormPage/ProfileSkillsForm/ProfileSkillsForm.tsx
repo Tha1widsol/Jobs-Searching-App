@@ -1,8 +1,8 @@
 import React,{useState, useEffect} from 'react'
-import {useAppDispatch, useAppSelector} from '../../../Global/features/hooks'
-import { addSkill } from '../../../Global/features/Jobseekers/profiles/profile'
+import {useAppDispatch, useAppSelector} from '../../../../app/hooks'
+import { addSkill } from '../../../../features/Jobseekers/profiles/profile'
 import Errors from '../../../Global/messages/Errors'
-import {token} from '../../../Global/features/Auth/user'
+import {token} from '../../../../features/Auth/user'
 import axios from 'axios'
 
 export default function ProfileSkillsForm({isIsolated = true, edit = false, popupOff, toggleTab}: {isIsolated?: boolean, edit?: boolean, popupOff: () => void, toggleTab: () => void}) {

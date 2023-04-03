@@ -1,8 +1,8 @@
 import React,{useState,useEffect} from 'react'
 import {useParams, useNavigate, Link} from 'react-router-dom';
-import {useAppSelector,useAppDispatch} from '../../Global/features/hooks';
-import {fetchCompany} from '../../Global/features/Employers/companies/company';
-import {fetchJobs} from '../../Global/features/Employers/jobs/jobs';
+import {useAppSelector,useAppDispatch} from '../../../app/hooks';
+import {fetchCompany} from '../../../features/Employers/companies/company';
+import {fetchJobs} from '../../../features/Employers/jobs/jobs';
 import './css/CompanyPage.css'
 
 export default function CompanyPage() {

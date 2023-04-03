@@ -1,11 +1,11 @@
 import React,{useState,useEffect} from 'react'
 import {useNavigate,useParams} from 'react-router-dom';
 import Errors from '../../Global/messages/Errors'
-import {useAppDispatch, useAppSelector} from '../../Global/features/hooks';
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
 import {FileProps} from '../../Global/types/forms';
 import {handleAddSuccessMsg} from '../../Global/messages/SuccessAlert';
-import {fetchCompany} from '../../Global/features/Employers/companies/company';
-import {token} from '../../Global/features/Auth/user';
+import {fetchCompany} from '../../../features/Employers/companies/company';
+import {token} from '../../../features/Auth/user';
 import axios from 'axios'
 
 export default function CompanyFormPage({edit = false}) {

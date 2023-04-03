@@ -1,8 +1,8 @@
 import React,{useEffect} from 'react'
 import Navbar from './components/Global/Navbar/Navbar'
-import {useAppDispatch} from './components/Global/features/hooks';
+import { useAppDispatch } from './app/hooks';
 import PagesRoutes from './components/Global/PagesRoutes';
-import {fetchUser,logout,token} from './components/Global/features/Auth/user';
+import { fetchUser, token, logout } from './features/Auth/user';
 import SuccessAlert from './components/Global/messages/SuccessAlert';
 
 function App() {
