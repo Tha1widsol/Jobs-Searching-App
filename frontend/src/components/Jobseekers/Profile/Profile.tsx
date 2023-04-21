@@ -164,7 +164,7 @@ export default function Profile({profile} : {profile: ProfileProps}) {
                 <hr className = 'mt-0-mb-4'/>
                 {education.values?.length ? 
                     <>
-                    <ProfileEducationList education = {education}/>
+                    <ProfileEducationList education = {education} allowEdit = {!user.isAnEmployer}/>
                 </>
                 :
                   null

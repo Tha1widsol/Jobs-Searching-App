@@ -52,6 +52,7 @@ export default function LoginPage() {
                 localStorage.setItem('token',data.token)
                 signIn(email.value, password.value)
                 dispatch(login())
+                window.location.reload()
                
         })
 

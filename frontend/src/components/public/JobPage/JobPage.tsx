@@ -101,7 +101,7 @@ export default function JobPage() {
         <h2>{job.values?.title}</h2>
         {job.values?.company?.logo ? <img src = {`/media/${job.values?.company?.logo}`} className = 'logo' alt = ''/> : null}
       </div>
-        <span style = {{color: 'gray', fontSize: 'small'}}> {matchingScore}% - matching score</span>
+        {!user.values?.isAnEmployer ? <span style = {{color: 'gray', fontSize: 'small'}}> {matchingScore}% - matching score</span> : null}
       <a href = {`/company/${job.values?.company?.id}`}><p>{job.values?.company?.name}</p></a>
 
       <p>{job.values?.description}</p> 

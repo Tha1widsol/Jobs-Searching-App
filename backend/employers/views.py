@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser,FormParser
 from jobseekers.models import Profile
-from jobseekers.serializers import ProfileSerializer
+from jobseekers.serializers import *
 from rest_framework.decorators import api_view
 from .models import *
 from django.db.models import Q
@@ -142,7 +142,6 @@ class JobAPI(APIView):
             return Response(status = status.HTTP_201_CREATED)
 
         return Response(status = status.HTTP_400_BAD_REQUEST)
-
     
     def put(self,request):
         lookup_url_kwarg ='id'
@@ -212,12 +211,50 @@ class JobAPI(APIView):
             return Response(serializer_class.data, status = status.HTTP_200_OK)
         
         return Response(status = status.HTTP_404_NOT_FOUND)
-
+    
     def delete(self,request):
         lookup_url_kwarg = 'id'
         id = request.GET.get(lookup_url_kwarg)
         job = Job.objects.get(id = id)
         job.delete()
+        
+class JobSkillsAPI(generics.ListAPIView):
+    serializer_class = SkillSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data = request.data)
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        if serializer.is_valid():
+            skillName = serializer.data.get('name')
+            isSpecific = serializer.data.get('specific')
+            job = Job.objects.get(id = id)
+            skill, created = Skill.objects.get_or_create(name = skillName, specific = isSpecific)
+            job.skills.add(skill)
+            job.save()
+            serializer = self.serializer_class(skill)
+            return Response({'skill': serializer.data}, status = status.HTTP_200_OK)
+
+        return Response(status = status.HTTP_400_BAD_REQUEST)
+
+    
+    def put(self, request):
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        skill = Skill.objects.get(id = id)
+        serializer = self.serializer_class(data = request.data, instance = skill)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'skill': serializer.data}, status = status.HTTP_200_OK)
+        
+        return Response(status = status.HTTP_400_BAD_REQUEST)
+
+
+    def delete(self, request):
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        skill = Skill.objects.get(id = id)
+        skill.delete()
         return Response(status = status.HTTP_200_OK)
 
 class ExperienceAPI(generics.ListAPIView):

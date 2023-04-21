@@ -31,7 +31,7 @@ export interface JobProps extends StatusProps{
         training: boolean,
         positions: string,
         education: string,
-        skills: [{name: string}],
+        skills: [{id: number, name: string, specific: boolean}],
         startDate: string,
         benefits: [{name: string}],
         workingDay1: string,
@@ -111,7 +111,7 @@ export const initialState: JobProps = {
         training: false,
         positions: '',
         education: '',
-        skills: [{name: ''}],
+        skills: [{id: 0, name: '', specific: false}],
         startDate: '',
         benefits: [{name: ''}],
         workingDay1: '',
@@ -142,7 +142,17 @@ export const JobSlice = createSlice({
         
         setDeleteJob:(state) => {
             state.values = initialState.values
+        },
+
+        addSkill: (state, action) => {
+            state.values.skills.push(action.payload)
+        },
+
+        editSkill: (state, action) => {
+            const index = state.values.skills.findIndex(skill => skill.id === action.payload.id)
+            state.values.skills[index] = action.payload
         }
+        
     
     },
 
@@ -164,6 +174,6 @@ export const JobSlice = createSlice({
 
 })
 
-export const {setJob,setDeleteJob} = JobSlice.actions
+export const {setJob, setDeleteJob, addSkill, editSkill} = JobSlice.actions
 
 export default JobSlice.reducer

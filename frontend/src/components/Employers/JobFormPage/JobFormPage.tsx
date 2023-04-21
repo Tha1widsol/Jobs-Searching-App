@@ -9,8 +9,10 @@ import {capitalizeFirstCharacter} from '../../Global/formFunctions';
 import List from '../../Global/Forms/List';
 import {token} from '../../../features/Auth/user';
 import {fetchJob} from '../../../features/Employers/jobs/job';
+import JobSkillsForm from './JobSkillsForm';
 import ReactScrollableFeed from 'react-scrollable-feed';
 import Popup from '../../Global/Popup/Popup';
+import JobSkillsList from './JobSkillsList';
 import axios from 'axios';
 
 export default function JobFormPage({edit = false}) {
@@ -316,12 +318,13 @@ function handleRemoveExperience(idx: number){
 } 
 
   return (
-    <div>
+    <div className = 'normalForm'>
         <div className = 'steps'>
             <span className = {`step ${currentTab === 1 ? 'active' : currentTab > 1 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(1) : null}><p className = 'step-label'>About</p></span>
             <span className = {`step ${currentTab === 2 ? 'active' : currentTab > 2 ? 'finish' : null}`} onClick = {e => e.currentTarget.className === 'step finish' ? setCurrentTab(2) : null}><p className = 'step-label'>Requirements</p></span>
         </div>
-        <form className = 'Form' noValidate>
+
+
             <div className = {`tab ${currentTab === 1 ? 'show' : 'hide'}`}>
               <h1 className = 'title'>About</h1> 
               <hr className = 'mt-0-mb-4'/>
@@ -402,20 +405,11 @@ function handleRemoveExperience(idx: number){
 
             <div className = {`tab ${currentTab === 2 ? 'show' : 'hide'}`}>
                 <h1 className = 'title'>Requirements</h1> 
+                <JobSkillsForm popupOff = {() => null} isIsolated = {false} toggleTab = {() => setCurrentTab(currentTab + 1)}/>
                 <hr className = 'mt-0-mb-4'/>
-                <Errors errors = {errors}/>
-                <label htmlFor = 'skills'><h3>Skills required (Optional):</h3></label>
-                <input id = 'skills' className = {skills.alreadyExists || skills.isEmpty ? 'inputError' : ''} value = {skills.currentVal} onChange = {handleSetSkills} placeholder = 'E.g Good problem solving...' autoComplete = 'on'/>
+                <h4>Skills ({job.values?.skills.length}):</h4>
+                <JobSkillsList skills = {job.values?.skills}/>
 
-                <List name = 'Skills' 
-                state = {skills}
-                handleAdd = {() => setSkills(prev => ({...prev, value: [...prev.value, skills.currentVal]}))}
-                handleClearInput = {() => setSkills(prev => {return {...prev,currentVal: ''}})}
-                handleSetIsEmpty = {(empty = true) => setSkills(prev => {return{...prev,isEmpty: empty}})}
-                handleSetAlreadyExists = {(exists = true) => setSkills(prev => {return {...prev,alreadyExists: exists}})}
-                handleSetAll = {(newItems: Array<string>) => setSkills(prev => {return {...prev,value: newItems}})}
-                />
-                <hr className = 'mt-0-mb-4'/>
                 <label htmlFor = 'experience'><h3>Experience required (Optional):</h3></label>
                 <button type = 'button' style = {{marginTop:'20px', display: 'block'}} onClick = {() => setExperience(prev => {return{...prev, popup: true}})}>Add</button>
 
@@ -529,7 +523,6 @@ function handleRemoveExperience(idx: number){
 
             {currentTab === maxTabs ? <button type = 'button' id = 'submit' onClick = {handleSubmitForm}>Submit</button> : <button type = 'button' className = 'toggleTabBtn' onClick = {validateForm} style = {{float:'right'}}>Next</button>}
             <button type = 'button' className = {currentTab > 1 ? 'toggleTabBtn' : 'hide'} onClick = {handleToPrevTab}>Previous</button>
-        </form>
 
     </div>
   )
