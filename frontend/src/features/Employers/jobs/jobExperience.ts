@@ -5,6 +5,7 @@ import axios from 'axios'
 const initialState = {
     status: '',
     values: [{
+        id: 0,
         experience: '',
         years: 0,
         required: false
@@ -14,7 +15,7 @@ const initialState = {
 export const fetchJobExperience = createAsyncThunk(
     'user/fetchJobExperience',
     async (id: number) => {
-        const response = await axios.get(`/api/jobExperience?id=${id}`,{
+        const response = await axios.get(`/api/job/experience?id=${id}`,{
             headers: {
                 Authorization: `Token ${token}`
             }
@@ -34,7 +35,20 @@ export const JobExperienceSlice = createSlice({
         
         setDeleteJobExperience:(state) => {
             state.values = initialState.values
-        }
+        },
+
+        addJobExperience: (state, action) => {
+            state.values.push(action.payload)
+          },
+  
+          deleteJobExperience: (state, action) => {
+              state.values.slice(state.values.findIndex(exp => exp.id === action.payload))
+          },
+  
+          editJobExperience: (state, action) => {
+              const index = state.values.findIndex(experience => experience.id === action.payload.id)
+              state.values[index] = action.payload
+          }
     
     },
 
@@ -56,6 +70,6 @@ export const JobExperienceSlice = createSlice({
 
 })
 
-export const {setJobExperience,setDeleteJobExperience} = JobExperienceSlice.actions
+export const {setJobExperience, setDeleteJobExperience, addJobExperience, deleteJobExperience, editJobExperience} = JobExperienceSlice.actions
 
 export default JobExperienceSlice.reducer
