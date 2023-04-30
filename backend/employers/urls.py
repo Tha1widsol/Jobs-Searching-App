@@ -11,5 +11,5 @@ urlpatterns = [
     path('profiles',views.ProfilesListAPI.as_view(), name = 'profiles'),
     path('applications/employers', views.ApplicantsListAPI.as_view(), name = 'applicants'),
     path('applications/employers/job', views.JobApplicantsListAPI.as_view(), name = 'job-applicants'),
-    path('jobExperience', views.ExperienceAPI.as_view(), name = 'jobExperience')
+    path('job/experience', views.JobExperienceAPI.as_view(), name = 'jobExperience')
 ]
