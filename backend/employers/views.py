@@ -257,8 +257,33 @@ class JobSkillsAPI(generics.ListAPIView):
         skill.delete()
         return Response(status = status.HTTP_200_OK)
 
-class ExperienceAPI(generics.ListAPIView):
+class JobExperienceAPI(generics.ListAPIView):
     serializer_class = ExperienceSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data = request.data)
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        if serializer.is_valid():
+            experience = serializer.data.get('experience')
+            years = serializer.data.get('years')
+            required = serializer.data.get('required')
+    
+            job = Job.objects.get(id = id)
+            experience, created = Experience.objects.get_or_create(job = job, experience = experience, years = years, required = required)
+            experience.save()
+            serializer = self.serializer_class(experience)
+            return Response({'experience': serializer.data}, status = status.HTTP_200_OK)
+
+        return Response(status = status.HTTP_400_BAD_REQUEST)
+    
+
+    def delete(self, request):
+        lookup_url_kwarg = 'id'
+        id = request.GET.get(lookup_url_kwarg)
+        experience = Experience.objects.get(id = id)
+        experience.delete()
+        return Response(status = status.HTTP_200_OK)
 
     def get_queryset(self):
         lookup_url_kwarg = 'id'
