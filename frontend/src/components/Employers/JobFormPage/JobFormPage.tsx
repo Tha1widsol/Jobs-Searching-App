@@ -14,6 +14,7 @@ import ReactScrollableFeed from 'react-scrollable-feed';
 import Popup from '../../Global/Popup/Popup';
 import JobSkillsList from './JobSkillsList';
 import axios from 'axios';
+import JobExperienceForm from './JobExperienceForm';
 
 export default function JobFormPage({edit = false}) {
   const navigate = useNavigate()
@@ -414,23 +415,7 @@ function handleRemoveExperience(idx: number){
                 <button type = 'button' style = {{marginTop:'20px', display: 'block'}} onClick = {() => setExperience(prev => {return{...prev, popup: true}})}>Add</button>
 
                 <Popup trigger = {experience.popup} switchOff = {() => setExperience(prev => {return{...prev, popup: false}})} modalOn = {false}>
-                  <h2>Add Experience:</h2>
-
-                  <p className = 'error'>{!experience.isValid ? <li>{experience.currentErrorMsg}</li> : null}</p>
-
-                  <label><h4>Description:</h4></label>
-                  <textarea id = 'experienceDescription' onChange = {handleSetExperience} value = {experience.currentVal.description} className = {!experience.isValid ? 'inputError' : ''}  placeholder = 'E.g Developing mobile apps...' autoComplete = 'on'/>
-
-                  <label><h4>Number of years:</h4></label>
-                  <input type = 'number' value = {experience.currentVal.years} onChange = {e => setExperience(prev => ({...prev, currentVal: {...prev.currentVal, years: e.target.value}}))} id = 'experienceYears' min = '0' max = '10' autoComplete = 'on'/>
-                 
-                  <div style = {{display: 'flex', alignItems: 'center'}}>
-                    <label><h4>Required:</h4></label>
-                    <input type = 'checkbox' id = 'experienceRequired' defaultValue = 'No'  onChange = {e => setExperience(prev => ({...prev,currentVal: {...prev.currentVal, isRequired: e.target.checked}}))}/>
-                  </div>
-                   
-                  <button type = 'button' onClick = {handleAddExperience}>Submit</button>
-                  <button onClick = {() => setExperience(prev => {return{...prev, popup: false}})}>Cancel</button>
+                  <JobExperienceForm edit = {false} popupOff = {() => setExperience(prev => {return{...prev, popup: false}})}/>
                 </Popup>
 
                 <div className = 'list longerList'>
