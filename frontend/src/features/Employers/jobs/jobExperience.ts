@@ -2,6 +2,17 @@ import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import {token} from '../../Auth/user'
 import axios from 'axios'
 
+export interface JobExperienceListProps{
+    status: 'success' | 'loading' | 'rejected' | ''
+    values: {
+        id: number,
+        experience: string,
+        years: number,
+        required: boolean
+    }[]
+}
+
+
 const initialState = {
     status: '',
     values: [{
@@ -10,7 +21,7 @@ const initialState = {
         years: 0,
         required: false
     }]
-}
+} as JobExperienceListProps
 
 export const fetchJobExperience = createAsyncThunk(
     'user/fetchJobExperience',

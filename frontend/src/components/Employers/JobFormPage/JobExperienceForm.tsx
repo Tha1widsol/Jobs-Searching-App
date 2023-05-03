@@ -4,7 +4,7 @@ import Errors from '../../Global/messages/Errors';
 import { useParams } from 'react-router-dom';
 import { useAppSelector,useAppDispatch } from '../../../app/hooks';
 import { token } from '../../../features/Auth/user';
-import { addJobExperience, editJobExperience, deleteJobExperience } from '../../../features/Employers/jobs/jobExperience';
+import { addJobExperience, editJobExperience} from '../../../features/Employers/jobs/jobExperience';
 import { JobExperienceProps } from '../../../features/Employers/jobs/types/JobExperienceProps';
 import { fetchJobExperience } from '../../../features/Employers/jobs/jobExperience';
 
@@ -60,9 +60,9 @@ export default function JobExperienceForm({edit = true, isIsolated = true, popup
         .then(response => {
           if (response.status === 200){
               const data = response.data.experience
-              popupOff()
               if (!edit) dispatch(addJobExperience(data))
               else dispatch(editJobExperience(data))
+              popupOff()
               setExperience(prev => {return{...prev, isValid: true, popup: false, value: initialExperience}})
               setErrors([])
           }

@@ -13,14 +13,18 @@ import JobSkillsForm from './JobSkillsForm';
 import ReactScrollableFeed from 'react-scrollable-feed';
 import Popup from '../../Global/Popup/Popup';
 import JobSkillsList from './JobSkillsList';
-import axios from 'axios';
+import JobPage from '../../public/JobPage/JobPage';
+import JobExperienceList from './JobExperienceList';
 import JobExperienceForm from './JobExperienceForm';
+import axios from 'axios';
+import { fetchJobExperience } from '../../../features/Employers/jobs/jobExperience';
 
 export default function JobFormPage({edit = false}) {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const job = useAppSelector(state => state.job)
   const [currentTab,setCurrentTab] = useState(1)
+
   const [errors,setErrors] = useState<Array<string>>([])
   const [title,setTitle] = useState({value: '' , isValid: true, errorMsg: 'Title is invalid', lengthErrorMsg: 'Length must be 60 characters or shorter'})
   const [description,setDescription] = useState({value: '', isValid: true, errorMsg: 'Description section is invalid',currentLength: 0, maxLength: 300})
@@ -34,7 +38,7 @@ export default function JobFormPage({edit = false}) {
   const [positions,setPositions] = useState({value: '1', isValid: true, errorMsg: 'Positions value is invalid'})
   const [education,setEducation] = useState({value: 'No formal education'})
   const [skills,setSkills] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid skill', alreadyExists: false, alreadyExistsMsg: 'Skill already exists',AddedMsg:'Skill added',RemovedMsg: 'Skill removed'})
-  const [experience,setExperience] = useState({value: [{description: '', years: '0', isRequired: false}], popup: false, currentVal: {description: '', years: '0', isRequired: false}, isValid: true, currentErrorMsg: '', emptyErrorMsg: 'Experience is invalid', alreadyExistsMsg: 'Experience already exists'})
+  const [experience,setExperience] = useState({value: [{id: 0, experience: '', years: 0, required: false}], popup: false, currentVal: {description: '', years: '0', isRequired: false}, isValid: true, currentErrorMsg: '', emptyErrorMsg: 'Experience is invalid', alreadyExistsMsg: 'Experience already exists'})
   const [startDate,setStartDate] = useState({value: '',isValid: true, errorMsg: 'Start date is invalid'})
   const [benefits,setBenefits] = useState<ListProps>({value: [], currentVal: '',isEmpty: false, emptyErrorMsg: 'Invalid benefit', alreadyExists: false, alreadyExistsMsg: 'Benefit already exists',AddedMsg:'benefit added',RemovedMsg: 'Benefit removed'})
   const [workingDay1,setWorkingDay1] = useState({value: 'Monday'})
@@ -53,6 +57,12 @@ export default function JobFormPage({edit = false}) {
     dispatch(fetchJob(Number(jobID)))
     .then(response => {
       if (response.meta.requestStatus === 'rejected') navigate('/jobs')
+  })
+
+  dispatch(fetchJobExperience(Number(jobID)))
+  .unwrap()
+  .then(data => {
+      setExperience(prev => {return{...prev, value: data}})
   })
 
     setTitle(prev => {return{...prev, value: job.values?.title}})
@@ -95,8 +105,9 @@ export default function JobFormPage({edit = false}) {
     job.values.training,
     job.values.applyOnOwnWebsite,
     job.values.link,
-    job.values.type
+    job.values.type,
     ])
+
   
   function handleToPrevTab(){
     setErrors([])
@@ -113,13 +124,6 @@ function handleSetSkills(e: React.ChangeEvent<HTMLInputElement>){
   e.target.value = e.target.value.replace(',','')
 }
 
-function handleSetExperience(e: React.ChangeEvent<HTMLTextAreaElement>){
-  setExperience(prev => ({
-    ...prev,
-    currentVal: {...prev.currentVal, description: e.target.value}
-  }))
-  e.target.value = e.target.value.replace(',','')
-}
 
 function handleSetBenefit(e: React.ChangeEvent<HTMLInputElement>){
   setBenefits(prev => {return {...prev, currentVal: e.target.value}})
@@ -289,34 +293,7 @@ function handleSubmitForm(e: React.SyntheticEvent){
 
 }
 
-function handleAddExperience(){
-  if (experience.value.find(exp => exp.description === experience.currentVal.description && exp.description)) {
-    setExperience(prev => {return{...prev, isValid: false, currentErrorMsg: experience.alreadyExistsMsg}})
-    return
-  }
 
-  if (!experience.currentVal.description) {
-    setExperience(prev => {return{...prev, isValid: false, currentErrorMsg: experience.emptyErrorMsg}})
-    return
-  }
-
-  setExperience(prev => ({
-    ...prev,
-    value: [...prev.value, {
-      description: experience.currentVal.description, 
-      years: experience.currentVal.years || '0', 
-      isRequired: experience.currentVal.isRequired}]
-  }))
-
-  setExperience(prev => {return{...prev, isValid: true, popup: false, currentVal: {description: '', years: '0', isRequired: false}}})
-  setErrors([])
-}
-
-function handleRemoveExperience(idx: number){
-  const newExperience = [...experience.value]
-  newExperience.splice(idx, 1)
-  setExperience(prev => {return{...prev, value: newExperience}})
-} 
 
   return (
     <div className = 'normalForm'>
@@ -411,44 +388,17 @@ function handleRemoveExperience(idx: number){
                 <h4>Skills ({job.values?.skills.length}):</h4>
                 <JobSkillsList skills = {job.values?.skills}/>
 
-                <label htmlFor = 'experience'><h3>Experience required (Optional):</h3></label>
-                <button type = 'button' style = {{marginTop:'20px', display: 'block'}} onClick = {() => setExperience(prev => {return{...prev, popup: true}})}>Add</button>
-
+      
                 <Popup trigger = {experience.popup} switchOff = {() => setExperience(prev => {return{...prev, popup: false}})} modalOn = {false}>
                   <JobExperienceForm edit = {false} popupOff = {() => setExperience(prev => {return{...prev, popup: false}})}/>
                 </Popup>
 
-                <div className = 'list longerList'>
-                <ReactScrollableFeed>
-                {experience.value.slice(1).map((exp, index) => {
-                  return (
-                    <div key = {index}>
-                        <table style = {{marginTop: '20px'}}>
-                        <tbody>
-                          <tr>
-                            <th>No</th>
-                            <th>Experience</th>
-                            <th>Years</th>
-                            <th>Required</th>
-                          </tr>
-
-                          <tr>
-                            <td>{index + 1}</td>
-                            <td>{exp.description}</td>
-                            <td>{exp.years}</td>
-                            <td>{exp.isRequired ? 'Yes' : 'No'}</td>
-                            <td><span>&#9998;</span></td>
-                            <td><span onClick = {() => handleRemoveExperience(index)} className = 'cross'>X</span></td>
-                          </tr>
-                        </tbody>
-                        </table>
-                        
-                        </div>
-                  )
-                })}
-                </ReactScrollableFeed>
-                </div>
-                
+                <h1 style = {{textAlign: 'center'}}><u>Work Experience:</u></h1>
+                <label htmlFor = 'experience'><h3>Experience required (Optional):</h3></label>
+                    <button onClick = {() => setExperience(prev => {return{...prev, popup: true}})}>Add</button>
+                    <hr className = 'mt-0-mb-4'/>
+                    <JobExperienceList experience = {experience.value} popupOff = {() => setExperience(prev => {return{...prev, popup: false}})}/>
+                    
                  <hr className = 'mt-0-mb-4'/>
 
                 <label><h3>Working days:</h3></label>
