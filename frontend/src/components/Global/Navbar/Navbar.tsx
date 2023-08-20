@@ -11,10 +11,11 @@ import axios from 'axios'
 import './css/Navbar.css'
 import { handleAddSuccessMsg } from '../messages/SuccessAlert'
 import { useAuth } from '../../../contexts/AuthContext'
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
 export default function Navbar() {
     const user = useAppSelector(state => state.user)
-    const {currentUser} = useAuth()
+    const [currentUser, setUser] = useState<any>()
     const [dropdown,setDropdown] = useState({menu: false, companies: false})
     const [toggleChannelClicked, setToggleChannelClicked] = useState(false)
     const companies = useAppSelector(state => state.companies)
@@ -24,19 +25,11 @@ export default function Navbar() {
     const dispatch = useAppDispatch()
     
 
-    useEffect(() => {
-        if (!currentUser) return
-        currentUser.getIdToken().then(function (idToken: string){
-            setToken(idToken)
-        })
-    },[currentUser])
 
-   
 
     
-    
     useEffect(() => {
-        if (!user.values?.isAnEmployer) return
+        if (!user?.values?.isAnEmployer) return
         dispatch(fetchApplications('jobseekers'))
         dispatch(fetchCompanies())
         dispatch(fetchApplications('employers'))
@@ -148,7 +141,7 @@ export default function Navbar() {
               </div>: 
 
               <NavLink to = '/login' onClick = {() => setDropdown({menu: false, companies: false})} >Login</NavLink>}
-              {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, {user.values?.email}</p> : null}
+              {user.isLoggedIn ? <p id = 'loggedinMessage'>Welcome, {currentUser?.email}</p> : null}
         </div>
     )
 }

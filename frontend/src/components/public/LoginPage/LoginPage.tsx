@@ -1,15 +1,20 @@
 import React,{useState} from 'react'
 import axios from 'axios'
+import {useNavigate, useLocation} from "react-router-dom";
 import {useAppDispatch} from '../../../app/hooks';
-import {login} from '../../../features/Auth/user';
+import {login, setUser} from '../../../features/Auth/user';
 import Errors from '../../Global/messages/Errors';
-import { useAuth } from '../../../contexts/AuthContext';
+import useAuth from '../../../hooks/useAuth';
+import { axiosInstance } from '../../../axios';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 
 export default function LoginPage() {
-    const {signIn} = useAuth()
+    const { setAccessToken, setCSRFToken } = useAuth()
+    const axiosPrivateInstance = useAxiosPrivate()
     const [email,setEmail] = useState({value: '', isValid: true, errorMsg: 'Email is required'})
     const [password,setPassword] = useState({value: '', isValid: true, errorMsg: 'Password is required'})
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const [errors, setErrors] = useState<Array<string>>([])
 
     const validateForm = () => {
@@ -37,32 +42,23 @@ export default function LoginPage() {
         return isValid
     }
 
-    function handleSubmitForm(e: React.SyntheticEvent){
+    async function handleSubmitForm(e: React.SyntheticEvent){
         e.preventDefault()
 
         if (!validateForm()) return
+        
+        try{
+            const response = await axiosInstance.post('auth/login', JSON.stringify({
+                email: email.value,
+                password: password.value
+            }))
 
-        const requestOptions = { 
-            headers:{'Content-Type':'application/json'}
+            setAccessToken(response?.data?.access_token)
+            setCSRFToken(response.headers["x-csrftoken"])
+            dispatch(login())
+        } catch (error) {
+            setErrors(['Email or password is invalid'])
         }
-
-        axios.post('/api/auth/login',JSON.stringify({email: email.value, password: password.value}),requestOptions)
-        .then(response => {
-                const data = response.data
-                localStorage.setItem('token',data.token)
-                signIn(email.value, password.value)
-                dispatch(login())
-                window.location.reload()
-               
-        })
-
-        .catch(error => {
-            if (error.response.status === 400) {
-                setPassword(prev => {return {...prev,isValid: true}})
-                setErrors(['Email or password is invalid'])
-                console.clear()
-            }
-        })
 
     }
 

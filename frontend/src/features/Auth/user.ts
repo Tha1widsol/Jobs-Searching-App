@@ -1,6 +1,5 @@
 import {createAsyncThunk,createSlice} from '@reduxjs/toolkit'
 import axios from 'axios'
-import storage from 'redux-persist/lib/storage'
 
 export const token = localStorage.getItem('token')
 
@@ -24,27 +23,21 @@ const initialState = {values: {
     isHired: false,
     isAnEmployer: false
     },
-    isLoggedIn: token ? true : false, 
+    isLoggedIn: false, 
     status: ''
 }
 
 export const fetchUser = createAsyncThunk(
     'user/fetchUser',
      async () => {
-        if (!token) return
         try{
-            const response = await axios.get('/api/user',{
-                headers: {
-                    Authorization:`Token ${token}`
-                }
-            })
-    
-            return response.data
+            const {data} = await axios.get('auth/user')
+            console.log("fsf", data)
+            return data
         }
 
       catch(error){
-          localStorage.removeItem('token');
-          window.location.reload()
+          console.log(error)
       }
     }
 
@@ -60,8 +53,11 @@ export const userSlice = createSlice({
 
         logout: (state) => {
             state.isLoggedIn = false
-            storage.removeItem('token')
             state = initialState;
+        },
+
+        setUser: (state, action) => {
+            state.values = action.payload
         }
     },
 
@@ -84,7 +80,7 @@ export const userSlice = createSlice({
 
 })
 
-export const {login,logout} = userSlice.actions
+export const {login,logout, setUser} = userSlice.actions
 
 export default userSlice.reducer
 
